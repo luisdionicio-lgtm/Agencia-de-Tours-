@@ -162,15 +162,56 @@ Funciones disponibles:
 - Backend: Railway o Render.
 - Base de datos: Railway MySQL, PlanetScale compatible MySQL o un MySQL administrado.
 
-Variables importantes en produccion:
+### Despliegue rapido en Vercel
+
+1. Sube los cambios a GitHub:
+
+```bash
+git push origin main
+```
+
+2. En Vercel, crea un proyecto nuevo e importa este repositorio.
+3. Configura el proyecto asi:
+
+```text
+Framework Preset: Vite
+Root Directory: frontend
+Build Command: npm run build
+Output Directory: dist
+Install Command: npm install
+```
+
+4. En `Environment Variables`, agrega:
+
+```env
+VITE_WHATSAPP_NUMBER=51945342536
+VITE_CULQI_PUBLIC_KEY=pk_test_xxxxxxxxxxxxxxxxx
+```
+
+Si vas a conectar un backend real, agrega tambien:
+
+```env
+VITE_API_URL=https://tu-backend-en-render-o-railway.com/api
+```
+
+Si no tienes backend desplegado, la web igual funciona con datos demo porque el frontend tiene fallback para tours, testimonios y panel admin.
+
+5. Click en `Deploy`.
+6. Cuando termine, Vercel te dara una URL tipo:
+
+```text
+https://tu-proyecto.vercel.app
+```
+
+Variables importantes para el backend en produccion:
 
 ```env
 DATABASE_URL=
 FRONTEND_URL=
 JWT_SECRET=
 CULQI_PRIVATE_KEY=
-VITE_API_URL=
-VITE_CULQI_PUBLIC_KEY=
+ADMIN_EMAIL=admin@jhontours.com
+ADMIN_PASSWORD=Admin12345
 ```
 
 ## Capturas sugeridas para evidencias
