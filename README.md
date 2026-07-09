@@ -117,6 +117,44 @@ URLs:
 - El backend nunca confia en el monto enviado por el frontend: calcula el total usando la reserva y el precio del tour guardado en MySQL.
 - Si no configuras una llave privada real, el backend usa modo demo para facilitar la presentacion academica.
 - No se guardan datos sensibles de tarjetas.
+- La pantalla `/pago/:id` ya tiene un slot visual `culqi-checkout-slot` para montar Culqi Checkout cuando se usen llaves reales.
+- La misma pantalla genera un QR aleatorio local para simular pagos Yape/Culqi en la presentacion.
+
+## WhatsApp
+
+El numero de contacto principal esta configurado como `+51 945 342 536`.
+
+```env
+VITE_WHATSAPP_NUMBER=51945342536
+```
+
+La web genera enlaces `wa.me` con mensajes prellenados para:
+
+- Cotizacion general.
+- Cotizacion de un tour especifico.
+- Confirmacion o envio de comprobante de una reserva.
+
+## Panel admin
+
+Ruta:
+
+```bash
+http://localhost:5173/admin
+```
+
+Credenciales seed:
+
+- Email: `admin@jhontours.com`
+- Password: `Admin12345`
+
+Funciones disponibles:
+
+- Crear tours.
+- Editar tours.
+- Marcar tours como destacados.
+- Activar o inactivar tours.
+- Desactivar tours desde el listado.
+- Ver reservas y pagos.
 
 ## Despliegue sugerido
 
@@ -152,4 +190,3 @@ Autor configurado localmente:
 ```bash
 git config user.name "Luis Angel Dionicio Bartolo"
 ```
-
