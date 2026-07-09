@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowRight, CalendarDays, CheckCircle2, CreditCard, Filter, Globe2, LayoutDashboard, LogOut, MapPin, Menu, MessageCircle, Plane, Search, ShieldCheck, Star, WalletCards, X } from "lucide-react";
+import { ArrowRight, Award, CalendarDays, CheckCircle2, CreditCard, Filter, Globe2, LayoutDashboard, LogOut, MapPin, Menu, MessageCircle, Plane, Search, ShieldCheck, Star, WalletCards, X } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, NavLink, Route, Routes, useNavigate, useParams, useSearchParams } from "react-router-dom";
@@ -9,7 +9,8 @@ import { api } from "./api/client";
 import type { Payment, Reservation, Tour, TourType } from "./types";
 
 const money = (value: string | number) => `$${Number(value).toFixed(2)}`;
-const whatsapp = import.meta.env.VITE_WHATSAPP_NUMBER ?? "51999999999";
+const whatsapp = import.meta.env.VITE_WHATSAPP_NUMBER ?? "51945342536";
+const whatsappDisplay = "+51 945 342 536";
 
 function Shell() {
   const [open, setOpen] = useState(false);
@@ -27,7 +28,7 @@ function Shell() {
       <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 lg:px-6">
           <Link to="/" className="flex items-center gap-3">
-            <span className="grid h-11 w-11 place-items-center rounded-lg bg-[#082447] text-amber-300"><Plane size={23} /></span>
+            <span className="brand-mark grid h-11 w-11 place-items-center rounded-lg bg-[#082447] text-amber-300"><Plane size={23} /></span>
             <span>
               <strong className="block text-lg leading-tight text-[#082447]">Jhon Tours</strong>
               <small className="text-xs font-semibold uppercase tracking-widest text-slate-500">Agencia de Turismo</small>
@@ -37,8 +38,8 @@ function Shell() {
             {links.map(([label, to]) => <NavLink key={label} to={to} className="hover:text-[#0f4c81]">{label}</NavLink>)}
           </nav>
           <div className="hidden items-center gap-3 lg:flex">
-            <Link to="/admin" className="rounded-lg border border-slate-200 px-4 py-2 text-sm font700 text-slate-700">Admin</Link>
-            <Link to="/tours" className="rounded-lg bg-[#f7b731] px-5 py-2.5 text-sm font-bold text-[#082447] shadow-sm">Reservar ahora</Link>
+            <Link to="/admin" className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-bold text-slate-700">Admin</Link>
+            <Link to="/tours" className="btn-gold rounded-lg px-5 py-2.5 text-sm font-bold shadow-sm">Reservar ahora</Link>
           </div>
           <button className="rounded-lg border border-slate-200 p-2 lg:hidden" onClick={() => setOpen(!open)} aria-label="Menu">
             {open ? <X /> : <Menu />}
@@ -110,18 +111,20 @@ function Home() {
     <>
       <section className="hero-bg">
         <div className="mx-auto grid min-h-[660px] max-w-7xl items-center gap-10 px-4 py-14 lg:grid-cols-[1.05fr_.95fr] lg:px-6">
-          <div className="max-w-3xl text-white">
-            <p className="mb-4 inline-flex rounded-lg bg-white/15 px-4 py-2 text-sm font-bold text-amber-200 ring-1 ring-white/20">Tours seguros, memorables y a buen precio</p>
-            <h1 className="text-4xl font-black leading-tight md:text-6xl">Descubre el mundo con Jhon Tours</h1>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-100">Tours nacionales e internacionales al mejor precio, con reservas online, pagos seguros y asesoria personalizada.</p>
+          <div className="animate-rise max-w-3xl text-white">
+            <p className="mb-4 inline-flex rounded-lg bg-white/15 px-4 py-2 text-sm font-bold text-amber-200 ring-1 ring-white/20">Asesoria formal para viajes nacionales e internacionales</p>
+            <h1 className="text-4xl font-black leading-tight md:text-6xl">Planifica tu siguiente destino con Jhon Tours</h1>
+            <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-100">Paquetes organizados, atencion directa, reservas online y pagos seguros para viajar con respaldo profesional.</p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link to="/tours" className="rounded-lg bg-[#f7b731] px-6 py-3 text-center font-black text-[#082447]">Ver tours</Link>
-              <a href={`https://wa.me/${whatsapp}`} className="rounded-lg bg-[#1fa463] px-6 py-3 text-center font-black text-white">Cotizar viaje</a>
+              <Link to="/tours" className="btn-gold rounded-lg px-6 py-3 text-center font-black">Ver tours</Link>
+              <a href={`https://wa.me/${whatsapp}`} className="rounded-lg bg-[#1fa463] px-6 py-3 text-center font-black text-white">Solicitar informacion</a>
             </div>
           </div>
           <SearchBox />
         </div>
       </section>
+      <TrustBar />
+      <DestinationCarousel tours={featured.length ? featured : tours.slice(0, 5)} />
       <Section title="Tours destacados" subtitle="Paquetes elegidos para viajar con confianza y asistencia desde la primera cotizacion.">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">{featured.map((tour) => <TourCard key={tour.id} tour={tour} />)}</div>
       </Section>
@@ -129,13 +132,76 @@ function Home() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">{types.map((type) => <div key={type} className="rounded-lg border border-slate-200 bg-white p-5 text-center shadow-sm"><Globe2 className="mx-auto mb-3 text-[#0f4c81]" /><strong>{type}</strong></div>)}</div>
       </Section>
       <Testimonials />
-      <section id="contacto" className="bg-[#082447] px-4 py-14 text-white">
+      <section id="contacto" className="formal-cta px-4 py-14 text-white">
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
-          <div><h2 className="text-3xl font-black">Listo para tu siguiente viaje?</h2><p className="mt-2 text-slate-200">Cotiza por WhatsApp y recibe una propuesta a tu medida.</p></div>
-          <a href={`https://wa.me/${whatsapp}`} className="inline-flex items-center gap-2 rounded-lg bg-[#1fa463] px-6 py-3 font-black"><MessageCircle /> Hablar por WhatsApp</a>
+          <div><h2 className="text-3xl font-black">Recibe informacion personalizada</h2><p className="mt-2 text-slate-200">Comunicate con un asesor de Jhon Tours al {whatsappDisplay}.</p></div>
+          <a href={`https://wa.me/${whatsapp}`} className="inline-flex items-center gap-2 rounded-lg bg-[#1fa463] px-6 py-3 font-black"><MessageCircle /> Mas informacion por WhatsApp</a>
         </div>
       </section>
     </>
+  );
+}
+
+function TrustBar() {
+  const items = [
+    ["+5", "destinos activos"],
+    ["24/7", "asistencia al viajero"],
+    ["100%", "pagos seguros"]
+  ];
+  return (
+    <section className="border-y border-slate-200 bg-white px-4 py-6">
+      <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-3">
+        {items.map(([value, label]) => (
+          <div key={label} className="animate-rise rounded-lg border border-slate-100 bg-slate-50 p-5 text-center">
+            <strong className="block text-3xl font-black text-[#082447]">{value}</strong>
+            <span className="text-sm font-semibold uppercase tracking-widest text-slate-500">{label}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function DestinationCarousel({ tours }: { tours: Tour[] }) {
+  if (!tours.length) return null;
+  return (
+    <section className="bg-[#f8fafc] px-4 py-14 lg:px-6">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-7 flex flex-col justify-between gap-3 md:flex-row md:items-end">
+          <div>
+            <p className="mb-2 inline-flex items-center gap-2 rounded-lg bg-amber-50 px-3 py-1 text-sm font-bold text-amber-700"><Award size={16} /> Seleccion profesional</p>
+            <h2 className="text-3xl font-black text-[#082447] md:text-4xl">Destinos recomendados</h2>
+          </div>
+          <Link to="/tours" className="inline-flex items-center gap-2 font-bold text-[#0f4c81]">Ver catalogo completo <ArrowRight size={18} /></Link>
+        </div>
+        <div id="destinationCarousel" className="carousel slide carousel-fade overflow-hidden rounded-lg shadow-xl" data-bs-ride="carousel">
+          <div className="carousel-indicators">
+            {tours.map((tour, index) => <button key={tour.id} type="button" data-bs-target="#destinationCarousel" data-bs-slide-to={index} className={index === 0 ? "active" : ""} aria-label={tour.title} />)}
+          </div>
+          <div className="carousel-inner">
+            {tours.map((tour, index) => (
+              <div key={tour.id} className={`carousel-item ${index === 0 ? "active" : ""}`} data-bs-interval="4200">
+                <img src={tour.imageUrl} className="d-block h-[460px] w-100 object-cover" alt={tour.title} />
+                <div className="carousel-caption formal-caption text-start">
+                  <span className="rounded-lg bg-white/90 px-3 py-1 text-sm font-bold text-[#082447]">{tour.type}</span>
+                  <h3 className="mt-3 text-3xl font-black md:text-5xl">{tour.title}</h3>
+                  <p className="mt-2 max-w-2xl text-base md:text-lg">{tour.destination} · {tour.duration} · desde {money(tour.price)}</p>
+                  <Link to={`/tours/${tour.id}`} className="mt-4 inline-flex items-center gap-2 rounded-lg bg-[#f7b731] px-5 py-3 font-black text-[#082447]">Ver detalles <ArrowRight size={18} /></Link>
+                </div>
+              </div>
+            ))}
+          </div>
+          <button className="carousel-control-prev" type="button" data-bs-target="#destinationCarousel" data-bs-slide="prev">
+            <span className="carousel-control-prev-icon" aria-hidden="true" />
+            <span className="visually-hidden">Anterior</span>
+          </button>
+          <button className="carousel-control-next" type="button" data-bs-target="#destinationCarousel" data-bs-slide="next">
+            <span className="carousel-control-next-icon" aria-hidden="true" />
+            <span className="visually-hidden">Siguiente</span>
+          </button>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -172,7 +238,7 @@ function Tours() {
         <select className="rounded-lg border px-4 py-3" value={initialType ?? ""} onChange={(e) => setParams(e.target.value ? { type: e.target.value } : {})}><option value="">Todos</option><option value="NACIONAL">Nacional</option><option value="INTERNACIONAL">Internacional</option></select>
         <input className="rounded-lg border px-4 py-3" placeholder="Destino" value={destination} onChange={(e) => setDestination(e.target.value)} />
         <label className="flex items-center gap-3 rounded-lg border px-4 py-3"><Filter size={18} /> Hasta ${maxPrice}<input type="range" min="100" max="3000" step="50" value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} /></label>
-        <a href={`https://wa.me/${whatsapp}`} className="rounded-lg bg-[#1fa463] px-4 py-3 text-center font-black text-white">Cotizar personalizado</a>
+        <a href={`https://wa.me/${whatsapp}`} className="rounded-lg bg-[#1fa463] px-4 py-3 text-center font-black text-white">Mas informacion</a>
       </div>
       {isLoading ? <p>Cargando tours...</p> : <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{filtered.map((tour) => <TourCard key={tour.id} tour={tour} />)}</div>}
     </Section>
@@ -303,7 +369,7 @@ function Info({ title, items, ordered = false }: { title: string; items: string[
 }
 
 function Footer() {
-  return <footer id="nosotros" className="border-t bg-white px-4 py-10"><div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-3"><div><strong className="text-xl text-[#082447]">Jhon Tours</strong><p className="mt-2 text-slate-600">Agencia de turismo especializada en paquetes nacionales e internacionales.</p></div><div><strong>Contacto</strong><p className="mt-2 text-slate-600">ventas@jhontours.com<br />WhatsApp +51 999 999 999</p></div><div><strong>Confianza</strong><p className="mt-2 text-slate-600">Reservas online, pagos Culqi/Yape y acompanamiento profesional.</p></div></div></footer>;
+  return <footer id="nosotros" className="border-t bg-white px-4 py-10"><div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-3"><div><strong className="text-xl text-[#082447]">Jhon Tours</strong><p className="mt-2 text-slate-600">Agencia de turismo especializada en paquetes nacionales e internacionales.</p></div><div><strong>Contacto</strong><p className="mt-2 text-slate-600">ventas@jhontours.com<br />WhatsApp {whatsappDisplay}</p></div><div><strong>Confianza</strong><p className="mt-2 text-slate-600">Reservas online, pagos Culqi/Yape y acompanamiento profesional.</p></div></div></footer>;
 }
 
 export default Shell;
