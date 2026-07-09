@@ -11,8 +11,50 @@ import type { Payment, Reservation, Tour, TourType } from "./types";
 const money = (value: string | number) => `$${Number(value).toFixed(2)}`;
 const whatsapp = import.meta.env.VITE_WHATSAPP_NUMBER ?? "51945342536";
 const whatsappDisplay = "+51 945 342 536";
+const culqiPublicKey = import.meta.env.VITE_CULQI_PUBLIC_KEY ?? "pk_test_xxxxxxxxxxxxxxxxx";
 
 const destinationImage = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1400&q=85`;
+
+const buildWhatsAppUrl = (message: string) => `https://wa.me/${whatsapp}?text=${encodeURIComponent(message)}`;
+const whatsappMessages = {
+  general: "Hola Jhon Tours, deseo informacion para cotizar un viaje.",
+  tour: (tour: Tour) => `Hola Jhon Tours, deseo cotizar el tour ${tour.title} para ${tour.destination}.`,
+  reservation: (reservation: Reservation) => `Hola Jhon Tours, deseo confirmar mi reserva #${reservation.id} para ${reservation.tour.title}.`
+};
+
+function createPaymentSeed(reservationId: string) {
+  const random = Math.random().toString(36).slice(2, 8).toUpperCase();
+  return `JHON-${reservationId || "DEMO"}-${Date.now().toString(36).toUpperCase()}-${random}`;
+}
+
+function pseudoQrSvg(seed: string) {
+  const size = 29;
+  const cell = 7;
+  const quiet = 3;
+  const total = (size + quiet * 2) * cell;
+  let hash = 2166136261;
+  for (const char of seed) {
+    hash ^= char.charCodeAt(0);
+    hash = Math.imul(hash, 16777619);
+  }
+  const isDark = (x: number, y: number) => {
+    const finder = (fx: number, fy: number) => x >= fx && x < fx + 7 && y >= fy && y < fy + 7;
+    if (finder(0, 0) || finder(size - 7, 0) || finder(0, size - 7)) {
+      const localX = x % (size - 7) % 7;
+      const localY = y % (size - 7) % 7;
+      return localX === 0 || localX === 6 || localY === 0 || localY === 6 || (localX >= 2 && localX <= 4 && localY >= 2 && localY <= 4);
+    }
+    const value = Math.imul(x + 11, 1103515245) ^ Math.imul(y + 17, 12345) ^ hash;
+    return ((value >>> ((x + y) % 13)) & 1) === 1;
+  };
+  const blocks = Array.from({ length: size }, (_, y) =>
+    Array.from({ length: size }, (_, x) =>
+      isDark(x, y) ? `<rect x="${(x + quiet) * cell}" y="${(y + quiet) * cell}" width="${cell}" height="${cell}" rx="1" />` : ""
+    ).join("")
+  ).join("");
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${total}" height="${total}" viewBox="0 0 ${total} ${total}"><rect width="100%" height="100%" fill="#fff"/><g fill="#082447">${blocks}</g></svg>`;
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+}
 
 const demoTours: Tour[] = [
   {
@@ -225,7 +267,7 @@ function Home() {
             <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-100">Tours nacionales e internacionales al mejor precio, con itinerarios claros, pagos seguros y acompanamiento humano desde la cotizacion hasta el retorno.</p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link to="/tours" className="btn-gold rounded-lg px-6 py-3 text-center font-black">Ver tours</Link>
-              <a href={`https://wa.me/${whatsapp}`} className="rounded-lg bg-[#1fa463] px-6 py-3 text-center font-black text-white">Cotizar viaje</a>
+              <a href={buildWhatsAppUrl(whatsappMessages.general)} className="rounded-lg bg-[#1fa463] px-6 py-3 text-center font-black text-white">Cotizar viaje</a>
             </div>
             <div className="mt-8 grid max-w-2xl gap-3 sm:grid-cols-3">
               <MiniTrust icon={<ShieldCheck />} value="Pago seguro" label="Culqi y Yape" />
@@ -252,7 +294,7 @@ function Home() {
       <section id="contacto" className="formal-cta px-4 py-14 text-white">
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
           <div><h2 className="text-3xl font-black">Recibe informacion personalizada</h2><p className="mt-2 text-slate-200">Comunicate con un asesor de Jhon Tours al {whatsappDisplay}.</p></div>
-          <a href={`https://wa.me/${whatsapp}`} className="inline-flex items-center gap-2 rounded-lg bg-[#1fa463] px-6 py-3 font-black"><MessageCircle /> Mas informacion por WhatsApp</a>
+          <a href={buildWhatsAppUrl(whatsappMessages.general)} className="inline-flex items-center gap-2 rounded-lg bg-[#1fa463] px-6 py-3 font-black"><MessageCircle /> Mas informacion por WhatsApp</a>
         </div>
       </section>
     </>
@@ -422,7 +464,7 @@ function Tours() {
         <select className="rounded-lg border px-4 py-3" value={initialType ?? ""} onChange={(e) => setParams(e.target.value ? { type: e.target.value } : {})}><option value="">Todos</option><option value="NACIONAL">Nacional</option><option value="INTERNACIONAL">Internacional</option></select>
         <input className="rounded-lg border px-4 py-3" placeholder="Destino" value={destination} onChange={(e) => setDestination(e.target.value)} />
         <label className="flex items-center gap-3 rounded-lg border px-4 py-3"><Filter size={18} /> Hasta ${maxPrice}<input type="range" min="100" max="3000" step="50" value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} /></label>
-        <a href={`https://wa.me/${whatsapp}`} className="rounded-lg bg-[#1fa463] px-4 py-3 text-center font-black text-white">Mas informacion</a>
+        <a href={buildWhatsAppUrl(whatsappMessages.general)} className="rounded-lg bg-[#1fa463] px-4 py-3 text-center font-black text-white">Mas informacion</a>
       </div>
       <div className="mb-6 grid gap-4 md:grid-cols-3">
         <CatalogSignal icon={<ShieldCheck />} title="Operador confiable" text="Itinerarios revisados y comunicacion directa." />
@@ -482,7 +524,7 @@ function TourDetail() {
             <p className="flex items-center gap-2"><UsersRound className="text-amber-600" size={18} /> Asesoria para tu grupo</p>
           </div>
           <Link to={`/reservar/${tour.id}`} className="mt-6 flex items-center justify-center gap-2 rounded-lg bg-[#f7b731] px-5 py-3 font-black text-[#082447]">Reservar <ArrowRight /></Link>
-          <a href={`https://wa.me/${whatsapp}`} className="mt-3 flex items-center justify-center gap-2 rounded-lg bg-[#1fa463] px-5 py-3 font-black text-white"><MessageCircle /> Cotizar por WhatsApp</a>
+          <a href={buildWhatsAppUrl(whatsappMessages.tour(tour))} className="mt-3 flex items-center justify-center gap-2 rounded-lg bg-[#1fa463] px-5 py-3 font-black text-white"><MessageCircle /> Cotizar por WhatsApp</a>
         </aside>
       </div>
       <div className="mt-10 grid gap-6 lg:grid-cols-3">
@@ -534,20 +576,38 @@ function PaymentPage() {
   const { id = "" } = useParams();
   const navigate = useNavigate();
   const { data: reservation } = useQuery<Reservation>({ queryKey: ["reservation", id], queryFn: async () => (await api.get(`/reservations/${id}`)).data });
+  const paymentSeed = useMemo(() => createPaymentSeed(id), [id]);
+  const qrImage = useMemo(() => pseudoQrSvg(paymentSeed), [paymentSeed]);
   const mutation = useMutation({
     mutationFn: async (method: "culqi" | "yape") => (await api.post(`/payments/${method}`, { reservationId: Number(id), token: "demo_token" })).data,
     onSuccess: () => navigate(`/confirmacion/${id}`)
   });
   return (
-    <Section title="Pago seguro" subtitle="El backend recalcula el monto desde la reserva antes de cobrar.">
-      {reservation && <div className="mx-auto max-w-3xl rounded-lg border bg-white p-6 shadow-sm">
-        <h3 className="text-2xl font-black text-[#082447]">{reservation.tour.title}</h3>
+    <Section title="Pago seguro" subtitle="El backend recalcula el monto desde la reserva antes de cobrar. Culqi queda listo para activar con llaves reales.">
+      {reservation && <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[1fr_.85fr]">
+        <div className="rounded-lg border bg-white p-6 shadow-sm">
+        <p className="text-sm font-bold uppercase text-[#0f7a4f]">Resumen de reserva</p>
+        <h3 className="mt-2 text-2xl font-black text-[#082447]">{reservation.tour.title}</h3>
         <p className="mt-2 text-slate-600">{reservation.peopleCount} personas · Total: <strong>{money(reservation.totalAmount)}</strong></p>
+        <div className="mt-6 rounded-lg border border-dashed border-[#0f4c81]/30 bg-[#f8fbff] p-4">
+          <h4 className="flex items-center gap-2 font-black text-[#082447]"><CreditCard size={19} /> Ubicacion Culqi Checkout</h4>
+          <p className="mt-2 text-sm leading-6 text-slate-600">Aqui se conecta el checkout oficial usando la llave publica del frontend. En modo demo se envia un token simulado al backend.</p>
+          <code className="mt-3 block overflow-x-auto rounded-lg bg-[#082447] px-3 py-2 text-xs text-amber-200">VITE_CULQI_PUBLIC_KEY={culqiPublicKey}</code>
+          <div id="culqi-checkout-slot" className="mt-4 rounded-lg border bg-white p-4 text-sm text-slate-600">Slot listo para montar Culqi Checkout / Yape cuando coloques llaves reales.</div>
+        </div>
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
-          <button onClick={() => mutation.mutate("culqi")} className="flex items-center justify-center gap-2 rounded-lg bg-[#082447] px-5 py-4 font-black text-white"><CreditCard /> Pagar con tarjeta</button>
-          <button onClick={() => mutation.mutate("yape")} className="flex items-center justify-center gap-2 rounded-lg bg-[#6d2bd9] px-5 py-4 font-black text-white"><WalletCards /> Pagar con Yape</button>
+          <button onClick={() => mutation.mutate("culqi")} className="flex items-center justify-center gap-2 rounded-lg bg-[#082447] px-5 py-4 font-black text-white" disabled={mutation.isPending}><CreditCard /> Pagar demo con tarjeta</button>
+          <button onClick={() => mutation.mutate("yape")} className="flex items-center justify-center gap-2 rounded-lg bg-[#6d2bd9] px-5 py-4 font-black text-white" disabled={mutation.isPending}><WalletCards /> Confirmar Yape demo</button>
         </div>
         <p className="mt-4 text-sm text-slate-500">Modo demo activo hasta configurar las llaves reales de Culqi.</p>
+        </div>
+        <div className="rounded-lg border bg-white p-6 text-center shadow-sm">
+          <p className="text-sm font-bold uppercase text-[#6d2bd9]">QR aleatorio de simulacion</p>
+          <img src={qrImage} alt="QR demo para simular pago" className="mx-auto mt-4 h-64 w-64 rounded-lg border p-3" />
+          <strong className="mt-4 block text-[#082447]">Codigo: {paymentSeed}</strong>
+          <p className="mt-2 text-sm leading-6 text-slate-600">Usa este QR visual para simular un pago Yape/Culqi durante la presentacion academica.</p>
+          <a href={buildWhatsAppUrl(whatsappMessages.reservation(reservation))} className="mt-5 inline-flex items-center justify-center gap-2 rounded-lg bg-[#1fa463] px-5 py-3 font-black text-white"><MessageCircle /> Enviar comprobante por WhatsApp</a>
+        </div>
       </div>}
     </Section>
   );
@@ -556,7 +616,7 @@ function PaymentPage() {
 function ConfirmationPage() {
   const { id = "" } = useParams();
   const { data: reservation } = useQuery<Reservation>({ queryKey: ["reservation", id], queryFn: async () => (await api.get(`/reservations/${id}`)).data });
-  return <Section title="Reserva pagada" subtitle={`Codigo de reserva #${id}`}>{reservation && <div className="mx-auto max-w-2xl rounded-lg border bg-white p-8 text-center shadow-sm"><CheckCircle2 className="mx-auto text-[#1fa463]" size={60} /><h3 className="mt-4 text-2xl font-black text-[#082447]">{reservation.tour.title}</h3><p className="mt-2 text-slate-600">Gracias, {reservation.customer.fullName}. Te contactaremos para coordinar los detalles finales.</p><div className="mt-6 flex justify-center gap-3"><Link className="rounded-lg bg-[#082447] px-5 py-3 font-bold text-white" to="/">Volver al inicio</Link><a className="rounded-lg bg-[#1fa463] px-5 py-3 font-bold text-white" href={`https://wa.me/${whatsapp}`}>WhatsApp</a></div></div>}</Section>;
+  return <Section title="Reserva pagada" subtitle={`Codigo de reserva #${id}`}>{reservation && <div className="mx-auto max-w-2xl rounded-lg border bg-white p-8 text-center shadow-sm"><CheckCircle2 className="mx-auto text-[#1fa463]" size={60} /><h3 className="mt-4 text-2xl font-black text-[#082447]">{reservation.tour.title}</h3><p className="mt-2 text-slate-600">Gracias, {reservation.customer.fullName}. Te contactaremos para coordinar los detalles finales.</p><div className="mt-6 flex justify-center gap-3"><Link className="rounded-lg bg-[#082447] px-5 py-3 font-bold text-white" to="/">Volver al inicio</Link><a className="rounded-lg bg-[#1fa463] px-5 py-3 font-bold text-white" href={buildWhatsAppUrl(whatsappMessages.reservation(reservation))}>WhatsApp</a></div></div>}</Section>;
 }
 
 function AdminPage() {
