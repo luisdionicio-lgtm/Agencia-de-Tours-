@@ -76,7 +76,7 @@ async function main() {
       duration: "2 dias / 1 noche",
       type: TourType.NACIONAL,
       categoryId: 1,
-      imageUrl: image("photo-1509316785289-025f5b846b35"),
+      imageUrl: "https://www.stampbystamptravel.com/wp-content/uploads/2025/02/laguna-huacachina-ica.jpg.webp",
       description: "Dunas, tubulares, sandboard, bodegas pisqueras y atardeceres inolvidables en el oasis.",
       availableSlots: 25,
       isFeatured: true
@@ -84,15 +84,18 @@ async function main() {
     {
       title: "Egipto",
       slug: "egipto",
-      destination: "Cairo, Egipto",
+      destination: "El Cairo, Egipto",
       price: 2700,
       duration: "8 dias / 7 noches",
       type: TourType.INTERNACIONAL,
       categoryId: 6,
       imageUrl: "https://www.barcelo.com/guia-turismo/wp-content/uploads/2022/05/el-cairo1.jpg",
-      description: "Pirámides, crucero por el Nilo, templos legendarios y acompanamiento especializado.",
+      description: "Piramides de Giza, El Cairo historico y crucero por el Nilo con itinerario claro, hoteles seleccionados y acompanamiento en cada etapa.",
       availableSlots: 10,
-      isFeatured: true
+      isFeatured: true,
+      itinerary: ["Llegada asistida a El Cairo", "Piramides de Giza y Esfinge con guia", "Museo Egipcio y barrio historico", "Crucero por el Nilo y templos principales", "Retorno con seguimiento del asesor"],
+      includes: ["Hoteles seleccionados", "Traslados programados", "Guia especializado en espanol", "Asistencia Jhon Tours por WhatsApp"],
+      excludes: ["Vuelos internacionales", "Gastos personales", "Propinas y servicios no mencionados"]
     }
   ];
 
@@ -101,15 +104,15 @@ async function main() {
       where: { slug: tour.slug },
       update: {
         ...tour,
-        itinerary: ["Llegada y bienvenida", "Tour principal guiado", "Experiencias locales", "Retorno"],
-        includes: ["Alojamiento", "Traslados", "Guia especializado", "Asistencia Jhon Tours"],
-        excludes: ["Gastos personales", "Propinas", "Servicios no mencionados"]
+        itinerary: tour.itinerary ?? ["Llegada y bienvenida", "Tour principal guiado", "Experiencias locales", "Retorno"],
+        includes: tour.includes ?? ["Alojamiento", "Traslados", "Guia especializado", "Asistencia Jhon Tours"],
+        excludes: tour.excludes ?? ["Gastos personales", "Propinas", "Servicios no mencionados"]
       },
       create: {
         ...tour,
-        itinerary: ["Llegada y bienvenida", "Tour principal guiado", "Experiencias locales", "Retorno"],
-        includes: ["Alojamiento", "Traslados", "Guia especializado", "Asistencia Jhon Tours"],
-        excludes: ["Gastos personales", "Propinas", "Servicios no mencionados"]
+        itinerary: tour.itinerary ?? ["Llegada y bienvenida", "Tour principal guiado", "Experiencias locales", "Retorno"],
+        includes: tour.includes ?? ["Alojamiento", "Traslados", "Guia especializado", "Asistencia Jhon Tours"],
+        excludes: tour.excludes ?? ["Gastos personales", "Propinas", "Servicios no mencionados"]
       }
     });
   }

@@ -112,7 +112,7 @@ const demoTours: Tour[] = [
     duration: "2 dias / 1 noche",
     type: "NACIONAL",
     availableSlots: 25,
-    imageUrl: destinationImage("photo-1509316785289-025f5b846b35"),
+    imageUrl: "https://www.stampbystamptravel.com/wp-content/uploads/2025/02/laguna-huacachina-ica.jpg.webp",
     isFeatured: true,
     status: "ACTIVO"
   },
@@ -120,15 +120,18 @@ const demoTours: Tour[] = [
     id: 5,
     title: "Egipto",
     slug: "egipto",
-    destination: "Cairo, Egipto",
-    description: "Piramides, crucero por el Nilo, templos legendarios y acompanamiento especializado.",
+    destination: "El Cairo, Egipto",
+    description: "Piramides de Giza, El Cairo historico y crucero por el Nilo con itinerario claro, hoteles seleccionados y acompanamiento en cada etapa.",
     price: 2700,
     duration: "8 dias / 7 noches",
     type: "INTERNACIONAL",
     availableSlots: 10,
     imageUrl: "https://www.barcelo.com/guia-turismo/wp-content/uploads/2022/05/el-cairo1.jpg",
     isFeatured: true,
-    status: "ACTIVO"
+    status: "ACTIVO",
+    itinerary: ["Llegada asistida a El Cairo", "Piramides de Giza y Esfinge con guia", "Museo Egipcio y barrio historico", "Crucero por el Nilo y templos principales", "Retorno con seguimiento del asesor"],
+    includes: ["Hoteles seleccionados", "Traslados programados", "Guia especializado en espanol", "Asistencia Jhon Tours por WhatsApp"],
+    excludes: ["Vuelos internacionales", "Gastos personales", "Propinas y servicios no mencionados"]
   }
 ];
 
@@ -262,17 +265,17 @@ function Home() {
       <section className="hero-bg">
         <div className="mx-auto grid min-h-[660px] max-w-7xl items-center gap-10 px-4 py-14 lg:grid-cols-[1.05fr_.95fr] lg:px-6">
           <div className="animate-rise max-w-3xl text-white">
-            <p className="mb-4 inline-flex items-center gap-2 rounded-lg bg-white/15 px-4 py-2 text-sm font-bold text-amber-200 ring-1 ring-white/20"><Sparkles size={17} /> Agencia formal para viajes memorables</p>
-            <h1 className="text-4xl font-black leading-tight md:text-6xl">Descubre el mundo con Jhon Tours</h1>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-100">Tours nacionales e internacionales al mejor precio, con itinerarios claros, pagos seguros y acompanamiento humano desde la cotizacion hasta el retorno.</p>
+            <p className="mb-4 inline-flex items-center gap-2 rounded-lg bg-white/15 px-4 py-2 text-sm font-bold text-amber-100 ring-1 ring-white/20"><Sparkles size={17} /> Viajes organizados con calma y respaldo</p>
+            <h1 className="text-4xl font-black leading-tight md:text-6xl">Elige tu proximo viaje con confianza</h1>
+            <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-100">Tours nacionales e internacionales con itinerarios claros, precios transparentes, pagos seguros y acompanamiento humano desde la cotizacion hasta tu retorno.</p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link to="/tours" className="btn-gold rounded-lg px-6 py-3 text-center font-black">Ver tours</Link>
               <a href={buildWhatsAppUrl(whatsappMessages.general)} className="rounded-lg bg-[#1fa463] px-6 py-3 text-center font-black text-white">Cotizar viaje</a>
             </div>
             <div className="mt-8 grid max-w-2xl gap-3 sm:grid-cols-3">
-              <MiniTrust icon={<ShieldCheck />} value="Pago seguro" label="Culqi y Yape" />
-              <MiniTrust icon={<Clock3 />} value="Respuesta rapida" label="Atencion por WhatsApp" />
-              <MiniTrust icon={<HeartHandshake />} value="Asistencia" label="Antes y durante el viaje" />
+              <MiniTrust icon={<ShieldCheck />} value="Pago seguro" label="Culqi, Yape y comprobante" />
+              <MiniTrust icon={<Clock3 />} value="Respuesta clara" label="Atencion por WhatsApp" />
+              <MiniTrust icon={<HeartHandshake />} value="Viaje acompanado" label="Antes, durante y despues" />
             </div>
           </div>
           <div className="space-y-4">
@@ -282,6 +285,7 @@ function Home() {
         </div>
       </section>
       <TrustBar />
+      <ConfidencePanel />
       <DestinationCarousel tours={featured.length ? featured : tours.slice(0, 5)} />
       <ExperienceBand />
       <Section title="Tours destacados" subtitle="Paquetes elegidos para viajar con confianza y asistencia desde la primera cotizacion.">
@@ -342,8 +346,8 @@ function HeroVisualCarousel({ tours }: { tours: Tour[] }) {
 function TrustBar() {
   const items = [
     ["+5", "destinos activos"],
-    ["24/7", "asistencia al viajero"],
-    ["100%", "pagos seguros"]
+    ["24/7", "canal de asistencia"],
+    ["100%", "precios transparentes"]
   ];
   return (
     <section className="border-y border-slate-200 bg-white px-4 py-6">
@@ -354,6 +358,34 @@ function TrustBar() {
             <span className="text-sm font-semibold uppercase tracking-widest text-slate-500">{label}</span>
           </div>
         ))}
+      </div>
+    </section>
+  );
+}
+
+function ConfidencePanel() {
+  const promises = [
+    ["Itinerario visible", "Sabes que incluye tu paquete, que no incluye y como se organiza cada dia."],
+    ["Asesor humano", "Un contacto directo te acompana para resolver dudas antes de reservar."],
+    ["Reserva sin presion", "Puedes cotizar por WhatsApp y revisar disponibilidad antes de pagar."]
+  ];
+  return (
+    <section className="confidence-panel px-4 py-12 lg:px-6">
+      <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[.85fr_1.15fr] lg:items-center">
+        <div>
+          <p className="mb-2 inline-flex items-center gap-2 rounded-lg bg-emerald-50 px-3 py-1 text-sm font-bold text-[#0f7a4f]"><ShieldCheck size={16} /> Confianza antes de reservar</p>
+          <h2 className="text-3xl font-black text-[#082447] md:text-4xl">Una web pensada para que el cliente se sienta tranquilo</h2>
+          <p className="mt-3 leading-7 text-slate-600">La experiencia muestra informacion concreta, contacto directo y pasos simples para que elegir Jhon Tours se sienta seguro desde el primer vistazo.</p>
+        </div>
+        <div className="grid gap-4 md:grid-cols-3">
+          {promises.map(([title, text]) => (
+            <div key={title} className="trust-card rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+              <CheckCircle2 className="mb-3 text-[#0f7a4f]" />
+              <strong className="text-[#082447]">{title}</strong>
+              <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
