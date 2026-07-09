@@ -8,7 +8,11 @@ import { z } from "zod";
 import { api } from "./api/client";
 import type { Payment, Reservation, Tour, TourStatus, TourType } from "./types";
 
-const money = (value: string | number) => `$${Number(value).toFixed(2)}`;
+const money = (value: string | number, currency: "PEN" | "USD" = "USD") =>
+  new Intl.NumberFormat("es-PE", { currency, maximumFractionDigits: 0, style: "currency" }).format(Number(value));
+const tourCurrency = (tour: Pick<Tour, "type">) => tour.type === "NACIONAL" ? "PEN" : "USD";
+const tourMoney = (tour: Pick<Tour, "price" | "type">, value: string | number = tour.price) => money(value, tourCurrency(tour));
+const paymentMoney = (payment: Payment) => payment.reservation?.tour ? tourMoney(payment.reservation.tour, payment.amount) : money(payment.amount);
 const whatsapp = import.meta.env.VITE_WHATSAPP_NUMBER ?? "51945342536";
 const whatsappDisplay = "+51 945 342 536";
 const culqiPublicKey = import.meta.env.VITE_CULQI_PUBLIC_KEY ?? "pk_test_xxxxxxxxxxxxxxxxx";
@@ -63,7 +67,7 @@ const demoTours: Tour[] = [
     slug: "machu-picchu",
     destination: "Cusco, Peru",
     description: "Explora la ciudadela inca, el Valle Sagrado y la magia cultural de Cusco con guias expertos y asistencia permanente.",
-    price: 450,
+    price: 1550,
     duration: "4 dias / 3 noches",
     type: "NACIONAL",
     availableSlots: 18,
@@ -94,11 +98,11 @@ const demoTours: Tour[] = [
     slug: "oxapampa",
     destination: "Pasco, Peru",
     description: "Naturaleza, cataratas, cafe y tradiciones locales en una escapada de aire puro.",
-    price: 280,
+    price: 950,
     duration: "3 dias / 2 noches",
     type: "NACIONAL",
     availableSlots: 20,
-    imageUrl: destinationImage("photo-1500530855697-b586d89ba3ee"),
+    imageUrl: "https://inforegion.pe/wp-content/uploads/2025/01/baf433a5-dji_20241114093018_0090_d-2.jpg",
     isFeatured: false,
     status: "ACTIVO"
   },
@@ -108,7 +112,7 @@ const demoTours: Tour[] = [
     slug: "ica-y-huacachina",
     destination: "Ica, Peru",
     description: "Dunas, tubulares, sandboard, bodegas pisqueras y atardeceres inolvidables en el oasis.",
-    price: 190,
+    price: 650,
     duration: "2 dias / 1 noche",
     type: "NACIONAL",
     availableSlots: 25,
@@ -239,7 +243,7 @@ function TourCard({ tour }: { tour: Tour }) {
           <span className="rounded-lg bg-slate-50 px-2 py-2"><UsersRound className="mx-auto mb-1 text-amber-600" size={16} />Guia</span>
         </div>
         <div className="flex items-center justify-between border-t border-slate-100 pt-4">
-          <span className="text-2xl font-black text-[#082447]">{money(tour.price)}</span>
+          <span className="text-2xl font-black text-[#082447]">{tourMoney(tour)}</span>
           <span className="flex items-center gap-1 text-sm text-slate-500"><CalendarDays size={16} /> {tour.duration}</span>
         </div>
         <Link to={`/tours/${tour.id}`} className="flex items-center justify-center gap-2 rounded-lg bg-[#082447] px-4 py-3 font-bold text-white">Ver detalles <ArrowRight size={18} /></Link>
@@ -443,7 +447,7 @@ function DestinationCarousel({ tours }: { tours: Tour[] }) {
                 <div className="carousel-caption formal-caption text-start">
                   <span className="rounded-lg bg-white/90 px-3 py-1 text-sm font-bold text-[#082447]">{tour.type}</span>
                   <h3 className="mt-3 text-3xl font-black md:text-5xl">{tour.title}</h3>
-                  <p className="mt-2 max-w-2xl text-base md:text-lg">{tour.destination} · {tour.duration} · desde {money(tour.price)}</p>
+                  <p className="mt-2 max-w-2xl text-base md:text-lg">{tour.destination} · {tour.duration} · desde {tourMoney(tour)}</p>
                   <Link to={`/tours/${tour.id}`} className="mt-4 inline-flex items-center gap-2 rounded-lg bg-[#f7b731] px-5 py-3 font-black text-[#082447]">Ver detalles <ArrowRight size={18} /></Link>
                 </div>
               </div>
@@ -495,7 +499,7 @@ function Tours() {
       <div className="mb-6 grid gap-3 rounded-lg border border-slate-200 bg-white p-4 shadow-sm lg:grid-cols-4">
         <select className="rounded-lg border px-4 py-3" value={initialType ?? ""} onChange={(e) => setParams(e.target.value ? { type: e.target.value } : {})}><option value="">Todos</option><option value="NACIONAL">Nacional</option><option value="INTERNACIONAL">Internacional</option></select>
         <input className="rounded-lg border px-4 py-3" placeholder="Destino" value={destination} onChange={(e) => setDestination(e.target.value)} />
-        <label className="flex items-center gap-3 rounded-lg border px-4 py-3"><Filter size={18} /> Hasta ${maxPrice}<input type="range" min="100" max="3000" step="50" value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} /></label>
+        <label className="flex items-center gap-3 rounded-lg border px-4 py-3"><Filter size={18} /> Tope por persona (S/ o US$): {maxPrice}<input type="range" min="100" max="3000" step="50" value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} /></label>
         <a href={buildWhatsAppUrl(whatsappMessages.general)} className="rounded-lg bg-[#1fa463] px-4 py-3 text-center font-black text-white">Mas informacion</a>
       </div>
       <div className="mb-6 grid gap-4 md:grid-cols-3">
@@ -548,7 +552,7 @@ function TourDetail() {
         </div>
         <aside className="booking-aside rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
           <p className="text-sm font-bold uppercase text-[#0f7a4f]">{tour.type}</p>
-          <p className="mt-3 text-4xl font-black text-[#082447]">{money(tour.price)}</p>
+          <p className="mt-3 text-4xl font-black text-[#082447]">{tourMoney(tour)}</p>
           <p className="mt-2 text-slate-600">Cupos disponibles: <strong>{tour.availableSlots}</strong></p>
           <div className="mt-5 space-y-3 text-sm text-slate-600">
             <p className="flex items-center gap-2"><ShieldCheck className="text-[#0f7a4f]" size={18} /> Reserva con datos protegidos</p>
@@ -630,7 +634,7 @@ function ReservationPage() {
     onSuccess: (reservation: Reservation) => navigate(`/pago/${reservation.id}`)
   });
   return (
-    <Section title="Reserva tu viaje" subtitle={tour ? `${tour.title} · Total estimado ${money(Number(tour.price) * people)}` : "Completa tus datos"}>
+    <Section title="Reserva tu viaje" subtitle={tour ? `${tour.title} · Total estimado ${tourMoney(tour, Number(tour.price) * people)}` : "Completa tus datos"}>
       <form onSubmit={form.handleSubmit((v) => mutation.mutate(v))} className="mx-auto grid max-w-3xl gap-4 rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
         {["fullName", "email", "phone", "documentNumber"].map((name) => <input key={name} className="rounded-lg border px-4 py-3" placeholder={{ fullName: "Nombre completo", email: "Correo", phone: "Telefono", documentNumber: "Documento" }[name]} {...form.register(name as never)} />)}
         <div className="grid gap-4 sm:grid-cols-2"><input className="rounded-lg border px-4 py-3" type="date" {...form.register("travelDate")} /><input className="rounded-lg border px-4 py-3" type="number" min="1" {...form.register("peopleCount")} /></div>
@@ -656,7 +660,7 @@ function PaymentPage() {
         <div className="rounded-lg border bg-white p-6 shadow-sm">
         <p className="text-sm font-bold uppercase text-[#0f7a4f]">Resumen de reserva</p>
         <h3 className="mt-2 text-2xl font-black text-[#082447]">{reservation.tour.title}</h3>
-        <p className="mt-2 text-slate-600">{reservation.peopleCount} personas · Total: <strong>{money(reservation.totalAmount)}</strong></p>
+        <p className="mt-2 text-slate-600">{reservation.peopleCount} personas · Total: <strong>{tourMoney(reservation.tour, reservation.totalAmount)}</strong></p>
         <div className="mt-6 rounded-lg border border-dashed border-[#0f4c81]/30 bg-[#f8fbff] p-4">
           <h4 className="flex items-center gap-2 font-black text-[#082447]"><CreditCard size={19} /> Ubicacion Culqi Checkout</h4>
           <p className="mt-2 text-sm leading-6 text-slate-600">Aqui se conecta el checkout oficial usando la llave publica del frontend. En modo demo se envia un token simulado al backend.</p>
@@ -767,7 +771,7 @@ function AdminPage() {
           <div className="grid gap-3 sm:grid-cols-2">
             <AdminField label="Titulo" value={tourForm.title} onChange={(value) => setTourForm({ ...tourForm, title: value })} required />
             <AdminField label="Destino" value={tourForm.destination} onChange={(value) => setTourForm({ ...tourForm, destination: value })} required />
-            <AdminField label="Precio USD" type="number" value={tourForm.price} onChange={(value) => setTourForm({ ...tourForm, price: value })} required />
+            <AdminField label={`Precio (${tourForm.type === "NACIONAL" ? "soles" : "USD"})`} type="number" value={tourForm.price} onChange={(value) => setTourForm({ ...tourForm, price: value })} required />
             <AdminField label="Duracion" value={tourForm.duration} onChange={(value) => setTourForm({ ...tourForm, duration: value })} />
             <AdminField label="Cupos" type="number" value={tourForm.availableSlots} onChange={(value) => setTourForm({ ...tourForm, availableSlots: value })} />
             <label className="grid gap-1 text-sm font-bold text-slate-700">Tipo<select className="rounded-lg border px-3 py-3" value={tourForm.type} onChange={(event) => setTourForm({ ...tourForm, type: event.target.value as TourType })}><option value="NACIONAL">Nacional</option><option value="INTERNACIONAL">Internacional</option></select></label>
@@ -792,7 +796,7 @@ function AdminPage() {
                 <div>
                   <strong className="text-[#082447]">{tour.title}</strong>
                   <p className="text-sm text-slate-600">{tour.destination} · {tour.duration}</p>
-                  <p className="text-sm font-bold text-[#0f7a4f]">{money(tour.price)} · {tour.type} · {tour.status}</p>
+                  <p className="text-sm font-bold text-[#0f7a4f]">{tourMoney(tour)} · {tour.type} · {tour.status}</p>
                 </div>
                 <div className="flex gap-2 sm:flex-col">
                   <button type="button" onClick={() => startEditTour(tour)} className="rounded-lg border px-3 py-2 text-sm font-bold">Editar</button>
@@ -804,8 +808,8 @@ function AdminPage() {
         </div>
       </div>
       <div className="grid gap-6 lg:grid-cols-2">
-        <AdminTable title="Reservas" rows={(reservations.data ?? []).map((r) => [`#${r.id}`, r.customer.fullName, r.tour.title, r.status, money(r.totalAmount)])} />
-        <AdminTable title="Pagos" rows={(payments.data ?? []).map((p) => [`#${p.id}`, p.paymentMethod, p.status, money(p.amount), p.culqiChargeId ?? "-"])} />
+        <AdminTable title="Reservas" rows={(reservations.data ?? []).map((r) => [`#${r.id}`, r.customer.fullName, r.tour.title, r.status, tourMoney(r.tour, r.totalAmount)])} />
+        <AdminTable title="Pagos" rows={(payments.data ?? []).map((p) => [`#${p.id}`, p.paymentMethod, p.status, paymentMoney(p), p.culqiChargeId ?? "-"])} />
       </div>
       <div className="mt-6 rounded-lg border bg-white p-6 shadow-sm"><h3 className="mb-3 flex items-center gap-2 text-xl font-black text-[#082447]"><LayoutDashboard /> Operacion lista</h3><p className="text-slate-600">El panel ya usa POST, PUT y DELETE protegidos con JWT para manejar tours desde la interfaz.</p></div>
     </Section>

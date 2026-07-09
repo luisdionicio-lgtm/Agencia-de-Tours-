@@ -35,5 +35,5 @@ export type Payment = {
   paymentMethod: "CARD" | "YAPE";
   amount: string | number;
   culqiChargeId?: string;
+  reservation?: Reservation;
 };
-
