@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowRight, Award, CalendarDays, CheckCircle2, CreditCard, Filter, Globe2, LayoutDashboard, LogOut, MapPin, Menu, MessageCircle, Plane, Search, ShieldCheck, Star, WalletCards, X } from "lucide-react";
+import { ArrowRight, Award, CalendarDays, Camera, CheckCircle2, Clock3, CreditCard, Filter, Globe2, HeartHandshake, Hotel, LayoutDashboard, LogOut, MapPin, Menu, MessageCircle, Plane, Search, ShieldCheck, Sparkles, Star, UsersRound, WalletCards, X } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, NavLink, Route, Routes, useNavigate, useParams, useSearchParams } from "react-router-dom";
@@ -11,6 +11,90 @@ import type { Payment, Reservation, Tour, TourType } from "./types";
 const money = (value: string | number) => `$${Number(value).toFixed(2)}`;
 const whatsapp = import.meta.env.VITE_WHATSAPP_NUMBER ?? "51945342536";
 const whatsappDisplay = "+51 945 342 536";
+
+const destinationImage = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1400&q=85`;
+
+const demoTours: Tour[] = [
+  {
+    id: 1,
+    title: "Machu Picchu",
+    slug: "machu-picchu",
+    destination: "Cusco, Peru",
+    description: "Explora la ciudadela inca, el Valle Sagrado y la magia cultural de Cusco con guias expertos y asistencia permanente.",
+    price: 450,
+    duration: "4 dias / 3 noches",
+    type: "NACIONAL",
+    availableSlots: 18,
+    imageUrl: destinationImage("photo-1587595431973-160d0d94add1"),
+    isFeatured: true,
+    status: "ACTIVO",
+    itinerary: ["Recepcion en Cusco y aclimatacion", "Valle Sagrado con guia local", "Ingreso a Machu Picchu", "Retorno asistido a Lima"],
+    includes: ["Hotel seleccionado", "Traslados", "Guiado profesional", "Asistencia Jhon Tours"],
+    excludes: ["Gastos personales", "Servicios no mencionados"]
+  },
+  {
+    id: 2,
+    title: "Disney Orlando",
+    slug: "disney-orlando",
+    destination: "Orlando, Estados Unidos",
+    description: "Vive parques tematicos, compras y experiencias familiares con una ruta clara, segura y organizada.",
+    price: 1890,
+    duration: "7 dias / 6 noches",
+    type: "INTERNACIONAL",
+    availableSlots: 12,
+    imageUrl: destinationImage("photo-1597466599360-3b9775841aec"),
+    isFeatured: true,
+    status: "ACTIVO"
+  },
+  {
+    id: 3,
+    title: "Oxapampa",
+    slug: "oxapampa",
+    destination: "Pasco, Peru",
+    description: "Naturaleza, cataratas, cafe y tradiciones locales en una escapada de aire puro.",
+    price: 280,
+    duration: "3 dias / 2 noches",
+    type: "NACIONAL",
+    availableSlots: 20,
+    imageUrl: destinationImage("photo-1500530855697-b586d89ba3ee"),
+    isFeatured: false,
+    status: "ACTIVO"
+  },
+  {
+    id: 4,
+    title: "Ica y Huacachina",
+    slug: "ica-y-huacachina",
+    destination: "Ica, Peru",
+    description: "Dunas, tubulares, sandboard, bodegas pisqueras y atardeceres inolvidables en el oasis.",
+    price: 190,
+    duration: "2 dias / 1 noche",
+    type: "NACIONAL",
+    availableSlots: 25,
+    imageUrl: destinationImage("photo-1509316785289-025f5b846b35"),
+    isFeatured: true,
+    status: "ACTIVO"
+  },
+  {
+    id: 5,
+    title: "Egipto",
+    slug: "egipto",
+    destination: "Cairo, Egipto",
+    description: "Piramides, crucero por el Nilo, templos legendarios y acompanamiento especializado.",
+    price: 2700,
+    duration: "8 dias / 7 noches",
+    type: "INTERNACIONAL",
+    availableSlots: 10,
+    imageUrl: destinationImage("photo-1539650116574-75c0c6d73f6e"),
+    isFeatured: true,
+    status: "ACTIVO"
+  }
+];
+
+const demoTestimonials = [
+  { name: "Maria Fernandez", location: "Lima", comment: "La reserva fue rapida, los precios fueron claros y el viaje a Cusco estuvo muy bien organizado.", rating: 5 },
+  { name: "Carlos Medina", location: "Trujillo", comment: "Me atendieron por WhatsApp con paciencia y todo el itinerario estuvo explicado antes de pagar.", rating: 5 },
+  { name: "Rosa Salazar", location: "Arequipa", comment: "El paquete familiar a Orlando supero nuestras expectativas. Se sintio seguro de inicio a fin.", rating: 5 }
+];
 
 function Shell() {
   const [open, setOpen] = useState(false);
@@ -73,25 +157,42 @@ function RoutesView() {
 }
 
 function useTours(type?: TourType | null) {
+  const fallback = type ? demoTours.filter((tour) => tour.type === type) : demoTours;
   return useQuery<Tour[]>({
     queryKey: ["tours", type],
-    queryFn: async () => (await api.get("/tours", { params: type ? { type } : {} })).data
+    queryFn: async () => {
+      try {
+        return (await api.get("/tours", { params: type ? { type } : {} })).data;
+      } catch {
+        return fallback;
+      }
+    },
+    placeholderData: fallback
   });
 }
 
 function TourCard({ tour }: { tour: Tour }) {
   return (
-    <article className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
-      <img src={tour.imageUrl} alt={tour.title} className="h-56 w-full object-cover" />
+    <article className="tour-card overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+      <div className="relative">
+        <img src={tour.imageUrl} alt={tour.title} className="h-56 w-full object-cover" />
+        <span className="absolute left-4 top-4 rounded-lg bg-white/95 px-3 py-1 text-xs font-black uppercase text-[#082447] shadow-sm">{tour.type}</span>
+        <span className="absolute bottom-4 right-4 rounded-lg bg-[#1fa463] px-3 py-1 text-xs font-black text-white">{tour.availableSlots} cupos</span>
+      </div>
       <div className="space-y-4 p-5">
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="flex items-center gap-1 text-sm font-semibold text-[#0f7a4f]"><MapPin size={16} /> {tour.destination}</p>
             <h3 className="mt-1 text-xl font-bold text-[#082447]">{tour.title}</h3>
           </div>
-          <span className="rounded-lg bg-amber-100 px-3 py-1 text-sm font-bold text-amber-700">{tour.type}</span>
+          <span className="rounded-lg bg-amber-100 px-3 py-1 text-sm font-bold text-amber-700">Top</span>
         </div>
         <p className="line-clamp-2 text-sm leading-6 text-slate-600">{tour.description}</p>
+        <div className="grid grid-cols-3 gap-2 text-center text-xs font-bold text-slate-600">
+          <span className="rounded-lg bg-slate-50 px-2 py-2"><ShieldCheck className="mx-auto mb-1 text-[#0f7a4f]" size={16} />Seguro</span>
+          <span className="rounded-lg bg-slate-50 px-2 py-2"><Hotel className="mx-auto mb-1 text-[#0f4c81]" size={16} />Hotel</span>
+          <span className="rounded-lg bg-slate-50 px-2 py-2"><UsersRound className="mx-auto mb-1 text-amber-600" size={16} />Guia</span>
+        </div>
         <div className="flex items-center justify-between border-t border-slate-100 pt-4">
           <span className="text-2xl font-black text-[#082447]">{money(tour.price)}</span>
           <span className="flex items-center gap-1 text-sm text-slate-500"><CalendarDays size={16} /> {tour.duration}</span>
@@ -105,31 +206,47 @@ function TourCard({ tour }: { tour: Tour }) {
 function Home() {
   const { data: tours = [] } = useTours();
   const featured = tours.filter((tour) => tour.isFeatured).slice(0, 4);
-  const types = ["Aventura", "Playa", "Cultural", "Familiar", "Romantico", "Lujo"];
+  const types = [
+    ["Aventura", "Rutas activas con energia y naturaleza"],
+    ["Playa", "Descanso, sol y hoteles seleccionados"],
+    ["Cultural", "Historia, guias locales y entradas claras"],
+    ["Familiar", "Itinerarios comodos para todas las edades"],
+    ["Romantico", "Escapadas cuidadas para dos"],
+    ["Lujo", "Experiencias premium y asistencia privada"]
+  ];
 
   return (
     <>
       <section className="hero-bg">
         <div className="mx-auto grid min-h-[660px] max-w-7xl items-center gap-10 px-4 py-14 lg:grid-cols-[1.05fr_.95fr] lg:px-6">
           <div className="animate-rise max-w-3xl text-white">
-            <p className="mb-4 inline-flex rounded-lg bg-white/15 px-4 py-2 text-sm font-bold text-amber-200 ring-1 ring-white/20">Asesoria formal para viajes nacionales e internacionales</p>
-            <h1 className="text-4xl font-black leading-tight md:text-6xl">Planifica tu siguiente destino con Jhon Tours</h1>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-100">Paquetes organizados, atencion directa, reservas online y pagos seguros para viajar con respaldo profesional.</p>
+            <p className="mb-4 inline-flex items-center gap-2 rounded-lg bg-white/15 px-4 py-2 text-sm font-bold text-amber-200 ring-1 ring-white/20"><Sparkles size={17} /> Agencia formal para viajes memorables</p>
+            <h1 className="text-4xl font-black leading-tight md:text-6xl">Descubre el mundo con Jhon Tours</h1>
+            <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-100">Tours nacionales e internacionales al mejor precio, con itinerarios claros, pagos seguros y acompanamiento humano desde la cotizacion hasta el retorno.</p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link to="/tours" className="btn-gold rounded-lg px-6 py-3 text-center font-black">Ver tours</Link>
-              <a href={`https://wa.me/${whatsapp}`} className="rounded-lg bg-[#1fa463] px-6 py-3 text-center font-black text-white">Solicitar informacion</a>
+              <a href={`https://wa.me/${whatsapp}`} className="rounded-lg bg-[#1fa463] px-6 py-3 text-center font-black text-white">Cotizar viaje</a>
+            </div>
+            <div className="mt-8 grid max-w-2xl gap-3 sm:grid-cols-3">
+              <MiniTrust icon={<ShieldCheck />} value="Pago seguro" label="Culqi y Yape" />
+              <MiniTrust icon={<Clock3 />} value="Respuesta rapida" label="Atencion por WhatsApp" />
+              <MiniTrust icon={<HeartHandshake />} value="Asistencia" label="Antes y durante el viaje" />
             </div>
           </div>
-          <SearchBox />
+          <div className="space-y-4">
+            <HeroVisualCarousel tours={featured.length ? featured : tours.slice(0, 4)} />
+            <SearchBox />
+          </div>
         </div>
       </section>
       <TrustBar />
       <DestinationCarousel tours={featured.length ? featured : tours.slice(0, 5)} />
+      <ExperienceBand />
       <Section title="Tours destacados" subtitle="Paquetes elegidos para viajar con confianza y asistencia desde la primera cotizacion.">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">{featured.map((tour) => <TourCard key={tour.id} tour={tour} />)}</div>
       </Section>
       <Section title="Tipos de viaje" subtitle="Elige el estilo de experiencia que quieres vivir.">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">{types.map((type) => <div key={type} className="rounded-lg border border-slate-200 bg-white p-5 text-center shadow-sm"><Globe2 className="mx-auto mb-3 text-[#0f4c81]" /><strong>{type}</strong></div>)}</div>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{types.map(([type, text]) => <div key={type} className="experience-card rounded-lg border border-slate-200 bg-white p-6 shadow-sm"><Globe2 className="mb-4 text-[#0f4c81]" /><strong className="text-lg text-[#082447]">{type}</strong><p className="mt-2 text-sm leading-6 text-slate-600">{text}</p></div>)}</div>
       </Section>
       <Testimonials />
       <section id="contacto" className="formal-cta px-4 py-14 text-white">
@@ -139,6 +256,44 @@ function Home() {
         </div>
       </section>
     </>
+  );
+}
+
+function MiniTrust({ icon, value, label }: { icon: React.ReactNode; value: string; label: string }) {
+  return (
+    <div className="rounded-lg bg-white/12 p-4 ring-1 ring-white/20 backdrop-blur">
+      <span className="mb-2 grid h-9 w-9 place-items-center rounded-lg bg-amber-300 text-[#082447]">{icon}</span>
+      <strong className="block text-sm">{value}</strong>
+      <span className="text-xs text-slate-200">{label}</span>
+    </div>
+  );
+}
+
+function HeroVisualCarousel({ tours }: { tours: Tour[] }) {
+  if (!tours.length) return null;
+  return (
+    <div id="heroExperienceCarousel" className="carousel slide hero-mini-carousel overflow-hidden rounded-lg shadow-2xl" data-bs-ride="carousel">
+      <div className="carousel-inner">
+        {tours.map((tour, index) => (
+          <div key={tour.id} className={`carousel-item ${index === 0 ? "active" : ""}`} data-bs-interval="3600">
+            <img src={tour.imageUrl} className="d-block h-[250px] w-100 object-cover" alt={tour.title} />
+            <div className="hero-mini-caption">
+              <span>{tour.duration}</span>
+              <strong>{tour.title}</strong>
+              <small>{tour.destination}</small>
+            </div>
+          </div>
+        ))}
+      </div>
+      <button className="carousel-control-prev" type="button" data-bs-target="#heroExperienceCarousel" data-bs-slide="prev">
+        <span className="carousel-control-prev-icon" aria-hidden="true" />
+        <span className="visually-hidden">Anterior</span>
+      </button>
+      <button className="carousel-control-next" type="button" data-bs-target="#heroExperienceCarousel" data-bs-slide="next">
+        <span className="carousel-control-next-icon" aria-hidden="true" />
+        <span className="visually-hidden">Siguiente</span>
+      </button>
+    </div>
   );
 }
 
@@ -157,6 +312,35 @@ function TrustBar() {
             <span className="text-sm font-semibold uppercase tracking-widest text-slate-500">{label}</span>
           </div>
         ))}
+      </div>
+    </section>
+  );
+}
+
+function ExperienceBand() {
+  const steps = [
+    ["1", "Cotiza", "Elige destino, fecha y numero de viajeros."],
+    ["2", "Reserva", "Registramos tus datos y confirmamos disponibilidad."],
+    ["3", "Paga seguro", "Culqi, Yape y comprobante de operacion."],
+    ["4", "Viaja", "Acompanamiento y comunicacion directa."]
+  ];
+  return (
+    <section className="journey-band px-4 py-14 text-white lg:px-6">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-8 max-w-3xl">
+          <p className="mb-2 inline-flex items-center gap-2 rounded-lg bg-white/12 px-3 py-1 text-sm font-bold text-amber-200"><Camera size={16} /> Experiencia completa</p>
+          <h2 className="text-3xl font-black md:text-4xl">De la idea del viaje a una reserva confiable</h2>
+          <p className="mt-3 leading-7 text-slate-200">Una ruta simple para que el cliente entienda que hay proceso, respaldo y comunicacion clara.</p>
+        </div>
+        <div className="grid gap-4 md:grid-cols-4">
+          {steps.map(([number, title, text]) => (
+            <div key={title} className="journey-step rounded-lg p-5">
+              <span className="grid h-11 w-11 place-items-center rounded-lg bg-amber-300 font-black text-[#082447]">{number}</span>
+              <strong className="mt-4 block text-xl">{title}</strong>
+              <p className="mt-2 text-sm leading-6 text-slate-200">{text}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -240,14 +424,39 @@ function Tours() {
         <label className="flex items-center gap-3 rounded-lg border px-4 py-3"><Filter size={18} /> Hasta ${maxPrice}<input type="range" min="100" max="3000" step="50" value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} /></label>
         <a href={`https://wa.me/${whatsapp}`} className="rounded-lg bg-[#1fa463] px-4 py-3 text-center font-black text-white">Mas informacion</a>
       </div>
+      <div className="mb-6 grid gap-4 md:grid-cols-3">
+        <CatalogSignal icon={<ShieldCheck />} title="Operador confiable" text="Itinerarios revisados y comunicacion directa." />
+        <CatalogSignal icon={<CreditCard />} title="Pagos protegidos" text="Reserva y pagos con flujo preparado para Culqi." />
+        <CatalogSignal icon={<MessageCircle />} title="Asesor humano" text="Soporte por WhatsApp para cotizar y confirmar." />
+      </div>
       {isLoading ? <p>Cargando tours...</p> : <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{filtered.map((tour) => <TourCard key={tour.id} tour={tour} />)}</div>}
     </Section>
   );
 }
 
+function CatalogSignal({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) {
+  return (
+    <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+      <span className="mb-3 grid h-10 w-10 place-items-center rounded-lg bg-[#082447] text-amber-300">{icon}</span>
+      <strong className="text-[#082447]">{title}</strong>
+      <p className="mt-1 text-sm leading-6 text-slate-600">{text}</p>
+    </div>
+  );
+}
+
 function TourDetail() {
   const { id = "" } = useParams();
-  const { data: tour, isLoading } = useQuery<Tour>({ queryKey: ["tour", id], queryFn: async () => (await api.get(`/tours/${id}`)).data });
+  const { data: tour, isLoading } = useQuery<Tour>({
+    queryKey: ["tour", id],
+    queryFn: async () => {
+      try {
+        return (await api.get(`/tours/${id}`)).data;
+      } catch {
+        return demoTours.find((item) => item.id === Number(id)) ?? demoTours[0];
+      }
+    },
+    placeholderData: demoTours.find((item) => item.id === Number(id)) ?? demoTours[0]
+  });
   if (isLoading || !tour) return <Section title="Cargando tour" subtitle="Preparando detalles..." />;
   const itinerary = tour.itinerary ?? ["Recepcion y briefing", "Experiencia principal", "Actividades libres", "Retorno"];
   const includes = tour.includes ?? ["Asistencia", "Traslados", "Guia"];
@@ -255,12 +464,25 @@ function TourDetail() {
   return (
     <Section title={tour.title} subtitle={`${tour.destination} · ${tour.duration}`}>
       <div className="grid gap-8 lg:grid-cols-[1.2fr_.8fr]">
-        <img src={tour.imageUrl} alt={tour.title} className="h-[440px] w-full rounded-lg object-cover shadow-xl" />
-        <aside className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="space-y-4">
+          <img src={tour.imageUrl} alt={tour.title} className="h-[440px] w-full rounded-lg object-cover shadow-xl" />
+          <div className="grid gap-4 sm:grid-cols-3">
+            {[tour.imageUrl, destinationImage("photo-1488646953014-85cb44e25828"), destinationImage("photo-1469854523086-cc02fe5d8800")].map((image, index) => (
+              <img key={`${image}-${index}`} src={image} alt={`${tour.title} experiencia ${index + 1}`} className="h-32 w-full rounded-lg object-cover shadow-sm" />
+            ))}
+          </div>
+        </div>
+        <aside className="booking-aside rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
           <p className="text-sm font-bold uppercase text-[#0f7a4f]">{tour.type}</p>
           <p className="mt-3 text-4xl font-black text-[#082447]">{money(tour.price)}</p>
           <p className="mt-2 text-slate-600">Cupos disponibles: <strong>{tour.availableSlots}</strong></p>
+          <div className="mt-5 space-y-3 text-sm text-slate-600">
+            <p className="flex items-center gap-2"><ShieldCheck className="text-[#0f7a4f]" size={18} /> Reserva con datos protegidos</p>
+            <p className="flex items-center gap-2"><Clock3 className="text-[#0f4c81]" size={18} /> Confirmacion y seguimiento</p>
+            <p className="flex items-center gap-2"><UsersRound className="text-amber-600" size={18} /> Asesoria para tu grupo</p>
+          </div>
           <Link to={`/reservar/${tour.id}`} className="mt-6 flex items-center justify-center gap-2 rounded-lg bg-[#f7b731] px-5 py-3 font-black text-[#082447]">Reservar <ArrowRight /></Link>
+          <a href={`https://wa.me/${whatsapp}`} className="mt-3 flex items-center justify-center gap-2 rounded-lg bg-[#1fa463] px-5 py-3 font-black text-white"><MessageCircle /> Cotizar por WhatsApp</a>
         </aside>
       </div>
       <div className="mt-10 grid gap-6 lg:grid-cols-3">
@@ -280,7 +502,17 @@ type ReservationForm = z.input<typeof reservationSchema>;
 function ReservationPage() {
   const { id = "" } = useParams();
   const navigate = useNavigate();
-  const { data: tour } = useQuery<Tour>({ queryKey: ["tour", id], queryFn: async () => (await api.get(`/tours/${id}`)).data });
+  const { data: tour } = useQuery<Tour>({
+    queryKey: ["tour", id],
+    queryFn: async () => {
+      try {
+        return (await api.get(`/tours/${id}`)).data;
+      } catch {
+        return demoTours.find((item) => item.id === Number(id)) ?? demoTours[0];
+      }
+    },
+    placeholderData: demoTours.find((item) => item.id === Number(id)) ?? demoTours[0]
+  });
   const form = useForm<ReservationForm>({ resolver: zodResolver(reservationSchema), defaultValues: { peopleCount: 1 } });
   const people = Number(form.watch("peopleCount") || 1);
   const mutation = useMutation({
@@ -355,8 +587,43 @@ function AdminTable({ title, rows }: { title: string; rows: string[][] }) {
 }
 
 function Testimonials() {
-  const { data = [] } = useQuery<{ name: string; location: string; comment: string; rating: number }[]>({ queryKey: ["testimonials"], queryFn: async () => (await api.get("/testimonials")).data });
-  return <Section title="Testimonios" subtitle="Viajeros que confiaron en Jhon Tours."><div className="grid gap-5 md:grid-cols-3">{data.map((item) => <div key={item.name} className="rounded-lg border bg-white p-6 shadow-sm"><div className="mb-3 flex text-amber-400">{Array.from({ length: item.rating }).map((_, i) => <Star key={i} size={18} fill="currentColor" />)}</div><p className="leading-7 text-slate-600">{item.comment}</p><strong className="mt-4 block text-[#082447]">{item.name}</strong><span className="text-sm text-slate-500">{item.location}</span></div>)}</div></Section>;
+  const { data = demoTestimonials } = useQuery<{ name: string; location: string; comment: string; rating: number }[]>({
+    queryKey: ["testimonials"],
+    queryFn: async () => {
+      try {
+        return (await api.get("/testimonials")).data;
+      } catch {
+        return demoTestimonials;
+      }
+    },
+    placeholderData: demoTestimonials
+  });
+  return (
+    <Section title="Testimonios" subtitle="Viajeros que confiaron en Jhon Tours.">
+      <div id="testimonialCarousel" className="carousel slide testimonial-carousel rounded-lg bg-white p-4 shadow-xl" data-bs-ride="carousel">
+        <div className="carousel-inner">
+          {data.map((item, index) => (
+            <div key={item.name} className={`carousel-item ${index === 0 ? "active" : ""}`} data-bs-interval="4800">
+              <div className="mx-auto max-w-3xl p-6 text-center">
+                <div className="mb-4 flex justify-center text-amber-400">{Array.from({ length: item.rating }).map((_, i) => <Star key={i} size={22} fill="currentColor" />)}</div>
+                <p className="text-xl font-semibold leading-9 text-slate-700">"{item.comment}"</p>
+                <strong className="mt-5 block text-[#082447]">{item.name}</strong>
+                <span className="text-sm text-slate-500">{item.location}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+        <button className="carousel-control-prev testimonial-control" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+          <span className="carousel-control-prev-icon" aria-hidden="true" />
+          <span className="visually-hidden">Anterior</span>
+        </button>
+        <button className="carousel-control-next testimonial-control" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+          <span className="carousel-control-next-icon" aria-hidden="true" />
+          <span className="visually-hidden">Siguiente</span>
+        </button>
+      </div>
+    </Section>
+  );
 }
 
 function Section({ title, subtitle, children }: { title: string; subtitle: string; children?: React.ReactNode }) {
@@ -369,7 +636,7 @@ function Info({ title, items, ordered = false }: { title: string; items: string[
 }
 
 function Footer() {
-  return <footer id="nosotros" className="border-t bg-white px-4 py-10"><div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-3"><div><strong className="text-xl text-[#082447]">Jhon Tours</strong><p className="mt-2 text-slate-600">Agencia de turismo especializada en paquetes nacionales e internacionales.</p></div><div><strong>Contacto</strong><p className="mt-2 text-slate-600">ventas@jhontours.com<br />WhatsApp {whatsappDisplay}</p></div><div><strong>Confianza</strong><p className="mt-2 text-slate-600">Reservas online, pagos Culqi/Yape y acompanamiento profesional.</p></div></div></footer>;
+  return <footer id="nosotros" className="footer-pro border-t px-4 py-10 text-white"><div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-4"><div className="md:col-span-2"><strong className="text-2xl text-amber-300">Jhon Tours</strong><p className="mt-3 max-w-xl text-slate-200">Agencia de turismo especializada en paquetes nacionales e internacionales, reservas online, pagos Culqi/Yape y acompanamiento profesional.</p></div><div><strong>Contacto</strong><p className="mt-3 text-slate-200">ventas@jhontours.com<br />WhatsApp {whatsappDisplay}</p></div><div><strong>Confianza</strong><p className="mt-3 text-slate-200">Itinerarios claros, precios transparentes y atencion personalizada.</p></div></div></footer>;
 }
 
 export default Shell;
