@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { Link, NavLink, Route, Routes, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { z } from "zod";
 import { api } from "./api/client";
-import type { Payment, Reservation, Tour, TourType } from "./types";
+import type { Payment, Reservation, Tour, TourStatus, TourType } from "./types";
 
 const money = (value: string | number) => `$${Number(value).toFixed(2)}`;
 const whatsapp = import.meta.env.VITE_WHATSAPP_NUMBER ?? "51945342536";
@@ -541,6 +541,42 @@ const reservationSchema = z.object({
 });
 type ReservationForm = z.input<typeof reservationSchema>;
 
+type AdminTourForm = {
+  id?: number;
+  title: string;
+  destination: string;
+  description: string;
+  price: string;
+  duration: string;
+  type: TourType;
+  availableSlots: string;
+  imageUrl: string;
+  isFeatured: boolean;
+  status: TourStatus;
+  itineraryText: string;
+  includesText: string;
+  excludesText: string;
+};
+
+const emptyAdminTourForm: AdminTourForm = {
+  title: "",
+  destination: "",
+  description: "",
+  price: "",
+  duration: "",
+  type: "NACIONAL",
+  availableSlots: "10",
+  imageUrl: "",
+  isFeatured: false,
+  status: "ACTIVO",
+  itineraryText: "Llegada y bienvenida\nTour principal guiado\nExperiencias locales\nRetorno",
+  includesText: "Alojamiento\nTraslados\nGuia especializado\nAsistencia Jhon Tours",
+  excludesText: "Gastos personales\nPropinas\nServicios no mencionados"
+};
+
+const listFromText = (value: string) => value.split("\n").map((item) => item.trim()).filter(Boolean);
+const textFromList = (value?: string[]) => (value ?? []).join("\n");
+
 function ReservationPage() {
   const { id = "" } = useParams();
   const navigate = useNavigate();
@@ -621,25 +657,139 @@ function ConfirmationPage() {
 
 function AdminPage() {
   const [token, setToken] = useState(localStorage.getItem("adminToken"));
+  const [tourForm, setTourForm] = useState<AdminTourForm>(emptyAdminTourForm);
   const form = useForm<{ email: string; password: string }>({ defaultValues: { email: "admin@jhontours.com", password: "Admin12345" } });
   const queryClient = useQueryClient();
   const login = useMutation({
     mutationFn: async (values: { email: string; password: string }) => (await api.post("/auth/login", values)).data,
     onSuccess: (data) => { localStorage.setItem("adminToken", data.token); setToken(data.token); queryClient.invalidateQueries(); }
   });
+  const tours = useQuery<Tour[]>({ queryKey: ["adminTours", token], queryFn: async () => (await api.get("/tours")).data, enabled: Boolean(token) });
   const reservations = useQuery<Reservation[]>({ queryKey: ["adminReservations", token], queryFn: async () => (await api.get("/reservations")).data, enabled: Boolean(token) });
   const payments = useQuery<Payment[]>({ queryKey: ["adminPayments", token], queryFn: async () => (await api.get("/payments")).data, enabled: Boolean(token) });
+  const resetTourForm = () => setTourForm(emptyAdminTourForm);
+  const startEditTour = (tour: Tour) => setTourForm({
+    id: tour.id,
+    title: tour.title,
+    destination: tour.destination,
+    description: tour.description ?? "",
+    price: String(tour.price),
+    duration: tour.duration ?? "",
+    type: tour.type,
+    availableSlots: String(tour.availableSlots),
+    imageUrl: tour.imageUrl ?? "",
+    isFeatured: tour.isFeatured,
+    status: tour.status,
+    itineraryText: textFromList(tour.itinerary),
+    includesText: textFromList(tour.includes),
+    excludesText: textFromList(tour.excludes)
+  });
+  const saveTour = useMutation({
+    mutationFn: async () => {
+      const payload = {
+        title: tourForm.title,
+        destination: tourForm.destination,
+        description: tourForm.description,
+        price: Number(tourForm.price),
+        duration: tourForm.duration,
+        type: tourForm.type,
+        availableSlots: Number(tourForm.availableSlots),
+        imageUrl: tourForm.imageUrl || null,
+        isFeatured: tourForm.isFeatured,
+        status: tourForm.status,
+        itinerary: listFromText(tourForm.itineraryText),
+        includes: listFromText(tourForm.includesText),
+        excludes: listFromText(tourForm.excludesText)
+      };
+      return tourForm.id ? (await api.put(`/tours/${tourForm.id}`, payload)).data : (await api.post("/tours", payload)).data;
+    },
+    onSuccess: () => {
+      resetTourForm();
+      queryClient.invalidateQueries({ queryKey: ["adminTours"] });
+      queryClient.invalidateQueries({ queryKey: ["tours"] });
+    }
+  });
+  const deleteTour = useMutation({
+    mutationFn: async (id: number) => (await api.delete(`/tours/${id}`)).data,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["adminTours"] });
+      queryClient.invalidateQueries({ queryKey: ["tours"] });
+    }
+  });
   if (!token) return <Section title="Login administrador" subtitle="Acceso al panel de gestion de Jhon Tours"><form onSubmit={form.handleSubmit((v) => login.mutate(v))} className="mx-auto grid max-w-md gap-4 rounded-lg border bg-white p-6 shadow-sm"><input className="rounded-lg border px-4 py-3" {...form.register("email")} /><input className="rounded-lg border px-4 py-3" type="password" {...form.register("password")} /><button className="rounded-lg bg-[#082447] px-5 py-3 font-black text-white">Ingresar</button></form></Section>;
   return (
     <Section title="Panel administrativo" subtitle="Gestion de reservas, pagos y operaciones.">
       <button onClick={() => { localStorage.removeItem("adminToken"); setToken(null); }} className="mb-5 inline-flex items-center gap-2 rounded-lg border bg-white px-4 py-2 font-bold"><LogOut size={18} /> Salir</button>
+      <div className="mb-6 grid gap-4 md:grid-cols-4">
+        <AdminMetric label="Tours activos" value={String(tours.data?.length ?? 0)} />
+        <AdminMetric label="Reservas" value={String(reservations.data?.length ?? 0)} />
+        <AdminMetric label="Pagos" value={String(payments.data?.length ?? 0)} />
+        <AdminMetric label="Modo pago" value="Demo/Culqi" />
+      </div>
+      <div className="mb-6 grid gap-6 xl:grid-cols-[.95fr_1.05fr]">
+        <form onSubmit={(event) => { event.preventDefault(); saveTour.mutate(); }} className="rounded-lg border bg-white p-6 shadow-sm">
+          <div className="mb-5 flex items-center justify-between gap-3">
+            <h3 className="text-xl font-black text-[#082447]">{tourForm.id ? "Editar tour" : "Crear tour"}</h3>
+            {tourForm.id && <button type="button" onClick={resetTourForm} className="rounded-lg border px-3 py-2 text-sm font-bold">Nuevo</button>}
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <AdminField label="Titulo" value={tourForm.title} onChange={(value) => setTourForm({ ...tourForm, title: value })} required />
+            <AdminField label="Destino" value={tourForm.destination} onChange={(value) => setTourForm({ ...tourForm, destination: value })} required />
+            <AdminField label="Precio USD" type="number" value={tourForm.price} onChange={(value) => setTourForm({ ...tourForm, price: value })} required />
+            <AdminField label="Duracion" value={tourForm.duration} onChange={(value) => setTourForm({ ...tourForm, duration: value })} />
+            <AdminField label="Cupos" type="number" value={tourForm.availableSlots} onChange={(value) => setTourForm({ ...tourForm, availableSlots: value })} />
+            <label className="grid gap-1 text-sm font-bold text-slate-700">Tipo<select className="rounded-lg border px-3 py-3" value={tourForm.type} onChange={(event) => setTourForm({ ...tourForm, type: event.target.value as TourType })}><option value="NACIONAL">Nacional</option><option value="INTERNACIONAL">Internacional</option></select></label>
+            <label className="grid gap-1 text-sm font-bold text-slate-700">Estado<select className="rounded-lg border px-3 py-3" value={tourForm.status} onChange={(event) => setTourForm({ ...tourForm, status: event.target.value as TourStatus })}><option value="ACTIVO">Activo</option><option value="INACTIVO">Inactivo</option></select></label>
+            <label className="flex items-center gap-2 rounded-lg border px-3 py-3 text-sm font-bold text-slate-700"><input type="checkbox" checked={tourForm.isFeatured} onChange={(event) => setTourForm({ ...tourForm, isFeatured: event.target.checked })} /> Destacado</label>
+          </div>
+          <AdminField label="Imagen URL" value={tourForm.imageUrl} onChange={(value) => setTourForm({ ...tourForm, imageUrl: value })} />
+          <label className="mt-3 grid gap-1 text-sm font-bold text-slate-700">Descripcion<textarea className="min-h-24 rounded-lg border px-3 py-3" value={tourForm.description} onChange={(event) => setTourForm({ ...tourForm, description: event.target.value })} /></label>
+          <div className="mt-3 grid gap-3 md:grid-cols-3">
+            <AdminTextArea label="Itinerario" value={tourForm.itineraryText} onChange={(value) => setTourForm({ ...tourForm, itineraryText: value })} />
+            <AdminTextArea label="Incluye" value={tourForm.includesText} onChange={(value) => setTourForm({ ...tourForm, includesText: value })} />
+            <AdminTextArea label="No incluye" value={tourForm.excludesText} onChange={(value) => setTourForm({ ...tourForm, excludesText: value })} />
+          </div>
+          <button className="mt-5 w-full rounded-lg bg-[#082447] px-5 py-3 font-black text-white" disabled={saveTour.isPending}>{saveTour.isPending ? "Guardando..." : tourForm.id ? "Actualizar tour" : "Crear tour"}</button>
+        </form>
+        <div className="rounded-lg border bg-white p-6 shadow-sm">
+          <h3 className="mb-4 text-xl font-black text-[#082447]">Tours administrables</h3>
+          <div className="grid max-h-[720px] gap-3 overflow-y-auto pr-1">
+            {(tours.data ?? []).map((tour) => (
+              <article key={tour.id} className="grid gap-3 rounded-lg border p-3 sm:grid-cols-[110px_1fr_auto]">
+                <img src={tour.imageUrl} alt={tour.title} className="h-24 w-full rounded-lg object-cover sm:w-28" />
+                <div>
+                  <strong className="text-[#082447]">{tour.title}</strong>
+                  <p className="text-sm text-slate-600">{tour.destination} · {tour.duration}</p>
+                  <p className="text-sm font-bold text-[#0f7a4f]">{money(tour.price)} · {tour.type} · {tour.status}</p>
+                </div>
+                <div className="flex gap-2 sm:flex-col">
+                  <button type="button" onClick={() => startEditTour(tour)} className="rounded-lg border px-3 py-2 text-sm font-bold">Editar</button>
+                  <button type="button" onClick={() => deleteTour.mutate(tour.id)} className="rounded-lg bg-red-50 px-3 py-2 text-sm font-bold text-red-700" disabled={deleteTour.isPending}>Desactivar</button>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
       <div className="grid gap-6 lg:grid-cols-2">
         <AdminTable title="Reservas" rows={(reservations.data ?? []).map((r) => [`#${r.id}`, r.customer.fullName, r.tour.title, r.status, money(r.totalAmount)])} />
         <AdminTable title="Pagos" rows={(payments.data ?? []).map((p) => [`#${p.id}`, p.paymentMethod, p.status, money(p.amount), p.culqiChargeId ?? "-"])} />
       </div>
-      <div className="mt-6 rounded-lg border bg-white p-6 shadow-sm"><h3 className="mb-3 flex items-center gap-2 text-xl font-black text-[#082447]"><LayoutDashboard /> CRUD de tours</h3><p className="text-slate-600">La API ya expone POST, PUT y DELETE protegidos con JWT para conectar formularios avanzados o una tabla editable.</p></div>
+      <div className="mt-6 rounded-lg border bg-white p-6 shadow-sm"><h3 className="mb-3 flex items-center gap-2 text-xl font-black text-[#082447]"><LayoutDashboard /> Operacion lista</h3><p className="text-slate-600">El panel ya usa POST, PUT y DELETE protegidos con JWT para manejar tours desde la interfaz.</p></div>
     </Section>
   );
+}
+
+function AdminMetric({ label, value }: { label: string; value: string }) {
+  return <div className="rounded-lg border bg-white p-5 shadow-sm"><span className="text-sm font-bold uppercase text-slate-500">{label}</span><strong className="mt-2 block text-2xl text-[#082447]">{value}</strong></div>;
+}
+
+function AdminField({ label, value, onChange, type = "text", required = false }: { label: string; value: string; onChange: (value: string) => void; type?: string; required?: boolean }) {
+  return <label className="grid gap-1 text-sm font-bold text-slate-700">{label}<input className="rounded-lg border px-3 py-3" type={type} value={value} onChange={(event) => onChange(event.target.value)} required={required} /></label>;
+}
+
+function AdminTextArea({ label, value, onChange }: { label: string; value: string; onChange: (value: string) => void }) {
+  return <label className="grid gap-1 text-sm font-bold text-slate-700">{label}<textarea className="min-h-32 rounded-lg border px-3 py-3" value={value} onChange={(event) => onChange(event.target.value)} /></label>;
 }
 
 function AdminTable({ title, rows }: { title: string; rows: string[][] }) {
