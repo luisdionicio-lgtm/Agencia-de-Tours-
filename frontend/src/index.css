@@ -16,8 +16,8 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background:
-    radial-gradient(circle at top left, rgba(31, 164, 99, 0.1), transparent 28rem),
-    linear-gradient(180deg, #f8fafc 0%, #eef5f8 100%);
+    linear-gradient(180deg, rgba(248, 250, 252, 0.84), rgba(238, 245, 248, 0.92)),
+    url("/tour-world-background.png") center top/cover fixed;
 }
 
 a {
@@ -31,10 +31,15 @@ textarea {
   font: inherit;
 }
 
+.site-shell {
+  background:
+    linear-gradient(180deg, rgba(248, 250, 252, 0.16) 0%, rgba(248, 250, 252, 0.9) 58%, #f8fafc 100%);
+}
+
 .hero-bg {
   background:
-    linear-gradient(90deg, rgba(5, 25, 50, 0.94) 0%, rgba(7, 37, 73, 0.76) 50%, rgba(7, 37, 73, 0.2) 100%),
-    url("https://www.barcelo.com/guia-turismo/wp-content/uploads/2022/05/el-cairo1.jpg") center/cover;
+    linear-gradient(90deg, rgba(5, 25, 50, 0.94) 0%, rgba(7, 37, 73, 0.74) 50%, rgba(7, 37, 73, 0.18) 100%),
+    url("/tour-world-background.png") center/cover;
   position: relative;
   overflow: hidden;
 }

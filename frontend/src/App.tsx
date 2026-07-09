@@ -153,7 +153,7 @@ function Shell() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="site-shell min-h-screen">
       <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 lg:px-6">
           <Link to="/" className="flex items-center gap-3">
