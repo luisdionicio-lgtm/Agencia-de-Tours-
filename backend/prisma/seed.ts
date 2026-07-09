@@ -89,7 +89,7 @@ async function main() {
       duration: "8 dias / 7 noches",
       type: TourType.INTERNACIONAL,
       categoryId: 6,
-      imageUrl: image("photo-1539650116574-75c0c6d73f6e"),
+      imageUrl: "https://www.barcelo.com/guia-turismo/wp-content/uploads/2022/05/el-cairo1.jpg",
       description: "Pirámides, crucero por el Nilo, templos legendarios y acompanamiento especializado.",
       availableSlots: 10,
       isFeatured: true
@@ -131,4 +131,3 @@ main()
     await prisma.$disconnect();
     process.exit(1);
   });
-

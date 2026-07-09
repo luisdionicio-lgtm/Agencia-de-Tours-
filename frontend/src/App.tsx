@@ -126,7 +126,7 @@ const demoTours: Tour[] = [
     duration: "8 dias / 7 noches",
     type: "INTERNACIONAL",
     availableSlots: 10,
-    imageUrl: destinationImage("photo-1539650116574-75c0c6d73f6e"),
+    imageUrl: "https://www.barcelo.com/guia-turismo/wp-content/uploads/2022/05/el-cairo1.jpg",
     isFeatured: true,
     status: "ACTIVO"
   }
