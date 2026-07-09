@@ -1,0 +1,134 @@
+import bcrypt from "bcryptjs";
+import { PrismaClient, Role, TourType } from "@prisma/client";
+
+const prisma = new PrismaClient();
+
+const image = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1400&q=80`;
+
+async function main() {
+  const categories = ["Aventura", "Playa", "Cultural", "Familiar", "Romantico", "Lujo"];
+
+  for (const name of categories) {
+    await prisma.category.upsert({
+      where: { id: categories.indexOf(name) + 1 },
+      update: { name },
+      create: { name }
+    });
+  }
+
+  const password = await bcrypt.hash(process.env.ADMIN_PASSWORD ?? "Admin12345", 10);
+  await prisma.user.upsert({
+    where: { email: process.env.ADMIN_EMAIL ?? "admin@jhontours.com" },
+    update: { password, role: Role.ADMIN },
+    create: {
+      name: "Administrador Jhon Tours",
+      email: process.env.ADMIN_EMAIL ?? "admin@jhontours.com",
+      password,
+      role: Role.ADMIN
+    }
+  });
+
+  const tours = [
+    {
+      title: "Machu Picchu",
+      slug: "machu-picchu",
+      destination: "Cusco, Peru",
+      price: 450,
+      duration: "4 dias / 3 noches",
+      type: TourType.NACIONAL,
+      categoryId: 3,
+      imageUrl: image("photo-1587595431973-160d0d94add1"),
+      description: "Explora la ciudadela inca, el Valle Sagrado y la magia cultural de Cusco con guias expertos.",
+      availableSlots: 18,
+      isFeatured: true
+    },
+    {
+      title: "Disney Orlando",
+      slug: "disney-orlando",
+      destination: "Orlando, Estados Unidos",
+      price: 1890,
+      duration: "7 dias / 6 noches",
+      type: TourType.INTERNACIONAL,
+      categoryId: 4,
+      imageUrl: image("photo-1597466599360-3b9775841aec"),
+      description: "Vive parques tematicos, compras y experiencias familiares con asistencia durante todo el viaje.",
+      availableSlots: 12,
+      isFeatured: true
+    },
+    {
+      title: "Oxapampa",
+      slug: "oxapampa",
+      destination: "Pasco, Peru",
+      price: 280,
+      duration: "3 dias / 2 noches",
+      type: TourType.NACIONAL,
+      categoryId: 1,
+      imageUrl: image("photo-1500530855697-b586d89ba3ee"),
+      description: "Naturaleza, cataratas, cafe y tradiciones austroalemanas en una escapada llena de aire puro.",
+      availableSlots: 20,
+      isFeatured: false
+    },
+    {
+      title: "Ica y Huacachina",
+      slug: "ica-y-huacachina",
+      destination: "Ica, Peru",
+      price: 190,
+      duration: "2 dias / 1 noche",
+      type: TourType.NACIONAL,
+      categoryId: 1,
+      imageUrl: image("photo-1509316785289-025f5b846b35"),
+      description: "Dunas, tubulares, sandboard, bodegas pisqueras y atardeceres inolvidables en el oasis.",
+      availableSlots: 25,
+      isFeatured: true
+    },
+    {
+      title: "Egipto",
+      slug: "egipto",
+      destination: "Cairo, Egipto",
+      price: 2700,
+      duration: "8 dias / 7 noches",
+      type: TourType.INTERNACIONAL,
+      categoryId: 6,
+      imageUrl: image("photo-1539650116574-75c0c6d73f6e"),
+      description: "Pirámides, crucero por el Nilo, templos legendarios y acompanamiento especializado.",
+      availableSlots: 10,
+      isFeatured: true
+    }
+  ];
+
+  for (const tour of tours) {
+    await prisma.tour.upsert({
+      where: { slug: tour.slug },
+      update: {
+        ...tour,
+        itinerary: ["Llegada y bienvenida", "Tour principal guiado", "Experiencias locales", "Retorno"],
+        includes: ["Alojamiento", "Traslados", "Guia especializado", "Asistencia Jhon Tours"],
+        excludes: ["Gastos personales", "Propinas", "Servicios no mencionados"]
+      },
+      create: {
+        ...tour,
+        itinerary: ["Llegada y bienvenida", "Tour principal guiado", "Experiencias locales", "Retorno"],
+        includes: ["Alojamiento", "Traslados", "Guia especializado", "Asistencia Jhon Tours"],
+        excludes: ["Gastos personales", "Propinas", "Servicios no mencionados"]
+      }
+    });
+  }
+
+  await prisma.testimonial.createMany({
+    data: [
+      { name: "Maria Fernandez", location: "Lima", comment: "La reserva fue rapida y el viaje a Cusco estuvo muy bien organizado.", rating: 5 },
+      { name: "Carlos Medina", location: "Trujillo", comment: "Excelente atencion por WhatsApp y precios claros desde el inicio.", rating: 5 },
+      { name: "Rosa Salazar", location: "Arequipa", comment: "El paquete familiar a Orlando supero nuestras expectativas.", rating: 5 }
+    ],
+    skipDuplicates: true
+  });
+}
+
+main()
+  .then(async () => prisma.$disconnect())
+  .catch(async (error) => {
+    console.error(error);
+    await prisma.$disconnect();
+    process.exit(1);
+  });
+

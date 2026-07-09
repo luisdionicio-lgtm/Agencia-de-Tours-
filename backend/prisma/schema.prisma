@@ -1,0 +1,162 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  CLIENT
+}
+
+enum TourType {
+  NACIONAL
+  INTERNACIONAL
+}
+
+enum TourStatus {
+  ACTIVO
+  INACTIVO
+}
+
+enum ReservationStatus {
+  PENDIENTE
+  PAGADA
+  RECHAZADA
+  CANCELADA
+}
+
+enum PaymentMethod {
+  CARD
+  YAPE
+}
+
+enum PaymentStatus {
+  PENDIENTE
+  EXITOSO
+  RECHAZADO
+  DEVUELTO
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(120)
+  email     String   @unique @db.VarChar(120)
+  password  String   @db.VarChar(255)
+  role      Role     @default(CLIENT)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("users")
+}
+
+model Category {
+  id    Int    @id @default(autoincrement())
+  name  String @db.VarChar(100)
+  tours Tour[]
+
+  @@map("categories")
+}
+
+model Tour {
+  id             Int          @id @default(autoincrement())
+  categoryId     Int?         @map("category_id")
+  title          String       @db.VarChar(150)
+  slug           String       @unique @db.VarChar(160)
+  destination    String       @db.VarChar(120)
+  description    String?      @db.Text
+  price          Decimal      @db.Decimal(10, 2)
+  duration       String?      @db.VarChar(80)
+  type           TourType
+  availableSlots Int          @default(0) @map("available_slots")
+  imageUrl       String?      @map("image_url") @db.Text
+  isFeatured     Boolean      @default(false) @map("is_featured")
+  status         TourStatus   @default(ACTIVO)
+  itinerary      Json?
+  includes       Json?
+  excludes       Json?
+  createdAt      DateTime     @default(now()) @map("created_at")
+  category       Category?    @relation(fields: [categoryId], references: [id])
+  images         TourImage[]
+  reservations   Reservation[]
+
+  @@map("tours")
+}
+
+model TourImage {
+  id        Int    @id @default(autoincrement())
+  tourId    Int    @map("tour_id")
+  imageUrl  String @map("image_url") @db.Text
+  altText   String? @map("alt_text") @db.VarChar(180)
+  tour      Tour   @relation(fields: [tourId], references: [id], onDelete: Cascade)
+
+  @@map("tour_images")
+}
+
+model Customer {
+  id             Int           @id @default(autoincrement())
+  fullName       String        @map("full_name") @db.VarChar(120)
+  email          String        @db.VarChar(120)
+  phone          String?       @db.VarChar(30)
+  documentNumber String?       @map("document_number") @db.VarChar(30)
+  createdAt      DateTime      @default(now()) @map("created_at")
+  reservations   Reservation[]
+
+  @@map("customers")
+}
+
+model Reservation {
+  id          Int               @id @default(autoincrement())
+  customerId  Int               @map("customer_id")
+  tourId      Int               @map("tour_id")
+  travelDate  DateTime          @map("travel_date") @db.Date
+  peopleCount Int               @map("people_count")
+  totalAmount Decimal           @map("total_amount") @db.Decimal(10, 2)
+  status      ReservationStatus @default(PENDIENTE)
+  createdAt   DateTime          @default(now()) @map("created_at")
+  customer    Customer          @relation(fields: [customerId], references: [id])
+  tour        Tour              @relation(fields: [tourId], references: [id])
+  payments    Payment[]
+
+  @@map("reservations")
+}
+
+model Payment {
+  id             Int           @id @default(autoincrement())
+  reservationId  Int           @map("reservation_id")
+  culqiChargeId  String?       @map("culqi_charge_id") @db.VarChar(150)
+  paymentMethod  PaymentMethod @map("payment_method")
+  amount         Decimal       @db.Decimal(10, 2)
+  currency       String        @default("PEN") @db.VarChar(10)
+  status         PaymentStatus @default(PENDIENTE)
+  culqiResponse  Json?         @map("culqi_response")
+  createdAt      DateTime      @default(now()) @map("created_at")
+  reservation    Reservation   @relation(fields: [reservationId], references: [id])
+
+  @@map("payments")
+}
+
+model ContactMessage {
+  id        Int      @id @default(autoincrement())
+  fullName  String   @map("full_name") @db.VarChar(120)
+  email     String   @db.VarChar(120)
+  phone     String?  @db.VarChar(30)
+  message   String   @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("contact_messages")
+}
+
+model Testimonial {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(120)
+  location  String?  @db.VarChar(120)
+  comment   String   @db.Text
+  rating    Int      @default(5)
+  avatarUrl String?  @map("avatar_url") @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("testimonials")
+}
