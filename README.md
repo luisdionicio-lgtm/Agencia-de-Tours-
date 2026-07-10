@@ -179,7 +179,6 @@ git push origin main
 Framework Preset: Next.js
 Root Directory: frontend
 Build Command: npm run build
-Output Directory: .next
 Install Command: npm install
 ```
 
