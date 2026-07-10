@@ -25,3 +25,57 @@ const envSchema = z.object({
 });
 
 export const env = envSchema.parse(process.env);
+
+const isPlaceholder = (value: string, markers: string[]) => !value || markers.some((marker) => value.includes(marker));
+
+export function getIntegrationStatus() {
+  return {
+    environment: env.NODE_ENV,
+    database: {
+      configured: Boolean(env.DATABASE_URL)
+    },
+    culqi: {
+      apiUrl: env.CULQI_API_URL,
+      privateKeyConfigured: !isPlaceholder(env.CULQI_PRIVATE_KEY, ["xxxxxxxx", "change_this"]),
+      webhookSecretConfigured: !isPlaceholder(env.CULQI_WEBHOOK_SECRET, ["change_this", "xxxxxxxx"]),
+      demoPaymentsEnabled: env.NODE_ENV === "development" && env.ALLOW_DEMO_PAYMENTS,
+      demoPaymentsAllowedInProduction: false
+    },
+    smtp: {
+      configured: Boolean(env.SMTP_HOST && env.SMTP_PORT && env.SMTP_USER && env.SMTP_PASS && env.MAIL_FROM),
+      hostConfigured: Boolean(env.SMTP_HOST),
+      portConfigured: Boolean(env.SMTP_PORT),
+      userConfigured: Boolean(env.SMTP_USER),
+      fromConfigured: Boolean(env.MAIL_FROM)
+    }
+  };
+}
+
+export function validateProductionConfig() {
+  if (env.NODE_ENV !== "production") return;
+
+  const errors: string[] = [];
+  const warnings: string[] = [];
+
+  if (env.ALLOW_DEMO_PAYMENTS) {
+    errors.push("ALLOW_DEMO_PAYMENTS no puede estar activo en produccion.");
+  }
+
+  if (env.JWT_SECRET === "cambia_este_secreto_en_produccion" || env.JWT_SECRET === "change_this_secret") {
+    errors.push("JWT_SECRET debe ser un secreto real en produccion.");
+  }
+
+  if (isPlaceholder(env.CULQI_PRIVATE_KEY, ["xxxxxxxx", "change_this"])) {
+    warnings.push("CULQI_PRIVATE_KEY no esta configurado. Los pagos reales fallaran hasta definir la llave privada.");
+  }
+
+  if (!getIntegrationStatus().smtp.configured) {
+    warnings.push("SMTP no esta configurado. Los correos de confirmacion se omitiran hasta definir SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS y MAIL_FROM.");
+  }
+
+  warnings.forEach((warning) => console.warn(`[config] ${warning}`));
+
+  if (errors.length) {
+    throw new Error(`Configuracion de produccion invalida: ${errors.join(" ")}`);
+  }
+}

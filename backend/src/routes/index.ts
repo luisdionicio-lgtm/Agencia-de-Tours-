@@ -4,6 +4,7 @@ import { contactController } from "../controllers/contact.controller";
 import { paymentController } from "../controllers/payment.controller";
 import { reservationController } from "../controllers/reservation.controller";
 import { tourController } from "../controllers/tour.controller";
+import { getIntegrationStatus } from "../config/env";
 import { asyncHandler } from "../middlewares/asyncHandler";
 import { requireAdmin } from "../middlewares/auth";
 import { validate } from "../middlewares/validate";
@@ -12,6 +13,7 @@ import { contactSchema, loginSchema, paymentSchema, reservationSchema, tourSchem
 export const routes = Router();
 
 routes.get("/health", (_req, res) => res.json({ status: "ok", service: "Jhon Tours API" }));
+routes.get("/health/integrations", (_req, res) => res.json(getIntegrationStatus()));
 
 routes.post("/auth/login", validate(loginSchema), asyncHandler(authController.login));
 
@@ -33,4 +35,3 @@ routes.post("/webhooks/culqi", asyncHandler(paymentController.webhook));
 routes.post("/contact", validate(contactSchema), asyncHandler(contactController.create));
 routes.get("/contact", requireAdmin, asyncHandler(contactController.list));
 routes.get("/testimonials", asyncHandler(contactController.testimonials));
-

@@ -8,6 +8,8 @@ Aplicacion web fullstack profesional para una agencia de tours enfocada en paque
 - Backend: Node.js, Express y TypeScript.
 - Base de datos: MySQL con Prisma ORM.
 - Pagos: Culqi Checkout/API y Yape mediante Culqi.
+- Correos: SMTP para confirmaciones.
+- WhatsApp: enlaces `wa.me` con mensajes prellenados.
 
 ## Arquitectura
 
@@ -23,7 +25,10 @@ backend/
     middlewares/      Auth, validacion y errores
     routes/           Endpoints REST
 database/             SQL auxiliar
+docs/                 Checklist de produccion y reglas del proyecto
 ```
+
+La arquitectura mantiene Next.js solo para frontend/SEO y Express para la logica critica de reservas, pagos, autenticacion y MySQL.
 
 ## Requisitos previos
 
@@ -117,10 +122,40 @@ URLs:
 - La llave privada va solo en `backend/.env` como `CULQI_PRIVATE_KEY`.
 - El backend nunca confia en el monto enviado por el frontend: calcula el total usando la reserva y el precio del tour guardado en MySQL.
 - En desarrollo puedes activar pagos demo solo con `NODE_ENV=development` y `ALLOW_DEMO_PAYMENTS=true`.
-- En produccion el backend nunca aprueba pagos demo: debes configurar `CULQI_PRIVATE_KEY` real.
+- En produccion el backend nunca aprueba pagos demo. Si `ALLOW_DEMO_PAYMENTS=true` con `NODE_ENV=production`, la API falla al iniciar.
+- Si falta `CULQI_PRIVATE_KEY`, el intento de pago devuelve un error claro y no marca la reserva como pagada.
 - No se guardan datos sensibles de tarjetas.
 - La pantalla `/pago/:id` carga Culqi Checkout con `NEXT_PUBLIC_CULQI_PUBLIC_KEY` y envia el token al backend.
 - WhatsApp queda como enlace `wa.me`; no usa API oficial todavia.
+
+Estado de integraciones:
+
+```bash
+GET http://localhost:4000/api/health/integrations
+```
+
+Este endpoint muestra si Culqi, webhook y SMTP estan configurados sin exponer secretos.
+
+## Requerimientos funcionales cubiertos
+
+- Mostrar tours nacionales e internacionales.
+- Filtrar tours por destino, tipo y precio.
+- Ver detalle de cada tour.
+- Crear reservas con datos del cliente.
+- Calcular total desde backend.
+- Preparar pago con tarjeta y Yape mediante Culqi.
+- Confirmar reserva pagada.
+- Enviar correos por SMTP cuando este configurado.
+- Administrar tours, reservas, pagos y mensajes desde panel privado.
+- Contacto por WhatsApp via `wa.me`.
+
+## Reglas de UI
+
+- Azul marino para confianza y estructura.
+- Dorado para llamadas a la accion.
+- Verde para WhatsApp y confirmaciones.
+- Tarjetas con imagen, precio, duracion y accion clara.
+- Diseno responsive, comercial y consistente para una agencia de turismo.
 
 ## WhatsApp
 
@@ -232,6 +267,16 @@ ADMIN_PASSWORD=Admin12345
 - Pantalla de pago Culqi/Yape.
 - Confirmacion de reserva pagada.
 - Panel admin con reservas y pagos.
+
+## Checklist profesional
+
+Lee tambien:
+
+```text
+docs/production-checklist.md
+```
+
+Incluye flujos de reserva, pago, admin, variables reales y preguntas pendientes para la empresa.
 
 ## Git
 
