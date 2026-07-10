@@ -308,9 +308,7 @@ function Home() {
         </div>
       </section>
       <TrustBar />
-      <ConfidencePanel />
       <DestinationCarousel tours={featured.length ? featured : tours.slice(0, 5)} />
-      <ExperienceBand />
       <Section title="Tours destacados" subtitle="Paquetes elegidos para viajar con confianza y asistencia desde la primera cotizacion.">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">{featured.map((tour) => <TourCard key={tour.id} tour={tour} />)}</div>
       </Section>
