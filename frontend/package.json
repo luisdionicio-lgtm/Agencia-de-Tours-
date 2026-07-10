@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/ensure-next.mjs",
     "build": "next build",
     "lint": "oxlint",
     "start": "next start"
