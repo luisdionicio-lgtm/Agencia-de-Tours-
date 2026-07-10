@@ -17,9 +17,9 @@
     "seed": "npm run seed --prefix backend"
   },
   "dependencies": {
-    "next": "^16.2.10",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "next": "^14.2.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "overrides": {
     "postcss": "^8.5.16"
