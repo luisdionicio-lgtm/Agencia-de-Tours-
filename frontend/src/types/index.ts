@@ -8,15 +8,27 @@ export type Tour = {
   destination: string;
   description?: string;
   price: string | number;
+  currency?: "PEN" | "USD";
+  paymentMode?: "FULL" | "DEPOSIT";
+  depositPercent?: number;
   duration?: string;
   type: TourType;
   availableSlots: number;
   imageUrl?: string;
+  imageCredit?: string;
   isFeatured: boolean;
   status: TourStatus;
   itinerary?: string[];
   includes?: string[];
   excludes?: string[];
+  departures?: { id: number; startDate: string; endDate?: string; capacity: number; availableSlots: number; status: TourStatus }[];
+};
+
+export type BusinessSettings = {
+  legalName?: string; tradeName: string; taxId?: string; address?: string; supportEmail?: string;
+  whatsappNumber?: string; domain?: string; cancellationPolicy?: string; refundPolicy?: string;
+  terms?: string; privacyPolicy?: string; cookiePolicy?: string; complaintsBookUrl?: string;
+  policiesPublished: boolean;
 };
 
 export type Reservation = {

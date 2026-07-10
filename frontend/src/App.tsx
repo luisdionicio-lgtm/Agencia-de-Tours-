@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { api } from "./api/client";
 import { Link, NavLink, Route, Routes, useNavigate, useParams, useSearchParams } from "./routing";
-import type { Payment, Reservation, Tour, TourStatus, TourType } from "./types";
+import type { BusinessSettings, Payment, Reservation, Tour, TourStatus, TourType } from "./types";
 
 declare global {
   interface Window {
@@ -26,7 +26,7 @@ declare global {
 
 const money = (value: string | number, currency: "PEN" | "USD" = "USD") =>
   new Intl.NumberFormat("es-PE", { currency, maximumFractionDigits: 0, style: "currency" }).format(Number(value));
-const tourCurrency = (tour: Pick<Tour, "type">) => tour.type === "NACIONAL" ? "PEN" : "USD";
+const tourCurrency = (tour: Pick<Tour, "type" | "currency">) => tour.currency ?? (tour.type === "NACIONAL" ? "PEN" : "USD");
 const tourMoney = (tour: Pick<Tour, "price" | "type">, value: string | number = tour.price) => money(value, tourCurrency(tour));
 const paymentMoney = (payment: Payment) => payment.reservation?.tour ? tourMoney(payment.reservation.tour, payment.amount) : money(payment.amount);
 const whatsapp = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "51945342536";
@@ -228,6 +228,7 @@ function RoutesView() {
       <Route path="/pago/:id" element={<PaymentPage />} />
       <Route path="/confirmacion/:id" element={<ConfirmationPage />} />
       <Route path="/admin" element={<AdminPage />} />
+      <Route path="/legal/:section" element={<LegalPage />} />
     </Routes>
   );
 }
@@ -623,10 +624,14 @@ type AdminTourForm = {
   destination: string;
   description: string;
   price: string;
+  currency: "PEN" | "USD";
+  paymentMode: "FULL" | "DEPOSIT";
+  depositPercent: string;
   duration: string;
   type: TourType;
   availableSlots: string;
   imageUrl: string;
+  imageCredit: string;
   isFeatured: boolean;
   status: TourStatus;
   itineraryText: string;
@@ -639,10 +644,14 @@ const emptyAdminTourForm: AdminTourForm = {
   destination: "",
   description: "",
   price: "",
+  currency: "PEN",
+  paymentMode: "FULL",
+  depositPercent: "",
   duration: "",
   type: "NACIONAL",
   availableSlots: "10",
   imageUrl: "",
+  imageCredit: "",
   isFeatured: false,
   status: "ACTIVO",
   itineraryText: "Llegada y bienvenida\nTour principal guiado\nExperiencias locales\nRetorno",
@@ -892,10 +901,14 @@ function AdminPage() {
     destination: tour.destination,
     description: tour.description ?? "",
     price: String(tour.price),
+    currency: tour.currency ?? tourCurrency(tour),
+    paymentMode: tour.paymentMode ?? "FULL",
+    depositPercent: String(tour.depositPercent ?? ""),
     duration: tour.duration ?? "",
     type: tour.type,
     availableSlots: String(tour.availableSlots),
     imageUrl: tour.imageUrl ?? "",
+    imageCredit: tour.imageCredit ?? "",
     isFeatured: tour.isFeatured,
     status: tour.status,
     itineraryText: textFromList(tour.itinerary),
@@ -909,10 +922,14 @@ function AdminPage() {
         destination: tourForm.destination,
         description: tourForm.description,
         price: Number(tourForm.price),
+        currency: tourForm.currency,
+        paymentMode: tourForm.paymentMode,
+        depositPercent: tourForm.paymentMode === "DEPOSIT" ? Number(tourForm.depositPercent) : null,
         duration: tourForm.duration,
         type: tourForm.type,
         availableSlots: Number(tourForm.availableSlots),
         imageUrl: tourForm.imageUrl || null,
+        imageCredit: tourForm.imageCredit || null,
         isFeatured: tourForm.isFeatured,
         status: tourForm.status,
         itinerary: listFromText(tourForm.itineraryText),
@@ -965,6 +982,7 @@ function AdminPage() {
         <AdminMetric label="Pagos" value={String(payments.data?.length ?? 0)} />
         <AdminMetric label="Modo pago" value="Demo/Culqi" />
       </div>
+      <BusinessSettingsPanel />
       <div className="mb-6 grid gap-6 xl:grid-cols-[.95fr_1.05fr]">
         <form onSubmit={(event) => { event.preventDefault(); saveTour.mutate(); }} className="rounded-lg border bg-white p-6 shadow-sm">
           <div className="mb-5 flex items-center justify-between gap-3">
@@ -975,6 +993,9 @@ function AdminPage() {
             <AdminField label="Titulo" value={tourForm.title} onChange={(value) => setTourForm({ ...tourForm, title: value })} required />
             <AdminField label="Destino" value={tourForm.destination} onChange={(value) => setTourForm({ ...tourForm, destination: value })} required />
             <AdminField label={`Precio (${tourForm.type === "NACIONAL" ? "soles" : "USD"})`} type="number" value={tourForm.price} onChange={(value) => setTourForm({ ...tourForm, price: value })} required />
+            <label className="grid gap-1 text-sm font-bold text-slate-700">Moneda<select className="rounded-lg border px-3 py-3" value={tourForm.currency} onChange={(event) => setTourForm({ ...tourForm, currency: event.target.value as "PEN" | "USD" })}><option value="PEN">Soles (PEN)</option><option value="USD">Dolares (USD)</option></select></label>
+            <label className="grid gap-1 text-sm font-bold text-slate-700">Modalidad de pago<select className="rounded-lg border px-3 py-3" value={tourForm.paymentMode} onChange={(event) => setTourForm({ ...tourForm, paymentMode: event.target.value as "FULL" | "DEPOSIT" })}><option value="FULL">Pago total</option><option value="DEPOSIT">Adelanto</option></select></label>
+            {tourForm.paymentMode === "DEPOSIT" && <AdminField label="Adelanto (%)" type="number" value={tourForm.depositPercent} onChange={(value) => setTourForm({ ...tourForm, depositPercent: value })} required />}
             <AdminField label="Duracion" value={tourForm.duration} onChange={(value) => setTourForm({ ...tourForm, duration: value })} />
             <AdminField label="Cupos" type="number" value={tourForm.availableSlots} onChange={(value) => setTourForm({ ...tourForm, availableSlots: value })} />
             <label className="grid gap-1 text-sm font-bold text-slate-700">Tipo<select className="rounded-lg border px-3 py-3" value={tourForm.type} onChange={(event) => setTourForm({ ...tourForm, type: event.target.value as TourType })}><option value="NACIONAL">Nacional</option><option value="INTERNACIONAL">Internacional</option></select></label>
@@ -982,6 +1003,7 @@ function AdminPage() {
             <label className="flex items-center gap-2 rounded-lg border px-3 py-3 text-sm font-bold text-slate-700"><input type="checkbox" checked={tourForm.isFeatured} onChange={(event) => setTourForm({ ...tourForm, isFeatured: event.target.checked })} /> Destacado</label>
           </div>
           <AdminField label="Imagen URL" value={tourForm.imageUrl} onChange={(value) => setTourForm({ ...tourForm, imageUrl: value })} />
+          <AdminField label="Credito o licencia de imagen" value={tourForm.imageCredit} onChange={(value) => setTourForm({ ...tourForm, imageCredit: value })} />
           <label className="mt-3 grid gap-1 text-sm font-bold text-slate-700">Descripcion<textarea className="min-h-24 rounded-lg border px-3 py-3" value={tourForm.description} onChange={(event) => setTourForm({ ...tourForm, description: event.target.value })} /></label>
           <div className="mt-3 grid gap-3 md:grid-cols-3">
             <AdminTextArea label="Itinerario" value={tourForm.itineraryText} onChange={(value) => setTourForm({ ...tourForm, itineraryText: value })} />
@@ -1021,6 +1043,30 @@ function AdminPage() {
 
 function AdminMetric({ label, value }: { label: string; value: string }) {
   return <div className="rounded-lg border bg-white p-5 shadow-sm"><span className="text-sm font-bold uppercase text-slate-500">{label}</span><strong className="mt-2 block text-2xl text-[#082447]">{value}</strong></div>;
+}
+
+const blankSettings: BusinessSettings = { tradeName: "Jhon Tours", policiesPublished: false };
+
+function BusinessSettingsPanel() {
+  const [settings, setSettings] = useState<BusinessSettings>(blankSettings);
+  const query = useQuery<BusinessSettings>({ queryKey: ["businessSettings"], queryFn: async () => (await api.get("/settings")).data });
+  useEffect(() => { if (query.data) setSettings(query.data); }, [query.data]);
+  const save = useMutation({ mutationFn: async () => (await api.put("/settings", settings)).data, onSuccess: setSettings });
+  const field = (key: keyof BusinessSettings, label: string, type = "input") => (
+    <label className="grid gap-1 text-sm font-bold text-slate-700">{label}{type === "textarea"
+      ? <textarea className="min-h-28 rounded-lg border px-3 py-3" value={String(settings[key] ?? "")} onChange={(event) => setSettings({ ...settings, [key]: event.target.value })} />
+      : <input className="rounded-lg border px-3 py-3" value={String(settings[key] ?? "")} onChange={(event) => setSettings({ ...settings, [key]: event.target.value })} />}</label>
+  );
+  return <form onSubmit={(event) => { event.preventDefault(); save.mutate(); }} className="mb-6 rounded-lg border bg-white p-6 shadow-sm">
+    <h3 className="text-xl font-black text-[#082447]">Datos reales y documentos legales</h3>
+    <p className="mb-5 mt-2 text-sm text-slate-600">Guarda borradores libremente. La web solo los muestra al activar “Publicar políticas”, y validará que estén completos.</p>
+    <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">{field("tradeName", "Nombre comercial")}{field("legalName", "Razón social")}{field("taxId", "RUC / identificación fiscal")}{field("address", "Dirección")}{field("supportEmail", "Correo de atención")}{field("whatsappNumber", "WhatsApp")}{field("domain", "Dominio (https://...)")}{field("complaintsBookUrl", "URL del Libro de Reclamaciones")}</div>
+    <div className="mt-4 grid gap-3 md:grid-cols-2">{field("cancellationPolicy", "Política de cancelación y cambios", "textarea")}{field("refundPolicy", "Política de reembolsos", "textarea")}{field("terms", "Términos y condiciones", "textarea")}{field("privacyPolicy", "Política de privacidad", "textarea")}{field("cookiePolicy", "Política de cookies", "textarea")}</div>
+    <label className="mt-4 flex items-center gap-2 font-bold"><input type="checkbox" checked={settings.policiesPublished} onChange={(event) => setSettings({ ...settings, policiesPublished: event.target.checked })} /> Publicar políticas validadas</label>
+    {save.isError && <p className="mt-3 rounded-lg bg-red-50 p-3 text-sm font-bold text-red-700">No se pudo guardar. Si intentas publicar, completa todos los campos obligatorios.</p>}
+    {save.isSuccess && <p className="mt-3 text-sm font-bold text-emerald-700">Configuración guardada.</p>}
+    <button className="mt-4 rounded-lg bg-[#082447] px-5 py-3 font-black text-white" disabled={save.isPending}>Guardar configuración</button>
+  </form>;
 }
 
 function AdminField({ label, value, onChange, type = "text", required = false }: { label: string; value: string; onChange: (value: string) => void; type?: string; required?: boolean }) {
@@ -1084,8 +1130,21 @@ function Info({ title, items, ordered = false }: { title: string; items: string[
   return <div className="rounded-lg border bg-white p-6 shadow-sm"><h3 className="mb-4 text-xl font-black text-[#082447]">{title}</h3><List className="space-y-3 text-slate-600">{items.map((item) => <li key={item} className="leading-7">{item}</li>)}</List></div>;
 }
 
+function LegalPage() {
+  const { section = "terms" } = useParams();
+  const { data } = useQuery<BusinessSettings>({ queryKey: ["publicSettings"], queryFn: async () => (await api.get("/settings/public")).data });
+  const content: Record<string, [string, keyof BusinessSettings]> = {
+    terminos: ["Términos y condiciones", "terms"], privacidad: ["Política de privacidad", "privacyPolicy"],
+    cookies: ["Política de cookies", "cookiePolicy"], cancelaciones: ["Cancelaciones y cambios", "cancellationPolicy"],
+    reembolsos: ["Política de reembolsos", "refundPolicy"]
+  };
+  const [title, key] = content[section] ?? content.terminos;
+  if (!data?.policiesPublished) return <Section title={title} subtitle="Documento pendiente de validación empresarial"><div className="rounded-lg border border-amber-200 bg-amber-50 p-5 text-amber-900">Esta política aún no ha sido publicada. Comunícate con la agencia para recibir las condiciones aplicables antes de reservar.</div></Section>;
+  return <Section title={title} subtitle={`Información oficial de ${data.tradeName}`}><article className="whitespace-pre-wrap rounded-lg border bg-white p-6 leading-8 text-slate-700 shadow-sm">{String(data[key] ?? "")}</article></Section>;
+}
+
 function Footer() {
-  return <footer id="nosotros" className="footer-pro border-t px-4 py-10 text-white"><div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-4"><div className="md:col-span-2"><strong className="text-2xl text-amber-300">Jhon Tours</strong><p className="mt-3 max-w-xl text-slate-200">Agencia de turismo especializada en paquetes nacionales e internacionales, reservas online, pagos Culqi/Yape y acompanamiento profesional.</p><div className="mt-5 flex flex-wrap gap-2 text-xs font-bold text-slate-100"><span className="rounded-lg bg-white/10 px-3 py-2">Itinerarios claros</span><span className="rounded-lg bg-white/10 px-3 py-2">Pago protegido</span><span className="rounded-lg bg-white/10 px-3 py-2">Atencion humana</span></div></div><div><strong>Contacto</strong><p className="mt-3 text-slate-200">ventas@jhontours.com<br />WhatsApp {whatsappDisplay}</p></div><div><strong>Confianza</strong><p className="mt-3 text-slate-200">Precios transparentes, cupos visibles y confirmaciones por correo cuando SMTP este configurado.</p></div></div></footer>;
+  return <footer id="nosotros" className="footer-pro border-t px-4 py-10 text-white"><div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-4"><div className="md:col-span-2"><strong className="text-2xl text-amber-300">Jhon Tours</strong><p className="mt-3 max-w-xl text-slate-200">Agencia de turismo especializada en paquetes nacionales e internacionales, reservas online, pagos Culqi/Yape y acompanamiento profesional.</p><div className="mt-5 flex flex-wrap gap-2 text-xs font-bold text-slate-100"><span className="rounded-lg bg-white/10 px-3 py-2">Itinerarios claros</span><span className="rounded-lg bg-white/10 px-3 py-2">Pago protegido</span><span className="rounded-lg bg-white/10 px-3 py-2">Atencion humana</span></div></div><div><strong>Contacto</strong><p className="mt-3 text-slate-200">ventas@jhontours.com<br />WhatsApp {whatsappDisplay}</p></div><div><strong>Información legal</strong><nav className="mt-3 grid gap-2 text-slate-200"><Link to="/legal/terminos">Términos</Link><Link to="/legal/privacidad">Privacidad</Link><Link to="/legal/cookies">Cookies</Link><Link to="/legal/cancelaciones">Cancelaciones</Link><Link to="/legal/reembolsos">Reembolsos</Link></nav></div></div></footer>;
 }
 
 export default Shell;

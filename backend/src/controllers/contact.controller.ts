@@ -10,7 +10,6 @@ export const contactController = {
     res.json(await contactService.list());
   },
   async testimonials(_req: Request, res: Response) {
-    res.json(await prisma.testimonial.findMany({ orderBy: { createdAt: "desc" } }));
+    res.json(await prisma.testimonial.findMany({ where: { verified: true, published: true }, orderBy: { createdAt: "desc" } }));
   }
 };
-

@@ -16,15 +16,15 @@ export const tourRepository = {
 
     return prisma.tour.findMany({
       where,
-      include: { category: true, images: true },
+      include: { category: true, images: true, departures: { where: { status: TourStatus.ACTIVO }, orderBy: { startDate: "asc" } } },
       orderBy: [{ isFeatured: "desc" }, { createdAt: "desc" }]
     });
   },
   findById(id: number) {
-    return prisma.tour.findUnique({ where: { id }, include: { category: true, images: true } });
+    return prisma.tour.findUnique({ where: { id }, include: { category: true, images: true, departures: { orderBy: { startDate: "asc" } } } });
   },
   findBySlug(slug: string) {
-    return prisma.tour.findUnique({ where: { slug }, include: { category: true, images: true } });
+    return prisma.tour.findUnique({ where: { slug }, include: { category: true, images: true, departures: { orderBy: { startDate: "asc" } } } });
   },
   create(data: Prisma.TourCreateInput & { slug?: string }) {
     const slug = data.slug ?? slugify(data.title, { lower: true, strict: true });
@@ -37,4 +37,3 @@ export const tourRepository = {
     return prisma.tour.update({ where: { id }, data: { status: TourStatus.INACTIVO } });
   }
 };
-

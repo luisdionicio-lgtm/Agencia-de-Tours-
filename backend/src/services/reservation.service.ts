@@ -9,7 +9,9 @@ export const reservationService = {
   async create(input: z.infer<typeof reservationSchema>) {
     const tour = await prisma.tour.findUnique({ where: { id: input.tourId } });
     if (!tour || tour.status !== TourStatus.ACTIVO) throw new AppError(404, "Tour no disponible");
-    if (tour.availableSlots < input.peopleCount) throw new AppError(409, "No hay cupos suficientes");
+    const departure = input.departureId ? await prisma.tourDeparture.findFirst({ where: { id: input.departureId, tourId: tour.id, status: TourStatus.ACTIVO } }) : null;
+    if (input.departureId && !departure) throw new AppError(404, "Salida no disponible");
+    if ((departure?.availableSlots ?? tour.availableSlots) < input.peopleCount) throw new AppError(409, "No hay cupos suficientes");
 
     const totalAmount = Number(tour.price) * input.peopleCount;
 
@@ -27,7 +29,8 @@ export const reservationService = {
         data: {
           customerId: customer.id,
           tourId: tour.id,
-          travelDate: input.travelDate,
+          departureId: departure?.id,
+          travelDate: departure?.startDate ?? input.travelDate,
           peopleCount: input.peopleCount,
           totalAmount,
           status: ReservationStatus.PENDIENTE
@@ -35,10 +38,10 @@ export const reservationService = {
         include: { customer: true, tour: true }
       });
 
-      await tx.tour.update({
-        where: { id: tour.id },
-        data: { availableSlots: { decrement: input.peopleCount } }
-      });
+      const updated = departure
+        ? await tx.tourDeparture.updateMany({ where: { id: departure.id, availableSlots: { gte: input.peopleCount } }, data: { availableSlots: { decrement: input.peopleCount } } })
+        : await tx.tour.updateMany({ where: { id: tour.id, availableSlots: { gte: input.peopleCount } }, data: { availableSlots: { decrement: input.peopleCount } } });
+      if (updated.count !== 1) throw new AppError(409, "Los ultimos cupos fueron reservados por otra persona");
 
       return reservation;
     });

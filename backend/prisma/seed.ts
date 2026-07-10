@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { PrismaClient, Role, TourType } from "@prisma/client";
+import { Currency, PrismaClient, Role, TourType } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -35,6 +35,7 @@ async function main() {
       slug: "machu-picchu",
       destination: "Cusco, Peru",
       price: 1550,
+      currency: Currency.PEN,
       duration: "4 dias / 3 noches",
       type: TourType.NACIONAL,
       categoryId: 3,
@@ -48,6 +49,7 @@ async function main() {
       slug: "disney-orlando",
       destination: "Orlando, Estados Unidos",
       price: 1890,
+      currency: Currency.USD,
       duration: "7 dias / 6 noches",
       type: TourType.INTERNACIONAL,
       categoryId: 4,
@@ -61,6 +63,7 @@ async function main() {
       slug: "oxapampa",
       destination: "Pasco, Peru",
       price: 950,
+      currency: Currency.PEN,
       duration: "3 dias / 2 noches",
       type: TourType.NACIONAL,
       categoryId: 1,
@@ -74,6 +77,7 @@ async function main() {
       slug: "ica-y-huacachina",
       destination: "Ica, Peru",
       price: 650,
+      currency: Currency.PEN,
       duration: "2 dias / 1 noche",
       type: TourType.NACIONAL,
       categoryId: 1,
@@ -87,6 +91,7 @@ async function main() {
       slug: "egipto",
       destination: "El Cairo, Egipto",
       price: 2700,
+      currency: Currency.USD,
       duration: "8 dias / 7 noches",
       type: TourType.INTERNACIONAL,
       categoryId: 6,
@@ -118,13 +123,15 @@ async function main() {
     });
   }
 
+  await prisma.testimonial.deleteMany({ where: { source: "seed-demo" } });
   await prisma.testimonial.createMany({
     data: [
-      { name: "Maria Fernandez", location: "Lima", comment: "La reserva fue rapida y el viaje a Cusco estuvo muy bien organizado.", rating: 5 },
-      { name: "Carlos Medina", location: "Trujillo", comment: "Excelente atencion por WhatsApp y precios claros desde el inicio.", rating: 5 },
-      { name: "Rosa Salazar", location: "Arequipa", comment: "El paquete familiar a Orlando supero nuestras expectativas.", rating: 5 }
+      { name: "Testimonio de demostracion", location: "Lima", comment: "Contenido de muestra: reemplazar por una opinion verificable antes de publicar.", rating: 5, source: "seed-demo", verified: false, published: false }
     ],
-    skipDuplicates: true
+  });
+
+  await prisma.businessSettings.upsert({
+    where: { id: 1 }, update: {}, create: { id: 1, tradeName: "Jhon Tours", policiesPublished: false }
   });
 }
 

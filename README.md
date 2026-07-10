@@ -278,6 +278,14 @@ docs/production-checklist.md
 
 Incluye flujos de reserva, pago, admin, variables reales y preguntas pendientes para la empresa.
 
+## Preparación de datos reales
+
+El panel `/admin` permite guardar la razón social, RUC, dirección, dominio, contacto y textos legales como borrador. Las políticas no aparecen como oficiales hasta activar `Publicar políticas validadas`; al hacerlo, el backend exige que todos los campos legales estén completos.
+
+Cada tour admite moneda `PEN` o `USD`, pago total o adelanto porcentual, crédito/licencia de imagen y salidas programadas mediante `/api/tours/:id/departures`. Los testimonios solo aparecen públicamente cuando están marcados simultáneamente como verificados y publicados.
+
+Antes de abrir ventas se debe reemplazar todo contenido demo, aplicar las migraciones y completar Culqi, SMTP, dominio y datos empresariales reales.
+
 ## Git
 
 Autor configurado localmente:

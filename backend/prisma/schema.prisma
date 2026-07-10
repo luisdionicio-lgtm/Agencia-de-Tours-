@@ -41,6 +41,16 @@ enum PaymentStatus {
   DEVUELTO
 }
 
+enum Currency {
+  PEN
+  USD
+}
+
+enum PaymentMode {
+  FULL
+  DEPOSIT
+}
+
 model User {
   id        Int      @id @default(autoincrement())
   name      String   @db.VarChar(120)
@@ -68,10 +78,14 @@ model Tour {
   destination    String       @db.VarChar(120)
   description    String?      @db.Text
   price          Decimal      @db.Decimal(10, 2)
+  currency       Currency     @default(PEN)
+  paymentMode    PaymentMode  @default(FULL) @map("payment_mode")
+  depositPercent Int?         @map("deposit_percent")
   duration       String?      @db.VarChar(80)
   type           TourType
   availableSlots Int          @default(0) @map("available_slots")
   imageUrl       String?      @map("image_url") @db.Text
+  imageCredit    String?      @map("image_credit") @db.VarChar(255)
   isFeatured     Boolean      @default(false) @map("is_featured")
   status         TourStatus   @default(ACTIVO)
   itinerary      Json?
@@ -81,8 +95,24 @@ model Tour {
   category       Category?    @relation(fields: [categoryId], references: [id])
   images         TourImage[]
   reservations   Reservation[]
+  departures     TourDeparture[]
 
   @@map("tours")
+}
+
+model TourDeparture {
+  id             Int           @id @default(autoincrement())
+  tourId         Int           @map("tour_id")
+  startDate      DateTime      @map("start_date") @db.Date
+  endDate        DateTime?     @map("end_date") @db.Date
+  capacity       Int
+  availableSlots Int           @map("available_slots")
+  status         TourStatus    @default(ACTIVO)
+  tour           Tour          @relation(fields: [tourId], references: [id], onDelete: Cascade)
+  reservations   Reservation[]
+
+  @@unique([tourId, startDate])
+  @@map("tour_departures")
 }
 
 model TourImage {
@@ -111,6 +141,7 @@ model Reservation {
   id          Int               @id @default(autoincrement())
   customerId  Int               @map("customer_id")
   tourId      Int               @map("tour_id")
+  departureId Int?              @map("departure_id")
   travelDate  DateTime          @map("travel_date") @db.Date
   peopleCount Int               @map("people_count")
   totalAmount Decimal           @map("total_amount") @db.Decimal(10, 2)
@@ -118,6 +149,7 @@ model Reservation {
   createdAt   DateTime          @default(now()) @map("created_at")
   customer    Customer          @relation(fields: [customerId], references: [id])
   tour        Tour              @relation(fields: [tourId], references: [id])
+  departure   TourDeparture?    @relation(fields: [departureId], references: [id])
   payments    Payment[]
 
   @@map("reservations")
@@ -156,7 +188,32 @@ model Testimonial {
   comment   String   @db.Text
   rating    Int      @default(5)
   avatarUrl String?  @map("avatar_url") @db.Text
+  source    String?  @db.VarChar(255)
+  verified  Boolean  @default(false)
+  published Boolean  @default(false)
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("testimonials")
+}
+
+
+model BusinessSettings {
+  id                 Int      @id @default(1)
+  legalName          String?  @map("legal_name") @db.VarChar(180)
+  tradeName          String   @default("Jhon Tours") @map("trade_name") @db.VarChar(120)
+  taxId              String?  @map("tax_id") @db.VarChar(30)
+  address            String?  @db.VarChar(255)
+  supportEmail       String?  @map("support_email") @db.VarChar(120)
+  whatsappNumber     String?  @map("whatsapp_number") @db.VarChar(30)
+  domain             String?  @db.VarChar(180)
+  cancellationPolicy String?  @map("cancellation_policy") @db.LongText
+  refundPolicy       String?  @map("refund_policy") @db.LongText
+  terms              String?  @db.LongText
+  privacyPolicy      String?  @map("privacy_policy") @db.LongText
+  cookiePolicy       String?  @map("cookie_policy") @db.LongText
+  complaintsBookUrl  String?  @map("complaints_book_url") @db.Text
+  policiesPublished  Boolean  @default(false) @map("policies_published")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  @@map("business_settings")
 }

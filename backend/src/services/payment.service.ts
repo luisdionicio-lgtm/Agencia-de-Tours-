@@ -6,7 +6,7 @@ import { prisma } from "../lib/prisma";
 import { mailService } from "./mail.service";
 import { AppError } from "../utils/AppError";
 
-async function chargeWithCulqi(token: string | undefined, amountInCents: number, email: string) {
+async function chargeWithCulqi(token: string | undefined, amountInCents: number, email: string, currency: "PEN" | "USD") {
   const canUseDemoPayments = env.NODE_ENV === "development" && env.ALLOW_DEMO_PAYMENTS;
 
   if (!env.CULQI_PRIVATE_KEY || env.CULQI_PRIVATE_KEY.includes("xxxxxxxx")) {
@@ -26,7 +26,7 @@ async function chargeWithCulqi(token: string | undefined, amountInCents: number,
     `${env.CULQI_API_URL.replace(/\/$/, "")}/charges`,
     {
       amount: amountInCents,
-      currency_code: "PEN",
+      currency_code: currency,
       email,
       source_id: token
     },
@@ -40,22 +40,25 @@ export const paymentService = {
   async pay(reservationId: number, method: PaymentMethod, token?: string) {
     const reservation = await prisma.reservation.findUnique({
       where: { id: reservationId },
-      include: { customer: true }
+      include: { customer: true, tour: true }
     });
     if (!reservation) throw new AppError(404, "Reserva no encontrada");
     if (reservation.status === ReservationStatus.PAGADA) throw new AppError(409, "La reserva ya fue pagada");
 
-    const amount = Number(reservation.totalAmount);
+    const amount = reservation.tour.paymentMode === "DEPOSIT"
+      ? Number(reservation.totalAmount) * Number(reservation.tour.depositPercent ?? 100) / 100
+      : Number(reservation.totalAmount);
     const amountInCents = Math.round(amount * 100);
 
     try {
-      const culqiResponse = await chargeWithCulqi(token, amountInCents, reservation.customer.email);
+      const culqiResponse = await chargeWithCulqi(token, amountInCents, reservation.customer.email, reservation.tour.currency);
       const payment = await prisma.payment.create({
         data: {
           reservationId,
           culqiChargeId: culqiResponse.id,
           paymentMethod: method,
           amount,
+          currency: reservation.tour.currency,
           status: PaymentStatus.EXITOSO,
           culqiResponse
         }

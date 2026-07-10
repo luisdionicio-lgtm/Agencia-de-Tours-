@@ -4,11 +4,12 @@ import { contactController } from "../controllers/contact.controller";
 import { paymentController } from "../controllers/payment.controller";
 import { reservationController } from "../controllers/reservation.controller";
 import { tourController } from "../controllers/tour.controller";
+import { operationsController } from "../controllers/operations.controller";
 import { getIntegrationStatus } from "../config/env";
 import { asyncHandler } from "../middlewares/asyncHandler";
 import { requireAdmin } from "../middlewares/auth";
 import { validate } from "../middlewares/validate";
-import { contactSchema, loginSchema, paymentSchema, reservationSchema, tourSchema } from "../validators/schemas";
+import { businessSettingsSchema, contactSchema, departureSchema, loginSchema, paymentSchema, reservationSchema, testimonialSchema, tourSchema } from "../validators/schemas";
 
 export const routes = Router();
 
@@ -35,3 +36,11 @@ routes.post("/webhooks/culqi", asyncHandler(paymentController.webhook));
 routes.post("/contact", validate(contactSchema), asyncHandler(contactController.create));
 routes.get("/contact", requireAdmin, asyncHandler(contactController.list));
 routes.get("/testimonials", asyncHandler(contactController.testimonials));
+routes.get("/settings/public", asyncHandler(operationsController.publicSettings));
+routes.get("/settings", requireAdmin, asyncHandler(operationsController.adminSettings));
+routes.put("/settings", requireAdmin, validate(businessSettingsSchema), asyncHandler(operationsController.saveSettings));
+routes.get("/tours/:id/departures", asyncHandler(operationsController.departures));
+routes.post("/tours/:id/departures", requireAdmin, validate(departureSchema), asyncHandler(operationsController.createDeparture));
+routes.get("/admin/testimonials", requireAdmin, asyncHandler(operationsController.testimonials));
+routes.post("/admin/testimonials", requireAdmin, validate(testimonialSchema), asyncHandler(operationsController.createTestimonial));
+routes.put("/admin/testimonials/:id", requireAdmin, validate(testimonialSchema), asyncHandler(operationsController.updateTestimonial));
