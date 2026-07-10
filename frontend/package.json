@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "prebuild": "node scripts/ensure-next.mjs",
+    "vercel-build": "next build",
     "build": "next build",
     "lint": "oxlint",
     "start": "next start"
