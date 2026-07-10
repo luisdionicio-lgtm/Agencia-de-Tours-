@@ -1,11 +1,18 @@
 import axios from "axios";
 import { PaymentMethod, PaymentStatus, ReservationStatus } from "@prisma/client";
+import crypto from "crypto";
 import { env } from "../config/env";
 import { prisma } from "../lib/prisma";
+import { mailService } from "./mail.service";
 import { AppError } from "../utils/AppError";
 
 async function chargeWithCulqi(token: string | undefined, amountInCents: number, email: string) {
+  const canUseDemoPayments = env.NODE_ENV === "development" && env.ALLOW_DEMO_PAYMENTS;
+
   if (!env.CULQI_PRIVATE_KEY || env.CULQI_PRIVATE_KEY.includes("xxxxxxxx")) {
+    if (!canUseDemoPayments) {
+      throw new AppError(503, "Culqi no esta configurado. Define CULQI_PRIVATE_KEY real o habilita ALLOW_DEMO_PAYMENTS=true solo en desarrollo.");
+    }
     return {
       id: `demo_${Date.now()}`,
       outcome: { type: "venta_exitosa", user_message: "Pago demo aprobado" },
@@ -16,7 +23,7 @@ async function chargeWithCulqi(token: string | undefined, amountInCents: number,
   if (!token) throw new AppError(422, "Token de Culqi requerido");
 
   const { data } = await axios.post(
-    "https://api.culqi.com/v2/charges",
+    `${env.CULQI_API_URL.replace(/\/$/, "")}/charges`,
     {
       amount: amountInCents,
       currency_code: "PEN",
@@ -59,8 +66,20 @@ export const paymentService = {
         data: { status: ReservationStatus.PAGADA }
       });
 
+      const paidReservation = await prisma.reservation.findUnique({
+        where: { id: reservationId },
+        include: { customer: true, tour: true }
+      });
+      if (paidReservation) {
+        void mailService.sendPaymentConfirmed(paidReservation).catch((error) => {
+          console.error("No se pudo enviar el correo de pago confirmado", error);
+        });
+      }
+
       return payment;
     } catch (error) {
+      if (error instanceof AppError) throw error;
+
       await prisma.payment.create({
         data: {
           reservationId,
@@ -74,15 +93,31 @@ export const paymentService = {
       throw new AppError(402, "Pago rechazado por Culqi");
     }
   },
+  verifyWebhookSignature(rawBody: string, signature: string | string[] | undefined) {
+    if (!env.CULQI_WEBHOOK_SECRET || env.CULQI_WEBHOOK_SECRET.includes("change_this")) return;
+    const receivedSignature = Array.isArray(signature) ? signature[0] : signature;
+    if (!receivedSignature) throw new AppError(401, "Firma de webhook Culqi requerida");
+
+    const expectedSignature = crypto.createHmac("sha256", env.CULQI_WEBHOOK_SECRET).update(rawBody).digest("hex");
+    const received = Buffer.from(receivedSignature.replace(/^sha256=/, ""), "hex");
+    const expected = Buffer.from(expectedSignature, "hex");
+    if (received.length !== expected.length || !crypto.timingSafeEqual(received, expected)) {
+      throw new AppError(401, "Firma de webhook Culqi invalida");
+    }
+  },
   async handleWebhook(payload: any) {
     const chargeId = payload?.data?.id ?? payload?.id;
     if (!chargeId) return { received: true };
 
     const payment = await prisma.payment.findFirst({ where: { culqiChargeId: chargeId } });
     if (payment && payload?.type?.includes("charge")) {
-      await prisma.reservation.update({
+      const reservation = await prisma.reservation.update({
         where: { id: payment.reservationId },
-        data: { status: ReservationStatus.PAGADA }
+        data: { status: ReservationStatus.PAGADA },
+        include: { customer: true, tour: true }
+      });
+      void mailService.sendPaymentConfirmed(reservation).catch((error) => {
+        console.error("No se pudo enviar el correo de pago confirmado por webhook", error);
       });
     }
 
@@ -92,4 +127,3 @@ export const paymentService = {
     return prisma.payment.findMany({ include: { reservation: { include: { customer: true, tour: true } } }, orderBy: { createdAt: "desc" } });
   }
 };
-

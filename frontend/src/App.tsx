@@ -1,21 +1,38 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowRight, Award, CalendarDays, Camera, CheckCircle2, Clock3, CreditCard, Filter, Globe2, HeartHandshake, Hotel, LayoutDashboard, LogOut, MapPin, Menu, MessageCircle, Plane, Search, ShieldCheck, Sparkles, Star, UsersRound, WalletCards, X } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, NavLink, Route, Routes, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { z } from "zod";
 import { api } from "./api/client";
+import { Link, NavLink, Route, Routes, useNavigate, useParams, useSearchParams } from "./routing";
 import type { Payment, Reservation, Tour, TourStatus, TourType } from "./types";
+
+declare global {
+  interface Window {
+    CulqiCheckout?: new (publicKey: string, config: unknown) => { open: () => void };
+    Culqi?: {
+      publicKey?: string;
+      token?: { id: string };
+      error?: { user_message?: string; merchant_message?: string };
+      settings?: (settings: unknown) => void;
+      options?: (options: unknown) => void;
+      open?: () => void;
+      close?: () => void;
+    };
+    culqi?: () => void;
+  }
+}
 
 const money = (value: string | number, currency: "PEN" | "USD" = "USD") =>
   new Intl.NumberFormat("es-PE", { currency, maximumFractionDigits: 0, style: "currency" }).format(Number(value));
 const tourCurrency = (tour: Pick<Tour, "type">) => tour.type === "NACIONAL" ? "PEN" : "USD";
 const tourMoney = (tour: Pick<Tour, "price" | "type">, value: string | number = tour.price) => money(value, tourCurrency(tour));
 const paymentMoney = (payment: Payment) => payment.reservation?.tour ? tourMoney(payment.reservation.tour, payment.amount) : money(payment.amount);
-const whatsapp = import.meta.env.VITE_WHATSAPP_NUMBER ?? "51945342536";
+const whatsapp = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "51945342536";
 const whatsappDisplay = "+51 945 342 536";
-const culqiPublicKey = import.meta.env.VITE_CULQI_PUBLIC_KEY ?? "pk_test_xxxxxxxxxxxxxxxxx";
+const culqiPublicKey = process.env.NEXT_PUBLIC_CULQI_PUBLIC_KEY ?? "pk_test_xxxxxxxxxxxxxxxxx";
+const isCulqiKeyConfigured = /^pk_(test|live)_[A-Za-z0-9]+/.test(culqiPublicKey) && !culqiPublicKey.includes("xxxxxxxx");
 
 const destinationImage = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1400&q=85`;
 
@@ -158,10 +175,10 @@ function Shell() {
 
   return (
     <div className="site-shell min-h-screen">
-      <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
+      <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 lg:px-6">
           <Link to="/" className="flex items-center gap-3">
-            <span className="brand-mark grid h-11 w-11 place-items-center rounded-lg bg-[#082447] text-amber-300"><Plane size={23} /></span>
+            <span className="brand-mark grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-[#082447] text-amber-300"><Plane size={23} /></span>
             <span>
               <strong className="block text-lg leading-tight text-[#082447]">Jhon Tours</strong>
               <small className="text-xs font-semibold uppercase tracking-widest text-slate-500">Agencia de Turismo</small>
@@ -267,23 +284,25 @@ function Home() {
   return (
     <>
       <section className="hero-bg">
-        <div className="mx-auto grid min-h-[660px] max-w-7xl items-center gap-10 px-4 py-14 lg:grid-cols-[1.05fr_.95fr] lg:px-6">
+        <div className="mx-auto grid min-h-[calc(100svh-80px)] max-w-7xl items-center gap-8 px-4 py-10 lg:min-h-[660px] lg:grid-cols-[1.05fr_.95fr] lg:gap-10 lg:px-6 lg:py-14">
           <div className="animate-rise max-w-3xl text-white">
             <p className="mb-4 inline-flex items-center gap-2 rounded-lg bg-white/15 px-4 py-2 text-sm font-bold text-amber-100 ring-1 ring-white/20"><Sparkles size={17} /> Viajes organizados con calma y respaldo</p>
-            <h1 className="text-4xl font-black leading-tight md:text-6xl">Elige tu proximo viaje con confianza</h1>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-100">Tours nacionales e internacionales con itinerarios claros, precios transparentes, pagos seguros y acompanamiento humano desde la cotizacion hasta tu retorno.</p>
+            <h1 className="text-3xl font-black leading-tight sm:text-4xl md:text-6xl">Elige tu proximo viaje con confianza</h1>
+            <p className="mt-5 max-w-2xl text-base leading-8 text-slate-100 md:text-lg">Tours nacionales e internacionales con itinerarios claros, precios transparentes, pagos seguros y acompanamiento humano desde la cotizacion hasta tu retorno.</p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link to="/tours" className="btn-gold rounded-lg px-6 py-3 text-center font-black">Ver tours</Link>
               <a href={buildWhatsAppUrl(whatsappMessages.general)} className="rounded-lg bg-[#1fa463] px-6 py-3 text-center font-black text-white">Cotizar viaje</a>
             </div>
-            <div className="mt-8 grid max-w-2xl gap-3 sm:grid-cols-3">
+            <div className="mt-8 grid max-w-2xl grid-cols-3 gap-2 sm:gap-3">
               <MiniTrust icon={<ShieldCheck />} value="Pago seguro" label="Culqi, Yape y comprobante" />
               <MiniTrust icon={<Clock3 />} value="Respuesta clara" label="Atencion por WhatsApp" />
               <MiniTrust icon={<HeartHandshake />} value="Viaje acompanado" label="Antes, durante y despues" />
             </div>
           </div>
-          <div className="space-y-4">
-            <HeroVisualCarousel tours={featured.length ? featured : tours.slice(0, 4)} />
+          <div className="space-y-4 lg:pl-2">
+            <div className="hidden lg:block">
+              <HeroVisualCarousel tours={featured.length ? featured : tours.slice(0, 4)} />
+            </div>
             <SearchBox />
           </div>
         </div>
@@ -311,10 +330,10 @@ function Home() {
 
 function MiniTrust({ icon, value, label }: { icon: React.ReactNode; value: string; label: string }) {
   return (
-    <div className="rounded-lg bg-white/12 p-4 ring-1 ring-white/20 backdrop-blur">
-      <span className="mb-2 grid h-9 w-9 place-items-center rounded-lg bg-amber-300 text-[#082447]">{icon}</span>
-      <strong className="block text-sm">{value}</strong>
-      <span className="text-xs text-slate-200">{label}</span>
+    <div className="rounded-lg bg-white/12 p-2 ring-1 ring-white/20 backdrop-blur sm:p-3 lg:p-4">
+      <span className="mb-2 grid h-8 w-8 place-items-center rounded-lg bg-amber-300 text-[#082447] sm:h-9 sm:w-9">{icon}</span>
+      <strong className="block text-xs leading-snug sm:text-sm">{value}</strong>
+      <span className="mt-1 block text-[11px] leading-snug text-slate-200 sm:text-xs">{label}</span>
     </div>
   );
 }
@@ -472,16 +491,16 @@ function SearchBox() {
   const [destination, setDestination] = useState("");
   const [type, setType] = useState("");
   return (
-    <div className="glass rounded-lg p-5 shadow-2xl">
-      <h2 className="text-2xl font-black text-[#082447]">Busca tu destino</h2>
-      <div className="mt-5 grid gap-3">
+    <div className="glass rounded-lg p-4 shadow-2xl lg:p-5">
+      <h2 className="text-xl font-black text-[#082447] lg:text-2xl">Busca tu destino</h2>
+      <div className="mt-5 grid gap-3 lg:grid-cols-2">
         <input className="rounded-lg border border-slate-200 px-4 py-3" placeholder="Destino" value={destination} onChange={(e) => setDestination(e.target.value)} />
         <input className="rounded-lg border border-slate-200 px-4 py-3" type="date" />
         <select className="rounded-lg border border-slate-200 px-4 py-3" value={type} onChange={(e) => setType(e.target.value)}>
           <option value="">Tipo de viaje</option><option value="NACIONAL">Nacional</option><option value="INTERNACIONAL">Internacional</option>
         </select>
         <input className="rounded-lg border border-slate-200 px-4 py-3" type="number" min="1" placeholder="Personas" />
-        <button className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#082447] px-5 py-3 font-black text-white" onClick={() => navigate(`/tours?${new URLSearchParams({ ...(type && { type }), ...(destination && { destination }) }).toString()}`)}><Search /> Buscar tours</button>
+        <button className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#082447] px-5 py-3 font-black text-white lg:col-span-2" onClick={() => navigate(`/tours?${new URLSearchParams({ ...(type && { type }), ...(destination && { destination }) }).toString()}`)}><Search /> Buscar tours</button>
       </div>
     </div>
   );
@@ -650,10 +669,111 @@ function PaymentPage() {
   const { data: reservation } = useQuery<Reservation>({ queryKey: ["reservation", id], queryFn: async () => (await api.get(`/reservations/${id}`)).data });
   const paymentSeed = useMemo(() => createPaymentSeed(id), [id]);
   const qrImage = useMemo(() => pseudoQrSvg(paymentSeed), [paymentSeed]);
+  const [paymentError, setPaymentError] = useState("");
+  const [checkoutReady, setCheckoutReady] = useState(Boolean(window.CulqiCheckout || window.Culqi));
   const mutation = useMutation({
-    mutationFn: async (method: "culqi" | "yape") => (await api.post(`/payments/${method}`, { reservationId: Number(id), token: "demo_token" })).data,
-    onSuccess: () => navigate(`/confirmacion/${id}`)
+    mutationFn: async ({ method, token }: { method: "culqi" | "yape"; token: string }) => (await api.post(`/payments/${method}`, { reservationId: Number(id), token })).data,
+    onSuccess: () => navigate(`/confirmacion/${id}`),
+    onError: (error) => {
+      const fallback = "No se pudo procesar el pago. Revisa la configuracion de Culqi o intenta nuevamente.";
+      if (error && typeof error === "object" && "response" in error) {
+        const response = (error as { response?: { data?: { message?: string } } }).response;
+        setPaymentError(response?.data?.message ?? fallback);
+        return;
+      }
+      setPaymentError(fallback);
+    }
   });
+
+  useEffect(() => {
+    if (!isCulqiKeyConfigured) {
+      console.warn("NEXT_PUBLIC_CULQI_PUBLIC_KEY no esta configurada. En produccion Culqi Checkout no podra abrirse.");
+      return;
+    }
+
+    if (window.CulqiCheckout || window.Culqi) {
+      setCheckoutReady(true);
+      return;
+    }
+
+    const existingScript = document.querySelector<HTMLScriptElement>('script[src="https://checkout.culqi.com/js/v4"]');
+    const script = existingScript ?? document.createElement("script");
+    script.src = "https://checkout.culqi.com/js/v4";
+    script.async = true;
+    script.onload = () => setCheckoutReady(true);
+    script.onerror = () => setPaymentError("No se pudo cargar Culqi Checkout. Revisa tu conexion o la llave publica.");
+    if (!existingScript) document.body.appendChild(script);
+  }, []);
+
+  const payWithToken = (method: "culqi" | "yape", token: string) => {
+    setPaymentError("");
+    mutation.mutate({ method, token });
+  };
+
+  const openCulqiCheckout = (method: "culqi" | "yape") => {
+    if (!reservation) return;
+
+    if (!isCulqiKeyConfigured) {
+      if (process.env.NODE_ENV === "development") {
+        payWithToken(method, "demo_token");
+        return;
+      }
+      setPaymentError("Falta configurar NEXT_PUBLIC_CULQI_PUBLIC_KEY con una llave publica real de Culqi.");
+      return;
+    }
+
+    const amountInCents = Math.round(Number(reservation.totalAmount) * 100);
+    const paymentMethods = {
+      tarjeta: method === "culqi",
+      yape: method === "yape",
+      bancaMovil: false,
+      agente: false,
+      billetera: false,
+      cuotealo: false
+    };
+
+    window.culqi = () => {
+      if (window.Culqi?.token?.id) {
+        const token = window.Culqi.token.id;
+        window.Culqi.close?.();
+        payWithToken(method, token);
+        return;
+      }
+
+      const message = window.Culqi?.error?.user_message ?? window.Culqi?.error?.merchant_message ?? "Culqi no pudo generar el token de pago.";
+      setPaymentError(message);
+    };
+
+    if (window.CulqiCheckout) {
+      const checkout = new window.CulqiCheckout(culqiPublicKey, {
+        settings: {
+          title: "Jhon Tours",
+          currency: "PEN",
+          amount: amountInCents
+        },
+        options: {
+          lang: "es",
+          installments: false,
+          paymentMethods
+        },
+        client: {
+          email: reservation.customer.email
+        }
+      });
+      checkout.open();
+      return;
+    }
+
+    if (window.Culqi?.settings && window.Culqi?.options && window.Culqi?.open) {
+      window.Culqi.publicKey = culqiPublicKey;
+      window.Culqi.settings({ title: "Jhon Tours", currency: "PEN", amount: amountInCents });
+      window.Culqi.options({ lang: "es", installments: false, paymentMethods });
+      window.Culqi.open();
+      return;
+    }
+
+    setPaymentError("Culqi Checkout aun no esta listo. Intenta nuevamente en unos segundos.");
+  };
   return (
     <Section title="Pago seguro" subtitle="El backend recalcula el monto desde la reserva antes de cobrar. Culqi queda listo para activar con llaves reales.">
       {reservation && <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[1fr_.85fr]">
@@ -663,21 +783,23 @@ function PaymentPage() {
         <p className="mt-2 text-slate-600">{reservation.peopleCount} personas · Total: <strong>{tourMoney(reservation.tour, reservation.totalAmount)}</strong></p>
         <div className="mt-6 rounded-lg border border-dashed border-[#0f4c81]/30 bg-[#f8fbff] p-4">
           <h4 className="flex items-center gap-2 font-black text-[#082447]"><CreditCard size={19} /> Ubicacion Culqi Checkout</h4>
-          <p className="mt-2 text-sm leading-6 text-slate-600">Aqui se conecta el checkout oficial usando la llave publica del frontend. En modo demo se envia un token simulado al backend.</p>
-          <code className="mt-3 block overflow-x-auto rounded-lg bg-[#082447] px-3 py-2 text-xs text-amber-200">VITE_CULQI_PUBLIC_KEY={culqiPublicKey}</code>
-          <div id="culqi-checkout-slot" className="mt-4 rounded-lg border bg-white p-4 text-sm text-slate-600">Slot listo para montar Culqi Checkout / Yape cuando coloques llaves reales.</div>
+          <p className="mt-2 text-sm leading-6 text-slate-600">Aqui se conecta el checkout oficial usando la llave publica del frontend. El backend procesa el cargo con la llave privada.</p>
+          <code className="mt-3 block overflow-x-auto rounded-lg bg-[#082447] px-3 py-2 text-xs text-amber-200">NEXT_PUBLIC_CULQI_PUBLIC_KEY={culqiPublicKey}</code>
+          {!isCulqiKeyConfigured && <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm font-bold text-amber-800">Warning: configura NEXT_PUBLIC_CULQI_PUBLIC_KEY para usar pagos reales. En produccion no se enviaran pagos demo.</div>}
+          <div id="culqi-checkout-slot" className="mt-4 rounded-lg border bg-white p-4 text-sm text-slate-600">{checkoutReady ? "Culqi Checkout listo para abrir." : "Cargando Culqi Checkout..."}</div>
         </div>
+        {paymentError && <p className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700">{paymentError}</p>}
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
-          <button onClick={() => mutation.mutate("culqi")} className="flex items-center justify-center gap-2 rounded-lg bg-[#082447] px-5 py-4 font-black text-white" disabled={mutation.isPending}><CreditCard /> Pagar demo con tarjeta</button>
-          <button onClick={() => mutation.mutate("yape")} className="flex items-center justify-center gap-2 rounded-lg bg-[#6d2bd9] px-5 py-4 font-black text-white" disabled={mutation.isPending}><WalletCards /> Confirmar Yape demo</button>
+          <button onClick={() => openCulqiCheckout("culqi")} className="flex items-center justify-center gap-2 rounded-lg bg-[#082447] px-5 py-4 font-black text-white" disabled={mutation.isPending}><CreditCard /> Pagar con tarjeta</button>
+          <button onClick={() => openCulqiCheckout("yape")} className="flex items-center justify-center gap-2 rounded-lg bg-[#6d2bd9] px-5 py-4 font-black text-white" disabled={mutation.isPending}><WalletCards /> Pagar con Yape Culqi</button>
         </div>
-        <p className="mt-4 text-sm text-slate-500">Modo demo activo hasta configurar las llaves reales de Culqi.</p>
+        <p className="mt-4 text-sm text-slate-500">Los pagos demo solo funcionan en desarrollo si el backend tiene ALLOW_DEMO_PAYMENTS=true.</p>
         </div>
         <div className="rounded-lg border bg-white p-6 text-center shadow-sm">
-          <p className="text-sm font-bold uppercase text-[#6d2bd9]">QR aleatorio de simulacion</p>
+          <p className="text-sm font-bold uppercase text-[#6d2bd9]">Referencia visual de reserva</p>
           <img src={qrImage} alt="QR demo para simular pago" className="mx-auto mt-4 h-64 w-64 rounded-lg border p-3" />
           <strong className="mt-4 block text-[#082447]">Codigo: {paymentSeed}</strong>
-          <p className="mt-2 text-sm leading-6 text-slate-600">Usa este QR visual para simular un pago Yape/Culqi durante la presentacion academica.</p>
+          <p className="mt-2 text-sm leading-6 text-slate-600">WhatsApp queda como canal de envio de comprobantes y coordinacion, no como API oficial.</p>
           <a href={buildWhatsAppUrl(whatsappMessages.reservation(reservation))} className="mt-5 inline-flex items-center justify-center gap-2 rounded-lg bg-[#1fa463] px-5 py-3 font-black text-white"><MessageCircle /> Enviar comprobante por WhatsApp</a>
         </div>
       </div>}

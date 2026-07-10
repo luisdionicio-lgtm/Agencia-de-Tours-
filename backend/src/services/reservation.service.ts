@@ -1,5 +1,6 @@
 import { ReservationStatus, TourStatus } from "@prisma/client";
 import { prisma } from "../lib/prisma";
+import { mailService } from "./mail.service";
 import { AppError } from "../utils/AppError";
 import type { reservationSchema } from "../validators/schemas";
 import type { z } from "zod";
@@ -12,7 +13,7 @@ export const reservationService = {
 
     const totalAmount = Number(tour.price) * input.peopleCount;
 
-    return prisma.$transaction(async (tx) => {
+    const reservation = await prisma.$transaction(async (tx) => {
       const customer = await tx.customer.create({
         data: {
           fullName: input.fullName,
@@ -41,6 +42,12 @@ export const reservationService = {
 
       return reservation;
     });
+
+    void mailService.sendReservationCreated(reservation).catch((error) => {
+      console.error("No se pudo enviar el correo de reserva", error);
+    });
+
+    return reservation;
   },
   list() {
     return prisma.reservation.findMany({
@@ -57,4 +64,3 @@ export const reservationService = {
     return reservation;
   }
 };
-

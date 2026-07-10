@@ -4,14 +4,15 @@ Aplicacion web fullstack profesional para una agencia de tours enfocada en paque
 
 ## Tecnologias
 
-- Frontend: React, TypeScript, Vite, Tailwind CSS, React Router DOM, Axios, TanStack Query, React Hook Form, Zod y Lucide React.
-- Backend: Node.js, Express, TypeScript, Prisma ORM, MySQL, JWT, Bcrypt, Zod, CORS y Axios.
-- Base de datos: MySQL con modelos Prisma para usuarios, categorias, tours, imagenes, clientes, reservas, pagos, mensajes y testimonios.
+- Frontend: Next.js, TypeScript y Tailwind CSS.
+- Backend: Node.js, Express y TypeScript.
+- Base de datos: MySQL con Prisma ORM.
+- Pagos: Culqi Checkout/API y Yape mediante Culqi.
 
 ## Arquitectura
 
 ```text
-frontend/             Aplicacion React + Vite
+frontend/             Aplicacion Next.js
 backend/
   prisma/             Schema Prisma y seed inicial
   src/
@@ -90,7 +91,7 @@ npm run dev --prefix frontend
 
 URLs:
 
-- Frontend: `http://localhost:5173`
+- Frontend: `http://localhost:3000`
 - Backend: `http://localhost:4000/api`
 - Healthcheck: `http://localhost:4000/api/health`
 
@@ -112,20 +113,21 @@ URLs:
 
 ## Integracion con Culqi y Yape
 
-- La llave publica va en `frontend/.env` como `VITE_CULQI_PUBLIC_KEY`.
+- La llave publica va en `frontend/.env` como `NEXT_PUBLIC_CULQI_PUBLIC_KEY`.
 - La llave privada va solo en `backend/.env` como `CULQI_PRIVATE_KEY`.
 - El backend nunca confia en el monto enviado por el frontend: calcula el total usando la reserva y el precio del tour guardado en MySQL.
-- Si no configuras una llave privada real, el backend usa modo demo para facilitar la presentacion academica.
+- En desarrollo puedes activar pagos demo solo con `NODE_ENV=development` y `ALLOW_DEMO_PAYMENTS=true`.
+- En produccion el backend nunca aprueba pagos demo: debes configurar `CULQI_PRIVATE_KEY` real.
 - No se guardan datos sensibles de tarjetas.
-- La pantalla `/pago/:id` ya tiene un slot visual `culqi-checkout-slot` para montar Culqi Checkout cuando se usen llaves reales.
-- La misma pantalla genera un QR aleatorio local para simular pagos Yape/Culqi en la presentacion.
+- La pantalla `/pago/:id` carga Culqi Checkout con `NEXT_PUBLIC_CULQI_PUBLIC_KEY` y envia el token al backend.
+- WhatsApp queda como enlace `wa.me`; no usa API oficial todavia.
 
 ## WhatsApp
 
 El numero de contacto principal esta configurado como `+51 945 342 536`.
 
 ```env
-VITE_WHATSAPP_NUMBER=51945342536
+NEXT_PUBLIC_WHATSAPP_NUMBER=51945342536
 ```
 
 La web genera enlaces `wa.me` con mensajes prellenados para:
@@ -139,7 +141,7 @@ La web genera enlaces `wa.me` con mensajes prellenados para:
 Ruta:
 
 ```bash
-http://localhost:5173/admin
+http://localhost:3000/admin
 ```
 
 Credenciales seed:
@@ -174,24 +176,24 @@ git push origin main
 3. Configura el proyecto asi:
 
 ```text
-Framework Preset: Vite
+Framework Preset: Next.js
 Root Directory: frontend
 Build Command: npm run build
-Output Directory: dist
+Output Directory: .next
 Install Command: npm install
 ```
 
 4. En `Environment Variables`, agrega:
 
 ```env
-VITE_WHATSAPP_NUMBER=51945342536
-VITE_CULQI_PUBLIC_KEY=pk_test_xxxxxxxxxxxxxxxxx
+NEXT_PUBLIC_WHATSAPP_NUMBER=51945342536
+NEXT_PUBLIC_CULQI_PUBLIC_KEY=pk_test_xxxxxxxxxxxxxxxxx
 ```
 
 Si vas a conectar un backend real, agrega tambien:
 
 ```env
-VITE_API_URL=https://tu-backend-en-render-o-railway.com/api
+NEXT_PUBLIC_API_URL=https://tu-backend-en-render-o-railway.com/api
 ```
 
 Si no tienes backend desplegado, la web igual funciona con datos demo porque el frontend tiene fallback para tours, testimonios y panel admin.
@@ -210,6 +212,14 @@ DATABASE_URL=
 FRONTEND_URL=
 JWT_SECRET=
 CULQI_PRIVATE_KEY=
+CULQI_API_URL=https://api.culqi.com/v2
+CULQI_WEBHOOK_SECRET=
+ALLOW_DEMO_PAYMENTS=false
+SMTP_HOST=
+SMTP_PORT=
+SMTP_USER=
+SMTP_PASS=
+MAIL_FROM=no-reply@jhontours.com
 ADMIN_EMAIL=admin@jhontours.com
 ADMIN_PASSWORD=Admin12345
 ```

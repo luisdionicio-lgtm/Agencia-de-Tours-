@@ -16,7 +16,8 @@ async function main() {
     });
   }
 
-  const password = await bcrypt.hash(process.env.ADMIN_PASSWORD ?? "Admin12345", 10);
+  const saltRounds = Number(process.env.BCRYPT_SALT_ROUNDS ?? 10);
+  const password = await bcrypt.hash(process.env.ADMIN_PASSWORD ?? "Admin12345", saltRounds);
   await prisma.user.upsert({
     where: { email: process.env.ADMIN_EMAIL ?? "admin@jhontours.com" },
     update: { password, role: Role.ADMIN },

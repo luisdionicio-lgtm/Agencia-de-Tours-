@@ -196,7 +196,11 @@ textarea {
 }
 
 article,
-.rounded-lg {
+.tour-card,
+.experience-card,
+.trust-card,
+.journey-step,
+.glass {
   animation: softReveal 520ms ease both;
 }
 

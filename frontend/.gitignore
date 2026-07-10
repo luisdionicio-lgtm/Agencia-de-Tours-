@@ -1,22 +1,40 @@
-# Logs
-logs
+# Dependencies
+node_modules/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Next.js
+.next/
+out/
+
+# Build outputs
+dist/
+build/
+dist-ssr/
+
+# Logs and reports
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
-yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+coverage/
 
-node_modules
-dist
-dist-ssr
-*.local
+# Cache
+.turbo/
+.vercel/
+*.tsbuildinfo
 
-# Editor directories and files
+# OS and editors
+.DS_Store
+Thumbs.db
+.idea/
 .vscode/*
 !.vscode/extensions.json
-.idea
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj

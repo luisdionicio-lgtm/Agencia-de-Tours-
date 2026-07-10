@@ -1,10 +1,57 @@
+# Dependencies
 node_modules/
-dist/
-build/
-.env
-.env.local
-.DS_Store
-*.log
-coverage/
-backend/prisma/migrations/dev.db
+**/node_modules/
 
+# Environment files
+.env
+.env.*
+**/.env
+**/.env.*
+!.env.example
+!**/.env.example
+
+# Build outputs
+dist/
+**/dist/
+build/
+**/build/
+.next/
+**/.next/
+out/
+**/out/
+dist-ssr/
+**/dist-ssr/
+
+# Logs and reports
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+coverage/
+**/coverage/
+
+# Runtime and cache
+.turbo/
+**/.turbo/
+.vercel/
+**/.vercel/
+*.tsbuildinfo
+**/*.tsbuildinfo
+
+# Prisma local artifacts
+backend/prisma/migrations/dev.db
+backend/prisma/migrations/dev.db-journal
+
+# OS and editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
