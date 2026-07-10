@@ -2,6 +2,9 @@
   "name": "jhon-tours-fullstack",
   "version": "1.0.0",
   "private": true,
+  "workspaces": [
+    "frontend"
+  ],
   "description": "Aplicacion fullstack profesional para la agencia de turismo Jhon Tours.",
   "scripts": {
     "install:all": "npm install --prefix frontend && npm install --prefix backend",
@@ -15,4 +18,3 @@
   "author": "Luis Angel Dionicio Bartolo",
   "license": "MIT"
 }
-
