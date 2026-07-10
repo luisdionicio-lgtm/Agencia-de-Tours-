@@ -176,6 +176,16 @@ function Shell() {
   return (
     <div className="site-shell min-h-screen">
       <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur">
+        <div className="hidden border-b border-white/10 bg-[#061b34] px-4 py-2 text-white lg:block">
+          <div className="mx-auto flex max-w-7xl items-center justify-between text-xs font-semibold">
+            <span className="inline-flex items-center gap-2 text-amber-200"><ShieldCheck size={14} /> Agencia con reservas, pagos seguros y asistencia personalizada</span>
+            <span className="inline-flex items-center gap-5 text-slate-200">
+              <span>WhatsApp {whatsappDisplay}</span>
+              <span>Culqi/Yape listo para produccion</span>
+              <span>MySQL + Prisma</span>
+            </span>
+          </div>
+        </div>
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 lg:px-6">
           <Link to="/" className="flex items-center gap-3">
             <span className="brand-mark grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-[#082447] text-amber-300"><Plane size={23} /></span>
@@ -239,11 +249,13 @@ function useTours(type?: TourType | null) {
 
 function TourCard({ tour }: { tour: Tour }) {
   return (
-    <article className="tour-card overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
-      <div className="relative">
+    <article className="tour-card group overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+      <div className="relative overflow-hidden">
         <img src={tour.imageUrl} alt={tour.title} className="h-56 w-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#061b34]/70 via-transparent to-transparent opacity-90" />
         <span className="absolute left-4 top-4 rounded-lg bg-white/95 px-3 py-1 text-xs font-black uppercase text-[#082447] shadow-sm">{tour.type}</span>
         <span className="absolute bottom-4 right-4 rounded-lg bg-[#1fa463] px-3 py-1 text-xs font-black text-white">{tour.availableSlots} cupos</span>
+        <span className="absolute bottom-4 left-4 inline-flex items-center gap-1 rounded-lg bg-[#082447]/90 px-3 py-1 text-xs font-black text-amber-200"><Star size={14} fill="currentColor" /> Verificado</span>
       </div>
       <div className="space-y-4 p-5">
         <div className="flex items-start justify-between gap-4">
@@ -251,7 +263,7 @@ function TourCard({ tour }: { tour: Tour }) {
             <p className="flex items-center gap-1 text-sm font-semibold text-[#0f7a4f]"><MapPin size={16} /> {tour.destination}</p>
             <h3 className="mt-1 text-xl font-bold text-[#082447]">{tour.title}</h3>
           </div>
-          <span className="rounded-lg bg-amber-100 px-3 py-1 text-sm font-bold text-amber-700">Top</span>
+          <span className="rounded-lg bg-amber-100 px-3 py-1 text-sm font-bold text-amber-700">Recomendado</span>
         </div>
         <p className="line-clamp-2 text-sm leading-6 text-slate-600">{tour.description}</p>
         <div className="grid grid-cols-3 gap-2 text-center text-xs font-bold text-slate-600">
@@ -263,7 +275,7 @@ function TourCard({ tour }: { tour: Tour }) {
           <span className="text-2xl font-black text-[#082447]">{tourMoney(tour)}</span>
           <span className="flex items-center gap-1 text-sm text-slate-500"><CalendarDays size={16} /> {tour.duration}</span>
         </div>
-        <Link to={`/tours/${tour.id}`} className="flex items-center justify-center gap-2 rounded-lg bg-[#082447] px-4 py-3 font-bold text-white">Ver detalles <ArrowRight size={18} /></Link>
+        <Link to={`/tours/${tour.id}`} className="flex items-center justify-center gap-2 rounded-lg bg-[#082447] px-4 py-3 font-bold text-white transition group-hover:bg-[#0f4c81]">Ver detalles <ArrowRight size={18} /></Link>
       </div>
     </article>
   );
@@ -286,12 +298,18 @@ function Home() {
       <section className="hero-bg">
         <div className="mx-auto grid min-h-[calc(100svh-80px)] max-w-7xl items-center gap-8 px-4 py-10 lg:min-h-[660px] lg:grid-cols-[1.05fr_.95fr] lg:gap-10 lg:px-6 lg:py-14">
           <div className="animate-rise max-w-3xl text-white">
-            <p className="mb-4 inline-flex items-center gap-2 rounded-lg bg-white/15 px-4 py-2 text-sm font-bold text-amber-100 ring-1 ring-white/20"><Sparkles size={17} /> Viajes organizados con calma y respaldo</p>
-            <h1 className="text-3xl font-black leading-tight sm:text-4xl md:text-6xl">Elige tu proximo viaje con confianza</h1>
-            <p className="mt-5 max-w-2xl text-base leading-8 text-slate-100 md:text-lg">Tours nacionales e internacionales con itinerarios claros, precios transparentes, pagos seguros y acompanamiento humano desde la cotizacion hasta tu retorno.</p>
+            <p className="mb-4 inline-flex items-center gap-2 rounded-lg bg-white/15 px-4 py-2 text-sm font-bold text-amber-100 ring-1 ring-white/20"><Sparkles size={17} /> Agencia de viajes preparada para vender en serio</p>
+            <h1 className="text-3xl font-black leading-tight sm:text-4xl md:text-6xl">Viaja con una agencia que se siente confiable desde el primer clic</h1>
+            <p className="mt-5 max-w-2xl text-base leading-8 text-slate-100 md:text-lg">Tours nacionales e internacionales con itinerarios claros, precios transparentes, pago preparado con Culqi/Yape y acompanamiento humano antes, durante y despues del viaje.</p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link to="/tours" className="btn-gold rounded-lg px-6 py-3 text-center font-black">Ver tours</Link>
               <a href={buildWhatsAppUrl(whatsappMessages.general)} className="rounded-lg bg-[#1fa463] px-6 py-3 text-center font-black text-white">Cotizar viaje</a>
+            </div>
+            <div className="mt-6 flex flex-wrap gap-2 text-xs font-bold text-slate-100">
+              <span className="rounded-lg bg-white/12 px-3 py-2 ring-1 ring-white/20">Reservas online</span>
+              <span className="rounded-lg bg-white/12 px-3 py-2 ring-1 ring-white/20">Panel admin</span>
+              <span className="rounded-lg bg-white/12 px-3 py-2 ring-1 ring-white/20">Correos SMTP</span>
+              <span className="rounded-lg bg-white/12 px-3 py-2 ring-1 ring-white/20">WhatsApp directo</span>
             </div>
             <div className="mt-8 grid max-w-2xl grid-cols-3 gap-2 sm:gap-3">
               <MiniTrust icon={<ShieldCheck />} value="Pago seguro" label="Culqi, Yape y comprobante" />
@@ -308,10 +326,12 @@ function Home() {
         </div>
       </section>
       <TrustBar />
+      <ConfidencePanel />
       <DestinationCarousel tours={featured.length ? featured : tours.slice(0, 5)} />
       <Section title="Tours destacados" subtitle="Paquetes elegidos para viajar con confianza y asistencia desde la primera cotizacion.">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">{featured.map((tour) => <TourCard key={tour.id} tour={tour} />)}</div>
       </Section>
+      <ExperienceBand />
       <Section title="Tipos de viaje" subtitle="Elige el estilo de experiencia que quieres vivir.">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{types.map(([type, text]) => <div key={type} className="experience-card rounded-lg border border-slate-200 bg-white p-6 shadow-sm"><Globe2 className="mb-4 text-[#0f4c81]" /><strong className="text-lg text-[#082447]">{type}</strong><p className="mt-2 text-sm leading-6 text-slate-600">{text}</p></div>)}</div>
       </Section>
@@ -368,13 +388,14 @@ function TrustBar() {
   const items = [
     ["+5", "destinos activos"],
     ["24/7", "canal de asistencia"],
-    ["100%", "precios transparentes"]
+    ["100%", "precios transparentes"],
+    ["0", "datos de tarjeta guardados"]
   ];
   return (
-    <section className="border-y border-slate-200 bg-white px-4 py-6">
-      <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-3">
+    <section className="trust-strip border-y border-slate-200 bg-white px-4 py-6">
+      <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-4">
         {items.map(([value, label]) => (
-          <div key={label} className="animate-rise rounded-lg border border-slate-100 bg-slate-50 p-5 text-center">
+          <div key={label} className="animate-rise rounded-lg border border-slate-100 bg-white p-5 text-center shadow-sm">
             <strong className="block text-3xl font-black text-[#082447]">{value}</strong>
             <span className="text-sm font-semibold uppercase tracking-widest text-slate-500">{label}</span>
           </div>
@@ -489,8 +510,10 @@ function SearchBox() {
   const [destination, setDestination] = useState("");
   const [type, setType] = useState("");
   return (
-    <div className="glass rounded-lg p-4 shadow-2xl lg:p-5">
-      <h2 className="text-xl font-black text-[#082447] lg:text-2xl">Busca tu destino</h2>
+    <div className="glass search-panel rounded-lg p-4 shadow-2xl lg:p-5">
+      <p className="mb-2 text-xs font-black uppercase tracking-widest text-[#0f7a4f]">Cotizacion rapida</p>
+      <h2 className="text-xl font-black text-[#082447] lg:text-2xl">Busca tu destino ideal</h2>
+      <p className="mt-1 text-sm leading-6 text-slate-600">Filtra por destino, fecha y tipo de viaje. Luego un asesor puede ayudarte por WhatsApp.</p>
       <div className="mt-5 grid gap-3 lg:grid-cols-2">
         <input className="rounded-lg border border-slate-200 px-4 py-3" placeholder="Destino" value={destination} onChange={(e) => setDestination(e.target.value)} />
         <input className="rounded-lg border border-slate-200 px-4 py-3" type="date" />
@@ -498,7 +521,7 @@ function SearchBox() {
           <option value="">Tipo de viaje</option><option value="NACIONAL">Nacional</option><option value="INTERNACIONAL">Internacional</option>
         </select>
         <input className="rounded-lg border border-slate-200 px-4 py-3" type="number" min="1" placeholder="Personas" />
-        <button className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#082447] px-5 py-3 font-black text-white lg:col-span-2" onClick={() => navigate(`/tours?${new URLSearchParams({ ...(type && { type }), ...(destination && { destination }) }).toString()}`)}><Search /> Buscar tours</button>
+        <button className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#082447] px-5 py-3 font-black text-white transition hover:bg-[#0f4c81] lg:col-span-2" onClick={() => navigate(`/tours?${new URLSearchParams({ ...(type && { type }), ...(destination && { destination }) }).toString()}`)}><Search /> Buscar tours</button>
       </div>
     </div>
   );
@@ -1053,7 +1076,7 @@ function Testimonials() {
 }
 
 function Section({ title, subtitle, children }: { title: string; subtitle: string; children?: React.ReactNode }) {
-  return <section className="px-4 py-14 lg:px-6"><div className="mx-auto max-w-7xl"><div className="mb-8 max-w-3xl"><p className="mb-2 inline-flex items-center gap-2 rounded-lg bg-emerald-50 px-3 py-1 text-sm font-bold text-[#0f7a4f]"><ShieldCheck size={16} /> Jhon Tours</p><h2 className="text-3xl font-black text-[#082447] md:text-4xl">{title}</h2><p className="mt-3 leading-7 text-slate-600">{subtitle}</p></div>{children}</div></section>;
+  return <section className="section-pro px-4 py-14 lg:px-6"><div className="mx-auto max-w-7xl"><div className="mb-8 max-w-3xl"><p className="mb-2 inline-flex items-center gap-2 rounded-lg bg-emerald-50 px-3 py-1 text-sm font-bold text-[#0f7a4f]"><ShieldCheck size={16} /> Jhon Tours</p><h2 className="text-3xl font-black text-[#082447] md:text-4xl">{title}</h2><p className="mt-3 leading-7 text-slate-600">{subtitle}</p></div>{children}</div></section>;
 }
 
 function Info({ title, items, ordered = false }: { title: string; items: string[]; ordered?: boolean }) {
@@ -1062,7 +1085,7 @@ function Info({ title, items, ordered = false }: { title: string; items: string[
 }
 
 function Footer() {
-  return <footer id="nosotros" className="footer-pro border-t px-4 py-10 text-white"><div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-4"><div className="md:col-span-2"><strong className="text-2xl text-amber-300">Jhon Tours</strong><p className="mt-3 max-w-xl text-slate-200">Agencia de turismo especializada en paquetes nacionales e internacionales, reservas online, pagos Culqi/Yape y acompanamiento profesional.</p></div><div><strong>Contacto</strong><p className="mt-3 text-slate-200">ventas@jhontours.com<br />WhatsApp {whatsappDisplay}</p></div><div><strong>Confianza</strong><p className="mt-3 text-slate-200">Itinerarios claros, precios transparentes y atencion personalizada.</p></div></div></footer>;
+  return <footer id="nosotros" className="footer-pro border-t px-4 py-10 text-white"><div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-4"><div className="md:col-span-2"><strong className="text-2xl text-amber-300">Jhon Tours</strong><p className="mt-3 max-w-xl text-slate-200">Agencia de turismo especializada en paquetes nacionales e internacionales, reservas online, pagos Culqi/Yape y acompanamiento profesional.</p><div className="mt-5 flex flex-wrap gap-2 text-xs font-bold text-slate-100"><span className="rounded-lg bg-white/10 px-3 py-2">Itinerarios claros</span><span className="rounded-lg bg-white/10 px-3 py-2">Pago protegido</span><span className="rounded-lg bg-white/10 px-3 py-2">Atencion humana</span></div></div><div><strong>Contacto</strong><p className="mt-3 text-slate-200">ventas@jhontours.com<br />WhatsApp {whatsappDisplay}</p></div><div><strong>Confianza</strong><p className="mt-3 text-slate-200">Precios transparentes, cupos visibles y confirmaciones por correo cuando SMTP este configurado.</p></div></div></footer>;
 }
 
 export default Shell;
