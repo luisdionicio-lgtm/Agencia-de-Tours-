@@ -16,6 +16,14 @@
     "prisma:migrate": "npm run prisma:migrate --prefix backend",
     "seed": "npm run seed --prefix backend"
   },
+  "dependencies": {
+    "next": "^16.2.10",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
+  },
+  "overrides": {
+    "postcss": "^8.5.16"
+  },
   "author": "Luis Angel Dionicio Bartolo",
   "license": "MIT"
 }
