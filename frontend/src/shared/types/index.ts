@@ -1,4 +1,5 @@
 export type TourType = "NACIONAL" | "INTERNACIONAL";
+
 export type TourStatus = "ACTIVO" | "INACTIVO";
 
 export type Tour = {

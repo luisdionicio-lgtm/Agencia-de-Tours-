@@ -3,7 +3,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import App from "./App";
-import { RouterProvider } from "./routing";
+import { RouterProvider } from "./core/routing";
 
 const queryClient = new QueryClient();
 
