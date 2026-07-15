@@ -250,9 +250,9 @@ function useTours(type?: TourType | null) {
 
 function TourCard({ tour }: { tour: Tour }) {
   return (
-    <article className="tour-card group overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+    <article className="tour-card group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
       <div className="relative overflow-hidden">
-        <img src={tour.imageUrl} alt={tour.title} className="h-56 w-full object-cover" />
+        <img src={tour.imageUrl} alt={tour.title} className="h-60 w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#061b34]/70 via-transparent to-transparent opacity-90" />
         <span className="absolute left-4 top-4 rounded-lg bg-white/95 px-3 py-1 text-xs font-black uppercase text-[#082447] shadow-sm">{tour.type}</span>
         <span className="absolute bottom-4 right-4 rounded-lg bg-[#1fa463] px-3 py-1 text-xs font-black text-white">{tour.availableSlots} cupos</span>
@@ -276,7 +276,7 @@ function TourCard({ tour }: { tour: Tour }) {
           <span className="text-2xl font-black text-[#082447]">{tourMoney(tour)}</span>
           <span className="flex items-center gap-1 text-sm text-slate-500"><CalendarDays size={16} /> {tour.duration}</span>
         </div>
-        <Link to={`/tours/${tour.id}`} className="flex items-center justify-center gap-2 rounded-lg bg-[#082447] px-4 py-3 font-bold text-white transition group-hover:bg-[#0f4c81]">Ver detalles <ArrowRight size={18} /></Link>
+        <Link to={`/tours/${tour.id}`} className="tour-card-cta flex items-center justify-center gap-2 rounded-xl bg-[#082447] px-4 py-3 font-bold text-white">Ver experiencia <ArrowRight size={18} /></Link>
       </div>
     </article>
   );
@@ -299,18 +299,18 @@ function Home() {
       <section className="hero-bg">
         <div className="mx-auto grid min-h-[calc(100svh-80px)] max-w-7xl items-center gap-8 px-4 py-10 lg:min-h-[660px] lg:grid-cols-[1.05fr_.95fr] lg:gap-10 lg:px-6 lg:py-14">
           <div className="animate-rise max-w-3xl text-white">
-            <p className="mb-4 inline-flex items-center gap-2 rounded-lg bg-white/15 px-4 py-2 text-sm font-bold text-amber-100 ring-1 ring-white/20"><Sparkles size={17} /> Agencia de viajes preparada para vender en serio</p>
-            <h1 className="text-3xl font-black leading-tight sm:text-4xl md:text-6xl">Viaja con una agencia que se siente confiable desde el primer clic</h1>
-            <p className="mt-5 max-w-2xl text-base leading-8 text-slate-100 md:text-lg">Tours nacionales e internacionales con itinerarios claros, precios transparentes, pago preparado con Culqi/Yape y acompanamiento humano antes, durante y despues del viaje.</p>
+            <p className="hero-eyebrow mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-bold text-amber-100 ring-1 ring-white/20"><Sparkles size={17} /> Experiencias creadas para recordar toda la vida</p>
+            <h1 className="hero-title text-4xl font-black leading-[1.04] sm:text-5xl md:text-7xl">Descubre experiencias <span>inolvidables</span> con Jhon Tours</h1>
+            <p className="mt-6 max-w-2xl text-base leading-8 text-slate-100 md:text-xl">Viajes nacionales e internacionales diseñados para sorprenderte, con atención cercana, itinerarios claros y respaldo en cada etapa.</p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link to="/tours" className="btn-gold rounded-lg px-6 py-3 text-center font-black">Ver tours</Link>
-              <a href={buildWhatsAppUrl(whatsappMessages.general)} className="rounded-lg bg-[#1fa463] px-6 py-3 text-center font-black text-white">Cotizar viaje</a>
+              <Link to="/tours" className="btn-gold rounded-xl px-7 py-3.5 text-center font-black">Explorar tours</Link>
+              <a href={buildWhatsAppUrl(whatsappMessages.general)} className="whatsapp-cta rounded-xl bg-[#1fa463] px-7 py-3.5 text-center font-black text-white">Cotizar por WhatsApp</a>
             </div>
             <div className="mt-6 flex flex-wrap gap-2 text-xs font-bold text-slate-100">
-              <span className="rounded-lg bg-white/12 px-3 py-2 ring-1 ring-white/20">Reservas online</span>
-              <span className="rounded-lg bg-white/12 px-3 py-2 ring-1 ring-white/20">Panel admin</span>
-              <span className="rounded-lg bg-white/12 px-3 py-2 ring-1 ring-white/20">Correos SMTP</span>
-              <span className="rounded-lg bg-white/12 px-3 py-2 ring-1 ring-white/20">WhatsApp directo</span>
+              <span className="trust-pill rounded-full bg-white/10 px-3 py-2 ring-1 ring-white/20">Atención 24/7</span>
+              <span className="trust-pill rounded-full bg-white/10 px-3 py-2 ring-1 ring-white/20">Pagos seguros</span>
+              <span className="trust-pill rounded-full bg-white/10 px-3 py-2 ring-1 ring-white/20">Experiencias premium</span>
+              <span className="trust-pill rounded-full bg-white/10 px-3 py-2 ring-1 ring-white/20">Agencia confiable</span>
             </div>
             <div className="mt-8 grid max-w-2xl grid-cols-3 gap-2 sm:gap-3">
               <MiniTrust icon={<ShieldCheck />} value="Pago seguro" label="Culqi, Yape y comprobante" />
@@ -334,13 +334,13 @@ function Home() {
       </Section>
       <ExperienceBand />
       <Section title="Tipos de viaje" subtitle="Elige el estilo de experiencia que quieres vivir.">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{types.map(([type, text]) => <div key={type} className="experience-card rounded-lg border border-slate-200 bg-white p-6 shadow-sm"><Globe2 className="mb-4 text-[#0f4c81]" /><strong className="text-lg text-[#082447]">{type}</strong><p className="mt-2 text-sm leading-6 text-slate-600">{text}</p></div>)}</div>
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{types.map(([type, text], index) => <div key={type} className="experience-card group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><span className="category-icon mb-5 grid h-12 w-12 place-items-center rounded-xl"><Globe2 /></span><span className="text-xs font-black uppercase tracking-[0.18em] text-amber-600">Experiencia 0{index + 1}</span><strong className="mt-2 block text-xl text-[#082447]">{type}</strong><p className="mt-2 text-sm leading-6 text-slate-600">{text}</p><span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#0f4c81]">Descubrir <ArrowRight size={16} /></span></div>)}</div>
       </Section>
       <Testimonials />
-      <section id="contacto" className="formal-cta px-4 py-14 text-white">
+      <section id="contacto" className="formal-cta px-4 py-20 text-white">
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
-          <div><h2 className="text-3xl font-black">Recibe informacion personalizada</h2><p className="mt-2 text-slate-200">Comunicate con un asesor de Jhon Tours al {whatsappDisplay}.</p></div>
-          <a href={buildWhatsAppUrl(whatsappMessages.general)} className="inline-flex items-center gap-2 rounded-lg bg-[#1fa463] px-6 py-3 font-black"><MessageCircle /> Mas informacion por WhatsApp</a>
+          <div className="max-w-3xl"><span className="text-sm font-black uppercase tracking-[0.2em] text-amber-300">El mundo te espera</span><h2 className="mt-3 text-4xl font-black md:text-5xl">Tu próxima aventura empieza hoy</h2><p className="mt-4 text-lg text-slate-200">Reserva con Jhon Tours y vive una experiencia diseñada para sorprenderte.</p></div>
+          <div className="flex flex-col gap-3 sm:flex-row"><a href={buildWhatsAppUrl(whatsappMessages.general)} className="whatsapp-cta inline-flex items-center justify-center gap-2 rounded-xl bg-[#1fa463] px-6 py-3.5 font-black"><MessageCircle /> Hablar por WhatsApp</a><Link to="/tours" className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/30 bg-white/10 px-6 py-3.5 font-black backdrop-blur">Ver paquetes <ArrowRight size={18} /></Link></div>
         </div>
       </section>
     </>
@@ -511,9 +511,9 @@ function SearchBox() {
   const [destination, setDestination] = useState("");
   const [type, setType] = useState("");
   return (
-    <div className="glass search-panel rounded-lg p-4 shadow-2xl lg:p-5">
+    <div className="glass search-panel rounded-2xl p-5 shadow-2xl lg:p-6">
       <p className="mb-2 text-xs font-black uppercase tracking-widest text-[#0f7a4f]">Cotizacion rapida</p>
-      <h2 className="text-xl font-black text-[#082447] lg:text-2xl">Busca tu destino ideal</h2>
+      <h2 className="text-xl font-black text-[#082447] lg:text-2xl">Diseña tu próxima experiencia</h2>
       <p className="mt-1 text-sm leading-6 text-slate-600">Filtra por destino, fecha y tipo de viaje. Luego un asesor puede ayudarte por WhatsApp.</p>
       <div className="mt-5 grid gap-3 lg:grid-cols-2">
         <input className="rounded-lg border border-slate-200 px-4 py-3" placeholder="Destino" value={destination} onChange={(e) => setDestination(e.target.value)} />
@@ -522,7 +522,7 @@ function SearchBox() {
           <option value="">Tipo de viaje</option><option value="NACIONAL">Nacional</option><option value="INTERNACIONAL">Internacional</option>
         </select>
         <input className="rounded-lg border border-slate-200 px-4 py-3" type="number" min="1" placeholder="Personas" />
-        <button className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#082447] px-5 py-3 font-black text-white transition hover:bg-[#0f4c81] lg:col-span-2" onClick={() => navigate(`/tours?${new URLSearchParams({ ...(type && { type }), ...(destination && { destination }) }).toString()}`)}><Search /> Buscar tours</button>
+        <button className="search-submit inline-flex items-center justify-center gap-2 rounded-xl bg-[#082447] px-5 py-3.5 font-black text-white lg:col-span-2" onClick={() => navigate(`/tours?${new URLSearchParams({ ...(type && { type }), ...(destination && { destination }) }).toString()}`)}><Search /> Buscar experiencia</button>
       </div>
     </div>
   );
@@ -1099,7 +1099,8 @@ function Testimonials() {
         <div className="carousel-inner">
           {data.map((item, index) => (
             <div key={item.name} className={`carousel-item ${index === 0 ? "active" : ""}`} data-bs-interval="4800">
-              <div className="mx-auto max-w-3xl p-6 text-center">
+              <div className="testimonial-card mx-auto max-w-3xl rounded-2xl p-7 text-center md:p-10">
+                <span className="testimonial-avatar mx-auto mb-4 grid h-14 w-14 place-items-center rounded-full text-lg font-black text-white">{item.name.split(" ").map((part) => part[0]).slice(0, 2).join("")}</span>
                 <div className="mb-4 flex justify-center text-amber-400">{Array.from({ length: item.rating }).map((_, i) => <Star key={i} size={22} fill="currentColor" />)}</div>
                 <p className="text-xl font-semibold leading-9 text-slate-700">"{item.comment}"</p>
                 <strong className="mt-5 block text-[#082447]">{item.name}</strong>
@@ -1144,7 +1145,7 @@ function LegalPage() {
 }
 
 function Footer() {
-  return <footer id="nosotros" className="footer-pro border-t px-4 py-10 text-white"><div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-4"><div className="md:col-span-2"><strong className="text-2xl text-amber-300">Jhon Tours</strong><p className="mt-3 max-w-xl text-slate-200">Agencia de turismo especializada en paquetes nacionales e internacionales, reservas online, pagos Culqi/Yape y acompanamiento profesional.</p><div className="mt-5 flex flex-wrap gap-2 text-xs font-bold text-slate-100"><span className="rounded-lg bg-white/10 px-3 py-2">Itinerarios claros</span><span className="rounded-lg bg-white/10 px-3 py-2">Pago protegido</span><span className="rounded-lg bg-white/10 px-3 py-2">Atencion humana</span></div></div><div><strong>Contacto</strong><p className="mt-3 text-slate-200">ventas@jhontours.com<br />WhatsApp {whatsappDisplay}</p></div><div><strong>Información legal</strong><nav className="mt-3 grid gap-2 text-slate-200"><Link to="/legal/terminos">Términos</Link><Link to="/legal/privacidad">Privacidad</Link><Link to="/legal/cookies">Cookies</Link><Link to="/legal/cancelaciones">Cancelaciones</Link><Link to="/legal/reembolsos">Reembolsos</Link></nav></div></div></footer>;
+  return <footer id="nosotros" className="footer-pro border-t px-4 pb-8 pt-14 text-white"><div className="mx-auto grid max-w-7xl gap-10 sm:grid-cols-2 lg:grid-cols-5"><div className="sm:col-span-2"><div className="flex items-center gap-3"><span className="brand-mark grid h-12 w-12 place-items-center rounded-xl bg-white/10 text-amber-300"><Plane /></span><div><strong className="block text-2xl text-amber-300">Jhon Tours</strong><span className="text-xs font-bold uppercase tracking-widest text-slate-300">Viajes que dejan huella</span></div></div><p className="mt-5 max-w-xl leading-7 text-slate-300">Agencia especializada en experiencias nacionales e internacionales, con reservas online, pagos seguros y acompañamiento profesional.</p><div className="mt-5 flex flex-wrap gap-2 text-xs font-bold text-slate-100"><span className="rounded-full bg-white/10 px-3 py-2">Itinerarios claros</span><span className="rounded-full bg-white/10 px-3 py-2">Pago protegido</span><span className="rounded-full bg-white/10 px-3 py-2">Atención humana</span></div></div><div><strong className="text-amber-200">Enlaces rápidos</strong><nav className="mt-4 grid gap-3 text-sm text-slate-300"><Link to="/">Inicio</Link><Link to="/tours">Todos los tours</Link><Link to="/tours?type=NACIONAL">Tours nacionales</Link><Link to="/tours?type=INTERNACIONAL">Internacionales</Link></nav></div><div><strong className="text-amber-200">Contacto</strong><p className="mt-4 text-sm leading-7 text-slate-300">ventas@jhontours.com<br />WhatsApp {whatsappDisplay}<br />Lima, Perú</p><div className="mt-4 flex gap-2"><span className="payment-chip">Culqi</span><span className="payment-chip">Yape</span></div></div><div><strong className="text-amber-200">Información legal</strong><nav className="mt-4 grid gap-3 text-sm text-slate-300"><Link to="/legal/terminos">Términos</Link><Link to="/legal/privacidad">Privacidad</Link><Link to="/legal/cookies">Cookies</Link><Link to="/legal/cancelaciones">Cancelaciones</Link><Link to="/legal/reembolsos">Reembolsos</Link></nav></div></div><div className="mx-auto mt-10 flex max-w-7xl flex-col justify-between gap-3 border-t border-white/10 pt-6 text-xs text-slate-400 sm:flex-row"><span>© {new Date().getFullYear()} Jhon Tours. Todos los derechos reservados.</span><span>Viaja seguro · Vive extraordinario</span></div></footer>;
 }
 
 export default Shell;
