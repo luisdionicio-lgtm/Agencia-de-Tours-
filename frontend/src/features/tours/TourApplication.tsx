@@ -327,6 +327,7 @@ function Home() {
         </div>
       </section>
       <TrustBar />
+      <EnjoyYourTrip />
       <ConfidencePanel />
       <DestinationCarousel tours={featured.length ? featured : tours.slice(0, 5)} />
       <Section title="Tours destacados" subtitle="Paquetes elegidos para viajar con confianza y asistencia desde la primera cotizacion.">
@@ -336,7 +337,9 @@ function Home() {
       <Section title="Experiencias que inspiran" subtitle="Encuentra una forma de viajar que conecte contigo y convierta cada destino en una historia.">
         <div className="experience-rail" role="region" aria-label="Estilos de viaje">{types.map(([type, text], index) => <div key={type} className="experience-card group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><span className="category-icon mb-5 grid h-12 w-12 place-items-center rounded-xl"><Globe2 /></span><span className="text-xs font-black uppercase tracking-[0.18em] text-amber-600">Experiencia 0{index + 1}</span><strong className="mt-2 block text-xl text-[#082447]">{type}</strong><p className="mt-2 text-sm leading-6 text-slate-600">{text}</p><Link to="/tours" className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#0f4c81]">Descubrir <ArrowRight size={16} /></Link></div>)}</div>
       </Section>
+      <TravelFamily />
       <Testimonials />
+      <FrequentlyAskedQuestions />
       <section id="contacto" className="formal-cta px-4 py-20 text-white">
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
           <div className="max-w-3xl"><span className="text-sm font-black uppercase tracking-[0.2em] text-amber-300">El mundo te espera</span><h2 className="mt-3 text-4xl font-black md:text-5xl">Tu próxima aventura empieza hoy</h2><p className="mt-4 text-lg text-slate-200">Reserva con Jhon Tours y vive una experiencia diseñada para sorprenderte.</p></div>
@@ -416,9 +419,9 @@ function ConfidencePanel() {
     <section className="confidence-panel px-4 py-12 lg:px-6">
       <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[.85fr_1.15fr] lg:items-center">
         <div>
-          <p className="mb-2 inline-flex items-center gap-2 rounded-lg bg-emerald-50 px-3 py-1 text-sm font-bold text-[#0f7a4f]"><ShieldCheck size={16} /> Confianza antes de reservar</p>
-          <h2 className="text-3xl font-black text-[#082447] md:text-4xl">Una web pensada para que el cliente se sienta tranquilo</h2>
-          <p className="mt-3 leading-7 text-slate-600">La experiencia muestra informacion concreta, contacto directo y pasos simples para que elegir Jhon Tours se sienta seguro desde el primer vistazo.</p>
+          <p className="mb-2 inline-flex items-center gap-2 rounded-lg bg-emerald-50 px-3 py-1 text-sm font-bold text-[#0f7a4f]"><ShieldCheck size={16} /> Respaldo en cada etapa</p>
+          <h2 className="text-3xl font-black text-[#082447] md:text-4xl">Viaja con confianza</h2>
+          <p className="mt-3 leading-7 text-slate-600">Información clara, contacto directo y acompañamiento humano para que disfrutes la emoción de viajar con la tranquilidad de sentirte respaldado.</p>
         </div>
         <div className="grid gap-4 md:grid-cols-3">
           {promises.map(([title, text]) => (
@@ -429,6 +432,71 @@ function ConfidencePanel() {
             </div>
           ))}
         </div>
+      </div>
+    </section>
+  );
+}
+
+function EnjoyYourTrip() {
+  const highlights = [
+    ["01", "Tú eliges la emoción", "Cuéntanos qué deseas vivir y te ayudamos a encontrar una experiencia que conecte contigo."],
+    ["02", "Nosotros cuidamos los detalles", "Coordinamos itinerario, reserva y orientación para que avances con información clara."],
+    ["03", "Solo disfruta tu viaje", "Mantén contacto directo con nuestro equipo antes y durante tu experiencia."]
+  ];
+  return (
+    <section className="enjoy-section px-4 py-16 lg:px-6 lg:py-20">
+      <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1fr_1.05fr] lg:items-center">
+        <div className="enjoy-visual relative min-h-[430px] overflow-hidden rounded-3xl shadow-2xl">
+          <div className="absolute inset-x-5 bottom-5 rounded-2xl border border-white/20 bg-[#061b34]/80 p-5 text-white backdrop-blur-md">
+            <span className="text-xs font-black uppercase tracking-[0.2em] text-amber-300">Viajar se siente mejor acompañado</span>
+            <strong className="mt-2 block text-2xl">Momentos que empiezan mucho antes de abordar</strong>
+          </div>
+        </div>
+        <div>
+          <span className="section-kicker">Tu experiencia, nuestra prioridad</span>
+          <h2 className="mt-4 text-4xl font-black leading-tight text-[#082447] md:text-5xl">Disfruta tu viaje.<br /><span className="text-[#0f7a4f]">Nosotros te acompañamos.</span></h2>
+          <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-600">Desde la primera idea hasta el regreso a casa, hacemos que cada paso se sienta cercano, claro y emocionante.</p>
+          <div className="mt-8 grid gap-4">
+            {highlights.map(([number, title, text]) => <div key={title} className="enjoy-step flex gap-4 rounded-2xl border border-slate-200 bg-white p-4"><span>{number}</span><div><strong className="text-[#082447]">{title}</strong><p className="mt-1 text-sm leading-6 text-slate-600">{text}</p></div></div>)}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TravelFamily() {
+  return (
+    <section id="familia-viajera" className="family-section px-4 py-16 text-white lg:px-6 lg:py-20">
+      <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.1fr_.9fr] lg:items-center">
+        <div className="max-w-3xl">
+          <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-bold text-amber-200 ring-1 ring-white/15"><HeartHandshake size={18} /> Cercanía que se siente</span>
+          <h2 className="mt-5 text-4xl font-black leading-tight md:text-5xl">Más que una agencia,<br />una familia viajera</h2>
+          <p className="mt-5 text-lg leading-8 text-slate-200">Creemos que un gran viaje nace de escuchar, orientar y estar presentes. Por eso cada consulta recibe atención humana y cada itinerario se trata como una experiencia personal.</p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row"><a href={buildWhatsAppUrl("Hola Jhon Tours, quiero conversar con un asesor sobre mi próximo viaje.")} className="whatsapp-cta inline-flex items-center justify-center gap-2 rounded-xl bg-[#1fa463] px-6 py-3.5 font-black"><MessageCircle /> Conversemos por WhatsApp</a><Link to="/#nosotros" className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/10 px-6 py-3.5 font-black">Conoce nuestro enfoque</Link></div>
+        </div>
+        <div className="family-values grid grid-cols-2 gap-4">
+          {["Escuchamos tus ideas", "Orientamos sin presión", "Respondemos con claridad", "Acompañamos tu viaje"].map((value, index) => <div key={value} className="rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur"><span className="text-2xl font-black text-amber-300">0{index + 1}</span><strong className="mt-8 block text-lg">{value}</strong></div>)}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FrequentlyAskedQuestions() {
+  const questions = [
+    ["¿Cómo puedo reservar un tour?", "Elige una experiencia, completa tus datos y revisa la información de pago. También puedes escribirnos por WhatsApp antes de reservar."],
+    ["¿Puedo solicitar un viaje personalizado?", "Sí. Cuéntanos destino, fechas, cantidad de viajeros y estilo de viaje para orientarte con una propuesta acorde a tus necesidades."],
+    ["¿Qué métodos de pago están disponibles?", "La plataforma está preparada para pagos con Culqi y Yape. Antes de pagar verás el importe calculado desde la información oficial del tour."],
+    ["¿Cuándo se confirma mi cupo?", "El cupo se descuenta y la reserva se confirma únicamente después de que el pago sea procesado exitosamente."],
+    ["¿Tendré asistencia durante el viaje?", "Sí. Nuestro enfoque incluye orientación previa y un canal de contacto directo para acompañarte durante tu experiencia."],
+    ["¿Dónde reviso lo que incluye cada paquete?", "En el detalle de cada tour encontrarás itinerario, servicios incluidos, exclusiones, duración, precio y disponibilidad."]
+  ];
+  return (
+    <section className="faq-section px-4 py-16 lg:px-6 lg:py-20">
+      <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[.75fr_1.25fr]">
+        <div><span className="section-kicker">Resolvemos tus dudas</span><h2 className="mt-4 text-4xl font-black text-[#082447] md:text-5xl">Preguntas frecuentes</h2><p className="mt-4 text-lg leading-8 text-slate-600">Queremos que decidas con información clara. Si necesitas una respuesta personal, estamos a un mensaje de distancia.</p><a href={buildWhatsAppUrl("Hola Jhon Tours, tengo una consulta sobre sus viajes.")} className="mt-7 inline-flex items-center gap-2 rounded-xl bg-[#1fa463] px-6 py-3.5 font-black text-white"><MessageCircle /> Consultar por WhatsApp</a></div>
+        <div className="grid gap-3">{questions.map(([question, answer], index) => <details key={question} className="faq-item group rounded-2xl border border-slate-200 bg-white"><summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 font-bold text-[#082447]"><span>{question}</span><span className="faq-plus grid h-8 w-8 shrink-0 place-items-center rounded-full">+</span></summary><div className="px-5 pb-5 pr-16 text-sm leading-7 text-slate-600">{answer}</div>{index === 0 && <span className="sr-only">Abre para ver la respuesta</span>}</details>)}</div>
       </div>
     </section>
   );
