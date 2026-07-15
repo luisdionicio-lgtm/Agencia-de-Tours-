@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "lint": "oxlint src app",
     "start": "next start"
   },
   "dependencies": {

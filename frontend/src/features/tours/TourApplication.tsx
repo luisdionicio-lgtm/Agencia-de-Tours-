@@ -252,7 +252,7 @@ function TourCard({ tour }: { tour: Tour }) {
   return (
     <article className="tour-card group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
       <div className="relative overflow-hidden">
-        <img src={tour.imageUrl} alt={tour.title} className="h-60 w-full object-cover" />
+        <img src={tour.imageUrl} alt={tour.title} loading="lazy" decoding="async" className="h-60 w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#061b34]/70 via-transparent to-transparent opacity-90" />
         <span className="absolute left-4 top-4 rounded-lg bg-white/95 px-3 py-1 text-xs font-black uppercase text-[#082447] shadow-sm">{tour.type}</span>
         <span className="absolute bottom-4 right-4 rounded-lg bg-[#1fa463] px-3 py-1 text-xs font-black text-white">{tour.availableSlots} cupos</span>
@@ -333,8 +333,8 @@ function Home() {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">{featured.map((tour) => <TourCard key={tour.id} tour={tour} />)}</div>
       </Section>
       <ExperienceBand />
-      <Section title="Tipos de viaje" subtitle="Elige el estilo de experiencia que quieres vivir.">
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{types.map(([type, text], index) => <div key={type} className="experience-card group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><span className="category-icon mb-5 grid h-12 w-12 place-items-center rounded-xl"><Globe2 /></span><span className="text-xs font-black uppercase tracking-[0.18em] text-amber-600">Experiencia 0{index + 1}</span><strong className="mt-2 block text-xl text-[#082447]">{type}</strong><p className="mt-2 text-sm leading-6 text-slate-600">{text}</p><span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#0f4c81]">Descubrir <ArrowRight size={16} /></span></div>)}</div>
+      <Section title="Experiencias que inspiran" subtitle="Encuentra una forma de viajar que conecte contigo y convierta cada destino en una historia.">
+        <div className="experience-rail" role="region" aria-label="Estilos de viaje">{types.map(([type, text], index) => <div key={type} className="experience-card group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><span className="category-icon mb-5 grid h-12 w-12 place-items-center rounded-xl"><Globe2 /></span><span className="text-xs font-black uppercase tracking-[0.18em] text-amber-600">Experiencia 0{index + 1}</span><strong className="mt-2 block text-xl text-[#082447]">{type}</strong><p className="mt-2 text-sm leading-6 text-slate-600">{text}</p><Link to="/tours" className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#0f4c81]">Descubrir <ArrowRight size={16} /></Link></div>)}</div>
       </Section>
       <Testimonials />
       <section id="contacto" className="formal-cta px-4 py-20 text-white">
@@ -364,7 +364,7 @@ function HeroVisualCarousel({ tours }: { tours: Tour[] }) {
       <div className="carousel-inner">
         {tours.map((tour, index) => (
           <div key={tour.id} className={`carousel-item ${index === 0 ? "active" : ""}`} data-bs-interval="3600">
-            <img src={tour.imageUrl} className="d-block h-[250px] w-100 object-cover" alt={tour.title} />
+            <img src={tour.imageUrl} loading={index === 0 ? "eager" : "lazy"} decoding="async" className="d-block h-[250px] w-100 object-cover" alt={tour.title} />
             <div className="hero-mini-caption">
               <span>{tour.duration}</span>
               <strong>{tour.title}</strong>
@@ -482,7 +482,7 @@ function DestinationCarousel({ tours }: { tours: Tour[] }) {
           <div className="carousel-inner">
             {tours.map((tour, index) => (
               <div key={tour.id} className={`carousel-item ${index === 0 ? "active" : ""}`} data-bs-interval="4200">
-                <img src={tour.imageUrl} className="d-block h-[460px] w-100 object-cover" alt={tour.title} />
+                <img src={tour.imageUrl} loading={index === 0 ? "eager" : "lazy"} decoding="async" className="d-block h-[460px] w-100 object-cover" alt={tour.title} />
                 <div className="carousel-caption formal-caption text-start">
                   <span className="rounded-lg bg-white/90 px-3 py-1 text-sm font-bold text-[#082447]">{tour.type}</span>
                   <h3 className="mt-3 text-3xl font-black md:text-5xl">{tour.title}</h3>
@@ -1094,7 +1094,7 @@ function Testimonials() {
     placeholderData: demoTestimonials
   });
   return (
-    <Section title="Testimonios" subtitle="Viajeros que confiaron en Jhon Tours.">
+    <Section title="Historias de viajeros felices" subtitle="Experiencias reales de personas que confiaron sus viajes a Jhon Tours.">
       <div id="testimonialCarousel" className="carousel slide testimonial-carousel rounded-lg bg-white p-4 shadow-xl" data-bs-ride="carousel">
         <div className="carousel-inner">
           {data.map((item, index) => (

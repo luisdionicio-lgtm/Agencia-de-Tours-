@@ -336,6 +336,27 @@ textarea {
   box-shadow: 0 16px 42px rgba(8, 36, 71, 0.08);
 }
 
+.experience-rail {
+  display: grid;
+  grid-auto-columns: minmax(17rem, 1fr);
+  grid-auto-flow: column;
+  gap: 1.25rem;
+  overflow-x: auto;
+  padding: 0.25rem 0.25rem 1.25rem;
+  scroll-snap-type: x mandatory;
+  scrollbar-color: rgba(15, 76, 129, 0.3) transparent;
+}
+
+.experience-rail .experience-card {
+  scroll-snap-align: start;
+}
+
+@media (min-width: 1024px) {
+  .experience-rail {
+    grid-auto-columns: calc((100% - 2.5rem) / 3);
+  }
+}
+
 .experience-card::after {
   position: absolute;
   width: 8rem;
