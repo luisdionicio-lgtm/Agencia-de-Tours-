@@ -40,10 +40,12 @@ export const paymentService = {
   async pay(reservationId: number, method: PaymentMethod, token?: string) {
     const reservation = await prisma.reservation.findUnique({
       where: { id: reservationId },
-      include: { customer: true, tour: true }
+      include: { customer: true, tour: true, departure: true }
     });
     if (!reservation) throw new AppError(404, "Reserva no encontrada");
     if (reservation.status === ReservationStatus.PAGADA) throw new AppError(409, "La reserva ya fue pagada");
+    const availableSlots = reservation.departure?.availableSlots ?? reservation.tour.availableSlots;
+    if (availableSlots < reservation.peopleCount) throw new AppError(409, "No hay cupos suficientes para procesar el pago");
 
     const amount = reservation.tour.paymentMode === "DEPOSIT"
       ? Number(reservation.totalAmount) * Number(reservation.tour.depositPercent ?? 100) / 100
@@ -52,21 +54,44 @@ export const paymentService = {
 
     try {
       const culqiResponse = await chargeWithCulqi(token, amountInCents, reservation.customer.email, reservation.tour.currency);
-      const payment = await prisma.payment.create({
-        data: {
-          reservationId,
-          culqiChargeId: culqiResponse.id,
-          paymentMethod: method,
-          amount,
-          currency: reservation.tour.currency,
-          status: PaymentStatus.EXITOSO,
-          culqiResponse
-        }
-      });
+      const payment = await prisma.$transaction(async (tx) => {
+        const currentReservation = await tx.reservation.findUnique({
+          where: { id: reservationId },
+          include: { tour: true }
+        });
+        if (!currentReservation) throw new AppError(404, "Reserva no encontrada");
+        if (currentReservation.status === ReservationStatus.PAGADA) throw new AppError(409, "La reserva ya fue pagada");
 
-      await prisma.reservation.update({
-        where: { id: reservationId },
-        data: { status: ReservationStatus.PAGADA }
+        const updatedSlots = currentReservation.departureId
+          ? await tx.tourDeparture.updateMany({
+              where: { id: currentReservation.departureId, availableSlots: { gte: currentReservation.peopleCount } },
+              data: { availableSlots: { decrement: currentReservation.peopleCount } }
+            })
+          : await tx.tour.updateMany({
+              where: { id: currentReservation.tourId, availableSlots: { gte: currentReservation.peopleCount } },
+              data: { availableSlots: { decrement: currentReservation.peopleCount } }
+            });
+        if (updatedSlots.count !== 1) throw new AppError(409, "No hay cupos suficientes para confirmar el pago");
+
+        const createdPayment = await tx.payment.create({
+          data: {
+            reservationId,
+            culqiChargeId: culqiResponse.id,
+            paymentMethod: method,
+            amount,
+            currency: reservation.tour.currency,
+            status: PaymentStatus.EXITOSO,
+            culqiResponse
+          }
+        });
+
+        const updatedReservation = await tx.reservation.updateMany({
+          where: { id: reservationId, status: { not: ReservationStatus.PAGADA } },
+          data: { status: ReservationStatus.PAGADA }
+        });
+        if (updatedReservation.count !== 1) throw new AppError(409, "La reserva ya fue procesada");
+
+        return createdPayment;
       });
 
       const paidReservation = await prisma.reservation.findUnique({
@@ -88,6 +113,7 @@ export const paymentService = {
           reservationId,
           paymentMethod: method,
           amount,
+          currency: reservation.tour.currency,
           status: PaymentStatus.RECHAZADO,
           culqiResponse: JSON.parse(JSON.stringify(error instanceof Error ? { message: error.message } : error))
         }

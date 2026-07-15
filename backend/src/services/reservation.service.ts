@@ -38,11 +38,6 @@ export const reservationService = {
         include: { customer: true, tour: true }
       });
 
-      const updated = departure
-        ? await tx.tourDeparture.updateMany({ where: { id: departure.id, availableSlots: { gte: input.peopleCount } }, data: { availableSlots: { decrement: input.peopleCount } } })
-        : await tx.tour.updateMany({ where: { id: tour.id, availableSlots: { gte: input.peopleCount } }, data: { availableSlots: { decrement: input.peopleCount } } });
-      if (updated.count !== 1) throw new AppError(409, "Los ultimos cupos fueron reservados por otra persona");
-
       return reservation;
     });
 
