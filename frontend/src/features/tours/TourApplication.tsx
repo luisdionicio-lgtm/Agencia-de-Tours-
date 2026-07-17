@@ -164,6 +164,7 @@ const demoTestimonials = [
 
 function Shell() {
   const [open, setOpen] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const links = [
     ["Inicio", "/"],
     ["Tours Nacionales", "/tours?type=NACIONAL"],
@@ -173,10 +174,32 @@ function Shell() {
     ["Contacto", "/#contacto"]
   ];
 
+  useEffect(() => {
+    const updateProgress = () => {
+      const available = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollProgress(available > 0 ? Math.min((window.scrollY / available) * 100, 100) : 0);
+    };
+    const revealObserver = new IntersectionObserver(
+      (entries) => entries.forEach((entry) => entry.isIntersecting && entry.target.classList.add("is-visible")),
+      { rootMargin: "0px 0px -8%", threshold: 0.08 }
+    );
+    document.querySelectorAll("main section, main article").forEach((element) => {
+      element.classList.add("reveal-on-scroll");
+      revealObserver.observe(element);
+    });
+    updateProgress();
+    window.addEventListener("scroll", updateProgress, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", updateProgress);
+      revealObserver.disconnect();
+    };
+  }, []);
+
   return (
     <div className="site-shell min-h-screen">
-      <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur">
-        <div className="hidden border-b border-white/10 bg-[#061b34] px-4 py-2 text-white lg:block">
+      <header className="site-header sticky top-0 z-50 border-b border-slate-200/70 bg-white/90 shadow-sm backdrop-blur-xl">
+        <div className="scroll-progress" style={{ width: `${scrollProgress}%` }} aria-hidden="true" />
+        <div className="top-ribbon hidden border-b border-white/10 bg-[#061b34] px-4 py-2 text-white lg:block">
           <div className="mx-auto flex max-w-7xl items-center justify-between text-xs font-semibold">
             <span className="inline-flex items-center gap-2 text-amber-200"><ShieldCheck size={14} /> Agencia con reservas, pagos seguros y asistencia personalizada</span>
             <span className="inline-flex items-center gap-5 text-slate-200">
@@ -187,32 +210,32 @@ function Shell() {
           </div>
         </div>
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 lg:px-6">
-          <Link to="/" className="flex items-center gap-3">
-            <span className="brand-mark grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-[#082447] text-amber-300"><Plane size={23} /></span>
+          <Link to="/" className="brand-lockup flex items-center gap-3" aria-label="Jhon Tours, inicio">
+            <span className="brand-mark grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-[#082447] text-amber-300"><Plane size={23} /></span>
             <span>
               <strong className="block text-lg leading-tight text-[#082447]">Jhon Tours</strong>
               <small className="text-xs font-semibold uppercase tracking-widest text-slate-500">Agencia de Turismo</small>
             </span>
           </Link>
-          <nav className="hidden items-center gap-6 text-sm font-semibold text-slate-700 lg:flex">
-            {links.map(([label, to]) => <NavLink key={label} to={to} className="hover:text-[#0f4c81]">{label}</NavLink>)}
+          <nav className="primary-nav hidden items-center gap-6 text-sm font-semibold text-slate-700 lg:flex">
+            {links.map(([label, to]) => <NavLink key={label} to={to}>{label}</NavLink>)}
           </nav>
           <div className="hidden items-center gap-3 lg:flex">
             <Link to="/admin" className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-bold text-slate-700">Admin</Link>
             <Link to="/tours" className="btn-gold rounded-lg px-5 py-2.5 text-sm font-bold shadow-sm">Reservar ahora</Link>
           </div>
-          <button className="rounded-lg border border-slate-200 p-2 lg:hidden" onClick={() => setOpen(!open)} aria-label="Menu">
+          <button className="menu-button rounded-xl border border-slate-200 p-2 lg:hidden" onClick={() => setOpen(!open)} aria-label={open ? "Cerrar menu" : "Abrir menu"} aria-expanded={open}>
             {open ? <X /> : <Menu />}
           </button>
         </div>
         {open && (
-          <div className="border-t border-slate-200 bg-white px-4 py-4 lg:hidden">
+          <div className="mobile-menu border-t border-slate-200 bg-white/95 px-4 py-4 backdrop-blur-xl lg:hidden">
             {links.map(([label, to]) => <Link key={label} to={to} onClick={() => setOpen(false)} className="block rounded-lg px-3 py-3 font-semibold text-slate-700">{label}</Link>)}
             <Link to="/admin" className="mt-2 block rounded-lg bg-slate-100 px-3 py-3 font-semibold">Panel admin</Link>
           </div>
         )}
       </header>
-      <main><RoutesView /></main>
+      <main className="overflow-hidden"><RoutesView /></main>
       <Footer />
     </div>
   );
