@@ -6,7 +6,7 @@ import type { z } from "zod";
 export const operationsService = {
   publicSettings: async () => {
     const settings = await prisma.businessSettings.findUnique({ where: { id: 1 } });
-    if (!settings?.policiesPublished) return { tradeName: settings?.tradeName ?? "Jhon Tours", policiesPublished: false };
+    if (!settings?.policiesPublished) return { tradeName: settings?.tradeName ?? "John Tours", policiesPublished: false };
     return settings;
   },
   adminSettings: () => prisma.businessSettings.upsert({ where: { id: 1 }, update: {}, create: { id: 1 } }),

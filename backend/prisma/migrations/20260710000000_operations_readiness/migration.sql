@@ -28,7 +28,7 @@ ALTER TABLE `testimonials`
 CREATE TABLE `business_settings` (
   `id` INTEGER NOT NULL DEFAULT 1,
   `legal_name` VARCHAR(180) NULL,
-  `trade_name` VARCHAR(120) NOT NULL DEFAULT 'Jhon Tours',
+  `trade_name` VARCHAR(120) NOT NULL DEFAULT 'John Tours',
   `tax_id` VARCHAR(30) NULL,
   `address` VARCHAR(255) NULL,
   `support_email` VARCHAR(120) NULL,

@@ -1,70 +1,94 @@
-# Jhon Tours - Agencia de Turismo
+# John Tours Perú - Agencia de Viajes y Turismo
 
-Aplicacion web fullstack profesional para una agencia de tours enfocada en paquetes nacionales e internacionales. Permite explorar destinos, filtrar tours, revisar detalles, crear reservas, simular pagos con Culqi/Yape y administrar reservas desde un panel privado.
+Plataforma web fullstack para presentar tours nacionales e internacionales, promociones escolares y viajes grupales. Incluye catálogo, detalle de cada experiencia, reserva desde S/ 200 por Yape, código único de operación, envío del comprobante por WhatsApp, demostración comercial y panel administrativo.
 
-## Tecnologias
+## Estado actual
 
-- Frontend: Next.js, TypeScript y Tailwind CSS.
-- Backend: Node.js, Express y TypeScript.
-- Base de datos: MySQL con Prisma ORM.
-- Pagos: Culqi Checkout/API y Yape mediante Culqi.
-- Correos: SMTP para confirmaciones.
-- WhatsApp: enlaces `wa.me` con mensajes prellenados.
+### Sitio público
 
-## Arquitectura
+- Identidad visual azul y turquesa basada en la marca de John Tours Perú.
+- Logo oficial animado con efecto 3D.
+- Inicio adaptable a celulares, tablets y computadoras.
+- Carruseles de destinos y tours destacados.
+- Catálogo con filtros para tours nacionales e internacionales.
+- Detalle del tour con precio, duración, disponibilidad, itinerario, inclusiones y exclusiones.
+- Secciones de historia, confianza, preguntas frecuentes y testimonios.
+- Área preparada para promociones escolares, delegaciones y viajes realizados.
+- Enlaces oficiales a TikTok e Instagram.
+- Contacto directo mediante WhatsApp.
 
-```text
-frontend/             Aplicacion Next.js
-backend/
-  prisma/             Schema Prisma y seed inicial
-  src/
-    config/           Variables de entorno
-    controllers/      Capa HTTP
-    services/         Reglas de negocio
-    repositories/     Acceso a datos
-    middlewares/      Auth, validacion y errores
-    routes/           Endpoints REST
-database/             SQL auxiliar
-docs/                 Checklist de produccion y reglas del proyecto
-```
+### Reservas
 
-La arquitectura mantiene Next.js solo para frontend/SEO y Express para la logica critica de reservas, pagos, autenticacion y MySQL.
+- Formulario de datos del pasajero y fecha del viaje.
+- Separación fija de S/ 200.
+- QR con instrucciones de pago y código único por reserva.
+- Envío del comprobante a WhatsApp para validación manual.
+- Modo demostración que simula la aprobación sin realizar un cobro.
+- PDF de servicios adicionales disponible solamente después de confirmar la reserva.
+- El PDF muestra servicios turísticos generales y no revela itinerarios o propuestas exclusivas.
 
-## Requisitos previos
+### Administración y arquitectura
 
-- Node.js 20 o superior.
-- MySQL Server y MySQL Workbench.
-- Git.
-- Cuenta Culqi para llaves reales, si se desea cobrar en produccion.
+- Frontend: Next.js, React, TypeScript y Tailwind CSS.
+- Backend: Node.js, Express, TypeScript, Prisma y MySQL.
+- Panel administrativo para tours, reservas, pagos y configuración empresarial.
+- Fallback local para demostrar tours y reservas cuando el backend no está disponible.
+- Validación de formularios con Zod y React Hook Form.
+- Estructura preparada para desplegar frontend y API por separado.
 
-## Configuracion de MySQL
+## Demostración del avance
 
-En MySQL Workbench ejecuta:
+1. Abrir el inicio y mostrar la identidad, logo animado y carruseles.
+2. Ingresar al catálogo y seleccionar un tour.
+3. Completar el formulario de reserva.
+4. Mostrar el QR, monto de S/ 200 y código único.
+5. Presionar `Demostración para presentación`.
+6. Enseñar la confirmación de reserva sin transacción bancaria real.
+7. Descargar el PDF de servicios adicionales desde la confirmación.
+8. Revisar las secciones de promociones, historia, TikTok e Instagram.
 
-```sql
-CREATE DATABASE agencia_tours;
-```
+El modo demostración informa expresamente que no genera cargos ni operaciones bancarias.
 
-La cadena por defecto usa el usuario `root`, password `luis` y base `agencia_tours`:
+## Pendientes antes de producción
 
-```env
-DATABASE_URL="mysql://root:luis@localhost:3306/agencia_tours"
-```
+### Contenido audiovisual
 
-## Instalacion
+- Reemplazar las fotografías referenciales por imágenes propias con autorización.
+- Incorporar fotografías reales de promociones escolares y delegaciones atendidas.
+- Recibir videos verticales y horizontales optimizados para web.
+- Añadir un carrusel mixto de fotografías y videos reales.
+- Preparar miniaturas, textos alternativos y versiones comprimidas para carga rápida.
+- Confirmar qué materiales pueden publicarse por contar con autorización de imagen.
+
+### Yape y transacciones
+
+- Confirmar el número Yape empresarial definitivo y el nombre exacto del titular.
+- Sustituir el QR informativo por el QR empresarial oficial cuando sea entregado.
+- Definir quién validará los comprobantes y en cuánto tiempo.
+- Crear el registro backend de comprobantes, estado de validación y auditoría.
+- Evitar confirmaciones duplicadas y códigos de reserva reutilizados.
+- Definir políticas de separación, saldo, vencimiento, cancelación y devolución.
+- Integrar notificaciones automáticas al aprobar o rechazar un comprobante.
+- Realizar pruebas de seguridad y transacciones antes de habilitar pagos reales.
+
+### Empresa y operación
+
+- Configurar correos corporativos cuando estén disponibles.
+- Completar razón social, RUC, Libro de Reclamaciones y políticas legales.
+- Conectar dominio, alojamiento de producción, base de datos y copias de seguridad.
+- Cambiar las credenciales administrativas de demostración.
+- Configurar SMTP para confirmaciones por correo.
+- Añadir analítica, SEO, monitoreo y registro de errores.
+
+## Instalación
 
 ```bash
 npm run install:all
 ```
 
-Copia variables de entorno:
+Configurar las variables de entorno del frontend y backend usando sus archivos `.env.example`.
 
-```bash
-copy backend\.env.example backend\.env
-copy frontend\.env.example frontend\.env
-```
-
-## Prisma
+Base de datos:
 
 ```bash
 cd backend
@@ -73,223 +97,29 @@ npm run prisma:migrate
 npm run seed
 ```
 
-El seed crea el administrador:
-
-- Email: `admin@jhontours.com`
-- Password: `Admin12345`
-
-Tambien crea los tours iniciales: Machu Picchu, Disney Orlando, Oxapampa, Ica y Huacachina, y Egipto.
-
-## Ejecucion local
-
-Terminal backend:
+Ejecución local:
 
 ```bash
 npm run dev --prefix backend
-```
-
-Terminal frontend:
-
-```bash
 npm run dev --prefix frontend
 ```
 
-URLs:
-
-- Frontend: `http://localhost:3000`
-- Backend: `http://localhost:4000/api`
-- Healthcheck: `http://localhost:4000/api/health`
-
-## Endpoints principales
-
-- `GET /api/tours`
-- `GET /api/tours/:id`
-- `POST /api/tours`
-- `PUT /api/tours/:id`
-- `DELETE /api/tours/:id`
-- `POST /api/reservations`
-- `GET /api/reservations`
-- `GET /api/reservations/:id`
-- `POST /api/payments/culqi`
-- `POST /api/payments/yape`
-- `POST /api/webhooks/culqi`
-- `POST /api/auth/login`
-- `POST /api/contact`
-
-## Integracion con Culqi y Yape
-
-- La llave publica va en `frontend/.env` como `NEXT_PUBLIC_CULQI_PUBLIC_KEY`.
-- La llave privada va solo en `backend/.env` como `CULQI_PRIVATE_KEY`.
-- El backend nunca confia en el monto enviado por el frontend: calcula el total usando la reserva y el precio del tour guardado en MySQL.
-- En desarrollo puedes activar pagos demo solo con `NODE_ENV=development` y `ALLOW_DEMO_PAYMENTS=true`.
-- En produccion el backend nunca aprueba pagos demo. Si `ALLOW_DEMO_PAYMENTS=true` con `NODE_ENV=production`, la API falla al iniciar.
-- Si falta `CULQI_PRIVATE_KEY`, el intento de pago devuelve un error claro y no marca la reserva como pagada.
-- No se guardan datos sensibles de tarjetas.
-- La pantalla `/pago/:id` carga Culqi Checkout con `NEXT_PUBLIC_CULQI_PUBLIC_KEY` y envia el token al backend.
-- WhatsApp queda como enlace `wa.me`; no usa API oficial todavia.
-
-Estado de integraciones:
+Compilación del frontend:
 
 ```bash
-GET http://localhost:4000/api/health/integrations
+npm run build --prefix frontend
 ```
 
-Este endpoint muestra si Culqi, webhook y SMTP estan configurados sin exponer secretos.
+## Datos que debe entregar John Tours Perú
 
-## Requerimientos funcionales cubiertos
+- Número y titular oficial de Yape.
+- QR empresarial oficial.
+- Correos corporativos.
+- Fotografías y videos autorizados.
+- Historia empresarial definitiva y datos del fundador.
+- Tarifas, cupos, fechas e inclusiones reales de cada tour.
+- Políticas comerciales y legales aprobadas.
 
-- Mostrar tours nacionales e internacionales.
-- Filtrar tours por destino, tipo y precio.
-- Ver detalle de cada tour.
-- Crear reservas con datos del cliente.
-- Calcular total desde backend.
-- Preparar pago con tarjeta y Yape mediante Culqi.
-- Confirmar reserva pagada.
-- Enviar correos por SMTP cuando este configurado.
-- Administrar tours, reservas, pagos y mensajes desde panel privado.
-- Contacto por WhatsApp via `wa.me`.
+## Seguridad
 
-## Reglas de UI
-
-- Azul marino para confianza y estructura.
-- Dorado para llamadas a la accion.
-- Verde para WhatsApp y confirmaciones.
-- Tarjetas con imagen, precio, duracion y accion clara.
-- Diseno responsive, comercial y consistente para una agencia de turismo.
-
-## WhatsApp
-
-El numero de contacto principal esta configurado como `+51 945 342 536`.
-
-```env
-NEXT_PUBLIC_WHATSAPP_NUMBER=51945342536
-```
-
-La web genera enlaces `wa.me` con mensajes prellenados para:
-
-- Cotizacion general.
-- Cotizacion de un tour especifico.
-- Confirmacion o envio de comprobante de una reserva.
-
-## Panel admin
-
-Ruta:
-
-```bash
-http://localhost:3000/admin
-```
-
-Credenciales seed:
-
-- Email: `admin@jhontours.com`
-- Password: `Admin12345`
-
-Funciones disponibles:
-
-- Crear tours.
-- Editar tours.
-- Marcar tours como destacados.
-- Activar o inactivar tours.
-- Desactivar tours desde el listado.
-- Ver reservas y pagos.
-
-## Despliegue sugerido
-
-- Frontend: Vercel.
-- Backend: Railway o Render.
-- Base de datos: Railway MySQL, PlanetScale compatible MySQL o un MySQL administrado.
-
-### Despliegue rapido en Vercel
-
-1. Sube los cambios a GitHub:
-
-```bash
-git push origin main
-```
-
-2. En Vercel, crea un proyecto nuevo e importa este repositorio.
-3. Configura el proyecto asi:
-
-```text
-Framework Preset: Next.js
-Root Directory: frontend
-Build Command: npm run build
-Install Command: npm install
-```
-
-4. En `Environment Variables`, agrega:
-
-```env
-NEXT_PUBLIC_WHATSAPP_NUMBER=51945342536
-NEXT_PUBLIC_CULQI_PUBLIC_KEY=pk_test_xxxxxxxxxxxxxxxxx
-```
-
-Si vas a conectar un backend real, agrega tambien:
-
-```env
-NEXT_PUBLIC_API_URL=https://tu-backend-en-render-o-railway.com/api
-```
-
-Si no tienes backend desplegado, la web igual funciona con datos demo porque el frontend tiene fallback para tours, testimonios y panel admin.
-
-5. Click en `Deploy`.
-6. Cuando termine, Vercel te dara una URL tipo:
-
-```text
-https://tu-proyecto.vercel.app
-```
-
-Variables importantes para el backend en produccion:
-
-```env
-DATABASE_URL=
-FRONTEND_URL=
-JWT_SECRET=
-CULQI_PRIVATE_KEY=
-CULQI_API_URL=https://api.culqi.com/v2
-CULQI_WEBHOOK_SECRET=
-ALLOW_DEMO_PAYMENTS=false
-SMTP_HOST=
-SMTP_PORT=
-SMTP_USER=
-SMTP_PASS=
-MAIL_FROM=no-reply@jhontours.com
-ADMIN_EMAIL=admin@jhontours.com
-ADMIN_PASSWORD=Admin12345
-```
-
-## Capturas sugeridas para evidencias
-
-- Inicio con hero y barra de busqueda.
-- Catalogo con filtros.
-- Detalle de tour.
-- Formulario de reserva.
-- Pantalla de pago Culqi/Yape.
-- Confirmacion de reserva pagada.
-- Panel admin con reservas y pagos.
-
-## Checklist profesional
-
-Lee tambien:
-
-```text
-docs/production-checklist.md
-```
-
-Incluye flujos de reserva, pago, admin, variables reales y preguntas pendientes para la empresa.
-
-## Preparación de datos reales
-
-El panel `/admin` permite guardar la razón social, RUC, dirección, dominio, contacto y textos legales como borrador. Las políticas no aparecen como oficiales hasta activar `Publicar políticas validadas`; al hacerlo, el backend exige que todos los campos legales estén completos.
-
-Cada tour admite moneda `PEN` o `USD`, pago total o adelanto porcentual, crédito/licencia de imagen y salidas programadas mediante `/api/tours/:id/departures`. Los testimonios solo aparecen públicamente cuando están marcados simultáneamente como verificados y publicados.
-
-Antes de abrir ventas se debe reemplazar todo contenido demo, aplicar las migraciones y completar Culqi, SMTP, dominio y datos empresariales reales.
-
-## Git
-
-Autor configurado localmente:
-
-```bash
-git config user.name "Luis Angel Dionicio Bartolo"
-```
+Nunca se deben guardar claves de Yape, códigos SMS, contraseñas bancarias ni datos sensibles del cliente. La confirmación real debe ocurrir únicamente después de validar el comprobante, el monto, el titular y el código único de la reserva.

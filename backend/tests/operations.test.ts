@@ -3,8 +3,8 @@ import test from "node:test";
 import { businessSettingsSchema, departureSchema, testimonialSchema, tourSchema } from "../src/validators/schemas";
 
 test("no permite publicar políticas incompletas", () => {
-  assert.equal(businessSettingsSchema.safeParse({ tradeName: "Jhon Tours", policiesPublished: true }).success, false);
-  assert.equal(businessSettingsSchema.safeParse({ tradeName: "Jhon Tours", policiesPublished: false }).success, true);
+  assert.equal(businessSettingsSchema.safeParse({ tradeName: "John Tours", policiesPublished: true }).success, false);
+  assert.equal(businessSettingsSchema.safeParse({ tradeName: "John Tours", policiesPublished: false }).success, true);
 });
 
 test("solo publica testimonios verificados", () => {

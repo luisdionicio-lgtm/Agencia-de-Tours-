@@ -40,27 +40,27 @@ export const mailService = {
   sendReservationCreated(reservation: ReservationEmail) {
     return sendMail(
       reservation.customer.email,
-      `Reserva recibida #${reservation.id} - Jhon Tours`,
+      `Reserva recibida #${reservation.id} - John Tours`,
       `
         <h2>Hola ${reservation.customer.fullName}</h2>
         <p>Recibimos tu reserva para <strong>${reservation.tour.title}</strong> (${reservation.tour.destination}).</p>
         <p><strong>Personas:</strong> ${reservation.peopleCount}</p>
         <p><strong>Total:</strong> ${formatAmount(reservation.totalAmount)}</p>
-        <p>Tu reserva esta pendiente de pago. Gracias por confiar en Jhon Tours.</p>
+        <p>Tu reserva esta pendiente de pago. Gracias por confiar en John Tours.</p>
       `
     );
   },
   sendPaymentConfirmed(reservation: ReservationEmail) {
     return sendMail(
       reservation.customer.email,
-      `Pago confirmado #${reservation.id} - Jhon Tours`,
+      `Pago confirmado #${reservation.id} - John Tours`,
       `
         <h2>Pago confirmado</h2>
         <p>Hola ${reservation.customer.fullName}, tu pago para <strong>${reservation.tour.title}</strong> fue confirmado.</p>
         <p><strong>Destino:</strong> ${reservation.tour.destination}</p>
         <p><strong>Personas:</strong> ${reservation.peopleCount}</p>
         <p><strong>Total:</strong> ${formatAmount(reservation.totalAmount)}</p>
-        <p>Un asesor de Jhon Tours se comunicara contigo para coordinar los detalles finales.</p>
+        <p>Un asesor de John Tours se comunicara contigo para coordinar los detalles finales.</p>
       `
     );
   }

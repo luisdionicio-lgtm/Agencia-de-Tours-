@@ -1,51 +1,41 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowRight, Award, CalendarDays, Camera, CheckCircle2, Clock3, CreditCard, Filter, Globe2, HeartHandshake, Hotel, LayoutDashboard, LogOut, MapPin, Menu, MessageCircle, Plane, Search, ShieldCheck, Sparkles, Star, UsersRound, WalletCards, X } from "lucide-react";
+import { ArrowRight, Award, CalendarDays, Camera, CheckCircle2, Clock3, Copy, CreditCard, Download, FileText, Filter, Globe2, HeartHandshake, Hotel, LayoutDashboard, LogOut, MapPin, Menu, MessageCircle, Plane, Search, ShieldCheck, Sparkles, Star, UsersRound, WalletCards, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
+import QRCode from "qrcode";
 import { z } from "zod";
 import { api } from "../../infrastructure/api/client";
 import { Link, NavLink, Route, Routes, useNavigate, useParams, useSearchParams } from "../../core/routing";
 import type { BusinessSettings, Payment, Reservation, Tour, TourStatus, TourType } from "../../shared/types";
 
-declare global {
-  interface Window {
-    CulqiCheckout?: new (publicKey: string, config: unknown) => { open: () => void };
-    Culqi?: {
-      publicKey?: string;
-      token?: { id: string };
-      error?: { user_message?: string; merchant_message?: string };
-      settings?: (settings: unknown) => void;
-      options?: (options: unknown) => void;
-      open?: () => void;
-      close?: () => void;
-    };
-    culqi?: () => void;
-  }
-}
+declare global { interface Window { CulqiCheckout?: new (publicKey: string, config: unknown) => { open: () => void }; Culqi?: any; culqi?: () => void } }
 
 const money = (value: string | number, currency: "PEN" | "USD" = "USD") =>
   new Intl.NumberFormat("es-PE", { currency, maximumFractionDigits: 0, style: "currency" }).format(Number(value));
 const tourCurrency = (tour: Pick<Tour, "type" | "currency">) => tour.currency ?? (tour.type === "NACIONAL" ? "PEN" : "USD");
 const tourMoney = (tour: Pick<Tour, "price" | "type">, value: string | number = tour.price) => money(value, tourCurrency(tour));
 const paymentMoney = (payment: Payment) => payment.reservation?.tour ? tourMoney(payment.reservation.tour, payment.amount) : money(payment.amount);
-const whatsapp = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "51945342536";
-const whatsappDisplay = "+51 945 342 536";
-const culqiPublicKey = process.env.NEXT_PUBLIC_CULQI_PUBLIC_KEY ?? "pk_test_xxxxxxxxxxxxxxxxx";
-const isCulqiKeyConfigured = /^pk_(test|live)_[A-Za-z0-9]+/.test(culqiPublicKey) && !culqiPublicKey.includes("xxxxxxxx");
+const whatsapp = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "51966779705";
+const whatsappDisplay = "+51 966 779 705";
+const reservationAmount = 200;
+const culqiPublicKey = "";
+const isCulqiKeyConfigured = false;
+const tiktokUrl = "https://www.tiktok.com/@johntoursperu?_r=1&_t=ZS-988zH7tdmDM";
+const instagramUrl = "https://www.instagram.com/johntoursperu?igsh=dm1hc3ZweGlkeWR2";
 
 const destinationImage = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1400&q=85`;
 
 const buildWhatsAppUrl = (message: string) => `https://wa.me/${whatsapp}?text=${encodeURIComponent(message)}`;
 const whatsappMessages = {
-  general: "Hola Jhon Tours, deseo informacion para cotizar un viaje.",
-  tour: (tour: Tour) => `Hola Jhon Tours, deseo cotizar el tour ${tour.title} para ${tour.destination}.`,
-  reservation: (reservation: Reservation) => `Hola Jhon Tours, deseo confirmar mi reserva #${reservation.id} para ${reservation.tour.title}.`
+  general: "Hola John Tours, deseo informacion para cotizar un viaje.",
+  tour: (tour: Tour) => `Hola John Tours, deseo cotizar el tour ${tour.title} para ${tour.destination}.`,
+  reservation: (reservation: Reservation) => `Hola John Tours, deseo confirmar mi reserva #${reservation.id} para ${reservation.tour.title}.`
 };
 
 function createPaymentSeed(reservationId: string) {
   const random = Math.random().toString(36).slice(2, 8).toUpperCase();
-  return `JHON-${reservationId || "DEMO"}-${Date.now().toString(36).toUpperCase()}-${random}`;
+  return `JOHN-${reservationId || "DEMO"}-${Date.now().toString(36).toUpperCase()}-${random}`;
 }
 
 function pseudoQrSvg(seed: string) {
@@ -92,7 +82,7 @@ const demoTours: Tour[] = [
     isFeatured: true,
     status: "ACTIVO",
     itinerary: ["Recepcion en Cusco y aclimatacion", "Valle Sagrado con guia local", "Ingreso a Machu Picchu", "Retorno asistido a Lima"],
-    includes: ["Hotel seleccionado", "Traslados", "Guiado profesional", "Asistencia Jhon Tours"],
+    includes: ["Hotel seleccionado", "Traslados", "Guiado profesional", "Asistencia John Tours"],
     excludes: ["Gastos personales", "Servicios no mencionados"]
   },
   {
@@ -151,7 +141,7 @@ const demoTours: Tour[] = [
     isFeatured: true,
     status: "ACTIVO",
     itinerary: ["Llegada asistida a El Cairo", "Piramides de Giza y Esfinge con guia", "Museo Egipcio y barrio historico", "Crucero por el Nilo y templos principales", "Retorno con seguimiento del asesor"],
-    includes: ["Hoteles seleccionados", "Traslados programados", "Guia especializado en espanol", "Asistencia Jhon Tours por WhatsApp"],
+    includes: ["Hoteles seleccionados", "Traslados programados", "Guia especializado en espanol", "Asistencia John Tours por WhatsApp"],
     excludes: ["Vuelos internacionales", "Gastos personales", "Propinas y servicios no mencionados"]
   }
 ];
@@ -201,21 +191,17 @@ function Shell() {
         <div className="scroll-progress" style={{ width: `${scrollProgress}%` }} aria-hidden="true" />
         <div className="top-ribbon hidden border-b border-white/10 bg-[#061b34] px-4 py-2 text-white lg:block">
           <div className="mx-auto flex max-w-7xl items-center justify-between text-xs font-semibold">
-            <span className="inline-flex items-center gap-2 text-amber-200"><ShieldCheck size={14} /> Agencia con reservas, pagos seguros y asistencia personalizada</span>
+            <span className="inline-flex items-center gap-2 text-cyan-100"><ShieldCheck size={14} /> Agencia de viajes y turismo · Tours operador mayorista</span>
             <span className="inline-flex items-center gap-5 text-slate-200">
               <span>WhatsApp {whatsappDisplay}</span>
-              <span>Culqi/Yape listo para produccion</span>
-              <span>MySQL + Prisma</span>
+              <span>Reserva desde S/ 200 con Yape</span>
+              <span>Santa Clara, Ate · Cusco</span>
             </span>
           </div>
         </div>
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 lg:px-6">
-          <Link to="/" className="brand-lockup flex items-center gap-3" aria-label="Jhon Tours, inicio">
-            <span className="brand-mark grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-[#082447] text-amber-300"><Plane size={23} /></span>
-            <span>
-              <strong className="block text-lg leading-tight text-[#082447]">Jhon Tours</strong>
-              <small className="text-xs font-semibold uppercase tracking-widest text-slate-500">Agencia de Turismo</small>
-            </span>
+          <Link to="/" className="brand-lockup flex items-center gap-3" aria-label="John Tours, inicio">
+            <img src="/john-tours-logo.jpg" alt="John Tours Perú" className="header-logo h-12 w-auto" />
           </Link>
           <nav className="primary-nav hidden items-center gap-6 text-sm font-semibold text-slate-700 lg:flex">
             {links.map(([label, to]) => <NavLink key={label} to={to}>{label}</NavLink>)}
@@ -248,7 +234,7 @@ function RoutesView() {
       <Route path="/tours" element={<Tours />} />
       <Route path="/tours/:id" element={<TourDetail />} />
       <Route path="/reservar/:id" element={<ReservationPage />} />
-      <Route path="/pago/:id" element={<PaymentPage />} />
+      <Route path="/pago/:id" element={<YapeReservationPage />} />
       <Route path="/confirmacion/:id" element={<ConfirmationPage />} />
       <Route path="/admin" element={<AdminPage />} />
       <Route path="/legal/:section" element={<LegalPage />} />
@@ -322,29 +308,28 @@ function Home() {
       <section className="hero-bg">
         <div className="mx-auto grid min-h-[calc(100svh-80px)] max-w-7xl items-center gap-8 px-4 py-10 lg:min-h-[660px] lg:grid-cols-[1.05fr_.95fr] lg:gap-10 lg:px-6 lg:py-14">
           <div className="animate-rise max-w-3xl text-white">
-            <p className="hero-eyebrow mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-bold text-amber-100 ring-1 ring-white/20"><Sparkles size={17} /> Experiencias creadas para recordar toda la vida</p>
-            <h1 className="hero-title text-4xl font-black leading-[1.04] sm:text-5xl md:text-7xl">Descubre experiencias <span>inolvidables</span> con Jhon Tours</h1>
-            <p className="mt-6 max-w-2xl text-base leading-8 text-slate-100 md:text-xl">Viajes nacionales e internacionales diseñados para sorprenderte, con atención cercana, itinerarios claros y respaldo en cada etapa.</p>
+            <p className="hero-eyebrow mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-bold text-cyan-100 ring-1 ring-white/20"><Sparkles size={17} /> Viaja seguro · Vive extraordinario</p>
+            <h1 className="hero-title text-4xl font-black leading-[1.04] sm:text-5xl md:text-7xl">Tu próximo destino <span>empieza aquí</span></h1>
+            <p className="mt-6 max-w-2xl text-base leading-8 text-slate-100 md:text-xl">Tours nacionales e internacionales con atención cercana, itinerarios claros y una reserva simple de S/ 200 por Yape.</p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link to="/tours" className="btn-gold rounded-xl px-7 py-3.5 text-center font-black">Explorar tours</Link>
               <a href={buildWhatsAppUrl(whatsappMessages.general)} className="whatsapp-cta rounded-xl bg-[#1fa463] px-7 py-3.5 text-center font-black text-white">Cotizar por WhatsApp</a>
             </div>
             <div className="mt-6 flex flex-wrap gap-2 text-xs font-bold text-slate-100">
               <span className="trust-pill rounded-full bg-white/10 px-3 py-2 ring-1 ring-white/20">Atención 24/7</span>
-              <span className="trust-pill rounded-full bg-white/10 px-3 py-2 ring-1 ring-white/20">Pagos seguros</span>
+              <span className="trust-pill rounded-full bg-white/10 px-3 py-2 ring-1 ring-white/20">Reserva S/ 200</span>
               <span className="trust-pill rounded-full bg-white/10 px-3 py-2 ring-1 ring-white/20">Experiencias premium</span>
               <span className="trust-pill rounded-full bg-white/10 px-3 py-2 ring-1 ring-white/20">Agencia confiable</span>
             </div>
             <div className="mt-8 grid max-w-2xl grid-cols-3 gap-2 sm:gap-3">
-              <MiniTrust icon={<ShieldCheck />} value="Pago seguro" label="Culqi, Yape y comprobante" />
+              <MiniTrust icon={<ShieldCheck />} value="Reserva segura" label="Yape, código único y comprobante" />
               <MiniTrust icon={<Clock3 />} value="Respuesta clara" label="Atencion por WhatsApp" />
               <MiniTrust icon={<HeartHandshake />} value="Viaje acompanado" label="Antes, durante y despues" />
             </div>
           </div>
           <div className="space-y-4 lg:pl-2">
-            <div className="hidden lg:block">
-              <HeroVisualCarousel tours={featured.length ? featured : tours.slice(0, 4)} />
-            </div>
+            <LogoShowcase />
+            <div className="hidden lg:block"><HeroVisualCarousel tours={featured.length ? featured : tours.slice(0, 4)} /></div>
             <SearchBox />
           </div>
         </div>
@@ -361,11 +346,14 @@ function Home() {
         <div className="experience-rail" role="region" aria-label="Estilos de viaje">{types.map(([type, text], index) => <div key={type} className="experience-card group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><span className="category-icon mb-5 grid h-12 w-12 place-items-center rounded-xl"><Globe2 /></span><span className="text-xs font-black uppercase tracking-[0.18em] text-amber-600">Experiencia 0{index + 1}</span><strong className="mt-2 block text-xl text-[#082447]">{type}</strong><p className="mt-2 text-sm leading-6 text-slate-600">{text}</p><Link to="/tours" className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#0f4c81]">Descubrir <ArrowRight size={16} /></Link></div>)}</div>
       </Section>
       <TravelFamily />
+      <SchoolPromotions />
+      <OurStory />
+      <SocialSpotlight />
       <Testimonials />
       <FrequentlyAskedQuestions />
       <section id="contacto" className="formal-cta px-4 py-20 text-white">
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
-          <div className="max-w-3xl"><span className="text-sm font-black uppercase tracking-[0.2em] text-amber-300">El mundo te espera</span><h2 className="mt-3 text-4xl font-black md:text-5xl">Tu próxima aventura empieza hoy</h2><p className="mt-4 text-lg text-slate-200">Reserva con Jhon Tours y vive una experiencia diseñada para sorprenderte.</p></div>
+          <div className="max-w-3xl"><span className="text-sm font-black uppercase tracking-[0.2em] text-amber-300">El mundo te espera</span><h2 className="mt-3 text-4xl font-black md:text-5xl">Tu próxima aventura empieza hoy</h2><p className="mt-4 text-lg text-slate-200">Reserva con John Tours y vive una experiencia diseñada para sorprenderte.</p></div>
           <div className="flex flex-col gap-3 sm:flex-row"><a href={buildWhatsAppUrl(whatsappMessages.general)} className="whatsapp-cta inline-flex items-center justify-center gap-2 rounded-xl bg-[#1fa463] px-6 py-3.5 font-black"><MessageCircle /> Hablar por WhatsApp</a><Link to="/tours" className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/30 bg-white/10 px-6 py-3.5 font-black backdrop-blur">Ver paquetes <ArrowRight size={18} /></Link></div>
         </div>
       </section>
@@ -409,6 +397,33 @@ function HeroVisualCarousel({ tours }: { tours: Tour[] }) {
       </button>
     </div>
   );
+}
+
+function LogoShowcase() {
+  return (
+    <div className="logo-stage" aria-label="John Tours Perú">
+      <div className="logo-orbit" aria-hidden="true" />
+      <img src="/john-tours-logo.jpg" alt="Logo oficial de John Tours Perú" />
+      <span>Agencia de Viajes y Turismo</span>
+    </div>
+  );
+}
+
+function SchoolPromotions() {
+  const campaigns = [
+    ["Promociones escolares", "Viajes de promoción organizados con acompañamiento y coordinación para colegios.", "photo-1523050854058-8df90110c9f1"],
+    ["Grupos y delegaciones", "Rutas diseñadas para instituciones, empresas y grupos con atención personalizada.", "photo-1517457373958-b7bdd4587205"],
+    ["Recuerdos que unen", "Experiencias seguras para celebrar etapas importantes y compartir en comunidad.", "photo-1529156069898-49953e39b3ac"]
+  ];
+  return <Section title="Experiencias que ya hicimos realidad" subtitle="Un espacio listo para publicar fotografías autorizadas de promociones, colegios, delegaciones y grupos atendidos por John Tours."><div className="promotion-grid">{campaigns.map(([title, text, photo]) => <article key={title} className="promotion-card"><img src={destinationImage(photo)} alt={title} loading="lazy" /><div><span>John Tours en acción</span><h3>{title}</h3><p>{text}</p></div></article>)}</div><p className="mt-5 text-sm text-slate-500">Las imágenes actuales son referenciales y pueden reemplazarse desde el catálogo administrativo por fotografías propias con autorización.</p></Section>;
+}
+
+function OurStory() {
+  return <section id="nosotros" className="story-section px-4 py-20 lg:px-6"><div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[.85fr_1.15fr] lg:items-center"><div className="story-logo"><img src="/john-tours-logo.jpg" alt="John Tours Perú" /></div><div><span className="section-kicker">Nuestra historia</span><h2 className="mt-4 text-4xl font-black text-[#073b83] md:text-5xl">¿Cómo nace John Tours?</h2><p className="mt-5 text-lg leading-8 text-slate-600">John Tours Perú nace con la convicción de que viajar debe sentirse cercano, claro y bien acompañado. Desde Santa Clara, Ate, y Cusco, conectamos a familias, colegios, grupos y viajeros con experiencias nacionales e internacionales.</p><p className="mt-4 leading-8 text-slate-600">Nuestro trabajo se sostiene en escuchar primero, explicar cada detalle y mantener un contacto humano antes, durante y después del viaje. Esa cercanía es la que convierte una reserva en confianza.</p><div className="mt-7 grid gap-3 sm:grid-cols-3">{["Atención directa", "Itinerarios claros", "Acompañamiento real"].map(item => <span key={item} className="rounded-xl bg-white p-4 text-center font-bold text-[#087db8] shadow-sm">{item}</span>)}</div></div></div></section>;
+}
+
+function SocialSpotlight() {
+  return <section className="social-section px-4 py-16 text-white lg:px-6"><div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 lg:flex-row lg:items-center"><div className="max-w-3xl"><span className="text-sm font-black uppercase tracking-[.2em] text-cyan-200">Síguenos y viaja con nosotros</span><h2 className="mt-3 text-4xl font-black md:text-5xl">Inspírate con nuestros próximos destinos</h2><p className="mt-4 text-lg text-blue-100">Mira promociones, salidas, consejos y experiencias reales en TikTok e Instagram.</p></div><div className="grid w-full gap-3 sm:grid-cols-2 lg:w-auto"><a href={tiktokUrl} target="_blank" rel="noreferrer" className="social-button"><strong>TikTok</strong><span>@johntoursperu</span></a><a href={instagramUrl} target="_blank" rel="noreferrer" className="social-button"><Camera /><span>@johntoursperu</span></a></div></div></section>;
 }
 
 function TrustBar() {
@@ -496,7 +511,7 @@ function TravelFamily() {
           <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-bold text-amber-200 ring-1 ring-white/15"><HeartHandshake size={18} /> Cercanía que se siente</span>
           <h2 className="mt-5 text-4xl font-black leading-tight md:text-5xl">Más que una agencia,<br />una familia viajera</h2>
           <p className="mt-5 text-lg leading-8 text-slate-200">Creemos que un gran viaje nace de escuchar, orientar y estar presentes. Por eso cada consulta recibe atención humana y cada itinerario se trata como una experiencia personal.</p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row"><a href={buildWhatsAppUrl("Hola Jhon Tours, quiero conversar con un asesor sobre mi próximo viaje.")} className="whatsapp-cta inline-flex items-center justify-center gap-2 rounded-xl bg-[#1fa463] px-6 py-3.5 font-black"><MessageCircle /> Conversemos por WhatsApp</a><Link to="/#nosotros" className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/10 px-6 py-3.5 font-black">Conoce nuestro enfoque</Link></div>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row"><a href={buildWhatsAppUrl("Hola John Tours, quiero conversar con un asesor sobre mi próximo viaje.")} className="whatsapp-cta inline-flex items-center justify-center gap-2 rounded-xl bg-[#1fa463] px-6 py-3.5 font-black"><MessageCircle /> Conversemos por WhatsApp</a><Link to="/#nosotros" className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/10 px-6 py-3.5 font-black">Conoce nuestro enfoque</Link></div>
         </div>
         <div className="family-values grid grid-cols-2 gap-4">
           {["Escuchamos tus ideas", "Orientamos sin presión", "Respondemos con claridad", "Acompañamos tu viaje"].map((value, index) => <div key={value} className="rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur"><span className="text-2xl font-black text-amber-300">0{index + 1}</span><strong className="mt-8 block text-lg">{value}</strong></div>)}
@@ -510,15 +525,15 @@ function FrequentlyAskedQuestions() {
   const questions = [
     ["¿Cómo puedo reservar un tour?", "Elige una experiencia, completa tus datos y revisa la información de pago. También puedes escribirnos por WhatsApp antes de reservar."],
     ["¿Puedo solicitar un viaje personalizado?", "Sí. Cuéntanos destino, fechas, cantidad de viajeros y estilo de viaje para orientarte con una propuesta acorde a tus necesidades."],
-    ["¿Qué métodos de pago están disponibles?", "La plataforma está preparada para pagos con Culqi y Yape. Antes de pagar verás el importe calculado desde la información oficial del tour."],
-    ["¿Cuándo se confirma mi cupo?", "El cupo se descuenta y la reserva se confirma únicamente después de que el pago sea procesado exitosamente."],
+    ["¿Cómo pago la reserva?", "Separa tu cupo con S/ 200 por Yape. El sistema genera un código único; luego envías el comprobante por WhatsApp para su validación."],
+    ["¿Cuándo se confirma mi cupo?", "La reserva se confirma después de validar el monto, el titular y el código único incluido en tu comprobante."],
     ["¿Tendré asistencia durante el viaje?", "Sí. Nuestro enfoque incluye orientación previa y un canal de contacto directo para acompañarte durante tu experiencia."],
     ["¿Dónde reviso lo que incluye cada paquete?", "En el detalle de cada tour encontrarás itinerario, servicios incluidos, exclusiones, duración, precio y disponibilidad."]
   ];
   return (
     <section className="faq-section px-4 py-16 lg:px-6 lg:py-20">
       <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[.75fr_1.25fr]">
-        <div><span className="section-kicker">Resolvemos tus dudas</span><h2 className="mt-4 text-4xl font-black text-[#082447] md:text-5xl">Preguntas frecuentes</h2><p className="mt-4 text-lg leading-8 text-slate-600">Queremos que decidas con información clara. Si necesitas una respuesta personal, estamos a un mensaje de distancia.</p><a href={buildWhatsAppUrl("Hola Jhon Tours, tengo una consulta sobre sus viajes.")} className="mt-7 inline-flex items-center gap-2 rounded-xl bg-[#1fa463] px-6 py-3.5 font-black text-white"><MessageCircle /> Consultar por WhatsApp</a></div>
+        <div><span className="section-kicker">Resolvemos tus dudas</span><h2 className="mt-4 text-4xl font-black text-[#082447] md:text-5xl">Preguntas frecuentes</h2><p className="mt-4 text-lg leading-8 text-slate-600">Queremos que decidas con información clara. Si necesitas una respuesta personal, estamos a un mensaje de distancia.</p><a href={buildWhatsAppUrl("Hola John Tours, tengo una consulta sobre sus viajes.")} className="mt-7 inline-flex items-center gap-2 rounded-xl bg-[#1fa463] px-6 py-3.5 font-black text-white"><MessageCircle /> Consultar por WhatsApp</a></div>
         <div className="grid gap-3">{questions.map(([question, answer], index) => <details key={question} className="faq-item group rounded-2xl border border-slate-200 bg-white"><summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 font-bold text-[#082447]"><span>{question}</span><span className="faq-plus grid h-8 w-8 shrink-0 place-items-center rounded-full">+</span></summary><div className="px-5 pb-5 pr-16 text-sm leading-7 text-slate-600">{answer}</div>{index === 0 && <span className="sr-only">Abre para ver la respuesta</span>}</details>)}</div>
       </div>
     </section>
@@ -529,7 +544,7 @@ function ExperienceBand() {
   const steps = [
     ["1", "Cotiza", "Elige destino, fecha y numero de viajeros."],
     ["2", "Reserva", "Registramos tus datos y confirmamos disponibilidad."],
-    ["3", "Paga seguro", "Culqi, Yape y comprobante de operacion."],
+    ["3", "Separa con Yape", "S/ 200, QR de instrucciones y código único."],
     ["4", "Viaja", "Acompanamiento y comunicacion directa."]
   ];
   return (
@@ -636,7 +651,7 @@ function Tours() {
       </div>
       <div className="mb-6 grid gap-4 md:grid-cols-3">
         <CatalogSignal icon={<ShieldCheck />} title="Operador confiable" text="Itinerarios revisados y comunicacion directa." />
-        <CatalogSignal icon={<CreditCard />} title="Pagos protegidos" text="Reserva y pagos con flujo preparado para Culqi." />
+        <CatalogSignal icon={<ShieldCheck />} title="Reserva protegida" text="Separa con S/ 200, código único y validación del comprobante." />
         <CatalogSignal icon={<MessageCircle />} title="Asesor humano" text="Soporte por WhatsApp para cotizar y confirmar." />
       </div>
       {isLoading ? <p>Cargando tours...</p> : <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{filtered.map((tour) => <TourCard key={tour.id} tour={tour} />)}</div>}
@@ -696,7 +711,7 @@ function TourDetail() {
         </aside>
       </div>
       <div className="mt-10 grid gap-6 lg:grid-cols-3">
-        <Info title="Descripcion" items={[tour.description ?? "Experiencia seleccionada por Jhon Tours."]} />
+        <Info title="Descripcion" items={[tour.description ?? "Experiencia seleccionada por John Tours."]} />
         <Info title="Itinerario" items={itinerary} ordered />
         <Info title="Incluye / No incluye" items={[...includes.map((i) => `Incluye: ${i}`), ...excludes.map((i) => `No incluye: ${i}`)]} />
       </div>
@@ -746,7 +761,7 @@ const emptyAdminTourForm: AdminTourForm = {
   isFeatured: false,
   status: "ACTIVO",
   itineraryText: "Llegada y bienvenida\nTour principal guiado\nExperiencias locales\nRetorno",
-  includesText: "Alojamiento\nTraslados\nGuia especializado\nAsistencia Jhon Tours",
+  includesText: "Alojamiento\nTraslados\nGuia especializado\nAsistencia John Tours",
   excludesText: "Gastos personales\nPropinas\nServicios no mencionados"
 };
 
@@ -771,10 +786,18 @@ function ReservationPage() {
   const people = Number(form.watch("peopleCount") || 1);
   const mutation = useMutation({
     mutationFn: async (values: ReservationForm) => (await api.post("/reservations", { ...reservationSchema.parse(values), tourId: Number(id) })).data,
-    onSuccess: (reservation: Reservation) => navigate(`/pago/${reservation.id}`)
+    onSuccess: (reservation: Reservation) => navigate(`/pago/${reservation.id}`),
+    onError: () => {
+      if (!tour) return;
+      const values = form.getValues();
+      const localId = Date.now();
+      const localReservation: Reservation = { id: localId, travelDate: values.travelDate, peopleCount: Number(values.peopleCount), totalAmount: reservationAmount, status: "PENDIENTE", customer: { fullName: values.fullName, email: values.email, phone: values.phone }, tour };
+      localStorage.setItem(`john-reservation-${localId}`, JSON.stringify(localReservation));
+      navigate(`/pago/${localId}`);
+    }
   });
   return (
-    <Section title="Reserva tu viaje" subtitle={tour ? `${tour.title} · Total estimado ${tourMoney(tour, Number(tour.price) * people)}` : "Completa tus datos"}>
+    <Section title="Reserva tu viaje" subtitle={tour ? `${tour.title} · Separa tu cupo con S/ ${reservationAmount}` : "Completa tus datos"}>
       <form onSubmit={form.handleSubmit((v) => mutation.mutate(v))} className="mx-auto grid max-w-3xl gap-4 rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
         {["fullName", "email", "phone", "documentNumber"].map((name) => <input key={name} className="rounded-lg border px-4 py-3" placeholder={{ fullName: "Nombre completo", email: "Correo", phone: "Telefono", documentNumber: "Documento" }[name]} {...form.register(name as never)} />)}
         <div className="grid gap-4 sm:grid-cols-2"><input className="rounded-lg border px-4 py-3" type="date" {...form.register("travelDate")} /><input className="rounded-lg border px-4 py-3" type="number" min="1" {...form.register("peopleCount")} /></div>
@@ -782,6 +805,36 @@ function ReservationPage() {
       </form>
     </Section>
   );
+}
+
+function YapeReservationPage() {
+  const { id = "" } = useParams();
+  const navigate = useNavigate();
+  const [copied, setCopied] = useState(false);
+  const [qrImage, setQrImage] = useState("");
+  const { data: reservation } = useQuery<Reservation>({
+    queryKey: ["reservation", id],
+    queryFn: async () => {
+      try { return (await api.get(`/reservations/${id}`)).data; }
+      catch {
+        const saved = localStorage.getItem(`john-reservation-${id}`);
+        if (!saved) throw new Error("Reserva no encontrada");
+        return JSON.parse(saved) as Reservation;
+      }
+    }
+  });
+  const paymentCode = useMemo(() => `JT-${id.slice(-6)}-${new Date().getFullYear()}`, [id]);
+  useEffect(() => {
+    const payload = `JOHN TOURS PERU\nReserva: ${paymentCode}\nMonto: S/ ${reservationAmount}.00\nYape: ${whatsappDisplay}\nConcepto: Separacion de tour`;
+    QRCode.toDataURL(payload, { width: 420, margin: 2, color: { dark: "#073b83", light: "#ffffff" }, errorCorrectionLevel: "H" }).then(setQrImage);
+  }, [paymentCode]);
+  if (!reservation) return <Section title="Preparando tu reserva" subtitle="Estamos generando tu código seguro de pago." />;
+  const message = `Hola John Tours, adjunto mi comprobante Yape de S/ ${reservationAmount} para ${reservation.tour.title}. Código de pago: ${paymentCode}. Reserva #${id}.`;
+  const simulatePayment = () => {
+    localStorage.setItem(`john-reservation-${id}`, JSON.stringify({ ...reservation, status: "PAGADA" }));
+    navigate(`/confirmacion/${id}?demo=1`);
+  };
+  return <Section title="Separa tu tour con Yape" subtitle="Sin pasarela ni datos de tarjeta: paga S/ 200, conserva tu código y envía el comprobante a un asesor."><div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[.9fr_1.1fr]"><article className="yape-card"><span className="yape-label">Reserva protegida</span><h3>{reservation.tour.title}</h3><p>{reservation.customer.fullName} · {reservation.peopleCount} viajero(s)</p><div className="reservation-price"><small>Monto de separación</small><strong>S/ {reservationAmount}.00</strong></div><div className="payment-code"><div><small>Código único de pago</small><strong>{paymentCode}</strong></div><button onClick={() => { navigator.clipboard.writeText(paymentCode); setCopied(true); }} aria-label="Copiar código"><Copy size={18} /> {copied ? "Copiado" : "Copiar"}</button></div><div className="secure-note"><ShieldCheck /> <span>Incluye este código en el mensaje del comprobante. John Tours validará titular, monto y reserva antes de confirmar el cupo. El PDF se habilita únicamente después de esa confirmación.</span></div><button type="button" onClick={simulatePayment} className="demo-payment"><Sparkles /><span><strong>Demostración para presentación</strong><small>Simular validación del pago y ver la reserva confirmada</small></span><ArrowRight /></button></article><article className="qr-card"><span>Escanea o usa los datos de reserva</span>{qrImage && <img src={qrImage} alt={`QR de instrucciones para la reserva ${paymentCode}`} />}<strong>Yape asociado al contacto: {whatsappDisplay}</strong><p>El QR contiene las instrucciones y el código único. Antes de transferir, verifica en Yape que el titular corresponda a la cuenta empresarial comunicada por John Tours.</p><a href={buildWhatsAppUrl(message)} target="_blank" rel="noreferrer" className="whatsapp-cta"><MessageCircle /> Enviar comprobante por WhatsApp</a><small>La reserva se confirma después de la validación manual del comprobante.</small></article></div></Section>;
 }
 
 function PaymentPage() {
@@ -868,7 +921,7 @@ function PaymentPage() {
     if (window.CulqiCheckout) {
       const checkout = new window.CulqiCheckout(culqiPublicKey, {
         settings: {
-          title: "Jhon Tours",
+          title: "John Tours",
           currency: "PEN",
           amount: amountInCents
         },
@@ -887,7 +940,7 @@ function PaymentPage() {
 
     if (window.Culqi?.settings && window.Culqi?.options && window.Culqi?.open) {
       window.Culqi.publicKey = culqiPublicKey;
-      window.Culqi.settings({ title: "Jhon Tours", currency: "PEN", amount: amountInCents });
+      window.Culqi.settings({ title: "John Tours", currency: "PEN", amount: amountInCents });
       window.Culqi.options({ lang: "es", installments: false, paymentMethods });
       window.Culqi.open();
       return;
@@ -930,22 +983,24 @@ function PaymentPage() {
 
 function ConfirmationPage() {
   const { id = "" } = useParams();
-  const { data: reservation } = useQuery<Reservation>({ queryKey: ["reservation", id], queryFn: async () => (await api.get(`/reservations/${id}`)).data });
-  return <Section title="Reserva pagada" subtitle={`Codigo de reserva #${id}`}>{reservation && <div className="mx-auto max-w-2xl rounded-lg border bg-white p-8 text-center shadow-sm"><CheckCircle2 className="mx-auto text-[#1fa463]" size={60} /><h3 className="mt-4 text-2xl font-black text-[#082447]">{reservation.tour.title}</h3><p className="mt-2 text-slate-600">Gracias, {reservation.customer.fullName}. Te contactaremos para coordinar los detalles finales.</p><div className="mt-6 flex justify-center gap-3"><Link className="rounded-lg bg-[#082447] px-5 py-3 font-bold text-white" to="/">Volver al inicio</Link><a className="rounded-lg bg-[#1fa463] px-5 py-3 font-bold text-white" href={buildWhatsAppUrl(whatsappMessages.reservation(reservation))}>WhatsApp</a></div></div>}</Section>;
+  const [searchParams] = useSearchParams();
+  const isDemo = searchParams.get("demo") === "1";
+  const { data: reservation } = useQuery<Reservation>({ queryKey: ["reservation", id], queryFn: async () => { try { return (await api.get(`/reservations/${id}`)).data; } catch { const saved = localStorage.getItem(`john-reservation-${id}`); if (!saved) throw new Error("Reserva no encontrada"); return JSON.parse(saved) as Reservation; } } });
+  return <Section title={isDemo ? "Demostración: reserva confirmada" : "Reserva confirmada"} subtitle={`${isDemo ? "Simulación de presentación · " : ""}Código de reserva #${id}`}>{reservation && <div className="mx-auto max-w-3xl rounded-2xl border bg-white p-8 text-center shadow-sm">{isDemo && <div className="mb-6 rounded-xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold text-[#087db8]">Modo demostración: no se realizó ningún cobro ni se registró una operación bancaria.</div>}<CheckCircle2 className="mx-auto text-[#09a889]" size={64} /><h3 className="mt-4 text-2xl font-black text-[#073b83]">{reservation.tour.title}</h3><p className="mt-2 text-slate-600">Gracias, {reservation.customer.fullName}. La separación de S/ 200 ha sido validada y tu solicitud de reserva quedó registrada.</p><div className="mx-auto mt-7 max-w-xl rounded-2xl bg-[#f3f9fd] p-5 text-left"><span className="text-xs font-black uppercase tracking-widest text-[#087db8]">Contenido desbloqueado después del pago</span><h4 className="mt-2 text-xl font-black text-[#073b83]">Servicios adicionales para complementar tu viaje</h4><p className="mt-2 text-sm leading-6 text-slate-600">El documento incluye opciones generales como traslados, alimentación, asistencia, equipaje y seguros. No revela itinerarios exclusivos ni la propuesta diferencial de la experiencia.</p><a href="/servicios-adicionales-john-tours.pdf" download className="download-guide mt-4"><FileText /><span><strong>Descargar PDF de servicios adicionales</strong><small>Disponible únicamente tras confirmar la reserva</small></span><Download /></a></div><div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row"><Link className="rounded-lg bg-[#073b83] px-5 py-3 font-bold text-white" to="/">Volver al inicio</Link><a className="rounded-lg bg-[#09a889] px-5 py-3 font-bold text-white" href={buildWhatsAppUrl(whatsappMessages.reservation(reservation))}>Contactar a John Tours</a></div></div>}</Section>;
 }
 
 function AdminPage() {
   const [token, setToken] = useState(localStorage.getItem("adminToken"));
   const [tourForm, setTourForm] = useState<AdminTourForm>(emptyAdminTourForm);
-  const form = useForm<{ email: string; password: string }>({ defaultValues: { email: "admin@jhontours.com", password: "Admin12345" } });
+  const form = useForm<{ email: string; password: string }>({ defaultValues: { email: "admin@johntours.com", password: "Admin12345" } });
   const queryClient = useQueryClient();
   const login = useMutation({
     mutationFn: async (values: { email: string; password: string }) => {
       try {
         return (await api.post("/auth/login", values)).data;
       } catch (error) {
-        if (values.email === "admin@jhontours.com" && values.password === "Admin12345") {
-          return { token: "demo-admin-token", user: { email: values.email, name: "Administrador Jhon Tours", role: "ADMIN" } };
+        if (values.email === "admin@johntours.com" && values.password === "Admin12345") {
+          return { token: "demo-admin-token", user: { email: values.email, name: "Administrador John Tours", role: "ADMIN" } };
         }
         throw error;
       }
@@ -1063,7 +1118,7 @@ function AdminPage() {
       queryClient.setQueryData<Tour[]>(["tours", undefined], (current = demoTours) => current.filter((tour) => tour.id !== id));
     }
   });
-  if (!token) return <Section title="Login administrador" subtitle="Acceso al panel de gestion de Jhon Tours"><form onSubmit={form.handleSubmit((v) => login.mutate(v))} className="mx-auto grid max-w-md gap-4 rounded-lg border bg-white p-6 shadow-sm"><input className="rounded-lg border px-4 py-3" {...form.register("email")} /><input className="rounded-lg border px-4 py-3" type="password" {...form.register("password")} />{login.isError && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm font-bold text-red-700">Credenciales invalidas.</p>}<button className="rounded-lg bg-[#082447] px-5 py-3 font-black text-white" disabled={login.isPending}>{login.isPending ? "Ingresando..." : "Ingresar"}</button></form></Section>;
+  if (!token) return <Section title="Login administrador" subtitle="Acceso al panel de gestion de John Tours"><form onSubmit={form.handleSubmit((v) => login.mutate(v))} className="mx-auto grid max-w-md gap-4 rounded-lg border bg-white p-6 shadow-sm"><input className="rounded-lg border px-4 py-3" {...form.register("email")} /><input className="rounded-lg border px-4 py-3" type="password" {...form.register("password")} />{login.isError && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm font-bold text-red-700">Credenciales invalidas.</p>}<button className="rounded-lg bg-[#082447] px-5 py-3 font-black text-white" disabled={login.isPending}>{login.isPending ? "Ingresando..." : "Ingresar"}</button></form></Section>;
   return (
     <Section title="Panel administrativo" subtitle="Gestion de reservas, pagos y operaciones.">
       <button onClick={() => { localStorage.removeItem("adminToken"); setToken(null); }} className="mb-5 inline-flex items-center gap-2 rounded-lg border bg-white px-4 py-2 font-bold"><LogOut size={18} /> Salir</button>
@@ -1071,7 +1126,7 @@ function AdminPage() {
         <AdminMetric label="Tours activos" value={String(tours.data?.length ?? 0)} />
         <AdminMetric label="Reservas" value={String(reservations.data?.length ?? 0)} />
         <AdminMetric label="Pagos" value={String(payments.data?.length ?? 0)} />
-        <AdminMetric label="Modo pago" value="Demo/Culqi" />
+        <AdminMetric label="Modo reserva" value="Yape + validación" />
       </div>
       <BusinessSettingsPanel />
       <div className="mb-6 grid gap-6 xl:grid-cols-[.95fr_1.05fr]">
@@ -1136,7 +1191,7 @@ function AdminMetric({ label, value }: { label: string; value: string }) {
   return <div className="rounded-lg border bg-white p-5 shadow-sm"><span className="text-sm font-bold uppercase text-slate-500">{label}</span><strong className="mt-2 block text-2xl text-[#082447]">{value}</strong></div>;
 }
 
-const blankSettings: BusinessSettings = { tradeName: "Jhon Tours", policiesPublished: false };
+const blankSettings: BusinessSettings = { tradeName: "John Tours", policiesPublished: false };
 
 function BusinessSettingsPanel() {
   const [settings, setSettings] = useState<BusinessSettings>(blankSettings);
@@ -1185,7 +1240,7 @@ function Testimonials() {
     placeholderData: demoTestimonials
   });
   return (
-    <Section title="Historias de viajeros felices" subtitle="Experiencias reales de personas que confiaron sus viajes a Jhon Tours.">
+    <Section title="Historias de viajeros felices" subtitle="Experiencias reales de personas que confiaron sus viajes a John Tours.">
       <div id="testimonialCarousel" className="carousel slide testimonial-carousel rounded-lg bg-white p-4 shadow-xl" data-bs-ride="carousel">
         <div className="carousel-inner">
           {data.map((item, index) => (
@@ -1214,7 +1269,7 @@ function Testimonials() {
 }
 
 function Section({ title, subtitle, children }: { title: string; subtitle: string; children?: React.ReactNode }) {
-  return <section className="section-pro px-4 py-14 lg:px-6"><div className="mx-auto max-w-7xl"><div className="mb-8 max-w-3xl"><p className="mb-2 inline-flex items-center gap-2 rounded-lg bg-emerald-50 px-3 py-1 text-sm font-bold text-[#0f7a4f]"><ShieldCheck size={16} /> Jhon Tours</p><h2 className="text-3xl font-black text-[#082447] md:text-4xl">{title}</h2><p className="mt-3 leading-7 text-slate-600">{subtitle}</p></div>{children}</div></section>;
+  return <section className="section-pro px-4 py-14 lg:px-6"><div className="mx-auto max-w-7xl"><div className="mb-8 max-w-3xl"><p className="mb-2 inline-flex items-center gap-2 rounded-lg bg-emerald-50 px-3 py-1 text-sm font-bold text-[#0f7a4f]"><ShieldCheck size={16} /> John Tours</p><h2 className="text-3xl font-black text-[#082447] md:text-4xl">{title}</h2><p className="mt-3 leading-7 text-slate-600">{subtitle}</p></div>{children}</div></section>;
 }
 
 function Info({ title, items, ordered = false }: { title: string; items: string[]; ordered?: boolean }) {
@@ -1236,7 +1291,7 @@ function LegalPage() {
 }
 
 function Footer() {
-  return <footer id="nosotros" className="footer-pro border-t px-4 pb-8 pt-14 text-white"><div className="mx-auto grid max-w-7xl gap-10 sm:grid-cols-2 lg:grid-cols-5"><div className="sm:col-span-2"><div className="flex items-center gap-3"><span className="brand-mark grid h-12 w-12 place-items-center rounded-xl bg-white/10 text-amber-300"><Plane /></span><div><strong className="block text-2xl text-amber-300">Jhon Tours</strong><span className="text-xs font-bold uppercase tracking-widest text-slate-300">Viajes que dejan huella</span></div></div><p className="mt-5 max-w-xl leading-7 text-slate-300">Agencia especializada en experiencias nacionales e internacionales, con reservas online, pagos seguros y acompañamiento profesional.</p><div className="mt-5 flex flex-wrap gap-2 text-xs font-bold text-slate-100"><span className="rounded-full bg-white/10 px-3 py-2">Itinerarios claros</span><span className="rounded-full bg-white/10 px-3 py-2">Pago protegido</span><span className="rounded-full bg-white/10 px-3 py-2">Atención humana</span></div></div><div><strong className="text-amber-200">Enlaces rápidos</strong><nav className="mt-4 grid gap-3 text-sm text-slate-300"><Link to="/">Inicio</Link><Link to="/tours">Todos los tours</Link><Link to="/tours?type=NACIONAL">Tours nacionales</Link><Link to="/tours?type=INTERNACIONAL">Internacionales</Link></nav></div><div><strong className="text-amber-200">Contacto</strong><p className="mt-4 text-sm leading-7 text-slate-300">ventas@jhontours.com<br />WhatsApp {whatsappDisplay}<br />Lima, Perú</p><div className="mt-4 flex gap-2"><span className="payment-chip">Culqi</span><span className="payment-chip">Yape</span></div></div><div><strong className="text-amber-200">Información legal</strong><nav className="mt-4 grid gap-3 text-sm text-slate-300"><Link to="/legal/terminos">Términos</Link><Link to="/legal/privacidad">Privacidad</Link><Link to="/legal/cookies">Cookies</Link><Link to="/legal/cancelaciones">Cancelaciones</Link><Link to="/legal/reembolsos">Reembolsos</Link></nav></div></div><div className="mx-auto mt-10 flex max-w-7xl flex-col justify-between gap-3 border-t border-white/10 pt-6 text-xs text-slate-400 sm:flex-row"><span>© {new Date().getFullYear()} Jhon Tours. Todos los derechos reservados.</span><span>Viaja seguro · Vive extraordinario</span></div></footer>;
+  return <footer className="footer-pro border-t px-4 pb-8 pt-14 text-white"><div className="mx-auto grid max-w-7xl gap-10 sm:grid-cols-2 lg:grid-cols-5"><div className="sm:col-span-2"><img src="/john-tours-logo.jpg" alt="John Tours Perú" className="h-20 w-auto rounded-xl bg-white p-2" /><p className="mt-5 max-w-xl leading-7 text-slate-300">Agencia de viajes y turismo para experiencias nacionales e internacionales, promociones escolares y grupos, con atención humana y reserva por Yape.</p></div><div><strong className="text-cyan-200">Explora</strong><nav className="mt-4 grid gap-3 text-sm text-slate-300"><Link to="/">Inicio</Link><Link to="/tours">Todos los tours</Link><Link to="/#nosotros">Nuestra historia</Link><a href={tiktokUrl} target="_blank" rel="noreferrer">TikTok</a><a href={instagramUrl} target="_blank" rel="noreferrer">Instagram</a></nav></div><div><strong className="text-cyan-200">Contacto</strong><p className="mt-4 text-sm leading-7 text-slate-300">johntoursperu29@gmail.com<br />{whatsappDisplay}<br />+51 982 896 989<br />Santa Clara, Ate · Cusco</p><div className="mt-4"><span className="payment-chip">Reserva Yape S/ 200</span></div></div><div><strong className="text-cyan-200">Información legal</strong><nav className="mt-4 grid gap-3 text-sm text-slate-300"><Link to="/legal/terminos">Términos</Link><Link to="/legal/privacidad">Privacidad</Link><Link to="/legal/cancelaciones">Cancelaciones</Link><Link to="/legal/reembolsos">Reembolsos</Link></nav></div></div><div className="mx-auto mt-10 flex max-w-7xl flex-col justify-between gap-3 border-t border-white/10 pt-6 text-xs text-slate-400 sm:flex-row"><span>© {new Date().getFullYear()} John Tours Perú. Todos los derechos reservados.</span><span>Viaja seguro · Vive extraordinario</span></div></footer>;
 }
 
 export default Shell;

@@ -1,4 +1,4 @@
-# Jhon Tours - Checklist de produccion
+# John Tours - Checklist de produccion
 
 ## Stack aprobado
 
@@ -39,8 +39,8 @@ SMTP_HOST=
 SMTP_PORT=
 SMTP_USER=
 SMTP_PASS=
-MAIL_FROM=no-reply@jhontours.com
-ADMIN_EMAIL=admin@jhontours.com
+MAIL_FROM=no-reply@johntours.com
+ADMIN_EMAIL=admin@johntours.com
 ADMIN_PASSWORD=Admin12345
 ```
 

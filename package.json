@@ -1,11 +1,11 @@
 {
-  "name": "jhon-tours-fullstack",
+  "name": "john-tours-fullstack",
   "version": "1.0.0",
   "private": true,
   "workspaces": [
     "frontend"
   ],
-  "description": "Aplicacion fullstack profesional para la agencia de turismo Jhon Tours.",
+  "description": "Aplicacion fullstack profesional para la agencia de turismo John Tours.",
   "scripts": {
     "install:all": "npm install --prefix frontend && npm install --prefix backend",
     "dev:frontend": "npm run dev --prefix frontend",

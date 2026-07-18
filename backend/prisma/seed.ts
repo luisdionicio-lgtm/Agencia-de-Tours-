@@ -19,11 +19,11 @@ async function main() {
   const saltRounds = Number(process.env.BCRYPT_SALT_ROUNDS ?? 10);
   const password = await bcrypt.hash(process.env.ADMIN_PASSWORD ?? "Admin12345", saltRounds);
   await prisma.user.upsert({
-    where: { email: process.env.ADMIN_EMAIL ?? "admin@jhontours.com" },
+    where: { email: process.env.ADMIN_EMAIL ?? "admin@johntours.com" },
     update: { password, role: Role.ADMIN },
     create: {
-      name: "Administrador Jhon Tours",
-      email: process.env.ADMIN_EMAIL ?? "admin@jhontours.com",
+      name: "Administrador John Tours",
+      email: process.env.ADMIN_EMAIL ?? "admin@johntours.com",
       password,
       role: Role.ADMIN
     }
@@ -100,7 +100,7 @@ async function main() {
       availableSlots: 10,
       isFeatured: true,
       itinerary: ["Llegada asistida a El Cairo", "Piramides de Giza y Esfinge con guia", "Museo Egipcio y barrio historico", "Crucero por el Nilo y templos principales", "Retorno con seguimiento del asesor"],
-      includes: ["Hoteles seleccionados", "Traslados programados", "Guia especializado en espanol", "Asistencia Jhon Tours por WhatsApp"],
+      includes: ["Hoteles seleccionados", "Traslados programados", "Guia especializado en espanol", "Asistencia John Tours por WhatsApp"],
       excludes: ["Vuelos internacionales", "Gastos personales", "Propinas y servicios no mencionados"]
     }
   ];
@@ -111,13 +111,13 @@ async function main() {
       update: {
         ...tour,
         itinerary: tour.itinerary ?? ["Llegada y bienvenida", "Tour principal guiado", "Experiencias locales", "Retorno"],
-        includes: tour.includes ?? ["Alojamiento", "Traslados", "Guia especializado", "Asistencia Jhon Tours"],
+        includes: tour.includes ?? ["Alojamiento", "Traslados", "Guia especializado", "Asistencia John Tours"],
         excludes: tour.excludes ?? ["Gastos personales", "Propinas", "Servicios no mencionados"]
       },
       create: {
         ...tour,
         itinerary: tour.itinerary ?? ["Llegada y bienvenida", "Tour principal guiado", "Experiencias locales", "Retorno"],
-        includes: tour.includes ?? ["Alojamiento", "Traslados", "Guia especializado", "Asistencia Jhon Tours"],
+        includes: tour.includes ?? ["Alojamiento", "Traslados", "Guia especializado", "Asistencia John Tours"],
         excludes: tour.excludes ?? ["Gastos personales", "Propinas", "Servicios no mencionados"]
       }
     });
@@ -131,7 +131,7 @@ async function main() {
   });
 
   await prisma.businessSettings.upsert({
-    where: { id: 1 }, update: {}, create: { id: 1, tradeName: "Jhon Tours", policiesPublished: false }
+    where: { id: 1 }, update: {}, create: { id: 1, tradeName: "John Tours", policiesPublished: false }
   });
 }
 

@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "API REST de Jhon Tours con Express, Prisma y MySQL.",
+  "description": "API REST de John Tours con Express, Prisma y MySQL.",
   "main": "dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",

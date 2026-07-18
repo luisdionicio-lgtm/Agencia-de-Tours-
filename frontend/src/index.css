@@ -9,12 +9,49 @@
   font-family: "DM Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --navy: #061b34;
   --blue: #0f4c81;
-  --gold: #f7b731;
-  --emerald: #1fa463;
+  --gold: #20b9e7;
+  --emerald: #09a889;
   --ink: #071d37;
   --surface: #f5f8fb;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
+
+.header-logo { max-width: 230px; object-fit: contain; mix-blend-mode: multiply; }
+
+.logo-stage { position: relative; display: grid; min-height: 205px; place-items: center; overflow: hidden; border: 1px solid rgba(255,255,255,.3); border-radius: 1.5rem; background: radial-gradient(circle at 50% 40%,rgba(49,200,239,.25),transparent 45%),rgba(255,255,255,.95); box-shadow: 0 30px 80px rgba(0,21,63,.38); perspective: 900px; }
+.logo-stage img { position: relative; z-index: 2; width: 84%; max-height: 150px; object-fit: contain; mix-blend-mode: multiply; animation: logoFloat 4s ease-in-out infinite; filter: drop-shadow(0 22px 18px rgba(6,72,151,.2)); }
+.logo-stage > span { position:absolute; z-index:3; bottom:.8rem; border-radius:999px; background:#073b83; padding:.42rem .9rem; color:#bcecff; font-size:.7rem; font-weight:900; letter-spacing:.14em; text-transform:uppercase; }
+.logo-orbit { position:absolute; width:130%; aspect-ratio:1; border:1px solid rgba(14,151,211,.25); border-radius:50%; animation: orbitSpin 12s linear infinite; }
+.logo-orbit::before,.logo-orbit::after { position:absolute; width:13px; height:13px; border-radius:50%; content:""; background:#17bce8; box-shadow:0 0 24px #17bce8; }
+.logo-orbit::before { top:12%; left:18%; }.logo-orbit::after { right:12%; bottom:25%; background:#073b83; }
+@keyframes logoFloat { 0%,100%{transform:translateY(0) rotateX(0)} 50%{transform:translateY(-8px) rotateX(3deg) scale(1.015)} }
+@keyframes orbitSpin { to{transform:rotate(360deg)} }
+
+.promotion-grid { display:grid; gap:1.25rem; }
+.promotion-card { position:relative; min-height:360px; overflow:hidden; border-radius:1.5rem; background:#073b83; box-shadow:0 18px 45px rgba(7,59,131,.16); }
+.promotion-card img { width:100%; height:100%; min-height:360px; object-fit:cover; transition:transform .6s ease; }
+.promotion-card:hover img { transform:scale(1.06); }
+.promotion-card > div { position:absolute; inset:auto 0 0; padding:5rem 1.5rem 1.5rem; color:white; background:linear-gradient(transparent,rgba(2,24,65,.96)); }
+.promotion-card span { color:#70dcf6; font-size:.72rem; font-weight:900; letter-spacing:.14em; text-transform:uppercase; }
+.promotion-card h3 { margin:.35rem 0; font-size:1.5rem; }.promotion-card p{margin:0;color:#d9effb;line-height:1.6}
+@media(min-width:768px){.promotion-grid{grid-template-columns:repeat(3,1fr)}}
+
+.story-section { background:radial-gradient(circle at 10% 20%,rgba(32,185,231,.13),transparent 28%),linear-gradient(135deg,#effaff,#fff); }
+.story-logo { display:grid; min-height:390px; place-items:center; border-radius:2rem; background:white; box-shadow:0 30px 70px rgba(7,59,131,.13); transform:perspective(900px) rotateY(3deg); }
+.story-logo img { width:90%; mix-blend-mode:multiply; }
+.social-section { background:radial-gradient(circle at 85% 20%,rgba(32,185,231,.3),transparent 30%),linear-gradient(110deg,#031e53,#075ba4); }
+.social-button { display:flex; min-width:220px; align-items:center; justify-content:center; gap:.65rem; border:1px solid rgba(255,255,255,.25); border-radius:1rem; background:rgba(255,255,255,.12); padding:1rem 1.2rem; color:white; backdrop-filter:blur(12px); transition:.2s ease; }
+.social-button:hover { transform:translateY(-3px); background:white; color:#073b83; }.social-button span{font-weight:700}
+
+.yape-card,.qr-card { border:1px solid #d9e8f4; border-radius:1.5rem; background:white; padding:1.5rem; box-shadow:0 22px 55px rgba(7,59,131,.1); }
+.yape-label { display:inline-flex; border-radius:999px; background:#e5f8ff; padding:.45rem .75rem; color:#087db8; font-size:.72rem; font-weight:900; letter-spacing:.1em; text-transform:uppercase; }
+.yape-card h3 { margin:1rem 0 .3rem; color:#073b83; font-size:1.8rem; }.yape-card>p{color:#64748b}
+.reservation-price { margin:1.5rem 0; border-radius:1rem; background:linear-gradient(135deg,#073b83,#0c82be); padding:1.2rem; color:white; }.reservation-price small,.reservation-price strong{display:block}.reservation-price strong{font-size:2.5rem}
+.payment-code { display:flex; align-items:center; justify-content:space-between; gap:1rem; border:1px dashed #0c82be; border-radius:1rem; padding:1rem; }.payment-code small,.payment-code strong{display:block}.payment-code strong{color:#073b83;font-size:1.25rem}.payment-code button{display:flex;gap:.4rem;border:0;border-radius:.75rem;background:#e5f8ff;padding:.65rem;color:#087db8;font-weight:800}
+.secure-note { display:flex; gap:.75rem; margin:1.2rem 0; border-radius:1rem; background:#effaf6; padding:1rem; color:#21624f; font-size:.86rem; line-height:1.6 }.secure-note svg{flex:0 0 auto}
+.download-guide { display:flex; align-items:center; gap:.75rem; border-radius:1rem; background:#f4f8fc; padding:1rem; color:#073b83 }.download-guide span{flex:1}.download-guide strong,.download-guide small{display:block}.download-guide small{margin-top:.2rem;color:#64748b}
+.demo-payment { display:flex; width:100%; align-items:center; gap:.75rem; border:1px solid #9edff1; border-radius:1rem; background:linear-gradient(135deg,#e8faff,#f7fcff); padding:1rem; color:#073b83; text-align:left; transition:.2s ease }.demo-payment:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(7,59,131,.12)}.demo-payment span{flex:1}.demo-payment strong,.demo-payment small{display:block}.demo-payment small{margin-top:.2rem;color:#55758d}
+.qr-card { text-align:center }.qr-card>span{color:#087db8;font-weight:900;text-transform:uppercase;font-size:.75rem;letter-spacing:.1em}.qr-card img{display:block;width:min(100%,300px);margin:1rem auto;border:1px solid #dbe7f0;border-radius:1.25rem;padding:.6rem}.qr-card>strong{display:block;color:#073b83}.qr-card>p{margin:1rem auto;max-width:34rem;color:#64748b;line-height:1.65}.qr-card .whatsapp-cta{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;border-radius:.85rem;background:#10a765;padding:.9rem 1.2rem;color:white;font-weight:900}.qr-card>small{display:block;margin-top:1rem;color:#64748b}
 
 h1, h2, h3, h4, h5, h6, strong {
   font-family: "Manrope", "DM Sans", sans-serif;

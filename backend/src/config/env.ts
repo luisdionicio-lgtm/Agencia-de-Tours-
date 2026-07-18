@@ -19,8 +19,8 @@ const envSchema = z.object({
   SMTP_PORT: z.coerce.number().optional(),
   SMTP_USER: z.string().default(""),
   SMTP_PASS: z.string().default(""),
-  MAIL_FROM: z.string().default("no-reply@jhontours.com"),
-  ADMIN_EMAIL: z.string().email().default("admin@jhontours.com"),
+  MAIL_FROM: z.string().default("no-reply@johntours.com"),
+  ADMIN_EMAIL: z.string().email().default("admin@johntours.com"),
   ADMIN_PASSWORD: z.string().min(8).default("Admin12345")
 });
 

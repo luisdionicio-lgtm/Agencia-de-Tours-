@@ -13,7 +13,7 @@ import { businessSettingsSchema, contactSchema, departureSchema, loginSchema, pa
 
 export const routes = Router();
 
-routes.get("/health", (_req, res) => res.json({ status: "ok", service: "Jhon Tours API" }));
+routes.get("/health", (_req, res) => res.json({ status: "ok", service: "John Tours API" }));
 routes.get("/health/integrations", (_req, res) => res.json(getIntegrationStatus()));
 
 routes.post("/auth/login", validate(loginSchema), asyncHandler(authController.login));

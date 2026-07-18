@@ -200,7 +200,7 @@ model Testimonial {
 model BusinessSettings {
   id                 Int      @id @default(1)
   legalName          String?  @map("legal_name") @db.VarChar(180)
-  tradeName          String   @default("Jhon Tours") @map("trade_name") @db.VarChar(120)
+  tradeName          String   @default("John Tours") @map("trade_name") @db.VarChar(120)
   taxId              String?  @map("tax_id") @db.VarChar(30)
   address            String?  @db.VarChar(255)
   supportEmail       String?  @map("support_email") @db.VarChar(120)
