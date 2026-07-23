@@ -7,12 +7,21 @@
   color: #0f172a;
   background: #f8fafc;
   font-family: "DM Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --navy: #061b34;
-  --blue: #0f4c81;
-  --gold: #20b9e7;
-  --emerald: #09a889;
-  --ink: #071d37;
-  --surface: #f5f8fb;
+  /* Paleta oficial inspirada en el logo John Tours Perú. */
+  --brand-navy: #052b5c;
+  --brand-blue: #075a9e;
+  --brand-cyan: #16b9e5;
+  --brand-turquoise: #0bb8c7;
+  --brand-green: #1fa463;
+  --brand-sun: #f5c247;
+  --brand-ink: #071d37;
+  --brand-surface: #f2faff;
+  --navy: var(--brand-navy);
+  --blue: var(--brand-blue);
+  --gold: var(--brand-sun);
+  --emerald: var(--brand-green);
+  --ink: var(--brand-ink);
+  --surface: var(--brand-surface);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -22,7 +31,7 @@
 .header-logo { position:absolute; z-index:2; inset:0; display:block; width:100% !important; max-width:100% !important; height:100% !important; max-height:100% !important; object-fit:contain; object-position:center; mix-blend-mode:multiply; filter:drop-shadow(0 8px 10px rgba(5,65,142,.18)); transform:rotateX(2deg) rotateY(-2deg) scale(.96); transition:transform .35s var(--ease-out),filter .35s ease; animation:headerLogoFloat 4.8s ease-in-out infinite; }
 .brand-lockup:hover .header-logo { transform:rotateX(0) rotateY(0) translateY(-3px) scale(1.035); filter:drop-shadow(0 18px 18px rgba(5,112,184,.28)); }
 .header-brand-glow { position:absolute; z-index:-1; inset:18% 8%; border-radius:999px; background:radial-gradient(ellipse,rgba(36,188,229,.22),transparent 70%); filter:blur(12px); animation:brandGlow 3.2s ease-in-out infinite; }
-.header-brand-carousel { position:absolute; z-index:4; right:.45rem; bottom:.25rem; width:7.2rem; height:1.05rem; overflow:hidden; border-radius:999px; background:linear-gradient(90deg,#073b83,#0aa9d1); box-shadow:0 5px 12px rgba(7,59,131,.2); color:white; font-size:.52rem; font-weight:900; letter-spacing:.14em; line-height:1.05rem; text-align:center; text-transform:uppercase; }
+.header-brand-carousel { position:absolute; z-index:4; right:.45rem; bottom:.25rem; width:7.2rem; height:1.05rem; overflow:hidden; border-radius:999px; background:linear-gradient(90deg,var(--brand-blue),var(--brand-cyan)); box-shadow:0 5px 12px rgba(7,59,131,.2); color:white; font-size:.52rem; font-weight:900; letter-spacing:.14em; line-height:1.05rem; text-align:center; text-transform:uppercase; }
 .header-brand-carousel i { position:absolute; inset:0; font-style:normal; opacity:0; animation:brandWordCarousel 6s infinite; }
 .header-brand-carousel i:nth-child(2){animation-delay:2s}.header-brand-carousel i:nth-child(3){animation-delay:4s}
 @keyframes headerLogoFloat { 0%,100%{transform:translateY(0) rotateX(2deg) rotateY(-2deg) scale(.96)} 50%{transform:translateY(-2px) rotateX(-1deg) rotateY(1deg) scale(.985)} }
@@ -31,7 +40,7 @@
 
 .logo-stage { position: relative; display: grid; min-height: 205px; place-items: center; overflow: hidden; border: 1px solid rgba(255,255,255,.3); border-radius: 1.5rem; background: radial-gradient(circle at 50% 40%,rgba(49,200,239,.25),transparent 45%),rgba(255,255,255,.95); box-shadow: 0 30px 80px rgba(0,21,63,.38); perspective: 900px; }
 .logo-stage img { position: relative; z-index: 2; width: 84%; max-height: 150px; object-fit: contain; mix-blend-mode: multiply; animation: logoFloat 4s ease-in-out infinite; filter: drop-shadow(0 22px 18px rgba(6,72,151,.2)); }
-.logo-stage > span { position:absolute; z-index:3; bottom:.8rem; border-radius:999px; background:#073b83; padding:.42rem .9rem; color:#bcecff; font-size:.7rem; font-weight:900; letter-spacing:.14em; text-transform:uppercase; }
+.logo-stage > span { position:absolute; z-index:3; bottom:.8rem; border-radius:999px; background:var(--brand-blue); padding:.42rem .9rem; color:#bcecff; font-size:.7rem; font-weight:900; letter-spacing:.14em; text-transform:uppercase; }
 .logo-orbit { position:absolute; width:130%; aspect-ratio:1; border:1px solid rgba(14,151,211,.25); border-radius:50%; animation: orbitSpin 12s linear infinite; }
 .logo-orbit::before,.logo-orbit::after { position:absolute; width:13px; height:13px; border-radius:50%; content:""; background:#17bce8; box-shadow:0 0 24px #17bce8; }
 .logo-orbit::before { top:12%; left:18%; }.logo-orbit::after { right:12%; bottom:25%; background:#073b83; }
@@ -103,7 +112,7 @@ body {
   bottom: -1px;
   left: 0;
   height: 3px;
-  background: linear-gradient(90deg, #1fa463, #f7b731, #ffd977);
+  background: linear-gradient(90deg, var(--brand-green), var(--brand-cyan), var(--brand-sun));
   box-shadow: 0 0 16px rgba(247, 183, 49, 0.55);
   transition: width 80ms linear;
 }
@@ -209,7 +218,7 @@ textarea {
 }
 
 .hero-bg .hero-title span {
-  background: linear-gradient(110deg, #ffe9a6, #f7b731 55%, #fff0b8);
+  background: linear-gradient(110deg, #fff0ad, var(--brand-sun) 55%, #fff5c7);
   background-size: 200% auto;
   background-clip: text;
   -webkit-background-clip: text;
@@ -268,7 +277,7 @@ textarea {
 }
 
 .btn-gold {
-  background: linear-gradient(135deg, #f8c14a, #d9a122);
+  background: linear-gradient(135deg, #ffda66, var(--brand-sun));
   color: #082447;
   box-shadow: 0 18px 36px rgba(247, 183, 49, 0.22);
 }
@@ -309,23 +318,39 @@ textarea {
 
 .hero-mini-carousel {
   border: 1px solid rgba(255, 255, 255, 0.26);
+  background: #fff;
 }
 
 .hero-mini-carousel::after {
-  position: absolute;
-  inset: 0;
-  content: "";
-  background: linear-gradient(180deg, transparent 20%, rgba(8, 36, 71, 0.78));
-  pointer-events: none;
+  content: none;
+}
+
+.hero-mini-carousel .carousel-item::after {
+  content: none;
+  background: none;
+}
+
+.hero-mini-carousel .carousel-item img {
+  filter: none;
+  opacity: 1;
+  image-rendering: auto;
 }
 
 .hero-mini-caption {
   position: absolute;
-  right: 1.25rem;
+  right: auto;
   bottom: 1.25rem;
   left: 1.25rem;
   z-index: 2;
+  width: fit-content;
+  max-width: calc(100% - 2.5rem);
+  border: 0;
+  background: transparent;
+  padding: 0;
   color: #fff;
+  box-shadow: none;
+  text-shadow: 0 2px 5px rgba(2, 16, 35, 0.95), 0 0 14px rgba(2, 16, 35, 0.75);
+  backdrop-filter: none;
 }
 
 .hero-mini-caption span,
@@ -484,9 +509,9 @@ textarea {
 .section-kicker {
   display: inline-flex;
   border-radius: 999px;
-  background: #eaf8f2;
+  background: linear-gradient(90deg, #eaf8f2, #e8f8fd);
   padding: 0.5rem 0.85rem;
-  color: #0f7a4f;
+  color: var(--brand-green);
   font-size: 0.75rem;
   font-weight: 900;
   letter-spacing: 0.16em;
@@ -721,8 +746,8 @@ textarea {
 }
 
 .category-icon {
-  color: #f7b731;
-  background: linear-gradient(135deg, #082447, #0f4c81);
+  color: var(--brand-sun);
+  background: linear-gradient(135deg, var(--brand-navy), var(--brand-blue));
   box-shadow: 0 10px 24px rgba(8, 36, 71, 0.2);
   transition: transform 240ms ease;
 }
