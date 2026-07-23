@@ -9,6 +9,7 @@ Plataforma web fullstack para promocionar, reservar y administrar tours nacional
 - Reserva desde S/ 200 mediante Yape, QR informativo y código único.
 - Envío del comprobante y atención directa por WhatsApp.
 - Beneficios exclusivos desbloqueados después de confirmar el pago.
+- Preparación de citas posteriores al pago con mensaje formal y código de separación.
 - PDF personalizado por destino con logo, imagen referencial y servicios extra.
 - Testimonios, preguntas frecuentes, historia, promociones escolares y redes sociales.
 - Panel administrativo para tours, reservas, pagos y datos empresariales.

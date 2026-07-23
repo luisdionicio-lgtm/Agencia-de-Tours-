@@ -34,6 +34,8 @@ La web presenta a John Tours como una agencia cercana, organizada y confiable. S
 5. El cliente envía el comprobante por el canal oficial de WhatsApp.
 6. Un asesor valida titular, monto y código antes de confirmar el cupo.
 7. La confirmación desbloquea beneficios y una guía PDF específica del destino.
+8. El cliente puede elegir fecha, hora, modalidad y tema para preparar una cita con un asesor.
+9. El sistema genera un mensaje formal con reserva, código de separación y referencia al comprobante; nunca lo envía automáticamente.
 
 El modo demostración permite recorrer el flujo sin ejecutar un cobro ni registrar una operación bancaria.
 
@@ -90,6 +92,7 @@ Los extras se cotizan por separado, están sujetos a disponibilidad y no aparece
 - `backend/src`: API y lógica de negocio.
 - `backend/prisma`: modelo y migraciones de base de datos.
 - `scripts/generate_destination_guides.py`: generación de guías PDF.
+- `scripts/prepare_whatsapp_appointment.py`: validación y preparación de mensajes de cita sin envío automático.
 - `frontend/public`: identidad, recursos visuales y PDFs descargables.
 - `docs/production-checklist.md`: requisitos para vender y desplegar.
 

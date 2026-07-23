@@ -468,7 +468,7 @@ textarea {
 .floating-whatsapp-label strong { font-size:.88rem;letter-spacing:.01em }
 .floating-whatsapp-label small { margin-top:.1rem;color:#e5fff1;font-size:.68rem;font-weight:700 }
 .floating-whatsapp-wrap.is-expanded .floating-whatsapp { padding-right:1rem }
-.floating-whatsapp-wrap.is-expanded .floating-whatsapp-label { width:7.35rem;opacity:1 }
+.floating-whatsapp-wrap.is-expanded .floating-whatsapp-label { width:9.6rem;opacity:1 }
 .floating-whatsapp:hover { transform:translateY(-3px) scale(1.02);box-shadow:0 23px 48px rgba(10,102,63,.44),0 0 0 5px rgba(247,183,49,.16) }
 .floating-whatsapp-rings { position:absolute;inset:0;border:2px solid rgba(31,164,99,.42);border-radius:inherit;animation:whatsappRing 2.5s ease-out infinite }
 .floating-notification { position:absolute;z-index:3;top:-5px;right:-3px;display:grid;width:21px;height:21px;place-items:center;border:2px solid #fff;border-radius:50%;background:#f7b731;color:#082447;font-size:.65rem;font-weight:900 }
@@ -649,6 +649,36 @@ textarea {
 .post-payment-guide > img {
   min-height: 100%;
 }
+
+.appointment-planner { overflow:hidden;border:1px solid #dce7ef;border-radius:1.35rem;background:linear-gradient(145deg,#fff,#f4f9fc);box-shadow:0 18px 45px rgba(8,36,71,.09) }
+.appointment-heading { display:flex;gap:1rem;border-bottom:1px solid #dce7ef;background:linear-gradient(100deg,#082447,#0f4c81);padding:1.2rem 1.35rem;color:#fff }
+.appointment-heading>span { display:grid;width:3rem;height:3rem;flex:0 0 3rem;place-items:center;border-radius:.9rem;background:#f7b731;color:#082447 }
+.appointment-heading small { color:#9de7df;font-size:.7rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase }
+.appointment-heading h4 { margin:.2rem 0 0;font-size:1.2rem;font-weight:900 }
+.appointment-heading p { margin:.25rem 0 0;color:#d9e8f3;font-size:.78rem;line-height:1.5 }
+.appointment-layout { display:grid;grid-template-columns:.85fr 1.15fr;gap:1rem;padding:1.2rem }
+.appointment-fields { display:grid;grid-template-columns:1fr 1fr;gap:.8rem }
+.appointment-fields label { color:#34536b;font-size:.72rem;font-weight:900 }
+.appointment-fields input,.appointment-fields select { display:block;width:100%;min-height:2.8rem;margin-top:.35rem;border:1px solid #cad9e5;border-radius:.75rem;background:#fff;padding:.65rem .75rem;color:#082447;font-size:.78rem;font-weight:700 }
+.appointment-fields input:focus,.appointment-fields select:focus { border-color:#0f7a4f;box-shadow:0 0 0 3px rgba(15,122,79,.1);outline:0 }
+.appointment-code { grid-column:1/-1;border:1px dashed rgba(15,76,129,.35);border-radius:1rem;background:#edf6fb;padding:1rem }
+.appointment-code small,.appointment-code strong,.appointment-code span { display:block }
+.appointment-code small { color:#087db8;font-size:.67rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase }
+.appointment-code strong { margin-top:.25rem;color:#082447;font-size:1.05rem;letter-spacing:.04em }
+.appointment-code span { margin-top:.3rem;color:#64748b;font-size:.72rem }
+.appointment-preview { min-width:0;overflow:hidden;border:1px solid #d7e7df;border-radius:1rem;background:#e9f7ef }
+.appointment-preview-bar { display:flex;align-items:center;gap:.65rem;background:#fff;padding:.75rem .9rem }
+.appointment-preview-bar img { width:2rem;height:2rem }
+.appointment-preview-bar strong,.appointment-preview-bar small { display:block }
+.appointment-preview-bar strong { color:#082447;font-size:.82rem }
+.appointment-preview-bar small { margin-top:.1rem;color:#64748b;font-size:.68rem }
+.appointment-preview pre { max-height:20rem;overflow:auto;margin:0;padding:1rem;white-space:pre-wrap;color:#27495a;font-family:"DM Sans",sans-serif;font-size:.72rem;line-height:1.55 }
+.appointment-actions { display:flex;flex-wrap:wrap;gap:.55rem;border-top:1px solid #cfe4d8;background:#fff;padding:.75rem }
+.appointment-actions button,.appointment-actions a { display:inline-flex;align-items:center;justify-content:center;gap:.4rem;border:0;border-radius:.7rem;padding:.65rem .8rem;font-size:.72rem;font-weight:900 }
+.appointment-actions button { background:#082447;color:#fff }
+.appointment-actions a { background:#1fa463;color:#fff }
+.appointment-actions a img { width:1.1rem;height:1.1rem }
+.demo-message-note { display:flex;align-items:center;gap:.45rem;margin:0;border-top:1px solid #f5df9b;background:#fff8df;padding:.7rem .8rem;color:#80611a;font-size:.68rem;font-weight:800;line-height:1.45 }
 
 .footer-pro {
   background:
@@ -883,6 +913,10 @@ a:focus-visible {
   .post-payment-guide {
     grid-template-columns: 1fr;
   }
+
+  .appointment-layout { grid-template-columns:1fr; }
+  .appointment-fields { grid-template-columns:1fr; }
+  .appointment-code { grid-column:auto; }
 
   .floating-whatsapp-wrap { right:.9rem;bottom:.9rem; }
   .floating-whatsapp-message { position:absolute;right:0;bottom:4.6rem;min-width:12.8rem; }

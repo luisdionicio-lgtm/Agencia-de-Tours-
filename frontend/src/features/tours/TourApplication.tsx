@@ -249,7 +249,7 @@ function Shell() {
 }
 
 function FloatingWhatsApp() {
-  const messages = ["¿Buscas un destino?", "Cotiza sin compromiso", "Te ayudamos a reservar"];
+  const messages = ["Cuéntanos tu presupuesto", "Buscamos opciones para ti", "Cotiza sin compromiso"];
   const [messageIndex, setMessageIndex] = useState(0);
   const [expanded, setExpanded] = useState(true);
 
@@ -262,10 +262,10 @@ function FloatingWhatsApp() {
   return (
     <div className={`floating-whatsapp-wrap ${expanded ? "is-expanded" : ""}`} onMouseEnter={() => setExpanded(true)} onMouseLeave={() => setExpanded(false)}>
       <div className="floating-whatsapp-message" role="status"><span className="advisor-status" /> <strong>Asesoría disponible</strong><small>{messages[messageIndex]}</small></div>
-      <a href={buildWhatsAppUrl("Hola John Tours, deseo orientación para elegir mi próximo viaje.")} className="floating-whatsapp" target="_blank" rel="noreferrer" aria-label="Hablar con un asesor de John Tours por WhatsApp">
+      <a href={buildWhatsAppUrl("Hola John Tours, deseo orientación según mi presupuesto para elegir un viaje. Mi presupuesto aproximado es: [indicar monto]. Viajaríamos: [cantidad de personas]. Fechas estimadas: [indicar fechas]. Destino de interés: [indicar destino o solicitar recomendación].")} className="floating-whatsapp" target="_blank" rel="noreferrer" aria-label="Recibir orientación de John Tours según mi presupuesto por WhatsApp">
         <span className="floating-whatsapp-rings" aria-hidden="true" />
         <img src="/whatsapp-logo.svg" alt="" />
-        <span className="floating-whatsapp-label"><strong>WhatsApp</strong><small>Respuesta directa</small></span>
+        <span className="floating-whatsapp-label"><strong>Según tu presupuesto</strong><small>Orientación por WhatsApp</small></span>
         <span className="floating-notification" aria-hidden="true">1</span>
       </a>
     </div>
@@ -1069,13 +1069,67 @@ function PaymentPage() {
   );
 }
 
+function appointmentSeparationCode(reservationId: string) {
+  return `JT-SEP-${reservationId.slice(-6).toUpperCase()}-${new Date().getFullYear()}`;
+}
+
+function buildAppointmentMessage(reservation: Reservation, date: string, time: string, channel: string, subject: string) {
+  const formattedDate = date ? new Intl.DateTimeFormat("es-PE", { dateStyle: "long", timeZone: "UTC" }).format(new Date(`${date}T12:00:00Z`)) : "por coordinar";
+  return [
+    "SOLICITUD DE CITA - JOHN TOURS PERÚ",
+    "",
+    `Estimados, mi nombre es ${reservation.customer.fullName}. Solicito coordinar una cita para revisar formalmente el paquete ${reservation.tour.title}.`,
+    "",
+    `Código de separación: ${appointmentSeparationCode(String(reservation.id))}`,
+    `Reserva: #${reservation.id}`,
+    `Destino: ${reservation.tour.destination}`,
+    `Viajeros: ${reservation.peopleCount}`,
+    `Fecha de viaje: ${reservation.travelDate || "por confirmar"}`,
+    `Monto de separación validado: S/ ${reservationAmount}.00`,
+    `Cita solicitada: ${formattedDate} a las ${time || "hora por coordinar"}`,
+    `Modalidad: ${channel}`,
+    `Tema principal: ${subject}`,
+    "",
+    "Adjuntaré la boleta o comprobante de separación en este chat para su verificación. Agradezco confirmar la disponibilidad del asesor y las condiciones finales del paquete.",
+    "",
+    "Quedo atento(a). Muchas gracias."
+  ].join("\n");
+}
+
+function AppointmentPlanner({ reservation, isDemo }: { reservation: Reservation; isDemo: boolean }) {
+  const tomorrow = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
+  const [date, setDate] = useState(tomorrow);
+  const [time, setTime] = useState("10:00");
+  const [channel, setChannel] = useState("Videollamada por WhatsApp");
+  const [subject, setSubject] = useState("Revisión del paquete, itinerario y saldo pendiente");
+  const [copied, setCopied] = useState(false);
+  const message = buildAppointmentMessage(reservation, date, time, channel, subject);
+  const copyMessage = async () => { await navigator.clipboard.writeText(message); setCopied(true); };
+
+  return (
+    <section className="appointment-planner mt-7 text-left">
+      <div className="appointment-heading"><span><CalendarDays /></span><div><small>Siguiente paso después de separar</small><h4>Agenda una cita sobre tu paquete</h4><p>Preparamos un mensaje formal con tu código de separación. En la demostración no se envía nada.</p></div></div>
+      <div className="appointment-layout">
+        <div className="appointment-fields">
+          <label>Fecha preferida<input type="date" min={tomorrow} value={date} onChange={(event) => setDate(event.target.value)} /></label>
+          <label>Hora preferida<input type="time" value={time} onChange={(event) => setTime(event.target.value)} /></label>
+          <label>Modalidad<select value={channel} onChange={(event) => setChannel(event.target.value)}><option>Videollamada por WhatsApp</option><option>Llamada telefónica</option><option>Atención presencial coordinada</option></select></label>
+          <label>Tema de la cita<select value={subject} onChange={(event) => setSubject(event.target.value)}><option>Revisión del paquete, itinerario y saldo pendiente</option><option>Servicios adicionales y personalización</option><option>Documentos, equipaje y recomendaciones</option><option>Coordinación para grupo o familia</option></select></label>
+          <div className="appointment-code"><small>Código de separación</small><strong>{appointmentSeparationCode(String(reservation.id))}</strong><span>Inclúyelo junto con la boleta o comprobante.</span></div>
+        </div>
+        <div className="appointment-preview"><div className="appointment-preview-bar"><img src="/whatsapp-logo.svg" alt="" /><span><strong>Mensaje preparado</strong><small>{isDemo ? "Vista de prueba · no se enviará" : "Revísalo antes de abrir WhatsApp"}</small></span></div><pre>{message}</pre><div className="appointment-actions"><button type="button" onClick={copyMessage}><Copy size={17} /> {copied ? "Mensaje copiado" : "Copiar mensaje"}</button>{!isDemo && <a href={buildWhatsAppUrl(message)} target="_blank" rel="noreferrer"><img src="/whatsapp-logo.svg" alt="" /> Abrir WhatsApp con el mensaje</a>}</div>{isDemo && <p className="demo-message-note"><ShieldCheck size={16} /> Prueba segura: el mensaje solo se visualiza y puede copiarse; no se abre WhatsApp ni se envía automáticamente.</p>}</div>
+      </div>
+    </section>
+  );
+}
+
 function ConfirmationPage() {
   const { id = "" } = useParams();
   const [searchParams] = useSearchParams();
   const isDemo = searchParams.get("demo") === "1";
   const { data: reservation } = useQuery<Reservation>({ queryKey: ["reservation", id], queryFn: async () => { try { return (await api.get(`/reservations/${id}`)).data; } catch { const saved = localStorage.getItem(`john-reservation-${id}`); if (!saved) throw new Error("Reserva no encontrada"); return JSON.parse(saved) as Reservation; } } });
   const guide = reservation ? guideForTour(reservation.tour) : null;
-  return <Section title={isDemo ? "Demostración: reserva confirmada" : "Reserva confirmada"} subtitle={`${isDemo ? "Simulación de presentación · " : ""}Código de reserva #${id}`}>{reservation && guide && <div className="mx-auto max-w-4xl rounded-2xl border bg-white p-6 text-center shadow-sm sm:p-8">{isDemo && <div className="mb-6 rounded-xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold text-[#087db8]">Modo demostración: no se realizó ningún cobro ni se registró una operación bancaria.</div>}<CheckCircle2 className="mx-auto text-[#09a889]" size={64} /><h3 className="mt-4 text-2xl font-black text-[#073b83]">{reservation.tour.title}</h3><p className="mt-2 text-slate-600">Gracias, {reservation.customer.fullName}. La separación de S/ 200 ha sido validada y tu solicitud de reserva quedó registrada.</p><div className="post-payment-guide mx-auto mt-7 overflow-hidden rounded-2xl border border-slate-200 bg-[#f3f9fd] text-left"><img src={guide.imageUrl} alt={`Imagen referencial de ${guide.label}`} className="h-60 w-full object-cover md:h-auto" /><div className="p-5"><span className="text-xs font-black uppercase tracking-widest text-[#087db8]">Contenido desbloqueado después del pago</span><h4 className="mt-2 text-xl font-black text-[#073b83]">Extras disponibles para {guide.label}</h4><p className="mt-2 text-sm leading-6 text-slate-600">Estas opciones no aparecen en el catálogo principal. Se muestran ahora porque tu reserva confirma el interés en adquirir el paquete.</p><div className="mt-4 grid gap-2 sm:grid-cols-2">{guide.extras.map((extra) => <span key={extra} className="flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-bold text-[#34536b]"><CheckCircle2 size={16} className="text-[#09a889]" />{extra}</span>)}</div><a href={guide.key === "general" ? "/servicios-adicionales-john-tours.pdf" : `/guia-extras-${guide.key}-john-tours.pdf`} download className="download-guide mt-5"><FileText /><span><strong>Descargar guía PDF de {guide.label}</strong><small>Incluye logo, imagen referencial y detalles de cada extra</small></span><Download /></a></div></div><div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row"><Link className="rounded-lg bg-[#073b83] px-5 py-3 font-bold text-white" to="/">Volver al inicio</Link><a className="rounded-lg bg-[#09a889] px-5 py-3 font-bold text-white" href={buildWhatsAppUrl(whatsappMessages.reservation(reservation))}>Contactar a John Tours</a></div></div>}</Section>;
+  return <Section title={isDemo ? "Demostración: reserva confirmada" : "Reserva confirmada"} subtitle={`${isDemo ? "Simulación de presentación · " : ""}Código de reserva #${id}`}>{reservation && guide && <div className="mx-auto max-w-5xl rounded-2xl border bg-white p-6 text-center shadow-sm sm:p-8">{isDemo && <div className="mb-6 rounded-xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold text-[#087db8]">Modo demostración: no se realizó ningún cobro ni se registró una operación bancaria.</div>}<CheckCircle2 className="mx-auto text-[#09a889]" size={64} /><h3 className="mt-4 text-2xl font-black text-[#073b83]">{reservation.tour.title}</h3><p className="mt-2 text-slate-600">Gracias, {reservation.customer.fullName}. La separación de S/ 200 ha sido validada y tu solicitud de reserva quedó registrada.</p><div className="post-payment-guide mx-auto mt-7 overflow-hidden rounded-2xl border border-slate-200 bg-[#f3f9fd] text-left"><img src={guide.imageUrl} alt={`Imagen referencial de ${guide.label}`} className="h-60 w-full object-cover md:h-auto" /><div className="p-5"><span className="text-xs font-black uppercase tracking-widest text-[#087db8]">Contenido desbloqueado después del pago</span><h4 className="mt-2 text-xl font-black text-[#073b83]">Extras disponibles para {guide.label}</h4><p className="mt-2 text-sm leading-6 text-slate-600">Estas opciones no aparecen en el catálogo principal. Se muestran ahora porque tu reserva confirma el interés en adquirir el paquete.</p><div className="mt-4 grid gap-2 sm:grid-cols-2">{guide.extras.map((extra) => <span key={extra} className="flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-bold text-[#34536b]"><CheckCircle2 size={16} className="text-[#09a889]" />{extra}</span>)}</div><a href={guide.key === "general" ? "/servicios-adicionales-john-tours.pdf" : `/guia-extras-${guide.key}-john-tours.pdf`} download className="download-guide mt-5"><FileText /><span><strong>Descargar guía PDF de {guide.label}</strong><small>Incluye logo, imagen referencial y detalles de cada extra</small></span><Download /></a></div></div><AppointmentPlanner reservation={reservation} isDemo={isDemo} /><div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row"><Link className="rounded-lg bg-[#073b83] px-5 py-3 font-bold text-white" to="/">Volver al inicio</Link><Link className="rounded-lg bg-[#09a889] px-5 py-3 font-bold text-white" to="/tours">Ver otros paquetes</Link></div></div>}</Section>;
 }
 
 function AdminPage() {
