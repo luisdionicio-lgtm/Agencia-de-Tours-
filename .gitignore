@@ -37,6 +37,8 @@ coverage/
 **/.turbo/
 .vercel/
 **/.vercel/
+/tmp/
+/output/
 *.tsbuildinfo
 **/*.tsbuildinfo
 

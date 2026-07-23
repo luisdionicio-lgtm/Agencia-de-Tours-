@@ -152,6 +152,22 @@ const demoTestimonials = [
   { name: "Rosa Salazar", location: "Arequipa", comment: "El paquete familiar a Orlando supero nuestras expectativas. Se sintio seguro de inicio a fin.", rating: 5 }
 ];
 
+const postPaymentGuides = [
+  { match: ["machu", "cusco"], key: "cusco", label: "Cusco y Machu Picchu", imageUrl: destinationImage("photo-1587595431973-160d0d94add1"), extras: ["Traslado privado", "Noche adicional", "Almuerzo regional", "Asistencia de altura", "Sesión fotográfica", "Seguro de viaje"] },
+  { match: ["disney", "orlando"], key: "orlando", label: "Disney Orlando", imageUrl: destinationImage("photo-1597466599360-3b9775841aec"), extras: ["Traslado aeropuerto-hotel", "Equipaje adicional", "Seguro internacional", "Día de compras", "Datos móviles", "Asistencia en español"] },
+  { match: ["oxapampa"], key: "oxapampa", label: "Oxapampa", imageUrl: destinationImage("photo-1500534314209-a25ddb2bd429"), extras: ["Traslado privado", "Noche adicional", "Experiencia de café", "Alimentación", "Fotografía", "Seguro de viaje"] },
+  { match: ["ica", "huacachina"], key: "ica", label: "Ica y Huacachina", imageUrl: "https://www.stampbystamptravel.com/wp-content/uploads/2025/02/laguna-huacachina-ica.jpg.webp", extras: ["Traslado privado", "Noche adicional", "Experiencia gastronómica", "Bodega seleccionada", "Fotografía al atardecer", "Seguro de viaje"] },
+  { match: ["egipto", "cairo"], key: "egipto", label: "Egipto", imageUrl: "https://www.barcelo.com/guia-turismo/wp-content/uploads/2022/05/el-cairo1.jpg", extras: ["Traslado privado", "Equipaje adicional", "Seguro internacional", "Datos móviles", "Comidas seleccionadas", "Asistencia en español"] }
+];
+
+function guideForTour(tour: Tour) {
+  const value = `${tour.title} ${tour.destination}`.toLowerCase();
+  return postPaymentGuides.find((guide) => guide.match.some((term) => value.includes(term))) ?? {
+    key: "general", label: tour.title, imageUrl: tour.imageUrl || destinationImage("photo-1488646953014-85cb44e25828"),
+    extras: ["Traslados", "Alojamiento adicional", "Alimentación", "Equipaje", "Seguro de viaje", "Asistencia personalizada"]
+  };
+}
+
 function Shell() {
   const [open, setOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -227,6 +243,7 @@ function Shell() {
       </header>
       <main className="overflow-hidden"><RoutesView /></main>
       <Footer />
+      <a href={buildWhatsAppUrl("Hola John Tours, deseo orientación para elegir mi próximo viaje.")} className="floating-whatsapp" aria-label="Hablar con un asesor de John Tours por WhatsApp"><MessageCircle /><span>Te asesoramos</span></a>
     </div>
   );
 }
@@ -341,6 +358,8 @@ function Home() {
       <TrustBar />
       <EnjoyYourTrip />
       <ConfidencePanel />
+      <ExclusiveReservationExperience />
+      <TrustVerification />
       <DestinationCarousel tours={featured.length ? featured : tours.slice(0, 5)} />
       <Section title="Tours destacados" subtitle="Paquetes elegidos para viajar con confianza y asistencia desde la primera cotizacion.">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">{featured.map((tour) => <TourCard key={tour.id} tour={tour} />)}</div>
@@ -473,6 +492,47 @@ function ConfidencePanel() {
               <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
             </div>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ExclusiveReservationExperience() {
+  const benefits = [
+    [<Sparkles key="sparkles" />, "Guía privada del destino", "Después de confirmar la reserva recibes una guía visual vinculada al viaje elegido."],
+    [<Award key="award" />, "Extras seleccionados", "Accedes a opciones complementarias pensadas para ese destino, sin saturar el paquete principal."],
+    [<HeartHandshake key="support" />, "Coordinación personal", "Un asesor revisa contigo fechas, disponibilidad y condiciones antes de agregar cualquier servicio."],
+    [<FileText key="file" />, "Información para conservar", "Descarga un PDF con el logo de John Tours, imagen referencial y detalles útiles para tu viaje."]
+  ];
+  return (
+    <section className="exclusive-section px-4 py-16 text-white lg:px-6 lg:py-20">
+      <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[.82fr_1.18fr] lg:items-center">
+        <div>
+          <span className="exclusive-badge"><Star size={16} fill="currentColor" /> Beneficio exclusivo para viajeros</span>
+          <h2 className="mt-5 text-4xl font-black leading-tight md:text-5xl">Tu reserva abre una experiencia más personal</h2>
+          <p className="mt-5 text-lg leading-8 text-slate-200">El catálogo te ayuda a elegir. Después de separar tu cupo, desbloqueamos información y opciones específicas para complementar el destino que realmente vas a disfrutar.</p>
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row"><Link to="/tours" className="btn-gold inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3.5 font-black">Elegir mi destino <ArrowRight size={18} /></Link><a href={buildWhatsAppUrl("Hola John Tours, quiero conocer los beneficios que se desbloquean al reservar un tour.")} className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/10 px-6 py-3.5 font-black backdrop-blur"><MessageCircle size={18} /> Consultar beneficios</a></div>
+        </div>
+        <div className="exclusive-grid grid gap-4 sm:grid-cols-2">{benefits.map(([icon, title, text]) => <article key={String(title)} className="exclusive-card rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur"><span>{icon}</span><strong className="mt-4 block text-lg">{title}</strong><p className="mt-2 text-sm leading-6 text-slate-200">{text}</p></article>)}</div>
+      </div>
+    </section>
+  );
+}
+
+function TrustVerification() {
+  const checks = [
+    ["Antes de pagar", "Confirma destino, fecha, viajeros, precio y qué incluye el paquete."],
+    ["Al separar", "Usa el código único de tu reserva y conserva el comprobante enviado."],
+    ["Antes de viajar", "Solicita la confirmación, condiciones aplicables y datos de contacto del asesor."],
+    ["Canales oficiales", `Verifica siempre el WhatsApp ${whatsappDisplay} y las redes @johntoursperu.`]
+  ];
+  return (
+    <section className="verification-section px-4 py-16 lg:px-6 lg:py-20">
+      <div className="mx-auto max-w-7xl rounded-3xl border border-slate-200 bg-white p-6 shadow-xl md:p-10">
+        <div className="grid gap-9 lg:grid-cols-[.75fr_1.25fr] lg:items-center">
+          <div><span className="section-kicker"><ShieldCheck size={16} /> Compra informada</span><h2 className="mt-4 text-4xl font-black text-[#082447]">Confianza que puedes verificar</h2><p className="mt-4 leading-7 text-slate-600">Una agencia confiable no te apura ni oculta condiciones. Te damos una ruta clara para revisar cada paso antes de comprometer tu viaje.</p><a href={buildWhatsAppUrl("Hola John Tours, deseo verificar disponibilidad, condiciones y datos de mi próximo viaje antes de reservar.")} className="mt-6 inline-flex items-center gap-2 font-black text-[#0f7a4f]">Verificar con un asesor <ArrowRight size={17} /></a></div>
+          <div className="grid gap-3 sm:grid-cols-2">{checks.map(([title, text], index) => <div key={title} className="verification-card rounded-2xl border border-slate-200 p-5"><span>0{index + 1}</span><strong className="ml-3 text-[#082447]">{title}</strong><p className="mt-3 text-sm leading-6 text-slate-600">{text}</p></div>)}</div>
         </div>
       </div>
     </section>
@@ -990,7 +1050,8 @@ function ConfirmationPage() {
   const [searchParams] = useSearchParams();
   const isDemo = searchParams.get("demo") === "1";
   const { data: reservation } = useQuery<Reservation>({ queryKey: ["reservation", id], queryFn: async () => { try { return (await api.get(`/reservations/${id}`)).data; } catch { const saved = localStorage.getItem(`john-reservation-${id}`); if (!saved) throw new Error("Reserva no encontrada"); return JSON.parse(saved) as Reservation; } } });
-  return <Section title={isDemo ? "Demostración: reserva confirmada" : "Reserva confirmada"} subtitle={`${isDemo ? "Simulación de presentación · " : ""}Código de reserva #${id}`}>{reservation && <div className="mx-auto max-w-3xl rounded-2xl border bg-white p-8 text-center shadow-sm">{isDemo && <div className="mb-6 rounded-xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold text-[#087db8]">Modo demostración: no se realizó ningún cobro ni se registró una operación bancaria.</div>}<CheckCircle2 className="mx-auto text-[#09a889]" size={64} /><h3 className="mt-4 text-2xl font-black text-[#073b83]">{reservation.tour.title}</h3><p className="mt-2 text-slate-600">Gracias, {reservation.customer.fullName}. La separación de S/ 200 ha sido validada y tu solicitud de reserva quedó registrada.</p><div className="mx-auto mt-7 max-w-xl rounded-2xl bg-[#f3f9fd] p-5 text-left"><span className="text-xs font-black uppercase tracking-widest text-[#087db8]">Contenido desbloqueado después del pago</span><h4 className="mt-2 text-xl font-black text-[#073b83]">Servicios adicionales para complementar tu viaje</h4><p className="mt-2 text-sm leading-6 text-slate-600">El documento incluye opciones generales como traslados, alimentación, asistencia, equipaje y seguros. No revela itinerarios exclusivos ni la propuesta diferencial de la experiencia.</p><a href="/servicios-adicionales-john-tours.pdf" download className="download-guide mt-4"><FileText /><span><strong>Descargar PDF de servicios adicionales</strong><small>Disponible únicamente tras confirmar la reserva</small></span><Download /></a></div><div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row"><Link className="rounded-lg bg-[#073b83] px-5 py-3 font-bold text-white" to="/">Volver al inicio</Link><a className="rounded-lg bg-[#09a889] px-5 py-3 font-bold text-white" href={buildWhatsAppUrl(whatsappMessages.reservation(reservation))}>Contactar a John Tours</a></div></div>}</Section>;
+  const guide = reservation ? guideForTour(reservation.tour) : null;
+  return <Section title={isDemo ? "Demostración: reserva confirmada" : "Reserva confirmada"} subtitle={`${isDemo ? "Simulación de presentación · " : ""}Código de reserva #${id}`}>{reservation && guide && <div className="mx-auto max-w-4xl rounded-2xl border bg-white p-6 text-center shadow-sm sm:p-8">{isDemo && <div className="mb-6 rounded-xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold text-[#087db8]">Modo demostración: no se realizó ningún cobro ni se registró una operación bancaria.</div>}<CheckCircle2 className="mx-auto text-[#09a889]" size={64} /><h3 className="mt-4 text-2xl font-black text-[#073b83]">{reservation.tour.title}</h3><p className="mt-2 text-slate-600">Gracias, {reservation.customer.fullName}. La separación de S/ 200 ha sido validada y tu solicitud de reserva quedó registrada.</p><div className="post-payment-guide mx-auto mt-7 overflow-hidden rounded-2xl border border-slate-200 bg-[#f3f9fd] text-left"><img src={guide.imageUrl} alt={`Imagen referencial de ${guide.label}`} className="h-60 w-full object-cover md:h-auto" /><div className="p-5"><span className="text-xs font-black uppercase tracking-widest text-[#087db8]">Contenido desbloqueado después del pago</span><h4 className="mt-2 text-xl font-black text-[#073b83]">Extras disponibles para {guide.label}</h4><p className="mt-2 text-sm leading-6 text-slate-600">Estas opciones no aparecen en el catálogo principal. Se muestran ahora porque tu reserva confirma el interés en adquirir el paquete.</p><div className="mt-4 grid gap-2 sm:grid-cols-2">{guide.extras.map((extra) => <span key={extra} className="flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-bold text-[#34536b]"><CheckCircle2 size={16} className="text-[#09a889]" />{extra}</span>)}</div><a href={guide.key === "general" ? "/servicios-adicionales-john-tours.pdf" : `/guia-extras-${guide.key}-john-tours.pdf`} download className="download-guide mt-5"><FileText /><span><strong>Descargar guía PDF de {guide.label}</strong><small>Incluye logo, imagen referencial y detalles de cada extra</small></span><Download /></a></div></div><div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row"><Link className="rounded-lg bg-[#073b83] px-5 py-3 font-bold text-white" to="/">Volver al inicio</Link><a className="rounded-lg bg-[#09a889] px-5 py-3 font-bold text-white" href={buildWhatsAppUrl(whatsappMessages.reservation(reservation))}>Contactar a John Tours</a></div></div>}</Section>;
 }
 
 function AdminPage() {
