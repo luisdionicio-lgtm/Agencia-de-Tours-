@@ -39,6 +39,8 @@ coverage/
 **/.vercel/
 /tmp/
 /output/
+__pycache__/
+*.py[cod]
 *.tsbuildinfo
 **/*.tsbuildinfo
 
