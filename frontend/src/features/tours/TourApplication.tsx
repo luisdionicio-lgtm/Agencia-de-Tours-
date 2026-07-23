@@ -243,7 +243,31 @@ function Shell() {
       </header>
       <main className="overflow-hidden"><RoutesView /></main>
       <Footer />
-      <a href={buildWhatsAppUrl("Hola John Tours, deseo orientación para elegir mi próximo viaje.")} className="floating-whatsapp" aria-label="Hablar con un asesor de John Tours por WhatsApp"><MessageCircle /><span>Te asesoramos</span></a>
+      <FloatingWhatsApp />
+    </div>
+  );
+}
+
+function FloatingWhatsApp() {
+  const messages = ["¿Buscas un destino?", "Cotiza sin compromiso", "Te ayudamos a reservar"];
+  const [messageIndex, setMessageIndex] = useState(0);
+  const [expanded, setExpanded] = useState(true);
+
+  useEffect(() => {
+    const messageTimer = window.setInterval(() => setMessageIndex((current) => (current + 1) % messages.length), 3800);
+    const collapseTimer = window.setTimeout(() => setExpanded(false), 12000);
+    return () => { window.clearInterval(messageTimer); window.clearTimeout(collapseTimer); };
+  }, [messages.length]);
+
+  return (
+    <div className={`floating-whatsapp-wrap ${expanded ? "is-expanded" : ""}`} onMouseEnter={() => setExpanded(true)} onMouseLeave={() => setExpanded(false)}>
+      <div className="floating-whatsapp-message" role="status"><span className="advisor-status" /> <strong>Asesoría disponible</strong><small>{messages[messageIndex]}</small></div>
+      <a href={buildWhatsAppUrl("Hola John Tours, deseo orientación para elegir mi próximo viaje.")} className="floating-whatsapp" target="_blank" rel="noreferrer" aria-label="Hablar con un asesor de John Tours por WhatsApp">
+        <span className="floating-whatsapp-rings" aria-hidden="true" />
+        <img src="/whatsapp-logo.svg" alt="" />
+        <span className="floating-whatsapp-label"><strong>WhatsApp</strong><small>Respuesta directa</small></span>
+        <span className="floating-notification" aria-hidden="true">1</span>
+      </a>
     </div>
   );
 }

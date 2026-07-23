@@ -460,8 +460,26 @@ textarea {
 .verification-card>span { display:inline-grid;width:2.25rem;height:2.25rem;place-items:center;border-radius:.7rem;background:#082447;color:#ffd56a;font-size:.75rem;font-weight:900 }
 .verification-card:hover { transform:translateY(-3px);border-color:rgba(15,122,79,.35);box-shadow:0 15px 35px rgba(8,36,71,.08) }
 
-.floating-whatsapp { position:fixed;z-index:60;right:1.25rem;bottom:1.25rem;display:inline-flex;align-items:center;gap:.6rem;border:1px solid rgba(255,255,255,.4);border-radius:999px;background:#1fa463;padding:.85rem 1.1rem;color:#fff;font-size:.85rem;font-weight:900;box-shadow:0 18px 42px rgba(10,102,63,.34);transition:transform 180ms ease,box-shadow 180ms ease }
-.floating-whatsapp:hover { transform:translateY(-3px);box-shadow:0 23px 48px rgba(10,102,63,.42) }
+.floating-whatsapp-wrap { position:fixed;z-index:60;right:1.25rem;bottom:1.25rem;display:flex;align-items:flex-end;gap:.75rem;filter:drop-shadow(0 18px 30px rgba(8,36,71,.2)) }
+.floating-whatsapp { position:relative;display:inline-flex;min-width:62px;min-height:62px;align-items:center;justify-content:center;gap:.65rem;overflow:visible;border:2px solid rgba(255,255,255,.82);border-radius:999px;background:linear-gradient(135deg,#20b66c,#159454);padding:.55rem;color:#fff;box-shadow:0 16px 38px rgba(10,102,63,.36),inset 0 1px rgba(255,255,255,.3);transition:transform 180ms ease,box-shadow 180ms ease,padding 260ms ease }
+.floating-whatsapp img { position:relative;z-index:2;width:46px;height:46px;flex:0 0 46px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.18)) }
+.floating-whatsapp-label { width:0;overflow:hidden;white-space:nowrap;opacity:0;transition:width 260ms ease,opacity 180ms ease }
+.floating-whatsapp-label strong,.floating-whatsapp-label small { display:block }
+.floating-whatsapp-label strong { font-size:.88rem;letter-spacing:.01em }
+.floating-whatsapp-label small { margin-top:.1rem;color:#e5fff1;font-size:.68rem;font-weight:700 }
+.floating-whatsapp-wrap.is-expanded .floating-whatsapp { padding-right:1rem }
+.floating-whatsapp-wrap.is-expanded .floating-whatsapp-label { width:7.35rem;opacity:1 }
+.floating-whatsapp:hover { transform:translateY(-3px) scale(1.02);box-shadow:0 23px 48px rgba(10,102,63,.44),0 0 0 5px rgba(247,183,49,.16) }
+.floating-whatsapp-rings { position:absolute;inset:0;border:2px solid rgba(31,164,99,.42);border-radius:inherit;animation:whatsappRing 2.5s ease-out infinite }
+.floating-notification { position:absolute;z-index:3;top:-5px;right:-3px;display:grid;width:21px;height:21px;place-items:center;border:2px solid #fff;border-radius:50%;background:#f7b731;color:#082447;font-size:.65rem;font-weight:900 }
+.floating-whatsapp-message { display:grid;grid-template-columns:auto 1fr;min-width:13.5rem;max-width:15rem;border:1px solid #dce7ef;border-radius:1rem;background:rgba(255,255,255,.97);padding:.75rem .9rem;color:#082447;box-shadow:0 14px 35px rgba(8,36,71,.13);opacity:0;transform:translateX(12px) scale(.97);pointer-events:none;transition:opacity 220ms ease,transform 220ms ease;backdrop-filter:blur(12px) }
+.floating-whatsapp-wrap.is-expanded .floating-whatsapp-message { opacity:1;transform:translateX(0) scale(1) }
+.floating-whatsapp-message strong,.floating-whatsapp-message small { grid-column:2;display:block }
+.floating-whatsapp-message strong { font-size:.78rem }
+.floating-whatsapp-message small { margin-top:.15rem;color:#587084;font-size:.7rem;font-weight:700;animation:softReveal 240ms ease both }
+.advisor-status { grid-row:1/3;width:.65rem;height:.65rem;margin:.22rem .55rem 0 0;border:2px solid #d9f6e7;border-radius:50%;background:#1fa463;box-shadow:0 0 0 3px rgba(31,164,99,.12) }
+
+@keyframes whatsappRing { 0%{opacity:.65;transform:scale(.92)} 70%,100%{opacity:0;transform:scale(1.35)} }
 
 .section-kicker {
   display: inline-flex;
@@ -866,8 +884,10 @@ a:focus-visible {
     grid-template-columns: 1fr;
   }
 
-  .floating-whatsapp span { display:none; }
-  .floating-whatsapp { right:.9rem;bottom:.9rem;padding:.85rem; }
+  .floating-whatsapp-wrap { right:.9rem;bottom:.9rem; }
+  .floating-whatsapp-message { position:absolute;right:0;bottom:4.6rem;min-width:12.8rem; }
+  .floating-whatsapp-wrap.is-expanded .floating-whatsapp { padding-right:.65rem; }
+  .floating-whatsapp-label { display:none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
