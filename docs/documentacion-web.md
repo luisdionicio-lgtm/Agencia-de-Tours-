@@ -105,3 +105,13 @@ Los extras se cotizan por separado, están sujetos a disponibilidad y no aparece
 - Cambiar todas las credenciales demostrativas.
 - Añadir analítica, monitoreo de errores, SEO técnico y pruebas de accesibilidad.
 - Validar el flujo completo con pagos de prueba antes de aceptar dinero real.
+
+## 10. Implementación futura confirmada
+
+- Registrar y conectar el dominio oficial de John Tours con HTTPS y configuración DNS segura.
+- Desplegar frontend, API y MySQL en servicios de hosting productivos con copias de seguridad y monitoreo.
+- Crear correos corporativos para reservas, ventas, soporte y administración cuando exista el dominio definitivo.
+- Configurar SMTP, SPF, DKIM y DMARC antes de mostrar esos correos en la web.
+- Sustituir los contactos demostrativos únicamente después de verificar que cada cuenta corporativa funciona correctamente.
+
+Estas funciones se añadirán a la web en una etapa posterior. No se publicarán direcciones de correo provisionales ni datos empresariales que todavía no hayan sido confirmados.

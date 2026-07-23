@@ -105,3 +105,12 @@ Este endpoint indica si Culqi, webhook y SMTP estan configurados sin exponer cla
 - Numero oficial de WhatsApp.
 - Dominio final.
 - Politicas de cancelacion, cambios y reembolsos.
+
+## Fase futura: dominio, hosting y correo corporativo
+
+- Registrar el dominio oficial y definir al responsable de renovación.
+- Configurar DNS, HTTPS y URL definitiva para frontend y API.
+- Desplegar frontend, backend y MySQL en infraestructura productiva separada del modo demostración.
+- Crear cuentas corporativas para reservas, ventas, soporte y administración.
+- Configurar SMTP seguro, SPF, DKIM y DMARC.
+- Actualizar la web con las direcciones corporativas solo después de verificarlas.

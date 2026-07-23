@@ -40,4 +40,6 @@ npm run test --prefix backend
 
 La descripción funcional y técnica completa está en [docs/documentacion-web.md](docs/documentacion-web.md). La preparación para producción se detalla en [docs/production-checklist.md](docs/production-checklist.md).
 
+El informe ejecutivo actualizado está disponible en [docs/Informe_Estado_Web_John_Tours_2026.docx](docs/Informe_Estado_Web_John_Tours_2026.docx).
+
 > Los pagos demostrativos no realizan cobros. Antes de vender deben configurarse los datos empresariales, políticas, credenciales y servicios reales.
