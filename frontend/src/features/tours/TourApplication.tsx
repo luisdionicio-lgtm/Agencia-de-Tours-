@@ -376,7 +376,9 @@ function Home() {
       </Section>
       <ConfidencePanel />
       <ExclusiveReservationExperience />
+      <OurStory />
       <Testimonials />
+      <SocialSpotlight />
       <FrequentlyAskedQuestions />
       <section id="contacto" className="formal-cta px-4 py-20 text-white">
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
@@ -450,7 +452,7 @@ function OurStory() {
 }
 
 function SocialSpotlight() {
-  return <section className="social-section px-4 py-16 text-white lg:px-6"><div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 lg:flex-row lg:items-center"><div className="max-w-3xl"><span className="text-sm font-black uppercase tracking-[.2em] text-cyan-200">Síguenos y viaja con nosotros</span><h2 className="mt-3 text-4xl font-black md:text-5xl">Inspírate con nuestros próximos destinos</h2><p className="mt-4 text-lg text-blue-100">Mira promociones, salidas, consejos y experiencias reales en TikTok e Instagram.</p></div><div className="social-cards grid w-full gap-4 sm:grid-cols-2 lg:w-auto"><a href={tiktokUrl} target="_blank" rel="noreferrer" className="social-button social-tiktok"><img src="/tiktok-logo.png" alt="" /><span><strong>TikTok</strong><small>@johntoursperu</small></span><ArrowRight /></a><a href={instagramUrl} target="_blank" rel="noreferrer" className="social-button social-instagram"><img src="/instagram-logo.png" alt="" /><span><strong>Instagram</strong><small>@johntoursperu</small></span><ArrowRight /></a></div></div></section>;
+  return <section className="social-section px-4 py-14 text-white lg:px-6"><div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 lg:flex-row lg:items-center"><div className="max-w-2xl"><span className="social-kicker"><Sparkles size={16} /> Comunidad John Tours</span><h2 className="mt-4 text-3xl font-black md:text-4xl">Síguenos y descubre tu próximo viaje</h2><p className="mt-3 leading-7 text-blue-100">Promociones, salidas, consejos y experiencias para inspirarte en nuestros canales oficiales.</p></div><div className="social-cards grid w-full gap-4 sm:grid-cols-2 lg:w-auto"><a href={tiktokUrl} target="_blank" rel="noreferrer" className="social-button social-tiktok" aria-label="Seguir a John Tours Perú en TikTok"><span className="social-logo-stage"><img src="/tiktok-logo.png" alt="Logo de TikTok" /></span><span><strong>TikTok</strong><small>@johntoursperu</small></span><ArrowRight /></a><a href={instagramUrl} target="_blank" rel="noreferrer" className="social-button social-instagram" aria-label="Seguir a John Tours Perú en Instagram"><span className="social-logo-stage"><img src="/instagram-logo.png" alt="Logo de Instagram" /></span><span><strong>Instagram</strong><small>@johntoursperu</small></span><ArrowRight /></a></div></div></section>;
 }
 
 function TrustBar() {
