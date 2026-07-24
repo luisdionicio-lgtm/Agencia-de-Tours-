@@ -64,6 +64,12 @@ export function validateProductionConfig() {
   if (env.JWT_SECRET === "cambia_este_secreto_en_produccion" || env.JWT_SECRET === "change_this_secret") {
     errors.push("JWT_SECRET debe ser un secreto real en produccion.");
   }
+  if (env.ADMIN_PASSWORD === "Admin12345" || env.ADMIN_PASSWORD.length < 16) {
+    errors.push("ADMIN_PASSWORD debe tener al menos 16 caracteres y no puede usar la clave demostrativa.");
+  }
+  if (env.ADMIN_EMAIL === "admin@johntours.com") {
+    errors.push("ADMIN_EMAIL debe ser una cuenta administrativa corporativa real.");
+  }
 
   if (isPlaceholder(env.CULQI_PRIVATE_KEY, ["xxxxxxxx", "change_this"])) {
     warnings.push("CULQI_PRIVATE_KEY no esta configurado. Los pagos reales fallaran hasta definir la llave privada.");

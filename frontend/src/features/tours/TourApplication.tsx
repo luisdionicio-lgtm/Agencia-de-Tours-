@@ -19,8 +19,9 @@ const paymentMoney = (payment: Payment) => payment.reservation?.tour ? tourMoney
 const whatsapp = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "51966779705";
 const whatsappDisplay = "+51 966 779 705";
 const reservationAmount = 200;
-const culqiPublicKey = "";
-const isCulqiKeyConfigured = false;
+const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+const culqiPublicKey = process.env.NEXT_PUBLIC_CULQI_PUBLIC_KEY ?? "";
+const isCulqiKeyConfigured = culqiPublicKey.startsWith("pk_");
 const tiktokUrl = "https://www.tiktok.com/@johntoursperu?_r=1&_t=ZS-988zH7tdmDM";
 const instagramUrl = "https://www.instagram.com/johntoursperu?igsh=dm1hc3ZweGlkeWR2";
 
@@ -227,7 +228,6 @@ function Shell() {
             {links.map(([label, to]) => <NavLink key={label} to={to}>{label}</NavLink>)}
           </nav>
           <div className="hidden items-center gap-3 lg:flex">
-            <Link to="/admin" className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-bold text-slate-700">Admin</Link>
             <Link to="/tours" className="btn-gold rounded-lg px-5 py-2.5 text-sm font-bold shadow-sm">Reservar ahora</Link>
           </div>
           <button className="menu-button rounded-xl border border-slate-200 p-2 lg:hidden" onClick={() => setOpen(!open)} aria-label={open ? "Cerrar menu" : "Abrir menu"} aria-expanded={open}>
@@ -237,7 +237,6 @@ function Shell() {
         {open && (
           <div className="mobile-menu border-t border-slate-200 bg-white/95 px-4 py-4 backdrop-blur-xl lg:hidden">
             {links.map(([label, to]) => <Link key={label} to={to} onClick={() => setOpen(false)} className="block rounded-lg px-3 py-3 font-semibold text-slate-700">{label}</Link>)}
-            <Link to="/admin" className="mt-2 block rounded-lg bg-slate-100 px-3 py-3 font-semibold">Panel admin</Link>
           </div>
         )}
       </header>
@@ -339,14 +338,6 @@ function TourCard({ tour }: { tour: Tour }) {
 function Home() {
   const { data: tours = [] } = useTours();
   const featured = tours.filter((tour) => tour.isFeatured).slice(0, 4);
-  const types = [
-    ["Aventura", "Rutas activas con energia y naturaleza"],
-    ["Playa", "Descanso, sol y hoteles seleccionados"],
-    ["Cultural", "Historia, guias locales y entradas claras"],
-    ["Familiar", "Itinerarios comodos para todas las edades"],
-    ["Romantico", "Escapadas cuidadas para dos"],
-    ["Lujo", "Experiencias premium y asistencia privada"]
-  ];
 
   return (
     <>
@@ -380,22 +371,11 @@ function Home() {
         </div>
       </section>
       <TrustBar />
-      <EnjoyYourTrip />
-      <ConfidencePanel />
-      <ExclusiveReservationExperience />
-      <TrustVerification />
-      <DestinationCarousel tours={featured.length ? featured : tours.slice(0, 5)} />
       <Section title="Tours destacados" subtitle="Paquetes elegidos para viajar con confianza y asistencia desde la primera cotizacion.">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">{featured.map((tour) => <TourCard key={tour.id} tour={tour} />)}</div>
       </Section>
-      <ExperienceBand />
-      <Section title="Experiencias que inspiran" subtitle="Encuentra una forma de viajar que conecte contigo y convierta cada destino en una historia.">
-        <div className="experience-rail" role="region" aria-label="Estilos de viaje">{types.map(([type, text], index) => <div key={type} className="experience-card group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><span className="category-icon mb-5 grid h-12 w-12 place-items-center rounded-xl"><Globe2 /></span><span className="text-xs font-black uppercase tracking-[0.18em] text-amber-600">Experiencia 0{index + 1}</span><strong className="mt-2 block text-xl text-[#082447]">{type}</strong><p className="mt-2 text-sm leading-6 text-slate-600">{text}</p><Link to="/tours" className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#0f4c81]">Descubrir <ArrowRight size={16} /></Link></div>)}</div>
-      </Section>
-      <TravelFamily />
-      <SchoolPromotions />
-      <OurStory />
-      <SocialSpotlight />
+      <ConfidencePanel />
+      <ExclusiveReservationExperience />
       <Testimonials />
       <FrequentlyAskedQuestions />
       <section id="contacto" className="formal-cta px-4 py-20 text-white">
@@ -874,13 +854,17 @@ function ReservationPage() {
   const people = Number(form.watch("peopleCount") || 1);
   const mutation = useMutation({
     mutationFn: async (values: ReservationForm) => (await api.post("/reservations", { ...reservationSchema.parse(values), tourId: Number(id) })).data,
-    onSuccess: (reservation: Reservation) => navigate(`/pago/${reservation.id}`),
+    onSuccess: (reservation: Reservation) => {
+      sessionStorage.setItem(`john-reservation-${reservation.id}`, JSON.stringify(reservation));
+      navigate(`/pago/${reservation.id}`);
+    },
     onError: () => {
       if (!tour) return;
       const values = form.getValues();
       const localId = Date.now();
       const localReservation: Reservation = { id: localId, travelDate: values.travelDate, peopleCount: Number(values.peopleCount), totalAmount: reservationAmount, status: "PENDIENTE", customer: { fullName: values.fullName, email: values.email, phone: values.phone }, tour };
-      localStorage.setItem(`john-reservation-${localId}`, JSON.stringify(localReservation));
+      if (!isDemoMode) return;
+      sessionStorage.setItem(`john-reservation-${localId}`, JSON.stringify(localReservation));
       navigate(`/pago/${localId}`);
     }
   });
@@ -905,7 +889,7 @@ function YapeReservationPage() {
     queryFn: async () => {
       try { return (await api.get(`/reservations/${id}`)).data; }
       catch {
-        const saved = localStorage.getItem(`john-reservation-${id}`);
+        const saved = sessionStorage.getItem(`john-reservation-${id}`);
         if (!saved) throw new Error("Reserva no encontrada");
         return JSON.parse(saved) as Reservation;
       }
@@ -919,10 +903,10 @@ function YapeReservationPage() {
   if (!reservation) return <Section title="Preparando tu reserva" subtitle="Estamos generando tu código seguro de pago." />;
   const message = `Hola John Tours, adjunto mi comprobante Yape de S/ ${reservationAmount} para ${reservation.tour.title}. Código de pago: ${paymentCode}. Reserva #${id}.`;
   const simulatePayment = () => {
-    localStorage.setItem(`john-reservation-${id}`, JSON.stringify({ ...reservation, status: "PAGADA" }));
+    sessionStorage.setItem(`john-reservation-${id}`, JSON.stringify({ ...reservation, status: "PAGADA" }));
     navigate(`/confirmacion/${id}?demo=1`);
   };
-  return <Section title="Separa tu tour con Yape" subtitle="Sin pasarela ni datos de tarjeta: paga S/ 200, conserva tu código y envía el comprobante a un asesor."><div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[.9fr_1.1fr]"><article className="yape-card"><div className="yape-brand"><img src="/yape-logo.png" alt="Yape" /><span>Reserva con Yape</span></div><span className="yape-label">Reserva protegida</span><h3>{reservation.tour.title}</h3><p>{reservation.customer.fullName} · {reservation.peopleCount} viajero(s)</p><div className="reservation-price"><small>Monto de separación</small><strong>S/ {reservationAmount}.00</strong></div><div className="payment-code"><div><small>Código único de pago</small><strong>{paymentCode}</strong></div><button onClick={() => { navigator.clipboard.writeText(paymentCode); setCopied(true); }} aria-label="Copiar código"><Copy size={18} /> {copied ? "Copiado" : "Copiar"}</button></div><div className="secure-note"><ShieldCheck /> <span>Incluye este código en el mensaje del comprobante. John Tours validará titular, monto y reserva antes de confirmar el cupo. El PDF se habilita únicamente después de esa confirmación.</span></div><button type="button" onClick={simulatePayment} className="demo-payment"><Sparkles /><span><strong>Demostración para presentación</strong><small>Simular validación del pago y ver la reserva confirmada</small></span><ArrowRight /></button></article><article className="qr-card yape-qr-card"><div className="yape-qr-heading"><img src="/yape-logo.png" alt="Yape" /><span><strong>Yapea tu reserva</strong><small>Escanea el código QR</small></span></div>{qrImage && <div className="yape-qr-frame"><img src={qrImage} alt={`QR de instrucciones para la reserva ${paymentCode}`} /></div>}<strong>Yape asociado al contacto: {whatsappDisplay}</strong><p>El QR contiene las instrucciones y el código único. Antes de transferir, verifica en Yape que el titular corresponda a la cuenta empresarial comunicada por John Tours.</p><a href={buildWhatsAppUrl(message)} target="_blank" rel="noreferrer" className="whatsapp-cta"><MessageCircle /> Enviar comprobante por WhatsApp</a><small>La reserva se confirma después de la validación manual del comprobante.</small></article></div></Section>;
+  return <Section title="Separa tu tour con Yape" subtitle="Sin pasarela ni datos de tarjeta: paga S/ 200, conserva tu código y envía el comprobante a un asesor."><div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[.9fr_1.1fr]"><article className="yape-card"><div className="yape-brand"><img src="/yape-logo.png" alt="Yape" /><span>Reserva con Yape</span></div><span className="yape-label">Reserva protegida</span><h3>{reservation.tour.title}</h3><p>{reservation.customer.fullName} · {reservation.peopleCount} viajero(s)</p><div className="reservation-price"><small>Monto de separación</small><strong>S/ {reservationAmount}.00</strong></div><div className="payment-code"><div><small>Código único de pago</small><strong>{paymentCode}</strong></div><button onClick={() => { navigator.clipboard.writeText(paymentCode); setCopied(true); }} aria-label="Copiar código"><Copy size={18} /> {copied ? "Copiado" : "Copiar"}</button></div><div className="secure-note"><ShieldCheck /> <span>Incluye este código en el mensaje del comprobante. John Tours validará titular, monto y reserva antes de confirmar el cupo. El PDF se habilita únicamente después de esa confirmación.</span></div>{isDemoMode && <button type="button" onClick={simulatePayment} className="demo-payment"><Sparkles /><span><strong>Demostración para presentación</strong><small>Simular validación del pago y ver la reserva confirmada</small></span><ArrowRight /></button>}</article><article className="qr-card yape-qr-card"><div className="yape-qr-heading"><img src="/yape-logo.png" alt="Yape" /><span><strong>Yapea tu reserva</strong><small>Escanea el código QR</small></span></div>{qrImage && <div className="yape-qr-frame"><img src={qrImage} alt={`QR de instrucciones para la reserva ${paymentCode}`} /></div>}<strong>Yape asociado al contacto: {whatsappDisplay}</strong><p>El QR contiene las instrucciones y el código único. Antes de transferir, verifica en Yape que el titular corresponda a la cuenta empresarial comunicada por John Tours.</p><a href={buildWhatsAppUrl(message)} target="_blank" rel="noreferrer" className="whatsapp-cta"><MessageCircle /> Enviar comprobante por WhatsApp</a><small>La reserva se confirma después de la validación manual del comprobante.</small></article></div></Section>;
 }
 
 function PaymentPage() {
@@ -1127,28 +1111,19 @@ function ConfirmationPage() {
   const { id = "" } = useParams();
   const [searchParams] = useSearchParams();
   const isDemo = searchParams.get("demo") === "1";
-  const { data: reservation } = useQuery<Reservation>({ queryKey: ["reservation", id], queryFn: async () => { try { return (await api.get(`/reservations/${id}`)).data; } catch { const saved = localStorage.getItem(`john-reservation-${id}`); if (!saved) throw new Error("Reserva no encontrada"); return JSON.parse(saved) as Reservation; } } });
+  const { data: reservation } = useQuery<Reservation>({ queryKey: ["reservation", id], queryFn: async () => { const saved = sessionStorage.getItem(`john-reservation-${id}`); if (!saved) throw new Error("Reserva no encontrada en esta sesión"); return JSON.parse(saved) as Reservation; } });
   const guide = reservation ? guideForTour(reservation.tour) : null;
   return <Section title={isDemo ? "Demostración: reserva confirmada" : "Reserva confirmada"} subtitle={`${isDemo ? "Simulación de presentación · " : ""}Código de reserva #${id}`}>{reservation && guide && <div className="mx-auto max-w-5xl rounded-2xl border bg-white p-6 text-center shadow-sm sm:p-8">{isDemo && <div className="mb-6 rounded-xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold text-[#087db8]">Modo demostración: no se realizó ningún cobro ni se registró una operación bancaria.</div>}<CheckCircle2 className="mx-auto text-[#09a889]" size={64} /><h3 className="mt-4 text-2xl font-black text-[#073b83]">{reservation.tour.title}</h3><p className="mt-2 text-slate-600">Gracias, {reservation.customer.fullName}. La separación de S/ 200 ha sido validada y tu solicitud de reserva quedó registrada.</p><div className="post-payment-guide mx-auto mt-7 overflow-hidden rounded-2xl border border-slate-200 bg-[#f3f9fd] text-left"><img src={guide.imageUrl} alt={`Imagen referencial de ${guide.label}`} className="h-60 w-full object-cover md:h-auto" /><div className="p-5"><span className="text-xs font-black uppercase tracking-widest text-[#087db8]">Contenido desbloqueado después del pago</span><h4 className="mt-2 text-xl font-black text-[#073b83]">Extras disponibles para {guide.label}</h4><p className="mt-2 text-sm leading-6 text-slate-600">Estas opciones no aparecen en el catálogo principal. Se muestran ahora porque tu reserva confirma el interés en adquirir el paquete.</p><div className="mt-4 grid gap-2 sm:grid-cols-2">{guide.extras.map((extra) => <span key={extra} className="flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-bold text-[#34536b]"><CheckCircle2 size={16} className="text-[#09a889]" />{extra}</span>)}</div><a href={guide.key === "general" ? "/servicios-adicionales-john-tours.pdf" : `/guia-extras-${guide.key}-john-tours.pdf`} download className="download-guide mt-5"><FileText /><span><strong>Descargar guía PDF de {guide.label}</strong><small>Incluye logo, imagen referencial y detalles de cada extra</small></span><Download /></a></div></div><AppointmentPlanner reservation={reservation} isDemo={isDemo} /><div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row"><Link className="rounded-lg bg-[#073b83] px-5 py-3 font-bold text-white" to="/">Volver al inicio</Link><Link className="rounded-lg bg-[#09a889] px-5 py-3 font-bold text-white" to="/tours">Ver otros paquetes</Link></div></div>}</Section>;
 }
 
 function AdminPage() {
-  const [token, setToken] = useState(localStorage.getItem("adminToken"));
+  const [token, setToken] = useState(sessionStorage.getItem("adminToken"));
   const [tourForm, setTourForm] = useState<AdminTourForm>(emptyAdminTourForm);
-  const form = useForm<{ email: string; password: string }>({ defaultValues: { email: "admin@johntours.com", password: "Admin12345" } });
+  const form = useForm<{ email: string; password: string }>({ defaultValues: { email: "", password: "" } });
   const queryClient = useQueryClient();
   const login = useMutation({
-    mutationFn: async (values: { email: string; password: string }) => {
-      try {
-        return (await api.post("/auth/login", values)).data;
-      } catch (error) {
-        if (values.email === "admin@johntours.com" && values.password === "Admin12345") {
-          return { token: "demo-admin-token", user: { email: values.email, name: "Administrador John Tours", role: "ADMIN" } };
-        }
-        throw error;
-      }
-    },
-    onSuccess: (data) => { localStorage.setItem("adminToken", data.token); setToken(data.token); queryClient.invalidateQueries(); }
+    mutationFn: async (values: { email: string; password: string }) => (await api.post("/auth/login", values)).data,
+    onSuccess: (data) => { sessionStorage.setItem("adminToken", data.token); setToken(data.token); queryClient.invalidateQueries(); }
   });
   const tours = useQuery<Tour[]>({
     enabled: Boolean(token),
@@ -1264,7 +1239,7 @@ function AdminPage() {
   if (!token) return <Section title="Login administrador" subtitle="Acceso al panel de gestion de John Tours"><form onSubmit={form.handleSubmit((v) => login.mutate(v))} className="mx-auto grid max-w-md gap-4 rounded-lg border bg-white p-6 shadow-sm"><input className="rounded-lg border px-4 py-3" {...form.register("email")} /><input className="rounded-lg border px-4 py-3" type="password" {...form.register("password")} />{login.isError && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm font-bold text-red-700">Credenciales invalidas.</p>}<button className="rounded-lg bg-[#082447] px-5 py-3 font-black text-white" disabled={login.isPending}>{login.isPending ? "Ingresando..." : "Ingresar"}</button></form></Section>;
   return (
     <Section title="Panel administrativo" subtitle="Gestion de reservas, pagos y operaciones.">
-      <button onClick={() => { localStorage.removeItem("adminToken"); setToken(null); }} className="mb-5 inline-flex items-center gap-2 rounded-lg border bg-white px-4 py-2 font-bold"><LogOut size={18} /> Salir</button>
+      <button onClick={() => { sessionStorage.removeItem("adminToken"); setToken(null); }} className="mb-5 inline-flex items-center gap-2 rounded-lg border bg-white px-4 py-2 font-bold"><LogOut size={18} /> Salir</button>
       <div className="mb-6 grid gap-4 md:grid-cols-4">
         <AdminMetric label="Tours activos" value={String(tours.data?.length ?? 0)} />
         <AdminMetric label="Reservas" value={String(reservations.data?.length ?? 0)} />

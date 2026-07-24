@@ -8,15 +8,16 @@ import { operationsController } from "../controllers/operations.controller";
 import { getIntegrationStatus } from "../config/env";
 import { asyncHandler } from "../middlewares/asyncHandler";
 import { requireAdmin } from "../middlewares/auth";
+import { createRateLimiter } from "../middlewares/security";
 import { validate } from "../middlewares/validate";
 import { businessSettingsSchema, contactSchema, departureSchema, loginSchema, paymentSchema, reservationSchema, testimonialSchema, tourSchema } from "../validators/schemas";
 
 export const routes = Router();
 
 routes.get("/health", (_req, res) => res.json({ status: "ok", service: "John Tours API" }));
-routes.get("/health/integrations", (_req, res) => res.json(getIntegrationStatus()));
+routes.get("/health/integrations", requireAdmin, (_req, res) => res.json(getIntegrationStatus()));
 
-routes.post("/auth/login", validate(loginSchema), asyncHandler(authController.login));
+routes.post("/auth/login", createRateLimiter({ windowMs: 15 * 60_000, max: 5 }), validate(loginSchema), asyncHandler(authController.login));
 
 routes.get("/tours", asyncHandler(tourController.list));
 routes.get("/tours/:id", asyncHandler(tourController.get));
@@ -26,7 +27,7 @@ routes.delete("/tours/:id", requireAdmin, asyncHandler(tourController.remove));
 
 routes.post("/reservations", validate(reservationSchema), asyncHandler(reservationController.create));
 routes.get("/reservations", requireAdmin, asyncHandler(reservationController.list));
-routes.get("/reservations/:id", asyncHandler(reservationController.get));
+routes.get("/reservations/:id", requireAdmin, asyncHandler(reservationController.get));
 
 routes.post("/payments/culqi", validate(paymentSchema), asyncHandler(paymentController.card));
 routes.post("/payments/yape", validate(paymentSchema), asyncHandler(paymentController.yape));

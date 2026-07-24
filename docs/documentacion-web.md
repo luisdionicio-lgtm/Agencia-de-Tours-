@@ -80,6 +80,12 @@ Los extras se cotizan por separado, están sujetos a disponibilidad y no aparece
 
 - El frontend no almacena claves privadas de pago.
 - El backend recalcula importes desde la reserva.
+- El acceso administrativo no se publica en la navegación comercial.
+- Las credenciales demostrativas fueron retiradas del frontend.
+- Los datos temporales de reserva y el token administrativo se conservan solo durante la sesión del navegador.
+- Frontend y API aplican cabeceras contra carga de contenido no autorizado, iframes, rastreo innecesario y detección incorrecta de tipos.
+- La API limita solicitudes generales e intentos de inicio de sesión.
+- El diagnóstico de integraciones y la consulta individual de reservas requieren autenticación administrativa.
 - No se deben guardar claves de Yape, códigos SMS ni contraseñas bancarias.
 - Los pagos reales requieren credenciales propias, webhook, auditoría y pruebas previas.
 - Las políticas de cancelación, cambios, privacidad y reembolso deben publicarse con aprobación empresarial.

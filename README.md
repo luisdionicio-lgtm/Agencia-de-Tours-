@@ -14,6 +14,7 @@ Plataforma web fullstack para promocionar, reservar y administrar tours nacional
 - Testimonios, preguntas frecuentes, historia, promociones escolares y redes sociales.
 - Panel administrativo para tours, reservas, pagos y datos empresariales.
 - Políticas legales y arquitectura preparada para producción.
+- Inicio comercial resumido y protecciones para sesiones, cabeceras, API y acceso administrativo.
 
 ## Tecnología
 
