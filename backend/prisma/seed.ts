@@ -142,6 +142,31 @@ async function main() {
     });
   }
 
+  const departureOffsets: Record<string, { days: number; capacity: number }[]> = {
+    "machu-picchu": [{ days: 12, capacity: 16 }, { days: 35, capacity: 18 }, { days: 68, capacity: 20 }],
+    "disney-orlando": [{ days: 28, capacity: 14 }, { days: 61, capacity: 16 }, { days: 96, capacity: 18 }],
+    oxapampa: [{ days: 9, capacity: 15 }, { days: 30, capacity: 18 }, { days: 58, capacity: 20 }],
+    "ica-y-huacachina": [{ days: 6, capacity: 20 }, { days: 20, capacity: 22 }, { days: 43, capacity: 24 }],
+    egipto: [{ days: 42, capacity: 12 }, { days: 77, capacity: 14 }, { days: 112, capacity: 16 }]
+  };
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
+  for (const [slug, departures] of Object.entries(departureOffsets)) {
+    const tour = await prisma.tour.findUniqueOrThrow({ where: { slug } });
+    for (const departure of departures) {
+      const startDate = new Date(today);
+      startDate.setUTCDate(startDate.getUTCDate() + departure.days);
+      const endDate = new Date(startDate);
+      const durationDays = Number(tour.duration?.match(/\d+/)?.[0] ?? 1);
+      endDate.setUTCDate(endDate.getUTCDate() + Math.max(0, durationDays - 1));
+      await prisma.tourDeparture.upsert({
+        where: { tourId_startDate: { tourId: tour.id, startDate } },
+        update: { endDate, capacity: departure.capacity, status: "ACTIVO" },
+        create: { tourId: tour.id, startDate, endDate, capacity: departure.capacity, availableSlots: departure.capacity }
+      });
+    }
+  }
+
   await prisma.testimonial.deleteMany({ where: { source: "seed-demo" } });
   await prisma.testimonial.createMany({
     data: [

@@ -69,7 +69,9 @@ export const reservationSchema = z.object({
 export const paymentSchema = z.object({
   reservationId: z.coerce.number().int().positive(),
   reservationToken: z.string().uuid(),
-  referenceCode: z.string().min(6).max(80)
+  referenceCode: z.string().min(6).max(80),
+  amount: z.coerce.number().positive().max(100000),
+  paidAt: z.coerce.date().refine((date) => date <= new Date(), "La fecha de pago no puede estar en el futuro")
 });
 
 export const contactSchema = z.object({

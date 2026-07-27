@@ -2,6 +2,7 @@ import { prisma } from "../lib/prisma";
 import { AppError } from "../utils/AppError";
 import type { businessSettingsSchema, departureSchema, testimonialSchema } from "../validators/schemas";
 import type { z } from "zod";
+import { releaseExpiredReservationHolds } from "./reservation.service";
 
 export const operationsService = {
   publicSettings: async () => {
@@ -15,7 +16,10 @@ export const operationsService = {
     if (!await prisma.tour.findUnique({ where: { id: tourId } })) throw new AppError(404, "Tour no encontrado");
     return prisma.tourDeparture.create({ data: { ...data, tourId, availableSlots: data.capacity } });
   },
-  listDepartures: (tourId: number) => prisma.tourDeparture.findMany({ where: { tourId }, orderBy: { startDate: "asc" } }),
+  listDepartures: async (tourId: number) => {
+    await releaseExpiredReservationHolds();
+    return prisma.tourDeparture.findMany({ where: { tourId }, orderBy: { startDate: "asc" } });
+  },
   createTestimonial: (data: z.infer<typeof testimonialSchema>) => prisma.testimonial.create({ data }),
   updateTestimonial: (id: number, data: z.infer<typeof testimonialSchema>) => prisma.testimonial.update({ where: { id }, data }),
   listTestimonialsAdmin: () => prisma.testimonial.findMany({ orderBy: { createdAt: "desc" } })

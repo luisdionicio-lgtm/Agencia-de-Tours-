@@ -12,6 +12,6 @@ export const reservationController = {
     res.json(await reservationService.get(Number(req.params.id)));
   },
   async cancel(req: Request, res: Response) {
-    res.json(await reservationService.cancel(Number(req.params.id)));
+    res.json(await reservationService.cancel(Number(req.params.id), req.user!.id));
   }
 };

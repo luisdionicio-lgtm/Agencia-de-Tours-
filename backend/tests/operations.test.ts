@@ -25,7 +25,7 @@ test("un adelanto exige porcentaje", () => {
 });
 
 test("el registro Yape exige token privado y referencia", () => {
-  const payload = { reservationId: 10, reservationToken: "550e8400-e29b-41d4-a716-446655440000", referenceCode: "JT-000010-2026" };
+  const payload = { reservationId: 10, reservationToken: "550e8400-e29b-41d4-a716-446655440000", referenceCode: "JT-000010-2026", amount: 200, paidAt: "2026-07-26T10:00:00-05:00" };
   assert.equal(paymentSchema.safeParse(payload).success, true);
   assert.equal(paymentSchema.safeParse({ reservationId: 10, referenceCode: "JT-000010-2026" }).success, false);
   assert.equal(paymentSchema.safeParse({ ...payload, reservationToken: "token-publico-invalido" }).success, false);

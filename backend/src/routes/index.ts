@@ -10,6 +10,7 @@ import { asyncHandler } from "../middlewares/asyncHandler";
 import { requireAdmin, requireStaff } from "../middlewares/auth";
 import { createRateLimiter } from "../middlewares/security";
 import { validate } from "../middlewares/validate";
+import { paymentProofUpload } from "../middlewares/paymentProofUpload";
 import { businessSettingsSchema, contactSchema, departureSchema, loginSchema, paymentSchema, reservationSchema, testimonialSchema, tourSchema } from "../validators/schemas";
 
 export const routes = Router();
@@ -30,8 +31,9 @@ routes.get("/reservations", requireStaff, asyncHandler(reservationController.lis
 routes.get("/reservations/:id", requireStaff, asyncHandler(reservationController.get));
 routes.patch("/reservations/:id/cancel", requireStaff, asyncHandler(reservationController.cancel));
 
-routes.post("/payments/yape", createRateLimiter({ windowMs: 15 * 60_000, max: 10 }), validate(paymentSchema), asyncHandler(paymentController.yape));
+routes.post("/payments/yape", createRateLimiter({ windowMs: 15 * 60_000, max: 10 }), paymentProofUpload, asyncHandler(paymentController.yape));
 routes.get("/payments", requireStaff, asyncHandler(paymentController.list));
+routes.get("/payments/:id/proof", requireStaff, asyncHandler(paymentController.proof));
 routes.patch("/payments/:id/confirm", requireStaff, asyncHandler(paymentController.confirm));
 routes.patch("/payments/:id/reject", requireStaff, asyncHandler(paymentController.reject));
 

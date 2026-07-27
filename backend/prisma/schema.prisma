@@ -42,6 +42,14 @@ enum PaymentStatus {
   DEVUELTO
 }
 
+enum PaymentAuditAction {
+  SUBMITTED
+  APPROVED
+  REJECTED
+  CANCELLED
+  HOLD_EXPIRED
+}
+
 enum Currency {
   PEN
   USD
@@ -59,6 +67,8 @@ model User {
   password  String   @db.VarChar(255)
   role      Role     @default(CLIENT)
   createdAt DateTime @default(now()) @map("created_at")
+  validatedPayments Payment[]      @relation("PaymentValidator")
+  paymentAudits     PaymentAudit[] @relation("PaymentAuditActor")
 
   @@map("users")
 }
@@ -148,6 +158,8 @@ model Reservation {
   peopleCount Int               @map("people_count")
   totalAmount Decimal           @map("total_amount") @db.Decimal(10, 2)
   status      ReservationStatus @default(PENDIENTE)
+  holdExpiresAt DateTime?        @map("hold_expires_at")
+  slotsHeld     Boolean          @default(false) @map("slots_held")
   createdAt   DateTime          @default(now()) @map("created_at")
   customer    Customer          @relation(fields: [customerId], references: [id])
   tour        Tour              @relation(fields: [tourId], references: [id])
@@ -166,10 +178,43 @@ model Payment {
   currency          String        @default("PEN") @db.VarChar(10)
   status            PaymentStatus @default(PENDIENTE)
   metadata          Json?         @map("culqi_response")
+  paidAt            DateTime?      @map("paid_at")
+  validatedAt       DateTime?      @map("validated_at")
+  validatedById     Int?           @map("validated_by_id")
   createdAt         DateTime      @default(now()) @map("created_at")
   reservation       Reservation   @relation(fields: [reservationId], references: [id])
+  validatedBy       User?          @relation("PaymentValidator", fields: [validatedById], references: [id], onDelete: SetNull)
+  proof             PaymentProof?
+  audits            PaymentAudit[]
 
   @@map("payments")
+}
+
+model PaymentProof {
+  id        Int      @id @default(autoincrement())
+  paymentId Int      @unique @map("payment_id")
+  fileName  String   @map("file_name") @db.VarChar(180)
+  mimeType  String   @map("mime_type") @db.VarChar(80)
+  sizeBytes Int      @map("size_bytes")
+  data      Bytes    @db.LongBlob
+  createdAt DateTime @default(now()) @map("created_at")
+  payment   Payment  @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+
+  @@map("payment_proofs")
+}
+
+model PaymentAudit {
+  id        Int                @id @default(autoincrement())
+  paymentId Int                @map("payment_id")
+  action    PaymentAuditAction
+  actorId   Int?               @map("actor_id")
+  details   Json?
+  createdAt DateTime           @default(now()) @map("created_at")
+  payment   Payment            @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  actor     User?              @relation("PaymentAuditActor", fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([paymentId, createdAt])
+  @@map("payment_audits")
 }
 
 model ContactMessage {

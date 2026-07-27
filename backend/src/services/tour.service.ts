@@ -3,9 +3,11 @@ import { tourRepository } from "../repositories/tour.repository";
 import { AppError } from "../utils/AppError";
 import type { tourSchema } from "../validators/schemas";
 import type { z } from "zod";
+import { releaseExpiredReservationHolds } from "./reservation.service";
 
 export const tourService = {
-  list(query: Record<string, unknown>) {
+  async list(query: Record<string, unknown>) {
+    await releaseExpiredReservationHolds();
     return tourRepository.findAll({
       type: query.type as TourType | undefined,
       destination: query.destination as string | undefined,
@@ -14,6 +16,7 @@ export const tourService = {
     });
   },
   async get(idOrSlug: string) {
+    await releaseExpiredReservationHolds();
     const tour = Number.isNaN(Number(idOrSlug))
       ? await tourRepository.findBySlug(idOrSlug)
       : await tourRepository.findById(Number(idOrSlug));
@@ -30,4 +33,3 @@ export const tourService = {
     return tourRepository.delete(id);
   }
 };
-

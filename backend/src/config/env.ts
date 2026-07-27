@@ -12,6 +12,7 @@ const envSchema = z.object({
   JWT_EXPIRES_IN: z.string().default("8h"),
   BCRYPT_SALT_ROUNDS: z.coerce.number().int().min(8).max(14).default(10),
   YAPE_RESERVATION_AMOUNT: z.coerce.number().positive().default(200),
+  RESERVATION_HOLD_MINUTES: z.coerce.number().int().min(5).max(1440).default(30),
   ENABLE_DEMO_STAFF: z.coerce.boolean().default(false),
   WORKER_EMAIL: z.string().email().optional(),
   WORKER_PASSWORD: z.string().min(12).optional(),
