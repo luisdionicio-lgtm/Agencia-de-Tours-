@@ -131,6 +131,131 @@ function guideForTour(tour: Tour) {
   };
 }
 
+const reservationCode = (id: string | number) => `JT-${String(id).slice(-6).toUpperCase()}-${new Date().getFullYear()}`;
+
+async function imageAsDataUrl(path: string) {
+  const response = await fetch(path);
+  if (!response.ok) throw new Error("No se pudo cargar el logo");
+  const blob = await response.blob();
+  return await new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(blob);
+  });
+}
+
+async function downloadReservationReceipt(reservation: Reservation) {
+  const { jsPDF } = await import("jspdf");
+  const doc = new jsPDF({ format: "a4", unit: "mm" });
+  const navy: [number, number, number] = [8, 36, 71];
+  const blue: [number, number, number] = [15, 76, 129];
+  const teal: [number, number, number] = [9, 168, 137];
+  const gold: [number, number, number] = [247, 183, 49];
+  const muted: [number, number, number] = [71, 85, 105];
+  const code = reservationCode(reservation.id);
+
+  doc.setFillColor(...navy);
+  doc.rect(0, 0, 210, 43, "F");
+  doc.setFillColor(...gold);
+  doc.rect(0, 43, 210, 2, "F");
+  try {
+    const logo = await imageAsDataUrl("/john-tours-logo-cropped.png");
+    doc.addImage(logo, "PNG", 14, 8, 58, 25, undefined, "FAST");
+  } catch {
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(16);
+    doc.text("JOHN TOURS PERÚ", 14, 23);
+  }
+
+  doc.setTextColor(255, 255, 255);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(15);
+  doc.text("COMPROBANTE DE RESERVA", 196, 17, { align: "right" });
+  doc.setFontSize(9);
+  doc.text(`Código ${code}`, 196, 25, { align: "right" });
+  doc.setFont("helvetica", "normal");
+  doc.text("Documento de separación sujeto a validación", 196, 32, { align: "right" });
+
+  let y = 57;
+  const sectionTitle = (title: string) => {
+    doc.setFillColor(239, 248, 247);
+    doc.roundedRect(14, y - 5, 182, 10, 2, 2, "F");
+    doc.setTextColor(...blue);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(10);
+    doc.text(title.toUpperCase(), 18, y + 1);
+    y += 12;
+  };
+  const field = (label: string, value: string, x: number, width: number) => {
+    doc.setTextColor(...muted);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8);
+    doc.text(label.toUpperCase(), x, y);
+    doc.setTextColor(...navy);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    const lines = doc.splitTextToSize(value || "Por confirmar", width);
+    doc.text(lines, x, y + 5);
+  };
+
+  sectionTitle("Datos de la reserva");
+  field("Cliente", reservation.customer.fullName, 18, 80);
+  field("Documento / contacto", reservation.customer.phone || reservation.customer.email, 108, 80);
+  y += 18;
+  field("Paquete", reservation.tour.title, 18, 80);
+  field("Destino", reservation.tour.destination, 108, 80);
+  y += 18;
+  field("Fecha de viaje", reservation.travelDate, 18, 80);
+  field("Viajeros", String(reservation.peopleCount), 108, 80);
+  y += 20;
+
+  sectionTitle("Pago y validación");
+  field("Método", "Yape", 18, 52);
+  field("Separación", `S/ ${reservationAmount}.00`, 74, 52);
+  field("Estado", reservation.status === "PAGADA" ? "Pago validado" : "Validación pendiente", 132, 56);
+  y += 20;
+
+  const itinerary = reservation.tour.itinerary?.length ? reservation.tour.itinerary : ["Coordinación del itinerario final con un asesor"];
+  sectionTitle("Itinerario del paquete");
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(9);
+  doc.setTextColor(...navy);
+  itinerary.forEach((item, index) => {
+    doc.setFillColor(...teal);
+    doc.circle(19, y - 1.2, 1.4, "F");
+    const lines = doc.splitTextToSize(`Día ${index + 1}: ${item}`, 169);
+    doc.text(lines, 24, y);
+    y += Math.max(7, lines.length * 4.5);
+  });
+  y += 4;
+
+  sectionTitle("Especificaciones y extras");
+  const details = [...(reservation.tour.includes ?? []), ...guideForTour(reservation.tour).extras];
+  doc.setFontSize(8.7);
+  details.slice(0, 10).forEach((item) => {
+    if (y > 268) {
+      doc.addPage();
+      y = 20;
+    }
+    doc.setTextColor(...teal);
+    doc.text("✓", 19, y);
+    doc.setTextColor(...navy);
+    doc.text(doc.splitTextToSize(item, 168), 24, y);
+    y += 6;
+  });
+
+  const footerY = 283;
+  doc.setDrawColor(214, 226, 235);
+  doc.line(14, footerY - 9, 196, footerY - 9);
+  doc.setTextColor(...muted);
+  doc.setFontSize(8);
+  doc.text("Contacto: +51 966 779 705 · johntoursperu29@gmail.com", 14, footerY);
+  doc.text("Conserva este comprobante y envíalo por WhatsApp para la validación final.", 196, footerY, { align: "right" });
+  doc.save(`comprobante-reserva-${code}.pdf`);
+}
+
 function Shell() {
   const [open, setOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -878,13 +1003,26 @@ function YapeReservationPage() {
       }
     }
   });
-  const paymentCode = useMemo(() => `JT-${id.slice(-6)}-${new Date().getFullYear()}`, [id]);
+  const paymentCode = useMemo(() => reservationCode(id), [id]);
   useEffect(() => {
     const payload = `JOHN TOURS PERU\nReserva: ${paymentCode}\nMonto: S/ ${reservationAmount}.00\nYape: ${whatsappDisplay}\nConcepto: Separacion de tour`;
     QRCode.toDataURL(payload, { width: 420, margin: 2, color: { dark: "#6f2c91", light: "#ffffff" }, errorCorrectionLevel: "H" }).then(setQrImage);
   }, [paymentCode]);
   if (!reservation) return <Section title="Preparando tu reserva" subtitle="Estamos generando tu código seguro de pago." />;
-  const message = `Hola John Tours, adjunto mi comprobante Yape de S/ ${reservationAmount} para ${reservation.tour.title}. Código de pago: ${paymentCode}. Reserva #${id}.`;
+  const message = [
+    "COMPROBANTE DE SEPARACIÓN - JOHN TOURS PERÚ",
+    "",
+    `Estimados, soy ${reservation.customer.fullName}. Solicito validar el pago Yape correspondiente a mi reserva.`,
+    `Código de separación: ${paymentCode}`,
+    `Reserva: #${id}`,
+    `Paquete: ${reservation.tour.title}`,
+    `Destino: ${reservation.tour.destination}`,
+    `Fecha de viaje: ${reservation.travelDate}`,
+    `Viajeros: ${reservation.peopleCount}`,
+    `Monto enviado: S/ ${reservationAmount}.00`,
+    "",
+    "Adjuntaré la captura o constancia de Yape en este chat. Agradezco confirmar la recepción, la validación del pago y los siguientes pasos del paquete."
+  ].join("\n");
   const simulatePayment = () => {
     sessionStorage.setItem(`john-reservation-${id}`, JSON.stringify({ ...reservation, status: "PAGADA" }));
     navigate(`/confirmacion/${id}?demo=1`);
@@ -919,6 +1057,25 @@ function buildAppointmentMessage(reservation: Reservation, date: string, time: s
   ].join("\n");
 }
 
+function ReceiptDownload({ reservation }: { reservation: Reservation }) {
+  const [generating, setGenerating] = useState(false);
+  const generate = async () => {
+    setGenerating(true);
+    try {
+      await downloadReservationReceipt(reservation);
+    } finally {
+      setGenerating(false);
+    }
+  };
+  return (
+    <button type="button" onClick={generate} disabled={generating} className="receipt-download mt-7">
+      <FileText />
+      <span><strong>{generating ? "Generando comprobante..." : "Descargar comprobante de reserva"}</strong><small>PDF con logo, código, pago Yape, itinerario y extras</small></span>
+      <Download />
+    </button>
+  );
+}
+
 function AppointmentPlanner({ reservation, isDemo }: { reservation: Reservation; isDemo: boolean }) {
   const tomorrow = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
   const [date, setDate] = useState(tomorrow);
@@ -930,7 +1087,9 @@ function AppointmentPlanner({ reservation, isDemo }: { reservation: Reservation;
   const copyMessage = async () => { await navigator.clipboard.writeText(message); setCopied(true); };
 
   return (
-    <section className="appointment-planner mt-7 text-left">
+    <>
+    <ReceiptDownload reservation={reservation} />
+    <section className="appointment-planner mt-4 text-left">
       <div className="appointment-heading"><span><CalendarDays /></span><div><small>Siguiente paso después de separar</small><h4>Agenda una cita sobre tu paquete</h4><p>Preparamos un mensaje formal con tu código de separación. En la demostración no se envía nada.</p></div></div>
       <div className="appointment-layout">
         <div className="appointment-fields">
@@ -943,6 +1102,7 @@ function AppointmentPlanner({ reservation, isDemo }: { reservation: Reservation;
         <div className="appointment-preview"><div className="appointment-preview-bar"><img src="/whatsapp-logo.svg" alt="" /><span><strong>Mensaje preparado</strong><small>{isDemo ? "Vista de prueba · no se enviará" : "Revísalo antes de abrir WhatsApp"}</small></span></div><pre>{message}</pre><div className="appointment-actions"><button type="button" onClick={copyMessage}><Copy size={17} /> {copied ? "Mensaje copiado" : "Copiar mensaje"}</button>{!isDemo && <a href={buildWhatsAppUrl(message)} target="_blank" rel="noreferrer"><img src="/whatsapp-logo.svg" alt="" /> Abrir WhatsApp con el mensaje</a>}</div>{isDemo && <p className="demo-message-note"><ShieldCheck size={16} /> Prueba segura: el mensaje solo se visualiza y puede copiarse; no se abre WhatsApp ni se envía automáticamente.</p>}</div>
       </div>
     </section>
+    </>
   );
 }
 

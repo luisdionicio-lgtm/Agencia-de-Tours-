@@ -740,6 +740,12 @@ textarea {
 }
 
 .appointment-planner { overflow:hidden;border:1px solid #dce7ef;border-radius:1.35rem;background:linear-gradient(145deg,#fff,#f4f9fc);box-shadow:0 18px 45px rgba(8,36,71,.09) }
+.receipt-download { display:flex;width:100%;align-items:center;gap:.8rem;border:0;border-radius:1rem;background:linear-gradient(105deg,#082447,#0f4c81);padding:1rem 1.1rem;color:#fff;text-align:left;box-shadow:0 14px 32px rgba(8,36,71,.18);transition:transform 180ms ease,box-shadow 180ms ease }
+.receipt-download:hover { transform:translateY(-2px);box-shadow:0 19px 38px rgba(8,36,71,.24) }
+.receipt-download:disabled { cursor:wait;opacity:.7 }
+.receipt-download>span { flex:1 }
+.receipt-download strong,.receipt-download small { display:block }
+.receipt-download small { margin-top:.18rem;color:#bdebe6;font-size:.7rem }
 .appointment-heading { display:flex;gap:1rem;border-bottom:1px solid #dce7ef;background:linear-gradient(100deg,#082447,#0f4c81);padding:1.2rem 1.35rem;color:#fff }
 .appointment-heading>span { display:grid;width:3rem;height:3rem;flex:0 0 3rem;place-items:center;border-radius:.9rem;background:#f7b731;color:#082447 }
 .appointment-heading small { color:#9de7df;font-size:.7rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase }
