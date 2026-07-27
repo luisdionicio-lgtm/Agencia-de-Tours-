@@ -1,46 +1,45 @@
 # John Tours Perú
 
-Plataforma web fullstack para promocionar, reservar y administrar tours nacionales e internacionales con una experiencia clara, visual y orientada a generar confianza.
+Web publicitaria fullstack para captar clientes, mostrar tours nacionales e internacionales y gestionar reservas con separación de S/ 200 por Yape.
 
-## Qué incluye
+## Incluye
 
-- Inicio publicitario adaptable a celulares, tablets y computadoras.
-- Catálogo con filtros, destinos destacados y detalle de cada paquete.
-- Reserva desde S/ 200 mediante Yape, QR informativo y código único.
-- Envío del comprobante y atención directa por WhatsApp.
-- Beneficios exclusivos desbloqueados después de confirmar el pago.
-- Preparación de citas posteriores al pago con mensaje formal y código de separación.
-- PDF personalizado por destino con logo, imagen referencial y servicios extra.
-- Testimonios, preguntas frecuentes, historia, promociones escolares y redes sociales.
-- Panel administrativo para tours, reservas, pagos y datos empresariales.
-- Políticas legales y arquitectura preparada para producción.
-- Inicio comercial resumido y protecciones para sesiones, cabeceras, API y acceso administrativo.
+- Landing adaptable con la paleta azul, turquesa y amarilla del logo.
+- Catálogo, filtros, detalle, itinerario, inclusiones y exclusiones de cada tour.
+- Reserva pendiente con código privado, QR informativo y mensaje formal de WhatsApp.
+- Estados visibles desde la creación hasta la confirmación.
+- Comprobante PDF por reserva con logo, cliente, tour, fecha, viajeros, pago, itinerario y extras.
+- Guías PDF adicionales por destino, visibles únicamente después de confirmar.
+- Panel interno en `/admin` con roles `ADMIN` y `WORKER`.
+- Validación manual de Yape, confirmación/rechazo, cancelación y control transaccional de cupos.
+- Seguridad con JWT, rate limiting, CORS, cabeceras, validación Zod y variables de entorno.
 
 ## Tecnología
 
-- Frontend: Next.js, React, TypeScript, Tailwind CSS y React Query.
+- Frontend: Next.js 15, React 18, TypeScript, Tailwind CSS, React Query y jsPDF.
 - Backend: Node.js, Express, TypeScript, Prisma y MySQL.
-- Pagos preparados: Culqi y flujo manual de Yape.
+- Atención y comprobantes: Yape manual + enlaces oficiales de WhatsApp.
 
-## Ejecución rápida
+## Inicio local
 
 ```bash
 npm run install:all
+npm run prisma:generate
 npm run dev:backend
 npm run dev:frontend
 ```
 
-Variables de entorno: copiar y completar los archivos `.env.example` del frontend y backend.
+Copiar y completar `frontend/.env.example` y `backend/.env.example`. Aplicar las migraciones Prisma antes de iniciar con una base nueva o existente.
 
 ## Validación
 
 ```bash
 npm run build:all
 npm run test --prefix backend
+npm audit --omit=dev
+npm audit --omit=dev --prefix backend
 ```
 
-La descripción funcional y técnica completa está en [docs/documentacion-web.md](docs/documentacion-web.md). La preparación para producción se detalla en [docs/production-checklist.md](docs/production-checklist.md).
+Documentación: [funciones y arquitectura](docs/documentacion-web.md) y [checklist de producción](docs/production-checklist.md).
 
-El informe ejecutivo actualizado está disponible en [docs/Informe_Estado_Web_John_Tours_2026.docx](docs/Informe_Estado_Web_John_Tours_2026.docx).
-
-> Los pagos demostrativos no realizan cobros. Antes de vender deben configurarse los datos empresariales, políticas, credenciales y servicios reales.
+> La web no realiza transferencias ni envía mensajes automáticamente. El cliente confirma la operación en Yape y adjunta su constancia en WhatsApp; el personal autorizado valida el pago desde el panel.

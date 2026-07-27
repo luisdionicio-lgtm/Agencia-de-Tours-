@@ -72,28 +72,28 @@ model Category {
 }
 
 model Tour {
-  id             Int          @id @default(autoincrement())
-  categoryId     Int?         @map("category_id")
-  title          String       @db.VarChar(150)
-  slug           String       @unique @db.VarChar(160)
-  destination    String       @db.VarChar(120)
-  description    String?      @db.Text
-  price          Decimal      @db.Decimal(10, 2)
-  currency       Currency     @default(PEN)
-  paymentMode    PaymentMode  @default(FULL) @map("payment_mode")
-  depositPercent Int?         @map("deposit_percent")
-  duration       String?      @db.VarChar(80)
+  id             Int             @id @default(autoincrement())
+  categoryId     Int?            @map("category_id")
+  title          String          @db.VarChar(150)
+  slug           String          @unique @db.VarChar(160)
+  destination    String          @db.VarChar(120)
+  description    String?         @db.Text
+  price          Decimal         @db.Decimal(10, 2)
+  currency       Currency        @default(PEN)
+  paymentMode    PaymentMode     @default(FULL) @map("payment_mode")
+  depositPercent Int?            @map("deposit_percent")
+  duration       String?         @db.VarChar(80)
   type           TourType
-  availableSlots Int          @default(0) @map("available_slots")
-  imageUrl       String?      @map("image_url") @db.Text
-  imageCredit    String?      @map("image_credit") @db.VarChar(255)
-  isFeatured     Boolean      @default(false) @map("is_featured")
-  status         TourStatus   @default(ACTIVO)
+  availableSlots Int             @default(0) @map("available_slots")
+  imageUrl       String?         @map("image_url") @db.Text
+  imageCredit    String?         @map("image_credit") @db.VarChar(255)
+  isFeatured     Boolean         @default(false) @map("is_featured")
+  status         TourStatus      @default(ACTIVO)
   itinerary      Json?
   includes       Json?
   excludes       Json?
-  createdAt      DateTime     @default(now()) @map("created_at")
-  category       Category?    @relation(fields: [categoryId], references: [id])
+  createdAt      DateTime        @default(now()) @map("created_at")
+  category       Category?       @relation(fields: [categoryId], references: [id])
   images         TourImage[]
   reservations   Reservation[]
   departures     TourDeparture[]
@@ -117,11 +117,11 @@ model TourDeparture {
 }
 
 model TourImage {
-  id        Int    @id @default(autoincrement())
-  tourId    Int    @map("tour_id")
-  imageUrl  String @map("image_url") @db.Text
-  altText   String? @map("alt_text") @db.VarChar(180)
-  tour      Tour   @relation(fields: [tourId], references: [id], onDelete: Cascade)
+  id       Int     @id @default(autoincrement())
+  tourId   Int     @map("tour_id")
+  imageUrl String  @map("image_url") @db.Text
+  altText  String? @map("alt_text") @db.VarChar(180)
+  tour     Tour    @relation(fields: [tourId], references: [id], onDelete: Cascade)
 
   @@map("tour_images")
 }
@@ -158,16 +158,16 @@ model Reservation {
 }
 
 model Payment {
-  id             Int           @id @default(autoincrement())
-  reservationId  Int           @map("reservation_id")
-  externalReference String?    @map("culqi_charge_id") @db.VarChar(150)
-  paymentMethod  PaymentMethod @map("payment_method")
-  amount         Decimal       @db.Decimal(10, 2)
-  currency       String        @default("PEN") @db.VarChar(10)
-  status         PaymentStatus @default(PENDIENTE)
-  metadata       Json?         @map("culqi_response")
-  createdAt      DateTime      @default(now()) @map("created_at")
-  reservation    Reservation   @relation(fields: [reservationId], references: [id])
+  id                Int           @id @default(autoincrement())
+  reservationId     Int           @map("reservation_id")
+  externalReference String?       @map("culqi_charge_id") @db.VarChar(150)
+  paymentMethod     PaymentMethod @map("payment_method")
+  amount            Decimal       @db.Decimal(10, 2)
+  currency          String        @default("PEN") @db.VarChar(10)
+  status            PaymentStatus @default(PENDIENTE)
+  metadata          Json?         @map("culqi_response")
+  createdAt         DateTime      @default(now()) @map("created_at")
+  reservation       Reservation   @relation(fields: [reservationId], references: [id])
 
   @@map("payments")
 }
@@ -197,7 +197,6 @@ model Testimonial {
 
   @@map("testimonials")
 }
-
 
 model BusinessSettings {
   id                 Int      @id @default(1)

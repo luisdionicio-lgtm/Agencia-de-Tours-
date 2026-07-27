@@ -262,7 +262,7 @@ def build_report():
         "Formulario de reserva con datos del pasajero, fecha del viaje y cantidad de personas.",
         "Separación referencial de S/ 200, QR informativo y código único por reserva.",
         "Envío del comprobante por WhatsApp para validación humana; no se confirma automáticamente sin revisión.",
-        "Integración preparada para Culqi y Yape, con cálculo del monto en backend y protección de claves privadas.",
+        "Flujo de separación por Yape con validación manual, código privado y control transaccional de cupos.",
         "Modo demostración que permite presentar el recorrido completo sin realizar cobros.",
     ):
         add_bullet(doc, item)
@@ -303,7 +303,7 @@ def build_report():
     add_heading(doc, "4. Seguridad y límites actuales", 1)
     add_callout(doc, "REGLA DE PRODUCCIÓN", "La demostración no debe confundirse con un cobro real. Antes de aceptar dinero se deben configurar credenciales empresariales, políticas publicadas, webhook, auditoría y pruebas completas.", fill=PALE_GOLD, accent=GOLD)
     for item in (
-        "Las claves privadas de Culqi solo deben existir en el backend y en variables seguras del hosting.",
+        "Las credenciales internas solo deben existir en el backend y en variables seguras del hosting.",
         "No se guardarán claves de Yape, códigos SMS, contraseñas bancarias ni datos de tarjetas.",
         "El backend debe recalcular importes desde la reserva y registrar cada cambio de estado.",
         "Las fotografías y testimonios finales deben contar con autorización verificable.",
@@ -349,7 +349,7 @@ def build_report():
     add_heading(doc, "6. Pendientes antes de publicar", 1)
     priorities = (
         ("Prioridad alta", "Razón social, RUC, dominio, políticas, datos de pago, precios, fechas, cupos e imágenes autorizadas."),
-        ("Prioridad alta", "Credenciales reales de Culqi/Yape, webhook, validación de pagos y pruebas transaccionales."),
+        ("Prioridad alta", "Cuenta empresarial de Yape, validación operativa y pruebas transaccionales."),
         ("Prioridad alta", "Base de datos productiva, copias de seguridad, cambio de credenciales demo y protección del panel administrativo."),
         ("Prioridad media", "Correos corporativos, SMTP, plantillas automáticas y seguimiento de entregabilidad."),
         ("Prioridad media", "SEO técnico, analítica, monitoreo de errores, rendimiento y accesibilidad."),
@@ -376,7 +376,7 @@ def build_report():
     for item in (
         "Nombre de dominio elegido y responsable de su renovación.",
         "Razón social, RUC, dirección, teléfonos y representantes autorizados.",
-        "Número, titular y QR empresarial de Yape; cuenta Culqi propia.",
+        "Número, titular y QR empresarial de Yape verificados.",
         "Lista definitiva de correos corporativos y responsables de cada bandeja.",
         "Tours reales, precios, monedas, fechas, cupos, condiciones e inclusiones.",
         "Políticas aprobadas de privacidad, cambios, cancelación y reembolso.",

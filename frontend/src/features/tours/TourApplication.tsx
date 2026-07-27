@@ -940,7 +940,6 @@ function ReservationPage() {
     placeholderData: demoTours.find((item) => item.id === Number(id)) ?? demoTours[0]
   });
   const form = useForm<ReservationForm>({ resolver: zodResolver(reservationSchema), defaultValues: { peopleCount: 1 } });
-  const people = Number(form.watch("peopleCount") || 1);
   const mutation = useMutation({
     mutationFn: async (values: ReservationForm) => (await api.post("/reservations", { ...reservationSchema.parse(values), tourId: Number(id) })).data,
     onSuccess: (reservation: Reservation) => {
@@ -1397,10 +1396,6 @@ function AdminField({ label, value, onChange, type = "text", required = false }:
 
 function AdminTextArea({ label, value, onChange }: { label: string; value: string; onChange: (value: string) => void }) {
   return <label className="grid gap-1 text-sm font-bold text-slate-700">{label}<textarea className="min-h-32 rounded-lg border px-3 py-3" value={value} onChange={(event) => onChange(event.target.value)} /></label>;
-}
-
-function AdminTable({ title, rows }: { title: string; rows: string[][] }) {
-  return <div className="overflow-hidden rounded-lg border bg-white shadow-sm"><h3 className="border-b p-4 text-xl font-black text-[#082447]">{title}</h3><div className="overflow-x-auto"><table className="w-full text-left text-sm"><tbody>{rows.map((row, i) => <tr key={i} className="border-b last:border-0">{row.map((cell) => <td key={cell} className="px-4 py-3">{cell}</td>)}</tr>)}</tbody></table></div></div>;
 }
 
 function Testimonials() {
