@@ -35,6 +35,7 @@ export type BusinessSettings = {
 export type Reservation = {
   id: number;
   publicToken?: string;
+  isDemo?: boolean;
   travelDate: string;
   peopleCount: number;
   totalAmount: string | number;

@@ -12,9 +12,9 @@ const nextConfig = {
       "img-src 'self' data: blob: https:",
       "font-src 'self' data: https://fonts.gstatic.com",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-      `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""} https://checkout.culqi.com`,
+      `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""}`,
       "connect-src 'self' https: wss:",
-      "frame-src 'self' https://checkout.culqi.com",
+      "frame-src 'self'",
       process.env.NODE_ENV === "production" ? "upgrade-insecure-requests" : ""
     ].filter(Boolean).join("; ");
 

@@ -17,7 +17,12 @@ const paymentMoney = (payment: Payment) => payment.reservation?.tour ? tourMoney
 const whatsapp = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "51966779705";
 const whatsappDisplay = "+51 966 779 705";
 const reservationAmount = 200;
-const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+const isStaticPresentation = !process.env.NEXT_PUBLIC_API_URL;
+const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true" || isStaticPresentation;
+const demoStaffAccounts = [
+  { email: "admin.demo@johntours.pe", password: "JohnToursAdmin2026!", role: "ADMIN" as const },
+  { email: "trabajador.demo@johntours.pe", password: "JohnToursWorker2026!", role: "WORKER" as const }
+];
 const tiktokUrl = "https://www.tiktok.com/@johntoursperu?_r=1&_t=ZS-988zH7tdmDM";
 const instagramUrl = "https://www.instagram.com/johntoursperu?igsh=dm1hc3ZweGlkeWR2";
 
@@ -114,6 +119,26 @@ const demoTestimonials = [
   { name: "Carlos Medina", location: "Trujillo", comment: "Me atendieron por WhatsApp con paciencia y todo el itinerario estuvo explicado antes de pagar.", rating: 5 },
   { name: "Rosa Salazar", location: "Arequipa", comment: "El paquete familiar a Orlando supero nuestras expectativas. Se sintio seguro de inicio a fin.", rating: 5 }
 ];
+
+const demoReservation: Reservation = {
+  id: 2026001,
+  isDemo: true,
+  travelDate: "2026-08-15",
+  peopleCount: 2,
+  totalAmount: 3100,
+  status: "PENDIENTE",
+  customer: { fullName: "Cliente de demostración", email: "cliente.demo@example.com", phone: "999 999 999" },
+  tour: demoTours[0]
+};
+
+const demoPayment: Payment = {
+  id: 5001,
+  status: "PENDIENTE",
+  paymentMethod: "YAPE",
+  amount: 200,
+  externalReference: "JT-DEMO-2026",
+  reservation: demoReservation
+};
 
 const postPaymentGuides = [
   { match: ["machu", "cusco"], key: "cusco", label: "Cusco y Machu Picchu", imageUrl: destinationImage("photo-1587595431973-160d0d94add1"), extras: ["Traslado privado", "Noche adicional", "Almuerzo regional", "Asistencia de altura", "Sesión fotográfica", "Seguro de viaje"] },
@@ -315,6 +340,7 @@ function Shell() {
             {links.map(([label, to]) => <NavLink key={label} to={to}>{label}</NavLink>)}
           </nav>
           <div className="hidden items-center gap-3 lg:flex">
+            <Link to="/admin" className="internal-header-link">Acceso interno</Link>
             <Link to="/tours" className="btn-gold rounded-lg px-5 py-2.5 text-sm font-bold shadow-sm">Reservar ahora</Link>
           </div>
           <button className="menu-button rounded-xl border border-slate-200 p-2 lg:hidden" onClick={() => setOpen(!open)} aria-label={open ? "Cerrar menu" : "Abrir menu"} aria-expanded={open}>
@@ -324,6 +350,7 @@ function Shell() {
         {open && (
           <div className="mobile-menu border-t border-slate-200 bg-white/95 px-4 py-4 backdrop-blur-xl lg:hidden">
             {links.map(([label, to]) => <Link key={label} to={to} onClick={() => setOpen(false)} className="block rounded-lg px-3 py-3 font-semibold text-slate-700">{label}</Link>)}
+            <Link to="/admin" onClick={() => setOpen(false)} className="block rounded-lg bg-[#edf6fb] px-3 py-3 font-black text-[#0f4c81]">Acceso interno</Link>
           </div>
         )}
       </header>
@@ -467,6 +494,7 @@ function Home() {
       <Testimonials />
       <SocialSpotlight />
       <FrequentlyAskedQuestions />
+      <InternalAccessPromo />
       <section id="contacto" className="formal-cta px-4 py-20 text-white">
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
           <div className="max-w-3xl"><span className="text-sm font-black uppercase tracking-[0.2em] text-amber-300">El mundo te espera</span><h2 className="mt-3 text-4xl font-black md:text-5xl">Tu próxima aventura empieza hoy</h2><p className="mt-4 text-lg text-slate-200">Reserva con John Tours y vive una experiencia diseñada para sorprenderte.</p></div>
@@ -474,6 +502,20 @@ function Home() {
         </div>
       </section>
     </>
+  );
+}
+
+function InternalAccessPromo() {
+  return (
+    <section className="internal-access-section px-4 py-12">
+      <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-5 rounded-2xl p-6 md:flex-row md:items-center md:p-8">
+        <div className="flex max-w-3xl gap-4">
+          <span className="internal-access-icon"><ShieldCheck /></span>
+          <div><small>Área privada de John Tours</small><h2>Acceso para administradores y trabajadores</h2><p>Gestiona tours, revisa reservas y valida comprobantes Yape según los permisos asignados.</p></div>
+        </div>
+        <Link to="/admin" className="internal-access-button">Ingresar al panel <ArrowRight size={18} /></Link>
+      </div>
+    </section>
   );
 }
 
@@ -928,6 +970,7 @@ const textFromList = (value?: string[]) => (value ?? []).join("\n");
 function ReservationPage() {
   const { id = "" } = useParams();
   const navigate = useNavigate();
+  const [reservationError, setReservationError] = useState("");
   const { data: tour } = useQuery<Tour>({
     queryKey: ["tour", id],
     queryFn: async () => {
@@ -948,10 +991,13 @@ function ReservationPage() {
     },
     onError: () => {
       if (!tour) return;
+      if (!isDemoMode) {
+        setReservationError("No pudimos conectar con el sistema de reservas. Intenta nuevamente o solicita ayuda por WhatsApp.");
+        return;
+      }
       const values = form.getValues();
       const localId = Date.now();
-      const localReservation: Reservation = { id: localId, travelDate: values.travelDate, peopleCount: Number(values.peopleCount), totalAmount: reservationAmount, status: "PENDIENTE", customer: { fullName: values.fullName, email: values.email, phone: values.phone }, tour };
-      if (!isDemoMode) return;
+      const localReservation: Reservation = { id: localId, isDemo: true, travelDate: values.travelDate, peopleCount: Number(values.peopleCount), totalAmount: reservationAmount, status: "PENDIENTE", customer: { fullName: values.fullName, email: values.email, phone: values.phone }, tour };
       sessionStorage.setItem(`john-reservation-${localId}`, JSON.stringify(localReservation));
       navigate(`/pago/${localId}`);
     }
@@ -959,8 +1005,10 @@ function ReservationPage() {
   return (
     <Section title="Reserva tu viaje" subtitle={tour ? `${tour.title} · Separa tu cupo con S/ ${reservationAmount}` : "Completa tus datos"}>
       <form onSubmit={form.handleSubmit((v) => mutation.mutate(v))} className="mx-auto grid max-w-3xl gap-4 rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+        {isDemoMode && <div className="demo-mode-banner"><Sparkles size={18} /><span><strong>Demostración interactiva</strong><small>Podrás recorrer la reserva, Yape, estados, PDF y panel sin realizar pagos ni guardar datos en una base real.</small></span></div>}
         {["fullName", "email", "phone", "documentNumber"].map((name) => <input key={name} className="rounded-lg border px-4 py-3" placeholder={{ fullName: "Nombre completo", email: "Correo", phone: "Telefono", documentNumber: "Documento" }[name]} {...form.register(name as never)} />)}
         <div className="grid gap-4 sm:grid-cols-2"><input className="rounded-lg border px-4 py-3" type="date" {...form.register("travelDate")} /><input className="rounded-lg border px-4 py-3" type="number" min="1" {...form.register("peopleCount")} /></div>
+        {reservationError && <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700">{reservationError}</p>}
         <button className="rounded-lg bg-[#082447] px-5 py-3 font-black text-white" disabled={mutation.isPending}>{mutation.isPending ? "Creando reserva..." : "Crear reserva pendiente"}</button>
       </form>
     </Section>
@@ -1134,7 +1182,16 @@ function AdminPage() {
   const form = useForm<{ email: string; password: string }>({ defaultValues: { email: "", password: "" } });
   const queryClient = useQueryClient();
   const login = useMutation({
-    mutationFn: async (values: { email: string; password: string }) => (await api.post("/auth/login", values)).data,
+    mutationFn: async (values: { email: string; password: string }) => {
+      try {
+        return (await api.post("/auth/login", values)).data;
+      } catch (error) {
+        if (!isDemoMode) throw error;
+        const account = demoStaffAccounts.find((candidate) => candidate.email === values.email.trim().toLowerCase() && candidate.password === values.password);
+        if (!account) throw error;
+        return { token: `demo-${account.role.toLowerCase()}-session`, user: { id: account.role === "ADMIN" ? 1 : 2, name: account.role === "ADMIN" ? "Administrador demo" : "Trabajador demo", email: account.email, role: account.role } };
+      }
+    },
     onSuccess: (data) => {
       sessionStorage.setItem("adminToken", data.token);
       sessionStorage.setItem("staffRole", data.user.role);
@@ -1161,7 +1218,7 @@ function AdminPage() {
       try {
         return (await api.get("/reservations")).data;
       } catch {
-        return [];
+        return token?.startsWith("demo-") ? [demoReservation] : [];
       }
     }
   });
@@ -1172,7 +1229,7 @@ function AdminPage() {
       try {
         return (await api.get("/payments")).data;
       } catch {
-        return [];
+        return token?.startsWith("demo-") ? [demoPayment] : [];
       }
     }
   });
@@ -1254,7 +1311,7 @@ function AdminPage() {
       queryClient.setQueryData<Tour[]>(["tours", undefined], (current = demoTours) => current.filter((tour) => tour.id !== id));
     }
   });
-  if (!token) return <Section title="Login administrador" subtitle="Acceso al panel de gestion de John Tours"><form onSubmit={form.handleSubmit((v) => login.mutate(v))} className="mx-auto grid max-w-md gap-4 rounded-lg border bg-white p-6 shadow-sm"><input className="rounded-lg border px-4 py-3" {...form.register("email")} /><input className="rounded-lg border px-4 py-3" type="password" {...form.register("password")} />{login.isError && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm font-bold text-red-700">Credenciales invalidas.</p>}<button className="rounded-lg bg-[#082447] px-5 py-3 font-black text-white" disabled={login.isPending}>{login.isPending ? "Ingresando..." : "Ingresar"}</button></form></Section>;
+  if (!token) return <Section title="Acceso interno" subtitle="Inicio de sesión exclusivo para administradores y trabajadores de John Tours."><div className="internal-login-layout"><aside><span><ShieldCheck /></span><small>Panel protegido</small><h3>Operación organizada y con permisos</h3><p>Los administradores gestionan tours y configuración. Los trabajadores revisan reservas y validan comprobantes Yape.</p><ul><li>Sesión privada y temporal</li><li>Permisos separados por rol</li><li>Acciones de pago registradas</li></ul></aside><form onSubmit={form.handleSubmit((v) => login.mutate(v))}><div className="internal-login-heading"><strong>Iniciar sesión</strong><small>Usa la cuenta asignada por John Tours</small></div>{isDemoMode && <div className="demo-mode-banner"><Sparkles size={18} /><span><strong>Panel de demostración</strong><small>Las cuentas de prueba solo controlan datos ficticios de esta presentación.</small></span></div>}<label>Correo corporativo<input placeholder="nombre@johntours.pe" autoComplete="username" {...form.register("email")} /></label><label>Contraseña<input type="password" placeholder="••••••••••••" autoComplete="current-password" {...form.register("password")} /></label>{login.isError && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm font-bold text-red-700">Credenciales inválidas o servicio no disponible.</p>}<button disabled={login.isPending}>{login.isPending ? "Verificando acceso..." : "Ingresar al panel"}</button><Link to="/" className="internal-login-back">Volver a la web pública</Link></form></div></Section>;
   if (staffRole === "WORKER") return <Section title="Panel de operaciones" subtitle="Validación de reservas y comprobantes Yape."><button onClick={() => { sessionStorage.removeItem("adminToken"); sessionStorage.removeItem("staffRole"); setToken(null); }} className="mb-5 inline-flex items-center gap-2 rounded-lg border bg-white px-4 py-2 font-bold"><LogOut size={18} /> Salir</button><div className="mb-6 grid gap-4 md:grid-cols-3"><AdminMetric label="Reservas" value={String(reservations.data?.length ?? 0)} /><AdminMetric label="Pagos" value={String(payments.data?.length ?? 0)} /><AdminMetric label="Rol" value="Asesor" /></div><div className="grid gap-6 lg:grid-cols-2"><ReservationsQueue reservations={reservations.data ?? []} token={token} /><PaymentsQueue payments={payments.data ?? []} token={token} /></div></Section>;
   return (
     <Section title="Panel administrativo" subtitle="Gestion de reservas, pagos y operaciones.">
@@ -1331,8 +1388,14 @@ function AdminMetric({ label, value }: { label: string; value: string }) {
 function ReservationsQueue({ reservations, token }: { reservations: Reservation[]; token: string }) {
   const queryClient = useQueryClient();
   const cancel = useMutation({
-    mutationFn: async (id: number) => (await api.patch(`/reservations/${id}/cancel`, {}, { headers: { Authorization: `Bearer ${token}` } })).data,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["adminReservations"] })
+    mutationFn: async (id: number) => token.startsWith("demo-") ? { id } : (await api.patch(`/reservations/${id}/cancel`, {}, { headers: { Authorization: `Bearer ${token}` } })).data,
+    onSuccess: (_data, id) => {
+      if (token.startsWith("demo-")) {
+        queryClient.setQueryData<Reservation[]>(["adminReservations", token], (current = []) => current.map((reservation) => reservation.id === id ? { ...reservation, status: "CANCELADA" } : reservation));
+        return;
+      }
+      queryClient.invalidateQueries({ queryKey: ["adminReservations"] });
+    }
   });
   return (
     <section className="admin-queue">
@@ -1348,8 +1411,14 @@ function ReservationsQueue({ reservations, token }: { reservations: Reservation[
 function PaymentsQueue({ payments, token }: { payments: Payment[]; token: string }) {
   const queryClient = useQueryClient();
   const decide = useMutation({
-    mutationFn: async ({ id, decision }: { id: number; decision: "confirm" | "reject" }) => (await api.patch(`/payments/${id}/${decision}`, {}, { headers: { Authorization: `Bearer ${token}` } })).data,
-    onSuccess: () => {
+    mutationFn: async ({ id, decision }: { id: number; decision: "confirm" | "reject" }) => token.startsWith("demo-") ? { id, decision } : (await api.patch(`/payments/${id}/${decision}`, {}, { headers: { Authorization: `Bearer ${token}` } })).data,
+    onSuccess: (_data, variables) => {
+      if (token.startsWith("demo-")) {
+        const paid = variables.decision === "confirm";
+        queryClient.setQueryData<Payment[]>(["adminPayments", token], (current = []) => current.map((payment) => payment.id === variables.id ? { ...payment, status: paid ? "EXITOSO" : "RECHAZADO" } : payment));
+        queryClient.setQueryData<Reservation[]>(["adminReservations", token], (current = []) => current.map((reservation) => reservation.id === demoReservation.id ? { ...reservation, status: paid ? "PAGADA" : "RECHAZADA" } : reservation));
+        return;
+      }
       queryClient.invalidateQueries({ queryKey: ["adminPayments"] });
       queryClient.invalidateQueries({ queryKey: ["adminReservations"] });
       queryClient.invalidateQueries({ queryKey: ["adminTours"] });
