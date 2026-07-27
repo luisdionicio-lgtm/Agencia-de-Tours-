@@ -8,13 +8,13 @@ La web funciona como una vitrina publicitaria breve: presenta confianza, permite
 
 1. El visitante conoce la propuesta, historia, canales oficiales y redes sociales.
 2. Filtra tours nacionales o internacionales y revisa el paquete.
-3. Completa sus datos, fecha y número de viajeros.
-4. El backend crea una reserva `PENDIENTE`; todavía no descuenta cupos.
+3. Elige una salida programada con cupos reales y completa sus datos.
+4. El backend crea una reserva `PENDIENTE`, descuenta temporalmente los cupos y fija el vencimiento del bloqueo.
 5. La web muestra S/ 200, código de separación, QR e instrucciones de Yape.
-6. Al preparar el envío se registra un comprobante `PENDIENTE` mediante el token privado de la reserva.
-7. WhatsApp se abre con un mensaje formal prellenado; el usuario adjunta la constancia y decide enviarla.
+6. El cliente registra código de operación, fecha, monto y un archivo JPG, PNG, WebP o PDF de hasta 5 MB.
+7. El servidor valida tipo, tamaño y firma real del archivo; WhatsApp queda como aviso opcional y no se envía automáticamente.
 8. Un administrador o trabajador valida o rechaza el pago.
-9. Al confirmar, la reserva pasa a `PAGADA` y los cupos se descuentan una sola vez.
+9. Al confirmar, la reserva pasa a `PAGADA`, conserva el cupo ya retenido y registra al trabajador responsable.
 10. La confirmación habilita el comprobante PDF, la guía del destino, extras y la preparación de una cita.
 
 Estados comunicados al cliente:
@@ -42,16 +42,27 @@ Ruta discreta: `/admin`. No se publica en la navegación comercial y no contiene
 
 Las cuentas se crean desde el seed y variables de entorno. `ENABLE_DEMO_STAFF` debe permanecer desactivado en producción.
 
-## Cupos e idempotencia
+## Salidas, cupos e idempotencia
 
-- Crear una reserva no modifica cupos.
+- Cada tour muestra su mejor época referencial y un calendario de salidas.
+- Crear una reserva retiene cupos durante `RESERVATION_HOLD_MINUTES` (30 minutos por defecto).
+- Si el bloqueo vence, la reserva se cancela y los cupos se liberan al consultar o procesar operaciones.
 - Confirmar un pago Yape usa una transacción Prisma.
 - La actualización exige que pago y reserva sigan pendientes.
-- El descuento exige disponibilidad suficiente.
-- Repetir una confirmación devuelve conflicto y no descuenta nuevamente.
-- Rechazar un comprobante no modifica cupos.
+- El bloqueo inicial exige disponibilidad suficiente.
+- Repetir una confirmación devuelve conflicto y no modifica cupos nuevamente.
+- Rechazar un comprobante libera los cupos retenidos.
 - Cancelar una reserva pagada devuelve sus cupos una sola vez.
 - Los cupos nunca se decrementan mediante valores enviados por el frontend.
+
+El panel muestra alertas de pocos cupos y salidas próximas. El administrador puede programar nuevas salidas con inicio, fin y capacidad.
+
+## Auditoría Yape
+
+- El comprobante se guarda en la base de datos y solo puede descargarse con sesión de personal.
+- Se registran monto, código, fecha del pago, fecha de validación y trabajador responsable.
+- El historial conserva envío, aprobación, rechazo, cancelación y vencimiento del bloqueo.
+- Los archivos se sirven con `nosniff` y nombre saneado.
 
 ## Seguridad
 
@@ -90,7 +101,7 @@ Backend:
 
 - `DATABASE_URL`, `FRONTEND_URL`
 - `JWT_SECRET`, `JWT_EXPIRES_IN`, `BCRYPT_SALT_ROUNDS`
-- `YAPE_RESERVATION_AMOUNT`
+- `YAPE_RESERVATION_AMOUNT`, `RESERVATION_HOLD_MINUTES`
 - `ADMIN_EMAIL`, `ADMIN_PASSWORD`
 - `ENABLE_DEMO_STAFF`, `WORKER_EMAIL`, `WORKER_PASSWORD`
 - `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `MAIL_FROM`

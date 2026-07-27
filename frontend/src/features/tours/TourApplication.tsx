@@ -25,6 +25,9 @@ const demoStaffAccounts = [
 ];
 const tiktokUrl = "https://www.tiktok.com/@johntoursperu?_r=1&_t=ZS-988zH7tdmDM";
 const instagramUrl = "https://www.instagram.com/johntoursperu?igsh=dm1hc3ZweGlkeWR2";
+type TourDeparture = NonNullable<Tour["departures"]>[number];
+const demoDepartures = (_tourId: number, items: [number, string, string, number, number][]): TourDeparture[] =>
+  items.map(([id, startDate, endDate, capacity, availableSlots]) => ({ id, startDate, endDate, capacity, availableSlots, status: "ACTIVO" }));
 
 const destinationImage = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1400&q=85`;
 
@@ -51,7 +54,8 @@ const demoTours: Tour[] = [
     status: "ACTIVO",
     itinerary: ["Recepcion en Cusco y aclimatacion", "Valle Sagrado con guia local", "Ingreso a Machu Picchu", "Retorno asistido a Lima"],
     includes: ["Hotel seleccionado", "Traslados", "Guiado profesional", "Asistencia John Tours"],
-    excludes: ["Gastos personales", "Servicios no mencionados"]
+    excludes: ["Gastos personales", "Servicios no mencionados"],
+    departures: demoDepartures(1, [[101, "2026-08-08", "2026-08-11", 16, 3], [102, "2026-08-29", "2026-09-01", 18, 11], [103, "2026-10-10", "2026-10-13", 20, 18]])
   },
   {
     id: 2,
@@ -65,7 +69,8 @@ const demoTours: Tour[] = [
     availableSlots: 12,
     imageUrl: destinationImage("photo-1597466599360-3b9775841aec"),
     isFeatured: true,
-    status: "ACTIVO"
+    status: "ACTIVO",
+    departures: demoDepartures(2, [[201, "2026-08-24", "2026-08-30", 14, 4], [202, "2026-09-26", "2026-10-02", 16, 12], [203, "2026-11-07", "2026-11-13", 18, 18]])
   },
   {
     id: 3,
@@ -79,7 +84,8 @@ const demoTours: Tour[] = [
     availableSlots: 20,
     imageUrl: "https://inforegion.pe/wp-content/uploads/2025/01/baf433a5-dji_20241114093018_0090_d-2.jpg",
     isFeatured: false,
-    status: "ACTIVO"
+    status: "ACTIVO",
+    departures: demoDepartures(3, [[301, "2026-08-05", "2026-08-07", 15, 2], [302, "2026-08-26", "2026-08-28", 18, 10], [303, "2026-09-23", "2026-09-25", 20, 19]])
   },
   {
     id: 4,
@@ -93,7 +99,8 @@ const demoTours: Tour[] = [
     availableSlots: 25,
     imageUrl: "https://www.stampbystamptravel.com/wp-content/uploads/2025/02/laguna-huacachina-ica.jpg.webp",
     isFeatured: true,
-    status: "ACTIVO"
+    status: "ACTIVO",
+    departures: demoDepartures(4, [[401, "2026-08-02", "2026-08-03", 20, 3], [402, "2026-08-16", "2026-08-17", 22, 14], [403, "2026-09-08", "2026-09-09", 24, 22]])
   },
   {
     id: 5,
@@ -110,7 +117,8 @@ const demoTours: Tour[] = [
     status: "ACTIVO",
     itinerary: ["Llegada asistida a El Cairo", "Piramides de Giza y Esfinge con guia", "Museo Egipcio y barrio historico", "Crucero por el Nilo y templos principales", "Retorno con seguimiento del asesor"],
     includes: ["Hoteles seleccionados", "Traslados programados", "Guia especializado en espanol", "Asistencia John Tours por WhatsApp"],
-    excludes: ["Vuelos internacionales", "Gastos personales", "Propinas y servicios no mencionados"]
+    excludes: ["Vuelos internacionales", "Gastos personales", "Propinas y servicios no mencionados"],
+    departures: demoDepartures(5, [[501, "2026-09-07", "2026-09-14", 12, 2], [502, "2026-10-12", "2026-10-19", 14, 9], [503, "2026-11-16", "2026-11-23", 16, 15]])
   }
 ];
 
@@ -137,6 +145,9 @@ const demoPayment: Payment = {
   paymentMethod: "YAPE",
   amount: 200,
   externalReference: "JT-DEMO-2026",
+  paidAt: "2026-07-27T10:30:00-05:00",
+  proof: { id: 1, fileName: "comprobante-yape-demo.png", mimeType: "image/png", sizeBytes: 245000, createdAt: "2026-07-27T10:31:00-05:00" },
+  audits: [{ id: 1, action: "SUBMITTED", createdAt: "2026-07-27T10:31:00-05:00" }],
   reservation: demoReservation
 };
 
@@ -868,6 +879,39 @@ function CatalogSignal({ icon, title, text }: { icon: React.ReactNode; title: st
   );
 }
 
+const seasonByDestination = [
+  { terms: ["cusco", "machu"], months: "mayo a septiembre", reason: "Temporada seca, cielos más despejados y mejores condiciones para caminatas." },
+  { terms: ["orlando", "disney"], months: "enero a mayo y septiembre a noviembre", reason: "Clima más moderado y, fuera de feriados, menor afluencia." },
+  { terms: ["oxapampa"], months: "mayo a octubre", reason: "Menos lluvias para cataratas, rutas y actividades al aire libre." },
+  { terms: ["ica", "huacachina"], months: "abril a noviembre", reason: "Días soleados y temperaturas cómodas para dunas y bodegas." },
+  { terms: ["egipto", "cairo"], months: "octubre a abril", reason: "Temperaturas más agradables para recorridos históricos." }
+];
+const tourSeason = (tour: Tour) => {
+  const value = `${tour.title} ${tour.destination}`.toLowerCase();
+  return seasonByDestination.find((item) => item.terms.some((term) => value.includes(term))) ?? { months: "según disponibilidad", reason: "Un asesor confirmará clima, demanda y condiciones antes de reservar." };
+};
+const departureDate = (value: string) => new Date(`${value.slice(0, 10)}T12:00:00`);
+const departureUrgency = (departure: TourDeparture) => {
+  const days = Math.ceil((departureDate(departure.startDate).getTime() - Date.now()) / 86_400_000);
+  if (departure.availableSlots <= 4) return { label: "Pocos cupos", tone: "low" };
+  if (days >= 0 && days <= 14) return { label: "Salida próxima", tone: "soon" };
+  return null;
+};
+
+function DepartureCalendar({ tour, selectedId, onSelect }: { tour: Tour; selectedId?: number; onSelect?: (departure: TourDeparture) => void }) {
+  const departures = (tour.departures ?? []).filter((departure) => departure.status === "ACTIVO" && departure.availableSlots > 0);
+  if (!departures.length) return <div className="departure-empty"><CalendarDays /><span><strong>Fechas por confirmar</strong><small>Solicita la próxima salida programada a un asesor.</small></span></div>;
+  return <div className="departure-calendar">{departures.map((departure) => {
+    const urgency = departureUrgency(departure);
+    return <button key={departure.id} type="button" className={selectedId === departure.id ? "selected" : ""} onClick={() => onSelect?.(departure)} disabled={!onSelect}>
+      <span className="departure-month">{new Intl.DateTimeFormat("es-PE", { month: "short" }).format(departureDate(departure.startDate))}</span>
+      <strong>{new Intl.DateTimeFormat("es-PE", { day: "2-digit" }).format(departureDate(departure.startDate))}</strong>
+      <small>{departure.availableSlots} de {departure.capacity} cupos</small>
+      {urgency && <em data-tone={urgency.tone}>{urgency.label}</em>}
+    </button>;
+  })}</div>;
+}
+
 function TourDetail() {
   const { id = "" } = useParams();
   const { data: tour, isLoading } = useQuery<Tour>({
@@ -885,6 +929,7 @@ function TourDetail() {
   const itinerary = tour.itinerary ?? ["Recepcion y briefing", "Experiencia principal", "Actividades libres", "Retorno"];
   const includes = tour.includes ?? ["Asistencia", "Traslados", "Guia"];
   const excludes = tour.excludes ?? ["Gastos personales"];
+  const season = tourSeason(tour);
   return (
     <Section title={tour.title} subtitle={`${tour.destination} · ${tour.duration}`}>
       <div className="grid gap-8 lg:grid-cols-[1.2fr_.8fr]">
@@ -909,6 +954,14 @@ function TourDetail() {
           <a href={buildWhatsAppUrl(whatsappMessages.tour(tour))} className="mt-3 flex items-center justify-center gap-2 rounded-lg bg-[#1fa463] px-5 py-3 font-black text-white"><MessageCircle /> Cotizar por WhatsApp</a>
         </aside>
       </div>
+      <section className="scheduled-departures">
+        <div className="scheduled-heading">
+          <span><CalendarDays /></span>
+          <div><small>Cupos y salidas programadas</small><h3>Fechas con disponibilidad real</h3><p>Los cupos se actualizan con cada reserva y se bloquean temporalmente mientras validamos el Yape.</p></div>
+          <div className="best-season"><strong>Mejor época</strong><span>{season.months}</span><small>{season.reason}</small></div>
+        </div>
+        <DepartureCalendar tour={tour} />
+      </section>
       <div className="mt-10 grid gap-6 lg:grid-cols-3">
         <Info title="Descripcion" items={[tour.description ?? "Experiencia seleccionada por John Tours."]} />
         <Info title="Itinerario" items={itinerary} ordered />
@@ -971,6 +1024,7 @@ function ReservationPage() {
   const { id = "" } = useParams();
   const navigate = useNavigate();
   const [reservationError, setReservationError] = useState("");
+  const [selectedDeparture, setSelectedDeparture] = useState<TourDeparture>();
   const { data: tour } = useQuery<Tour>({
     queryKey: ["tour", id],
     queryFn: async () => {
@@ -983,8 +1037,15 @@ function ReservationPage() {
     placeholderData: demoTours.find((item) => item.id === Number(id)) ?? demoTours[0]
   });
   const form = useForm<ReservationForm>({ resolver: zodResolver(reservationSchema), defaultValues: { peopleCount: 1 } });
+  useEffect(() => {
+    const first = tour?.departures?.find((departure) => departure.status === "ACTIVO" && departure.availableSlots > 0);
+    if (first && !selectedDeparture) {
+      setSelectedDeparture(first);
+      form.setValue("travelDate", first.startDate.slice(0, 10));
+    }
+  }, [tour, selectedDeparture, form]);
   const mutation = useMutation({
-    mutationFn: async (values: ReservationForm) => (await api.post("/reservations", { ...reservationSchema.parse(values), tourId: Number(id) })).data,
+    mutationFn: async (values: ReservationForm) => (await api.post("/reservations", { ...reservationSchema.parse(values), tourId: Number(id), departureId: selectedDeparture?.id })).data,
     onSuccess: (reservation: Reservation) => {
       sessionStorage.setItem(`john-reservation-${reservation.id}`, JSON.stringify(reservation));
       navigate(`/pago/${reservation.id}`);
@@ -997,7 +1058,7 @@ function ReservationPage() {
       }
       const values = form.getValues();
       const localId = Date.now();
-      const localReservation: Reservation = { id: localId, isDemo: true, travelDate: values.travelDate, peopleCount: Number(values.peopleCount), totalAmount: reservationAmount, status: "PENDIENTE", customer: { fullName: values.fullName, email: values.email, phone: values.phone }, tour };
+      const localReservation: Reservation = { id: localId, isDemo: true, travelDate: values.travelDate, peopleCount: Number(values.peopleCount), totalAmount: reservationAmount, status: "PENDIENTE", slotsHeld: true, holdExpiresAt: new Date(Date.now() + 30 * 60_000).toISOString(), departure: selectedDeparture, customer: { fullName: values.fullName, email: values.email, phone: values.phone }, tour };
       sessionStorage.setItem(`john-reservation-${localId}`, JSON.stringify(localReservation));
       navigate(`/pago/${localId}`);
     }
@@ -1007,7 +1068,9 @@ function ReservationPage() {
       <form onSubmit={form.handleSubmit((v) => mutation.mutate(v))} className="mx-auto grid max-w-3xl gap-4 rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
         {isDemoMode && <div className="demo-mode-banner"><Sparkles size={18} /><span><strong>Demostración interactiva</strong><small>Podrás recorrer la reserva, Yape, estados, PDF y panel sin realizar pagos ni guardar datos en una base real.</small></span></div>}
         {["fullName", "email", "phone", "documentNumber"].map((name) => <input key={name} className="rounded-lg border px-4 py-3" placeholder={{ fullName: "Nombre completo", email: "Correo", phone: "Telefono", documentNumber: "Documento" }[name]} {...form.register(name as never)} />)}
-        <div className="grid gap-4 sm:grid-cols-2"><input className="rounded-lg border px-4 py-3" type="date" {...form.register("travelDate")} /><input className="rounded-lg border px-4 py-3" type="number" min="1" {...form.register("peopleCount")} /></div>
+        {tour && <div className="reservation-departures"><strong>Selecciona tu salida</strong><DepartureCalendar tour={tour} selectedId={selectedDeparture?.id} onSelect={(departure) => { setSelectedDeparture(departure); form.setValue("travelDate", departure.startDate.slice(0, 10)); }} /></div>}
+        <div className="grid gap-4 sm:grid-cols-2"><input className="rounded-lg border px-4 py-3" type="date" readOnly={Boolean(tour?.departures?.length)} {...form.register("travelDate")} /><input className="rounded-lg border px-4 py-3" type="number" min="1" max={selectedDeparture?.availableSlots ?? tour?.availableSlots ?? 20} {...form.register("peopleCount")} /></div>
+        <div className="hold-notice"><Clock3 /><span><strong>Bloqueo temporal de 30 minutos</strong><small>Al crear la reserva, tus cupos se apartan mientras John Tours recibe y valida el comprobante Yape.</small></span></div>
         {reservationError && <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700">{reservationError}</p>}
         <button className="rounded-lg bg-[#082447] px-5 py-3 font-black text-white" disabled={mutation.isPending}>{mutation.isPending ? "Creando reserva..." : "Crear reserva pendiente"}</button>
       </form>
@@ -1039,6 +1102,14 @@ function YapeReservationPage() {
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
   const [proofRegistered, setProofRegistered] = useState(false);
+  const [proofFile, setProofFile] = useState<File>();
+  const [proofError, setProofError] = useState("");
+  const [proofPending, setProofPending] = useState(false);
+  const [referenceCode, setReferenceCode] = useState("");
+  const [paidAt, setPaidAt] = useState(() => {
+    const now = new Date(Date.now() - new Date().getTimezoneOffset() * 60_000);
+    return now.toISOString().slice(0, 16);
+  });
   const [qrImage, setQrImage] = useState("");
   const { data: reservation } = useQuery<Reservation>({
     queryKey: ["reservation", id],
@@ -1075,19 +1146,34 @@ function YapeReservationPage() {
     sessionStorage.setItem(`john-reservation-${id}`, JSON.stringify({ ...reservation, status: "PAGADA" }));
     navigate(`/confirmacion/${id}?demo=1`);
   };
-  const openProofMessage = async () => {
-    const target = buildWhatsAppUrl(message);
-    if (reservation.publicToken) {
-      try {
-        await api.post("/payments/yape", { reservationId: reservation.id, reservationToken: reservation.publicToken, referenceCode: paymentCode });
-        setProofRegistered(true);
-      } catch {
-        // Si ya fue registrado, WhatsApp sigue disponible para adjuntar la constancia.
+  const registerProof = async () => {
+    setProofError("");
+    if (!proofFile) return setProofError("Adjunta una imagen o PDF del comprobante.");
+    if (!["image/jpeg", "image/png", "image/webp", "application/pdf"].includes(proofFile.type) || proofFile.size > 5 * 1024 * 1024) return setProofError("Usa JPG, PNG, WebP o PDF de hasta 5 MB.");
+    if (referenceCode.trim().length < 6) return setProofError("Ingresa el código de operación mostrado por Yape.");
+    setProofPending(true);
+    try {
+      if (reservation.publicToken) {
+        const data = new FormData();
+        data.append("reservationId", String(reservation.id));
+        data.append("reservationToken", reservation.publicToken);
+        data.append("referenceCode", referenceCode.trim());
+        data.append("amount", String(reservationAmount));
+        data.append("paidAt", new Date(paidAt).toISOString());
+        data.append("proof", proofFile);
+        await api.post("/payments/yape", data);
+      } else if (!isDemoMode) {
+        throw new Error("Reserva sin token");
       }
+      setProofRegistered(true);
+    } catch {
+      setProofError(isDemoMode ? "" : "No se pudo registrar el comprobante. Verifica que la reserva siga vigente.");
+      if (isDemoMode) setProofRegistered(true);
+    } finally {
+      setProofPending(false);
     }
-    window.open(target, "_blank", "noopener,noreferrer");
   };
-  return <Section title="Separa tu tour con Yape" subtitle="Sin pasarela ni datos de tarjeta: paga S/ 200, conserva tu código y envía el comprobante a un asesor."><div className="mx-auto max-w-6xl"><ReservationProgress currentStep={proofRegistered ? 3 : 1} /><div className="grid gap-6 lg:grid-cols-[.9fr_1.1fr]"><article className="yape-card"><div className="yape-brand"><img src="/yape-logo.png" alt="Yape" /><span>Reserva con Yape</span></div><span className="yape-label">Reserva protegida</span><h3>{reservation.tour.title}</h3><p>{reservation.customer.fullName} · {reservation.peopleCount} viajero(s)</p><div className="reservation-price"><small>Monto de separación</small><strong>S/ {reservationAmount}.00</strong></div><div className="payment-code"><div><small>Código único de pago</small><strong>{paymentCode}</strong></div><button onClick={() => { navigator.clipboard.writeText(paymentCode); setCopied(true); }} aria-label="Copiar código"><Copy size={18} /> {copied ? "Copiado" : "Copiar"}</button></div><div className="secure-note"><ShieldCheck /> <span>Incluye este código en el mensaje del comprobante. John Tours validará titular, monto y reserva antes de confirmar el cupo. El PDF se habilita únicamente después de esa confirmación.</span></div>{isDemoMode && <button type="button" onClick={simulatePayment} className="demo-payment"><Sparkles /><span><strong>Demostración para presentación</strong><small>Simular validación del pago y ver la reserva confirmada</small></span><ArrowRight /></button>}</article><article className="qr-card yape-qr-card"><div className="yape-qr-heading"><img src="/yape-logo.png" alt="Yape" /><span><strong>Yapea tu reserva</strong><small>Escanea el código QR</small></span></div>{qrImage && <div className="yape-qr-frame"><img src={qrImage} alt={`QR de instrucciones para la reserva ${paymentCode}`} /></div>}<strong>Yape asociado al contacto: {whatsappDisplay}</strong><p>El QR contiene las instrucciones y el código único. Antes de transferir, verifica en Yape que el titular corresponda a la cuenta empresarial comunicada por John Tours.</p><button type="button" onClick={openProofMessage} className="whatsapp-cta"><MessageCircle /> {proofRegistered ? "Comprobante registrado · abrir WhatsApp" : "Registrar y enviar comprobante por WhatsApp"}</button><small>La reserva se confirma después de la validación manual del comprobante.</small></article></div></div></Section>;
+  return <Section title="Separa tu tour con Yape" subtitle="Paga S/ 200 y registra tu constancia para mantener el cupo mientras un trabajador la valida."><div className="mx-auto max-w-6xl"><ReservationProgress currentStep={proofRegistered ? 3 : 1} /><div className="grid gap-6 lg:grid-cols-[.9fr_1.1fr]"><article className="yape-card"><div className="yape-brand"><img src="/yape-logo.png" alt="Yape" /><span>Reserva con Yape</span></div><span className="yape-label">Cupo retenido temporalmente</span><h3>{reservation.tour.title}</h3><p>{reservation.customer.fullName} · {reservation.peopleCount} viajero(s)</p><div className="reservation-price"><small>Monto de separación</small><strong>S/ {reservationAmount}.00</strong></div><div className="payment-code"><div><small>Código único de reserva</small><strong>{paymentCode}</strong></div><button onClick={() => { navigator.clipboard.writeText(paymentCode); setCopied(true); }} aria-label="Copiar código"><Copy size={18} /> {copied ? "Copiado" : "Copiar"}</button></div><div className="secure-note"><ShieldCheck /> <span>El cupo se mantiene por 30 minutos. La confirmación final requiere validar monto, fecha, código y archivo.</span></div>{isDemoMode && proofRegistered && <button type="button" onClick={simulatePayment} className="demo-payment"><Sparkles /><span><strong>Demostración para presentación</strong><small>Simular la aprobación del trabajador</small></span><ArrowRight /></button>}</article><article className="qr-card proof-upload-card"><div className="yape-qr-heading"><img src="/yape-logo.png" alt="Yape" /><span><strong>Registra tu comprobante</strong><small>Proceso seguro y verificable</small></span></div><div className="proof-fields"><label>Código de operación<input value={referenceCode} onChange={(event) => setReferenceCode(event.target.value)} placeholder="Ej. 75709508" /></label><label>Fecha y hora del pago<input type="datetime-local" max={paidAt} value={paidAt} onChange={(event) => setPaidAt(event.target.value)} /></label><label className="proof-file"><FileText /><span><strong>{proofFile?.name ?? "Adjuntar captura o PDF"}</strong><small>JPG, PNG, WebP o PDF · máximo 5 MB</small></span><input type="file" accept=".jpg,.jpeg,.png,.webp,.pdf,image/jpeg,image/png,image/webp,application/pdf" onChange={(event) => setProofFile(event.target.files?.[0])} /></label></div>{proofError && <p className="proof-error">{proofError}</p>}<button type="button" onClick={registerProof} className="proof-submit" disabled={proofPending || proofRegistered}><ShieldCheck /> {proofPending ? "Registrando..." : proofRegistered ? "Comprobante registrado" : "Registrar para validación"}</button>{proofRegistered && <a href={buildWhatsAppUrl(message)} target="_blank" rel="noreferrer" className="whatsapp-cta"><MessageCircle /> Avisar a un asesor por WhatsApp</a>}<small>El archivo se valida por contenido y tamaño. Solo el personal autorizado puede visualizarlo.</small></article></div></div></Section>;
 }
 
 function appointmentSeparationCode(reservationId: string) {
@@ -1312,7 +1398,7 @@ function AdminPage() {
     }
   });
   if (!token) return <Section title="Acceso interno" subtitle="Inicio de sesión exclusivo para administradores y trabajadores de John Tours."><div className="internal-login-layout"><aside><span><ShieldCheck /></span><small>Panel protegido</small><h3>Operación organizada y con permisos</h3><p>Los administradores gestionan tours y configuración. Los trabajadores revisan reservas y validan comprobantes Yape.</p><ul><li>Sesión privada y temporal</li><li>Permisos separados por rol</li><li>Acciones de pago registradas</li></ul></aside><form onSubmit={form.handleSubmit((v) => login.mutate(v))}><div className="internal-login-heading"><strong>Iniciar sesión</strong><small>Usa la cuenta asignada por John Tours</small></div>{isDemoMode && <div className="demo-mode-banner"><Sparkles size={18} /><span><strong>Panel de demostración</strong><small>Las cuentas de prueba solo controlan datos ficticios de esta presentación.</small></span></div>}<label>Correo corporativo<input placeholder="nombre@johntours.pe" autoComplete="username" {...form.register("email")} /></label><label>Contraseña<input type="password" placeholder="••••••••••••" autoComplete="current-password" {...form.register("password")} /></label>{login.isError && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm font-bold text-red-700">Credenciales inválidas o servicio no disponible.</p>}<button disabled={login.isPending}>{login.isPending ? "Verificando acceso..." : "Ingresar al panel"}</button><Link to="/" className="internal-login-back">Volver a la web pública</Link></form></div></Section>;
-  if (staffRole === "WORKER") return <Section title="Panel de operaciones" subtitle="Validación de reservas y comprobantes Yape."><button onClick={() => { sessionStorage.removeItem("adminToken"); sessionStorage.removeItem("staffRole"); setToken(null); }} className="mb-5 inline-flex items-center gap-2 rounded-lg border bg-white px-4 py-2 font-bold"><LogOut size={18} /> Salir</button><div className="mb-6 grid gap-4 md:grid-cols-3"><AdminMetric label="Reservas" value={String(reservations.data?.length ?? 0)} /><AdminMetric label="Pagos" value={String(payments.data?.length ?? 0)} /><AdminMetric label="Rol" value="Asesor" /></div><div className="grid gap-6 lg:grid-cols-2"><ReservationsQueue reservations={reservations.data ?? []} token={token} /><PaymentsQueue payments={payments.data ?? []} token={token} /></div></Section>;
+  if (staffRole === "WORKER") return <Section title="Panel de operaciones" subtitle="Validación de reservas, salidas y comprobantes Yape."><button onClick={() => { sessionStorage.removeItem("adminToken"); sessionStorage.removeItem("staffRole"); setToken(null); }} className="mb-5 inline-flex items-center gap-2 rounded-lg border bg-white px-4 py-2 font-bold"><LogOut size={18} /> Salir</button><div className="mb-6 grid gap-4 md:grid-cols-3"><AdminMetric label="Reservas" value={String(reservations.data?.length ?? 0)} /><AdminMetric label="Pagos" value={String(payments.data?.length ?? 0)} /><AdminMetric label="Rol" value="Asesor" /></div><DepartureOperations tours={tours.data ?? []} token={token} canCreate={false} /><div className="grid gap-6 lg:grid-cols-2"><ReservationsQueue reservations={reservations.data ?? []} token={token} /><PaymentsQueue payments={payments.data ?? []} token={token} /></div></Section>;
   return (
     <Section title="Panel administrativo" subtitle="Gestion de reservas, pagos y operaciones.">
       <button onClick={() => { sessionStorage.removeItem("adminToken"); sessionStorage.removeItem("staffRole"); setToken(null); }} className="mb-5 inline-flex items-center gap-2 rounded-lg border bg-white px-4 py-2 font-bold"><LogOut size={18} /> Salir</button>
@@ -1322,6 +1408,7 @@ function AdminPage() {
         <AdminMetric label="Pagos" value={String(payments.data?.length ?? 0)} />
         <AdminMetric label="Modo reserva" value="Yape + validación" />
       </div>
+      <DepartureOperations tours={tours.data ?? []} token={token} canCreate />
       <BusinessSettingsPanel />
       <div className="mb-6 grid gap-6 xl:grid-cols-[.95fr_1.05fr]">
         <form onSubmit={(event) => { event.preventDefault(); saveTour.mutate(); }} className="rounded-lg border bg-white p-6 shadow-sm">
@@ -1381,6 +1468,37 @@ function AdminPage() {
   );
 }
 
+function DepartureOperations({ tours, token, canCreate }: { tours: Tour[]; token: string; canCreate: boolean }) {
+  const queryClient = useQueryClient();
+  const [tourId, setTourId] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [capacity, setCapacity] = useState("12");
+  const alerts = tours.flatMap((tour) => (tour.departures ?? []).map((departure) => ({ tour, departure, urgency: departureUrgency(departure) }))).filter((item) => item.urgency);
+  const create = useMutation({
+    mutationFn: async () => {
+      const payload = { startDate, endDate: endDate || null, capacity: Number(capacity), status: "ACTIVO" };
+      if (!token.startsWith("demo-")) return (await api.post(`/tours/${tourId}/departures`, payload)).data as TourDeparture;
+      return { id: Date.now(), startDate, endDate, capacity: Number(capacity), availableSlots: Number(capacity), status: "ACTIVO" } as TourDeparture;
+    },
+    onSuccess: (departure) => {
+      queryClient.setQueryData<Tour[]>(["adminTours", token], (current = []) => current.map((tour) => tour.id === Number(tourId) ? { ...tour, departures: [...(tour.departures ?? []), departure].sort((a, b) => a.startDate.localeCompare(b.startDate)) } : tour));
+      setStartDate(""); setEndDate(""); setCapacity("12");
+    }
+  });
+  return <section className="departure-operations">
+    <div className="departure-alerts"><div><small>Alertas operativas</small><h3>Salidas próximas y pocos cupos</h3></div><span>{alerts.length}</span></div>
+    <div className="departure-alert-list">{alerts.slice(0, 6).map(({ tour, departure, urgency }) => <article key={`${tour.id}-${departure.id}`}><CalendarDays /><div><strong>{tour.title}</strong><small>{new Intl.DateTimeFormat("es-PE", { dateStyle: "medium" }).format(departureDate(departure.startDate))} · {departure.availableSlots} cupos</small></div><em data-tone={urgency?.tone}>{urgency?.label}</em></article>)}{!alerts.length && <p>Sin alertas activas.</p>}</div>
+    {canCreate && <form onSubmit={(event) => { event.preventDefault(); create.mutate(); }}>
+      <label>Tour<select required value={tourId} onChange={(event) => setTourId(event.target.value)}><option value="">Seleccionar</option>{tours.map((tour) => <option key={tour.id} value={tour.id}>{tour.title}</option>)}</select></label>
+      <label>Inicio<input type="date" required value={startDate} onChange={(event) => setStartDate(event.target.value)} /></label>
+      <label>Fin<input type="date" min={startDate} value={endDate} onChange={(event) => setEndDate(event.target.value)} /></label>
+      <label>Capacidad<input type="number" min="1" required value={capacity} onChange={(event) => setCapacity(event.target.value)} /></label>
+      <button disabled={create.isPending}>{create.isPending ? "Guardando..." : "Programar salida"}</button>
+    </form>}
+  </section>;
+}
+
 function AdminMetric({ label, value }: { label: string; value: string }) {
   return <div className="rounded-lg border bg-white p-5 shadow-sm"><span className="text-sm font-bold uppercase text-slate-500">{label}</span><strong className="mt-2 block text-2xl text-[#082447]">{value}</strong></div>;
 }
@@ -1415,7 +1533,7 @@ function PaymentsQueue({ payments, token }: { payments: Payment[]; token: string
     onSuccess: (_data, variables) => {
       if (token.startsWith("demo-")) {
         const paid = variables.decision === "confirm";
-        queryClient.setQueryData<Payment[]>(["adminPayments", token], (current = []) => current.map((payment) => payment.id === variables.id ? { ...payment, status: paid ? "EXITOSO" : "RECHAZADO" } : payment));
+        queryClient.setQueryData<Payment[]>(["adminPayments", token], (current = []) => current.map((payment) => payment.id === variables.id ? { ...payment, status: paid ? "EXITOSO" : "RECHAZADO", validatedAt: new Date().toISOString(), validatedBy: { name: "Trabajador demo", email: "trabajador.demo@johntours.pe" }, audits: [...(payment.audits ?? []), { id: Date.now(), action: paid ? "APPROVED" : "REJECTED", createdAt: new Date().toISOString(), actor: { name: "Trabajador demo", email: "trabajador.demo@johntours.pe" } }] } : payment));
         queryClient.setQueryData<Reservation[]>(["adminReservations", token], (current = []) => current.map((reservation) => reservation.id === demoReservation.id ? { ...reservation, status: paid ? "PAGADA" : "RECHAZADA" } : reservation));
         return;
       }
@@ -1424,11 +1542,18 @@ function PaymentsQueue({ payments, token }: { payments: Payment[]; token: string
       queryClient.invalidateQueries({ queryKey: ["adminTours"] });
     }
   });
+  const openProof = async (payment: Payment) => {
+    if (token.startsWith("demo-")) return;
+    const response = await api.get(`/payments/${payment.id}/proof`, { responseType: "blob" });
+    const url = URL.createObjectURL(response.data);
+    window.open(url, "_blank", "noopener,noreferrer");
+    window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
+  };
   return (
     <section className="admin-queue">
       <h3>Validación de pagos Yape</h3>
       <div>
-        {payments.map((payment) => <article key={payment.id}><div><span className={`status-badge status-${payment.status.toLowerCase()}`}>{payment.status}</span><strong>Pago #{payment.id} · {payment.externalReference ?? "Sin referencia"}</strong><p>{payment.reservation?.customer.fullName} · {paymentMoney(payment)} · Yape</p></div>{payment.status === "PENDIENTE" && <div className="admin-actions"><button type="button" onClick={() => decide.mutate({ id: payment.id, decision: "confirm" })} disabled={decide.isPending}>Confirmar</button><button type="button" onClick={() => decide.mutate({ id: payment.id, decision: "reject" })} disabled={decide.isPending}>Rechazar</button></div>}</article>)}
+        {payments.map((payment) => <article key={payment.id} className="payment-review"><div><span className={`status-badge status-${payment.status.toLowerCase()}`}>{payment.status}</span><strong>Pago #{payment.id} · {payment.externalReference ?? "Sin referencia"}</strong><p>{payment.reservation?.customer.fullName} · {paymentMoney(payment)} · {payment.paidAt ? new Intl.DateTimeFormat("es-PE", { dateStyle: "short", timeStyle: "short" }).format(new Date(payment.paidAt)) : "Fecha no registrada"}</p>{payment.validatedBy && <p>Validado por {payment.validatedBy.name}</p>}<div className="payment-history">{payment.audits?.map((audit) => <small key={audit.id}>{({ SUBMITTED: "Enviado", APPROVED: "Aprobado", REJECTED: "Rechazado", CANCELLED: "Cancelado", HOLD_EXPIRED: "Bloqueo vencido" } as const)[audit.action]} · {new Intl.DateTimeFormat("es-PE", { dateStyle: "short", timeStyle: "short" }).format(new Date(audit.createdAt))}{audit.actor ? ` · ${audit.actor.name}` : ""}</small>)}</div></div><div className="admin-actions">{payment.proof && <button type="button" onClick={() => openProof(payment)}>Ver archivo</button>}{payment.status === "PENDIENTE" && <><button type="button" onClick={() => decide.mutate({ id: payment.id, decision: "confirm" })} disabled={decide.isPending}>Confirmar</button><button type="button" onClick={() => decide.mutate({ id: payment.id, decision: "reject" })} disabled={decide.isPending}>Rechazar</button></>}</div></article>)}
         {!payments.length && <p className="admin-empty">No hay comprobantes pendientes.</p>}
       </div>
     </section>

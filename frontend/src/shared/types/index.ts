@@ -40,6 +40,9 @@ export type Reservation = {
   peopleCount: number;
   totalAmount: string | number;
   status: "PENDIENTE" | "PAGADA" | "RECHAZADA" | "CANCELADA";
+  holdExpiresAt?: string;
+  slotsHeld?: boolean;
+  departure?: Tour["departures"] extends (infer D)[] | undefined ? D : never;
   customer: { fullName: string; email: string; phone?: string };
   tour: Tour;
 };
@@ -50,5 +53,10 @@ export type Payment = {
   paymentMethod: "CARD" | "YAPE";
   amount: string | number;
   externalReference?: string;
+  paidAt?: string;
+  validatedAt?: string;
+  validatedBy?: { name: string; email: string };
+  proof?: { id: number; fileName: string; mimeType: string; sizeBytes: number; createdAt: string };
+  audits?: { id: number; action: "SUBMITTED" | "APPROVED" | "REJECTED" | "CANCELLED" | "HOLD_EXPIRED"; createdAt: string; actor?: { name: string; email: string } }[];
   reservation?: Reservation;
 };
