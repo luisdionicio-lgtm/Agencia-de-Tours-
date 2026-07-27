@@ -991,6 +991,7 @@ function YapeReservationPage() {
   const { id = "" } = useParams();
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
+  const [proofRegistered, setProofRegistered] = useState(false);
   const [qrImage, setQrImage] = useState("");
   const { data: reservation } = useQuery<Reservation>({
     queryKey: ["reservation", id],
@@ -1027,7 +1028,19 @@ function YapeReservationPage() {
     sessionStorage.setItem(`john-reservation-${id}`, JSON.stringify({ ...reservation, status: "PAGADA" }));
     navigate(`/confirmacion/${id}?demo=1`);
   };
-  return <Section title="Separa tu tour con Yape" subtitle="Sin pasarela ni datos de tarjeta: paga S/ 200, conserva tu código y envía el comprobante a un asesor."><div className="mx-auto max-w-6xl"><ReservationProgress currentStep={1} /><div className="grid gap-6 lg:grid-cols-[.9fr_1.1fr]"><article className="yape-card"><div className="yape-brand"><img src="/yape-logo.png" alt="Yape" /><span>Reserva con Yape</span></div><span className="yape-label">Reserva protegida</span><h3>{reservation.tour.title}</h3><p>{reservation.customer.fullName} · {reservation.peopleCount} viajero(s)</p><div className="reservation-price"><small>Monto de separación</small><strong>S/ {reservationAmount}.00</strong></div><div className="payment-code"><div><small>Código único de pago</small><strong>{paymentCode}</strong></div><button onClick={() => { navigator.clipboard.writeText(paymentCode); setCopied(true); }} aria-label="Copiar código"><Copy size={18} /> {copied ? "Copiado" : "Copiar"}</button></div><div className="secure-note"><ShieldCheck /> <span>Incluye este código en el mensaje del comprobante. John Tours validará titular, monto y reserva antes de confirmar el cupo. El PDF se habilita únicamente después de esa confirmación.</span></div>{isDemoMode && <button type="button" onClick={simulatePayment} className="demo-payment"><Sparkles /><span><strong>Demostración para presentación</strong><small>Simular validación del pago y ver la reserva confirmada</small></span><ArrowRight /></button>}</article><article className="qr-card yape-qr-card"><div className="yape-qr-heading"><img src="/yape-logo.png" alt="Yape" /><span><strong>Yapea tu reserva</strong><small>Escanea el código QR</small></span></div>{qrImage && <div className="yape-qr-frame"><img src={qrImage} alt={`QR de instrucciones para la reserva ${paymentCode}`} /></div>}<strong>Yape asociado al contacto: {whatsappDisplay}</strong><p>El QR contiene las instrucciones y el código único. Antes de transferir, verifica en Yape que el titular corresponda a la cuenta empresarial comunicada por John Tours.</p><a href={buildWhatsAppUrl(message)} target="_blank" rel="noreferrer" className="whatsapp-cta"><MessageCircle /> Enviar comprobante por WhatsApp</a><small>La reserva se confirma después de la validación manual del comprobante.</small></article></div></div></Section>;
+  const openProofMessage = async () => {
+    const target = buildWhatsAppUrl(message);
+    if (reservation.publicToken) {
+      try {
+        await api.post("/payments/yape", { reservationId: reservation.id, reservationToken: reservation.publicToken, referenceCode: paymentCode });
+        setProofRegistered(true);
+      } catch {
+        // Si ya fue registrado, WhatsApp sigue disponible para adjuntar la constancia.
+      }
+    }
+    window.open(target, "_blank", "noopener,noreferrer");
+  };
+  return <Section title="Separa tu tour con Yape" subtitle="Sin pasarela ni datos de tarjeta: paga S/ 200, conserva tu código y envía el comprobante a un asesor."><div className="mx-auto max-w-6xl"><ReservationProgress currentStep={proofRegistered ? 3 : 1} /><div className="grid gap-6 lg:grid-cols-[.9fr_1.1fr]"><article className="yape-card"><div className="yape-brand"><img src="/yape-logo.png" alt="Yape" /><span>Reserva con Yape</span></div><span className="yape-label">Reserva protegida</span><h3>{reservation.tour.title}</h3><p>{reservation.customer.fullName} · {reservation.peopleCount} viajero(s)</p><div className="reservation-price"><small>Monto de separación</small><strong>S/ {reservationAmount}.00</strong></div><div className="payment-code"><div><small>Código único de pago</small><strong>{paymentCode}</strong></div><button onClick={() => { navigator.clipboard.writeText(paymentCode); setCopied(true); }} aria-label="Copiar código"><Copy size={18} /> {copied ? "Copiado" : "Copiar"}</button></div><div className="secure-note"><ShieldCheck /> <span>Incluye este código en el mensaje del comprobante. John Tours validará titular, monto y reserva antes de confirmar el cupo. El PDF se habilita únicamente después de esa confirmación.</span></div>{isDemoMode && <button type="button" onClick={simulatePayment} className="demo-payment"><Sparkles /><span><strong>Demostración para presentación</strong><small>Simular validación del pago y ver la reserva confirmada</small></span><ArrowRight /></button>}</article><article className="qr-card yape-qr-card"><div className="yape-qr-heading"><img src="/yape-logo.png" alt="Yape" /><span><strong>Yapea tu reserva</strong><small>Escanea el código QR</small></span></div>{qrImage && <div className="yape-qr-frame"><img src={qrImage} alt={`QR de instrucciones para la reserva ${paymentCode}`} /></div>}<strong>Yape asociado al contacto: {whatsappDisplay}</strong><p>El QR contiene las instrucciones y el código único. Antes de transferir, verifica en Yape que el titular corresponda a la cuenta empresarial comunicada por John Tours.</p><button type="button" onClick={openProofMessage} className="whatsapp-cta"><MessageCircle /> {proofRegistered ? "Comprobante registrado · abrir WhatsApp" : "Registrar y enviar comprobante por WhatsApp"}</button><small>La reserva se confirma después de la validación manual del comprobante.</small></article></div></div></Section>;
 }
 
 function appointmentSeparationCode(reservationId: string) {
@@ -1117,12 +1130,19 @@ function ConfirmationPage() {
 
 function AdminPage() {
   const [token, setToken] = useState(sessionStorage.getItem("adminToken"));
+  const [staffRole, setStaffRole] = useState<"ADMIN" | "WORKER">((sessionStorage.getItem("staffRole") as "ADMIN" | "WORKER") || "ADMIN");
   const [tourForm, setTourForm] = useState<AdminTourForm>(emptyAdminTourForm);
   const form = useForm<{ email: string; password: string }>({ defaultValues: { email: "", password: "" } });
   const queryClient = useQueryClient();
   const login = useMutation({
     mutationFn: async (values: { email: string; password: string }) => (await api.post("/auth/login", values)).data,
-    onSuccess: (data) => { sessionStorage.setItem("adminToken", data.token); setToken(data.token); queryClient.invalidateQueries(); }
+    onSuccess: (data) => {
+      sessionStorage.setItem("adminToken", data.token);
+      sessionStorage.setItem("staffRole", data.user.role);
+      setToken(data.token);
+      setStaffRole(data.user.role);
+      queryClient.invalidateQueries();
+    }
   });
   const tours = useQuery<Tour[]>({
     enabled: Boolean(token),
@@ -1236,9 +1256,10 @@ function AdminPage() {
     }
   });
   if (!token) return <Section title="Login administrador" subtitle="Acceso al panel de gestion de John Tours"><form onSubmit={form.handleSubmit((v) => login.mutate(v))} className="mx-auto grid max-w-md gap-4 rounded-lg border bg-white p-6 shadow-sm"><input className="rounded-lg border px-4 py-3" {...form.register("email")} /><input className="rounded-lg border px-4 py-3" type="password" {...form.register("password")} />{login.isError && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm font-bold text-red-700">Credenciales invalidas.</p>}<button className="rounded-lg bg-[#082447] px-5 py-3 font-black text-white" disabled={login.isPending}>{login.isPending ? "Ingresando..." : "Ingresar"}</button></form></Section>;
+  if (staffRole === "WORKER") return <Section title="Panel de operaciones" subtitle="Validación de reservas y comprobantes Yape."><button onClick={() => { sessionStorage.removeItem("adminToken"); sessionStorage.removeItem("staffRole"); setToken(null); }} className="mb-5 inline-flex items-center gap-2 rounded-lg border bg-white px-4 py-2 font-bold"><LogOut size={18} /> Salir</button><div className="mb-6 grid gap-4 md:grid-cols-3"><AdminMetric label="Reservas" value={String(reservations.data?.length ?? 0)} /><AdminMetric label="Pagos" value={String(payments.data?.length ?? 0)} /><AdminMetric label="Rol" value="Asesor" /></div><div className="grid gap-6 lg:grid-cols-2"><ReservationsQueue reservations={reservations.data ?? []} token={token} /><PaymentsQueue payments={payments.data ?? []} token={token} /></div></Section>;
   return (
     <Section title="Panel administrativo" subtitle="Gestion de reservas, pagos y operaciones.">
-      <button onClick={() => { sessionStorage.removeItem("adminToken"); setToken(null); }} className="mb-5 inline-flex items-center gap-2 rounded-lg border bg-white px-4 py-2 font-bold"><LogOut size={18} /> Salir</button>
+      <button onClick={() => { sessionStorage.removeItem("adminToken"); sessionStorage.removeItem("staffRole"); setToken(null); }} className="mb-5 inline-flex items-center gap-2 rounded-lg border bg-white px-4 py-2 font-bold"><LogOut size={18} /> Salir</button>
       <div className="mb-6 grid gap-4 md:grid-cols-4">
         <AdminMetric label="Tours activos" value={String(tours.data?.length ?? 0)} />
         <AdminMetric label="Reservas" value={String(reservations.data?.length ?? 0)} />
@@ -1296,8 +1317,8 @@ function AdminPage() {
         </div>
       </div>
       <div className="grid gap-6 lg:grid-cols-2">
-        <AdminTable title="Reservas" rows={(reservations.data ?? []).map((r) => [`#${r.id}`, r.customer.fullName, r.tour.title, r.status, tourMoney(r.tour, r.totalAmount)])} />
-        <AdminTable title="Pagos" rows={(payments.data ?? []).map((p) => [`#${p.id}`, p.paymentMethod, p.status, paymentMoney(p), p.culqiChargeId ?? "-"])} />
+        <ReservationsQueue reservations={reservations.data ?? []} token={token} />
+        <PaymentsQueue payments={payments.data ?? []} token={token} />
       </div>
       <div className="mt-6 rounded-lg border bg-white p-6 shadow-sm"><h3 className="mb-3 flex items-center gap-2 text-xl font-black text-[#082447]"><LayoutDashboard /> Operacion lista</h3><p className="text-slate-600">El panel ya usa POST, PUT y DELETE protegidos con JWT para manejar tours desde la interfaz.</p></div>
     </Section>
@@ -1306,6 +1327,44 @@ function AdminPage() {
 
 function AdminMetric({ label, value }: { label: string; value: string }) {
   return <div className="rounded-lg border bg-white p-5 shadow-sm"><span className="text-sm font-bold uppercase text-slate-500">{label}</span><strong className="mt-2 block text-2xl text-[#082447]">{value}</strong></div>;
+}
+
+function ReservationsQueue({ reservations, token }: { reservations: Reservation[]; token: string }) {
+  const queryClient = useQueryClient();
+  const cancel = useMutation({
+    mutationFn: async (id: number) => (await api.patch(`/reservations/${id}/cancel`, {}, { headers: { Authorization: `Bearer ${token}` } })).data,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["adminReservations"] })
+  });
+  return (
+    <section className="admin-queue">
+      <h3>Reservas</h3>
+      <div>
+        {reservations.map((reservation) => <article key={reservation.id}><div><span className={`status-badge status-${reservation.status.toLowerCase()}`}>{reservation.status}</span><strong>#{reservation.id} · {reservation.customer.fullName}</strong><p>{reservation.tour.title} · {reservation.peopleCount} viajero(s) · {tourMoney(reservation.tour, reservation.totalAmount)}</p></div>{reservation.status !== "CANCELADA" && <button type="button" onClick={() => cancel.mutate(reservation.id)} disabled={cancel.isPending}>Cancelar</button>}</article>)}
+        {!reservations.length && <p className="admin-empty">Aún no hay reservas registradas.</p>}
+      </div>
+    </section>
+  );
+}
+
+function PaymentsQueue({ payments, token }: { payments: Payment[]; token: string }) {
+  const queryClient = useQueryClient();
+  const decide = useMutation({
+    mutationFn: async ({ id, decision }: { id: number; decision: "confirm" | "reject" }) => (await api.patch(`/payments/${id}/${decision}`, {}, { headers: { Authorization: `Bearer ${token}` } })).data,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["adminPayments"] });
+      queryClient.invalidateQueries({ queryKey: ["adminReservations"] });
+      queryClient.invalidateQueries({ queryKey: ["adminTours"] });
+    }
+  });
+  return (
+    <section className="admin-queue">
+      <h3>Validación de pagos Yape</h3>
+      <div>
+        {payments.map((payment) => <article key={payment.id}><div><span className={`status-badge status-${payment.status.toLowerCase()}`}>{payment.status}</span><strong>Pago #{payment.id} · {payment.externalReference ?? "Sin referencia"}</strong><p>{payment.reservation?.customer.fullName} · {paymentMoney(payment)} · Yape</p></div>{payment.status === "PENDIENTE" && <div className="admin-actions"><button type="button" onClick={() => decide.mutate({ id: payment.id, decision: "confirm" })} disabled={decide.isPending}>Confirmar</button><button type="button" onClick={() => decide.mutate({ id: payment.id, decision: "reject" })} disabled={decide.isPending}>Rechazar</button></div>}</article>)}
+        {!payments.length && <p className="admin-empty">No hay comprobantes pendientes.</p>}
+      </div>
+    </section>
+  );
 }
 
 const blankSettings: BusinessSettings = { tradeName: "John Tours", policiesPublished: false };

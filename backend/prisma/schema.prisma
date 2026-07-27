@@ -9,6 +9,7 @@ datasource db {
 
 enum Role {
   ADMIN
+  WORKER
   CLIENT
 }
 
@@ -139,6 +140,7 @@ model Customer {
 
 model Reservation {
   id          Int               @id @default(autoincrement())
+  publicToken String            @unique @default(uuid()) @map("public_token") @db.VarChar(191)
   customerId  Int               @map("customer_id")
   tourId      Int               @map("tour_id")
   departureId Int?              @map("departure_id")
@@ -158,12 +160,12 @@ model Reservation {
 model Payment {
   id             Int           @id @default(autoincrement())
   reservationId  Int           @map("reservation_id")
-  culqiChargeId  String?       @map("culqi_charge_id") @db.VarChar(150)
+  externalReference String?    @map("culqi_charge_id") @db.VarChar(150)
   paymentMethod  PaymentMethod @map("payment_method")
   amount         Decimal       @db.Decimal(10, 2)
   currency       String        @default("PEN") @db.VarChar(10)
   status         PaymentStatus @default(PENDIENTE)
-  culqiResponse  Json?         @map("culqi_response")
+  metadata       Json?         @map("culqi_response")
   createdAt      DateTime      @default(now()) @map("created_at")
   reservation    Reservation   @relation(fields: [reservationId], references: [id])
 

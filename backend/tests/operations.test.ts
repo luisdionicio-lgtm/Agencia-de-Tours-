@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { businessSettingsSchema, departureSchema, testimonialSchema, tourSchema } from "../src/validators/schemas";
+import { businessSettingsSchema, departureSchema, paymentSchema, testimonialSchema, tourSchema } from "../src/validators/schemas";
 
 test("no permite publicar políticas incompletas", () => {
   assert.equal(businessSettingsSchema.safeParse({ tradeName: "John Tours", policiesPublished: true }).success, false);
@@ -22,4 +22,11 @@ test("un adelanto exige porcentaje", () => {
   const tour = { title: "Cusco", destination: "Cusco", price: 100, type: "NACIONAL", currency: "PEN", paymentMode: "DEPOSIT" };
   assert.equal(tourSchema.safeParse(tour).success, false);
   assert.equal(tourSchema.safeParse({ ...tour, depositPercent: 30 }).success, true);
+});
+
+test("el registro Yape exige token privado y referencia", () => {
+  const payload = { reservationId: 10, reservationToken: "550e8400-e29b-41d4-a716-446655440000", referenceCode: "JT-000010-2026" };
+  assert.equal(paymentSchema.safeParse(payload).success, true);
+  assert.equal(paymentSchema.safeParse({ reservationId: 10, referenceCode: "JT-000010-2026" }).success, false);
+  assert.equal(paymentSchema.safeParse({ ...payload, reservationToken: "token-publico-invalido" }).success, false);
 });

@@ -799,6 +799,27 @@ textarea {
   font-weight: 800;
 }
 
+.admin-queue { overflow:hidden;border:1px solid #dce7ef;border-radius:1rem;background:#fff;box-shadow:0 12px 30px rgba(8,36,71,.07) }
+.admin-queue>h3 { margin:0;background:linear-gradient(100deg,#082447,#0f4c81);padding:1rem 1.2rem;color:#fff;font-size:1rem;font-weight:900 }
+.admin-queue>div { display:grid;max-height:30rem;overflow:auto }
+.admin-queue article { display:flex;align-items:center;justify-content:space-between;gap:1rem;border-bottom:1px solid #e7eef3;padding:1rem 1.15rem;text-align:left }
+.admin-queue article:last-child { border-bottom:0 }
+.admin-queue article strong,.admin-queue article p { display:block }
+.admin-queue article strong { margin-top:.35rem;color:#082447;font-size:.82rem }
+.admin-queue article p { margin:.25rem 0 0;color:#64748b;font-size:.72rem }
+.admin-queue article>button,.admin-actions button { border:0;border-radius:.65rem;padding:.6rem .75rem;font-size:.7rem;font-weight:900 }
+.admin-queue article>button { background:#fff1f2;color:#be123c }
+.admin-actions { display:flex;gap:.4rem }
+.admin-actions button:first-child { background:#eaf8f2;color:#0f7a4f }
+.admin-actions button:last-child { background:#fff1f2;color:#be123c }
+.admin-actions button:disabled,.admin-queue article>button:disabled { cursor:wait;opacity:.55 }
+.status-badge { display:inline-flex;border-radius:999px;padding:.25rem .5rem;font-size:.58rem;font-weight:900;letter-spacing:.06em }
+.status-pendiente { background:#fff7d6;color:#8a6200 }
+.status-pagada,.status-exitoso { background:#eaf8f2;color:#0f7a4f }
+.status-rechazada,.status-rechazado,.status-cancelada { background:#fff1f2;color:#be123c }
+.status-devuelto { background:#edf6fb;color:#0f4c81 }
+.admin-empty { margin:0;padding:1.5rem;color:#64748b;text-align:center;font-size:.8rem }
+
 .hero-title {
   max-width: 12ch;
   letter-spacing: -0.045em;

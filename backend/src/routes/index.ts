@@ -7,7 +7,7 @@ import { tourController } from "../controllers/tour.controller";
 import { operationsController } from "../controllers/operations.controller";
 import { getIntegrationStatus } from "../config/env";
 import { asyncHandler } from "../middlewares/asyncHandler";
-import { requireAdmin } from "../middlewares/auth";
+import { requireAdmin, requireStaff } from "../middlewares/auth";
 import { createRateLimiter } from "../middlewares/security";
 import { validate } from "../middlewares/validate";
 import { businessSettingsSchema, contactSchema, departureSchema, loginSchema, paymentSchema, reservationSchema, testimonialSchema, tourSchema } from "../validators/schemas";
@@ -26,13 +26,14 @@ routes.put("/tours/:id", requireAdmin, validate(tourSchema), asyncHandler(tourCo
 routes.delete("/tours/:id", requireAdmin, asyncHandler(tourController.remove));
 
 routes.post("/reservations", validate(reservationSchema), asyncHandler(reservationController.create));
-routes.get("/reservations", requireAdmin, asyncHandler(reservationController.list));
-routes.get("/reservations/:id", requireAdmin, asyncHandler(reservationController.get));
+routes.get("/reservations", requireStaff, asyncHandler(reservationController.list));
+routes.get("/reservations/:id", requireStaff, asyncHandler(reservationController.get));
+routes.patch("/reservations/:id/cancel", requireStaff, asyncHandler(reservationController.cancel));
 
-routes.post("/payments/culqi", validate(paymentSchema), asyncHandler(paymentController.card));
-routes.post("/payments/yape", validate(paymentSchema), asyncHandler(paymentController.yape));
-routes.get("/payments", requireAdmin, asyncHandler(paymentController.list));
-routes.post("/webhooks/culqi", asyncHandler(paymentController.webhook));
+routes.post("/payments/yape", createRateLimiter({ windowMs: 15 * 60_000, max: 10 }), validate(paymentSchema), asyncHandler(paymentController.yape));
+routes.get("/payments", requireStaff, asyncHandler(paymentController.list));
+routes.patch("/payments/:id/confirm", requireStaff, asyncHandler(paymentController.confirm));
+routes.patch("/payments/:id/reject", requireStaff, asyncHandler(paymentController.reject));
 
 routes.post("/contact", validate(contactSchema), asyncHandler(contactController.create));
 routes.get("/contact", requireAdmin, asyncHandler(contactController.list));

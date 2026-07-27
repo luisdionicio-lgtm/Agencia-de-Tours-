@@ -29,6 +29,25 @@ async function main() {
     }
   });
 
+  if (process.env.ENABLE_DEMO_STAFF === "true") {
+    const workerEmail = process.env.WORKER_EMAIL;
+    const workerPassword = process.env.WORKER_PASSWORD;
+    if (!workerEmail || !workerPassword || workerPassword.length < 12) {
+      throw new Error("Para habilitar personal demo define WORKER_EMAIL y WORKER_PASSWORD con al menos 12 caracteres.");
+    }
+    const workerHash = await bcrypt.hash(workerPassword, saltRounds);
+    await prisma.user.upsert({
+      where: { email: workerEmail },
+      update: { password: workerHash, role: Role.WORKER },
+      create: {
+        name: "Asesor John Tours",
+        email: workerEmail,
+        password: workerHash,
+        role: Role.WORKER
+      }
+    });
+  }
+
   const tours = [
     {
       title: "Machu Picchu",

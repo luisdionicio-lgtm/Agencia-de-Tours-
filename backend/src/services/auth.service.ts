@@ -8,7 +8,7 @@ import { AppError } from "../utils/AppError";
 export const authService = {
   async login(email: string, password: string) {
     const user = await prisma.user.findUnique({ where: { email } });
-    if (!user || user.role !== Role.ADMIN) throw new AppError(401, "Credenciales invalidas");
+    if (!user || (user.role !== Role.ADMIN && user.role !== Role.WORKER)) throw new AppError(401, "Credenciales invalidas");
 
     const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) throw new AppError(401, "Credenciales invalidas");
@@ -20,4 +20,3 @@ export const authService = {
     return { token, user: { id: user.id, name: user.name, email: user.email, role: user.role } };
   }
 };
-

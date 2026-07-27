@@ -1,17 +1,16 @@
-import { PaymentMethod } from "@prisma/client";
 import type { Request, Response } from "express";
 import { paymentService } from "../services/payment.service";
 
 export const paymentController = {
-  async card(req: Request, res: Response) {
-    res.status(201).json(await paymentService.pay(Number(req.body.reservationId), PaymentMethod.CARD, req.body.token));
-  },
   async yape(req: Request, res: Response) {
-    res.status(201).json(await paymentService.pay(Number(req.body.reservationId), PaymentMethod.YAPE, req.body.token));
+    const { reservationId, reservationToken, referenceCode } = req.body;
+    res.status(201).json(await paymentService.submitYape(Number(reservationId), reservationToken, referenceCode));
   },
-  async webhook(req: Request, res: Response) {
-    paymentService.verifyWebhookSignature(req.rawBody ?? JSON.stringify(req.body), req.headers["x-culqi-signature"] ?? req.headers["x-hook-signature"]);
-    res.json(await paymentService.handleWebhook(req.body));
+  async confirm(req: Request, res: Response) {
+    res.json(await paymentService.confirmYape(Number(req.params.id)));
+  },
+  async reject(req: Request, res: Response) {
+    res.json(await paymentService.rejectYape(Number(req.params.id)));
   },
   async list(_req: Request, res: Response) {
     res.json(await paymentService.list());

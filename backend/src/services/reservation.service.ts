@@ -60,5 +60,37 @@ export const reservationService = {
     });
     if (!reservation) throw new AppError(404, "Reserva no encontrada");
     return reservation;
+  },
+  async cancel(id: number) {
+    return prisma.$transaction(async (tx) => {
+      const reservation = await tx.reservation.findUnique({ where: { id } });
+      if (!reservation) throw new AppError(404, "Reserva no encontrada");
+      if (reservation.status === ReservationStatus.CANCELADA) throw new AppError(409, "La reserva ya fue cancelada");
+
+      const cancelled = await tx.reservation.updateMany({
+        where: { id, status: reservation.status },
+        data: { status: ReservationStatus.CANCELADA }
+      });
+      if (cancelled.count !== 1) throw new AppError(409, "La reserva ya fue procesada");
+
+      if (reservation.status === ReservationStatus.PAGADA) {
+        if (reservation.departureId) {
+          await tx.tourDeparture.update({
+            where: { id: reservation.departureId },
+            data: { availableSlots: { increment: reservation.peopleCount } }
+          });
+        } else {
+          await tx.tour.update({
+            where: { id: reservation.tourId },
+            data: { availableSlots: { increment: reservation.peopleCount } }
+          });
+        }
+      }
+
+      return tx.reservation.findUnique({
+        where: { id },
+        include: { customer: true, tour: true, payments: true }
+      });
+    });
   }
 };

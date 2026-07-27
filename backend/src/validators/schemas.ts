@@ -68,7 +68,8 @@ export const reservationSchema = z.object({
 
 export const paymentSchema = z.object({
   reservationId: z.coerce.number().int().positive(),
-  token: z.string().min(6).optional()
+  reservationToken: z.string().uuid(),
+  referenceCode: z.string().min(6).max(80)
 });
 
 export const contactSchema = z.object({

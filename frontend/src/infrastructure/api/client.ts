@@ -6,7 +6,7 @@ export const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("adminToken");
+  const token = typeof window !== "undefined" ? sessionStorage.getItem("adminToken") : null;
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });

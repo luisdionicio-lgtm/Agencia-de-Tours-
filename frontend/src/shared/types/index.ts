@@ -34,6 +34,7 @@ export type BusinessSettings = {
 
 export type Reservation = {
   id: number;
+  publicToken?: string;
   travelDate: string;
   peopleCount: number;
   totalAmount: string | number;
@@ -47,6 +48,6 @@ export type Payment = {
   status: "PENDIENTE" | "EXITOSO" | "RECHAZADO" | "DEVUELTO";
   paymentMethod: "CARD" | "YAPE";
   amount: string | number;
-  culqiChargeId?: string;
+  externalReference?: string;
   reservation?: Reservation;
 };
