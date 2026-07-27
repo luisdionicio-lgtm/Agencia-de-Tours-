@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowRight, Award, CalendarDays, Camera, CheckCircle2, Clock3, Copy, CreditCard, Download, FileText, Filter, Globe2, HeartHandshake, Hotel, LayoutDashboard, LogOut, MapPin, Menu, MessageCircle, Plane, Search, ShieldCheck, Sparkles, Star, UsersRound, WalletCards, X } from "lucide-react";
+import { ArrowRight, Award, CalendarDays, Camera, CheckCircle2, Clock3, Copy, Download, FileText, Filter, Globe2, HeartHandshake, Hotel, LayoutDashboard, LogOut, MapPin, Menu, MessageCircle, Plane, Search, ShieldCheck, Sparkles, Star, UsersRound, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import QRCode from "qrcode";
@@ -8,8 +8,6 @@ import { z } from "zod";
 import { api } from "../../infrastructure/api/client";
 import { Link, NavLink, Route, Routes, useNavigate, useParams, useSearchParams } from "../../core/routing";
 import type { BusinessSettings, Payment, Reservation, Tour, TourStatus, TourType } from "../../shared/types";
-
-declare global { interface Window { CulqiCheckout?: new (publicKey: string, config: unknown) => { open: () => void }; Culqi?: any; culqi?: () => void } }
 
 const money = (value: string | number, currency: "PEN" | "USD" = "USD") =>
   new Intl.NumberFormat("es-PE", { currency, maximumFractionDigits: 0, style: "currency" }).format(Number(value));
@@ -20,8 +18,6 @@ const whatsapp = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "51966779705";
 const whatsappDisplay = "+51 966 779 705";
 const reservationAmount = 200;
 const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
-const culqiPublicKey = process.env.NEXT_PUBLIC_CULQI_PUBLIC_KEY ?? "";
-const isCulqiKeyConfigured = culqiPublicKey.startsWith("pk_");
 const tiktokUrl = "https://www.tiktok.com/@johntoursperu?_r=1&_t=ZS-988zH7tdmDM";
 const instagramUrl = "https://www.instagram.com/johntoursperu?igsh=dm1hc3ZweGlkeWR2";
 
@@ -33,40 +29,6 @@ const whatsappMessages = {
   tour: (tour: Tour) => `Hola John Tours, deseo cotizar el tour ${tour.title} para ${tour.destination}.`,
   reservation: (reservation: Reservation) => `Hola John Tours, deseo confirmar mi reserva #${reservation.id} para ${reservation.tour.title}.`
 };
-
-function createPaymentSeed(reservationId: string) {
-  const random = Math.random().toString(36).slice(2, 8).toUpperCase();
-  return `JOHN-${reservationId || "DEMO"}-${Date.now().toString(36).toUpperCase()}-${random}`;
-}
-
-function pseudoQrSvg(seed: string) {
-  const size = 29;
-  const cell = 7;
-  const quiet = 3;
-  const total = (size + quiet * 2) * cell;
-  let hash = 2166136261;
-  for (const char of seed) {
-    hash ^= char.charCodeAt(0);
-    hash = Math.imul(hash, 16777619);
-  }
-  const isDark = (x: number, y: number) => {
-    const finder = (fx: number, fy: number) => x >= fx && x < fx + 7 && y >= fy && y < fy + 7;
-    if (finder(0, 0) || finder(size - 7, 0) || finder(0, size - 7)) {
-      const localX = x % (size - 7) % 7;
-      const localY = y % (size - 7) % 7;
-      return localX === 0 || localX === 6 || localY === 0 || localY === 6 || (localX >= 2 && localX <= 4 && localY >= 2 && localY <= 4);
-    }
-    const value = Math.imul(x + 11, 1103515245) ^ Math.imul(y + 17, 12345) ^ hash;
-    return ((value >>> ((x + y) % 13)) & 1) === 1;
-  };
-  const blocks = Array.from({ length: size }, (_, y) =>
-    Array.from({ length: size }, (_, x) =>
-      isDark(x, y) ? `<rect x="${(x + quiet) * cell}" y="${(y + quiet) * cell}" width="${cell}" height="${cell}" rx="1" />` : ""
-    ).join("")
-  ).join("");
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${total}" height="${total}" viewBox="0 0 ${total} ${total}"><rect width="100%" height="100%" fill="#fff"/><g fill="#082447">${blocks}</g></svg>`;
-  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
-}
 
 const demoTours: Tour[] = [
   {
@@ -881,6 +843,25 @@ function ReservationPage() {
   );
 }
 
+const reservationSteps = [
+  "Reserva creada",
+  "Pago Yape pendiente / enviado",
+  "Comprobante generado",
+  "Validación pendiente",
+  "Reserva confirmada"
+];
+
+function ReservationProgress({ currentStep }: { currentStep: number }) {
+  return (
+    <ol className="reservation-progress" aria-label="Estado de la reserva">
+      {reservationSteps.map((label, index) => {
+        const state = index < currentStep ? "complete" : index === currentStep ? "current" : "pending";
+        return <li key={label} data-state={state} aria-current={state === "current" ? "step" : undefined}><span>{index + 1}</span><strong>{label}</strong></li>;
+      })}
+    </ol>
+  );
+}
+
 function YapeReservationPage() {
   const { id = "" } = useParams();
   const navigate = useNavigate();
@@ -908,151 +889,7 @@ function YapeReservationPage() {
     sessionStorage.setItem(`john-reservation-${id}`, JSON.stringify({ ...reservation, status: "PAGADA" }));
     navigate(`/confirmacion/${id}?demo=1`);
   };
-  return <Section title="Separa tu tour con Yape" subtitle="Sin pasarela ni datos de tarjeta: paga S/ 200, conserva tu código y envía el comprobante a un asesor."><div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[.9fr_1.1fr]"><article className="yape-card"><div className="yape-brand"><img src="/yape-logo.png" alt="Yape" /><span>Reserva con Yape</span></div><span className="yape-label">Reserva protegida</span><h3>{reservation.tour.title}</h3><p>{reservation.customer.fullName} · {reservation.peopleCount} viajero(s)</p><div className="reservation-price"><small>Monto de separación</small><strong>S/ {reservationAmount}.00</strong></div><div className="payment-code"><div><small>Código único de pago</small><strong>{paymentCode}</strong></div><button onClick={() => { navigator.clipboard.writeText(paymentCode); setCopied(true); }} aria-label="Copiar código"><Copy size={18} /> {copied ? "Copiado" : "Copiar"}</button></div><div className="secure-note"><ShieldCheck /> <span>Incluye este código en el mensaje del comprobante. John Tours validará titular, monto y reserva antes de confirmar el cupo. El PDF se habilita únicamente después de esa confirmación.</span></div>{isDemoMode && <button type="button" onClick={simulatePayment} className="demo-payment"><Sparkles /><span><strong>Demostración para presentación</strong><small>Simular validación del pago y ver la reserva confirmada</small></span><ArrowRight /></button>}</article><article className="qr-card yape-qr-card"><div className="yape-qr-heading"><img src="/yape-logo.png" alt="Yape" /><span><strong>Yapea tu reserva</strong><small>Escanea el código QR</small></span></div>{qrImage && <div className="yape-qr-frame"><img src={qrImage} alt={`QR de instrucciones para la reserva ${paymentCode}`} /></div>}<strong>Yape asociado al contacto: {whatsappDisplay}</strong><p>El QR contiene las instrucciones y el código único. Antes de transferir, verifica en Yape que el titular corresponda a la cuenta empresarial comunicada por John Tours.</p><a href={buildWhatsAppUrl(message)} target="_blank" rel="noreferrer" className="whatsapp-cta"><MessageCircle /> Enviar comprobante por WhatsApp</a><small>La reserva se confirma después de la validación manual del comprobante.</small></article></div></Section>;
-}
-
-function PaymentPage() {
-  const { id = "" } = useParams();
-  const navigate = useNavigate();
-  const { data: reservation } = useQuery<Reservation>({ queryKey: ["reservation", id], queryFn: async () => (await api.get(`/reservations/${id}`)).data });
-  const paymentSeed = useMemo(() => createPaymentSeed(id), [id]);
-  const qrImage = useMemo(() => pseudoQrSvg(paymentSeed), [paymentSeed]);
-  const [paymentError, setPaymentError] = useState("");
-  const [checkoutReady, setCheckoutReady] = useState(Boolean(window.CulqiCheckout || window.Culqi));
-  const mutation = useMutation({
-    mutationFn: async ({ method, token }: { method: "culqi" | "yape"; token: string }) => (await api.post(`/payments/${method}`, { reservationId: Number(id), token })).data,
-    onSuccess: () => navigate(`/confirmacion/${id}`),
-    onError: (error) => {
-      const fallback = "No se pudo procesar el pago. Revisa la configuracion de Culqi o intenta nuevamente.";
-      if (error && typeof error === "object" && "response" in error) {
-        const response = (error as { response?: { data?: { message?: string } } }).response;
-        setPaymentError(response?.data?.message ?? fallback);
-        return;
-      }
-      setPaymentError(fallback);
-    }
-  });
-
-  useEffect(() => {
-    if (!isCulqiKeyConfigured) {
-      console.warn("NEXT_PUBLIC_CULQI_PUBLIC_KEY no esta configurada. En produccion Culqi Checkout no podra abrirse.");
-      return;
-    }
-
-    if (window.CulqiCheckout || window.Culqi) {
-      setCheckoutReady(true);
-      return;
-    }
-
-    const existingScript = document.querySelector<HTMLScriptElement>('script[src="https://checkout.culqi.com/js/v4"]');
-    const script = existingScript ?? document.createElement("script");
-    script.src = "https://checkout.culqi.com/js/v4";
-    script.async = true;
-    script.onload = () => setCheckoutReady(true);
-    script.onerror = () => setPaymentError("No se pudo cargar Culqi Checkout. Revisa tu conexion o la llave publica.");
-    if (!existingScript) document.body.appendChild(script);
-  }, []);
-
-  const payWithToken = (method: "culqi" | "yape", token: string) => {
-    setPaymentError("");
-    mutation.mutate({ method, token });
-  };
-
-  const openCulqiCheckout = (method: "culqi" | "yape") => {
-    if (!reservation) return;
-
-    if (!isCulqiKeyConfigured) {
-      if (process.env.NODE_ENV === "development") {
-        payWithToken(method, "demo_token");
-        return;
-      }
-      setPaymentError("Falta configurar NEXT_PUBLIC_CULQI_PUBLIC_KEY con una llave publica real de Culqi.");
-      return;
-    }
-
-    const amountInCents = Math.round(Number(reservation.totalAmount) * 100);
-    const paymentMethods = {
-      tarjeta: method === "culqi",
-      yape: method === "yape",
-      bancaMovil: false,
-      agente: false,
-      billetera: false,
-      cuotealo: false
-    };
-
-    window.culqi = () => {
-      if (window.Culqi?.token?.id) {
-        const token = window.Culqi.token.id;
-        window.Culqi.close?.();
-        payWithToken(method, token);
-        return;
-      }
-
-      const message = window.Culqi?.error?.user_message ?? window.Culqi?.error?.merchant_message ?? "Culqi no pudo generar el token de pago.";
-      setPaymentError(message);
-    };
-
-    if (window.CulqiCheckout) {
-      const checkout = new window.CulqiCheckout(culqiPublicKey, {
-        settings: {
-          title: "John Tours",
-          currency: "PEN",
-          amount: amountInCents
-        },
-        options: {
-          lang: "es",
-          installments: false,
-          paymentMethods
-        },
-        client: {
-          email: reservation.customer.email
-        }
-      });
-      checkout.open();
-      return;
-    }
-
-    if (window.Culqi?.settings && window.Culqi?.options && window.Culqi?.open) {
-      window.Culqi.publicKey = culqiPublicKey;
-      window.Culqi.settings({ title: "John Tours", currency: "PEN", amount: amountInCents });
-      window.Culqi.options({ lang: "es", installments: false, paymentMethods });
-      window.Culqi.open();
-      return;
-    }
-
-    setPaymentError("Culqi Checkout aun no esta listo. Intenta nuevamente en unos segundos.");
-  };
-  return (
-    <Section title="Pago seguro" subtitle="El backend recalcula el monto desde la reserva antes de cobrar. Culqi queda listo para activar con llaves reales.">
-      {reservation && <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[1fr_.85fr]">
-        <div className="rounded-lg border bg-white p-6 shadow-sm">
-        <p className="text-sm font-bold uppercase text-[#0f7a4f]">Resumen de reserva</p>
-        <h3 className="mt-2 text-2xl font-black text-[#082447]">{reservation.tour.title}</h3>
-        <p className="mt-2 text-slate-600">{reservation.peopleCount} personas · Total: <strong>{tourMoney(reservation.tour, reservation.totalAmount)}</strong></p>
-        <div className="mt-6 rounded-lg border border-dashed border-[#0f4c81]/30 bg-[#f8fbff] p-4">
-          <h4 className="flex items-center gap-2 font-black text-[#082447]"><CreditCard size={19} /> Ubicacion Culqi Checkout</h4>
-          <p className="mt-2 text-sm leading-6 text-slate-600">Aqui se conecta el checkout oficial usando la llave publica del frontend. El backend procesa el cargo con la llave privada.</p>
-          <code className="mt-3 block overflow-x-auto rounded-lg bg-[#082447] px-3 py-2 text-xs text-amber-200">NEXT_PUBLIC_CULQI_PUBLIC_KEY={culqiPublicKey}</code>
-          {!isCulqiKeyConfigured && <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm font-bold text-amber-800">Warning: configura NEXT_PUBLIC_CULQI_PUBLIC_KEY para usar pagos reales. En produccion no se enviaran pagos demo.</div>}
-          <div id="culqi-checkout-slot" className="mt-4 rounded-lg border bg-white p-4 text-sm text-slate-600">{checkoutReady ? "Culqi Checkout listo para abrir." : "Cargando Culqi Checkout..."}</div>
-        </div>
-        {paymentError && <p className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700">{paymentError}</p>}
-        <div className="mt-6 grid gap-3 sm:grid-cols-2">
-          <button onClick={() => openCulqiCheckout("culqi")} className="flex items-center justify-center gap-2 rounded-lg bg-[#082447] px-5 py-4 font-black text-white" disabled={mutation.isPending}><CreditCard /> Pagar con tarjeta</button>
-          <button onClick={() => openCulqiCheckout("yape")} className="flex items-center justify-center gap-2 rounded-lg bg-[#6d2bd9] px-5 py-4 font-black text-white" disabled={mutation.isPending}><WalletCards /> Pagar con Yape Culqi</button>
-        </div>
-        <p className="mt-4 text-sm text-slate-500">Los pagos demo solo funcionan en desarrollo si el backend tiene ALLOW_DEMO_PAYMENTS=true.</p>
-        </div>
-        <div className="rounded-lg border bg-white p-6 text-center shadow-sm">
-          <p className="text-sm font-bold uppercase text-[#6d2bd9]">Referencia visual de reserva</p>
-          <img src={qrImage} alt="QR demo para simular pago" className="mx-auto mt-4 h-64 w-64 rounded-lg border p-3" />
-          <strong className="mt-4 block text-[#082447]">Codigo: {paymentSeed}</strong>
-          <p className="mt-2 text-sm leading-6 text-slate-600">WhatsApp queda como canal de envio de comprobantes y coordinacion, no como API oficial.</p>
-          <a href={buildWhatsAppUrl(whatsappMessages.reservation(reservation))} className="mt-5 inline-flex items-center justify-center gap-2 rounded-lg bg-[#1fa463] px-5 py-3 font-black text-white"><MessageCircle /> Enviar comprobante por WhatsApp</a>
-        </div>
-      </div>}
-    </Section>
-  );
+  return <Section title="Separa tu tour con Yape" subtitle="Sin pasarela ni datos de tarjeta: paga S/ 200, conserva tu código y envía el comprobante a un asesor."><div className="mx-auto max-w-6xl"><ReservationProgress currentStep={1} /><div className="grid gap-6 lg:grid-cols-[.9fr_1.1fr]"><article className="yape-card"><div className="yape-brand"><img src="/yape-logo.png" alt="Yape" /><span>Reserva con Yape</span></div><span className="yape-label">Reserva protegida</span><h3>{reservation.tour.title}</h3><p>{reservation.customer.fullName} · {reservation.peopleCount} viajero(s)</p><div className="reservation-price"><small>Monto de separación</small><strong>S/ {reservationAmount}.00</strong></div><div className="payment-code"><div><small>Código único de pago</small><strong>{paymentCode}</strong></div><button onClick={() => { navigator.clipboard.writeText(paymentCode); setCopied(true); }} aria-label="Copiar código"><Copy size={18} /> {copied ? "Copiado" : "Copiar"}</button></div><div className="secure-note"><ShieldCheck /> <span>Incluye este código en el mensaje del comprobante. John Tours validará titular, monto y reserva antes de confirmar el cupo. El PDF se habilita únicamente después de esa confirmación.</span></div>{isDemoMode && <button type="button" onClick={simulatePayment} className="demo-payment"><Sparkles /><span><strong>Demostración para presentación</strong><small>Simular validación del pago y ver la reserva confirmada</small></span><ArrowRight /></button>}</article><article className="qr-card yape-qr-card"><div className="yape-qr-heading"><img src="/yape-logo.png" alt="Yape" /><span><strong>Yapea tu reserva</strong><small>Escanea el código QR</small></span></div>{qrImage && <div className="yape-qr-frame"><img src={qrImage} alt={`QR de instrucciones para la reserva ${paymentCode}`} /></div>}<strong>Yape asociado al contacto: {whatsappDisplay}</strong><p>El QR contiene las instrucciones y el código único. Antes de transferir, verifica en Yape que el titular corresponda a la cuenta empresarial comunicada por John Tours.</p><a href={buildWhatsAppUrl(message)} target="_blank" rel="noreferrer" className="whatsapp-cta"><MessageCircle /> Enviar comprobante por WhatsApp</a><small>La reserva se confirma después de la validación manual del comprobante.</small></article></div></div></Section>;
 }
 
 function appointmentSeparationCode(reservationId: string) {
