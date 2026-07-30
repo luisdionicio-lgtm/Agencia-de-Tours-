@@ -592,7 +592,38 @@ function OurStory() {
 }
 
 function SocialSpotlight() {
-  return <section className="social-section px-4 py-14 text-white lg:px-6"><div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 lg:flex-row lg:items-center"><div className="max-w-2xl"><span className="social-kicker"><Sparkles size={16} /> Comunidad John Tours</span><h2 className="mt-4 text-3xl font-black md:text-4xl">Síguenos y descubre tu próximo viaje</h2><p className="mt-3 leading-7 text-blue-100">Promociones, salidas, consejos y experiencias para inspirarte en nuestros canales oficiales.</p></div><div className="social-cards grid w-full gap-4 sm:grid-cols-2 lg:w-auto"><a href={tiktokUrl} target="_blank" rel="noreferrer" className="social-button social-tiktok" aria-label="Seguir a John Tours Perú en TikTok"><span className="social-logo-stage"><img src="/tiktok-logo.png" alt="Logo de TikTok" /></span><span><strong>TikTok</strong><small>@johntoursperu</small></span><ArrowRight /></a><a href={instagramUrl} target="_blank" rel="noreferrer" className="social-button social-instagram" aria-label="Seguir a John Tours Perú en Instagram"><span className="social-logo-stage"><img src="/instagram-logo.png" alt="Logo de Instagram" /></span><span><strong>Instagram</strong><small>@johntoursperu</small></span><ArrowRight /></a></div></div></section>;
+  const networks = [
+    { name: "TikTok", href: tiktokUrl, logo: "/tiktok-logo.png", className: "social-tiktok", description: "Videos, destinos y consejos" },
+    { name: "Instagram", href: instagramUrl, logo: "/instagram-logo.png", className: "social-instagram", description: "Promociones y experiencias" }
+  ];
+  return (
+    <section className="social-section px-4 py-16 text-white lg:px-6" aria-labelledby="social-title">
+      <div className="social-shell mx-auto max-w-7xl">
+        <div className="social-copy">
+          <span className="social-kicker"><Sparkles size={16} /> Comunidad John Tours</span>
+          <h2 id="social-title">Inspírate para tu próximo viaje</h2>
+          <p>Síguenos en nuestros canales oficiales y descubre promociones, nuevas salidas y experiencias de viajeros.</p>
+          <span className="social-official"><ShieldCheck size={17} /> Perfiles oficiales de John Tours Perú</span>
+        </div>
+        <div className="social-cards">
+          {networks.map((network) => (
+            <a key={network.name} href={network.href} target="_blank" rel="noreferrer" className={`social-button ${network.className}`} aria-label={`Abrir el perfil oficial de John Tours Perú en ${network.name}`}>
+              <span className={`social-logo-stage social-logo-stage-${network.name.toLowerCase()}`}>
+                <img src={network.logo} alt="" />
+              </span>
+              <span className="social-platform">
+                <small>Canal oficial</small>
+                <strong>{network.name}</strong>
+                <span>{network.description}</span>
+                <b>@johntoursperu</b>
+              </span>
+              <span className="social-open">Ver perfil <ArrowRight size={17} /></span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }
 
 function TrustBar() {
