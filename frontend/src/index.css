@@ -282,9 +282,10 @@ textarea {
 }
 
 .btn-gold {
-  background: linear-gradient(135deg, #ffda66, var(--brand-sun));
+  border: 1px solid rgba(153, 97, 5, .18);
+  background: linear-gradient(145deg, #ffe185, #f7b731 62%, #e6a51d);
   color: #082447;
-  box-shadow: 0 18px 36px rgba(247, 183, 49, 0.22);
+  box-shadow: 0 16px 34px rgba(247, 183, 49, .24), inset 0 1px rgba(255,255,255,.65);
 }
 
 .btn-gold,
@@ -292,7 +293,12 @@ textarea {
 .whatsapp-cta {
   position: relative;
   overflow: hidden;
+  isolation: isolate;
 }
+
+.btn-gold > *,
+.search-submit > *,
+.whatsapp-cta > * { position:relative;z-index:1; }
 
 .btn-gold::after,
 .search-submit::after,
@@ -314,6 +320,130 @@ textarea {
   transform: translateY(-2px);
   box-shadow: 0 14px 34px rgba(8, 36, 71, 0.18);
 }
+
+/* Sistema de acciones profesionales */
+.primary-action,
+.search-submit,
+.catalog-advisor,
+.internal-access-button,
+.formal-secondary-action {
+  display: inline-flex;
+  min-height: 3.7rem;
+  align-items: center;
+  gap: .7rem;
+  border-radius: .85rem;
+  padding: .55rem .65rem;
+  text-align: left;
+  font-weight: 900;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, filter 180ms ease;
+}
+
+.button-emblem,
+.button-brand-stage,
+.button-terminal,
+.airline-link-terminal,
+.airline-transfer-terminal {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+}
+
+.button-emblem,
+.button-brand-stage {
+  width: 2.55rem;
+  height: 2.55rem;
+  border: 1px solid rgba(255,255,255,.32);
+  border-radius: .72rem;
+  background: rgba(255,255,255,.18);
+  box-shadow: inset 0 1px rgba(255,255,255,.28);
+}
+
+.btn-gold .button-emblem {
+  border-color: rgba(8,36,71,.12);
+  background: rgba(255,255,255,.48);
+  color: #073b83;
+}
+
+.button-brand-stage {
+  background: rgba(255,255,255,.96);
+  box-shadow: 0 7px 18px rgba(8,36,71,.12);
+}
+
+.button-brand-stage img { width:1.7rem;height:1.7rem;object-fit:contain; }
+.button-copy { display:flex;min-width:0;flex:1;flex-direction:column;line-height:1.05; }
+.button-copy small { margin-bottom:.23rem;color:inherit;font-size:.57rem;font-weight:800;letter-spacing:.07em;opacity:.72;text-transform:uppercase; }
+.button-copy strong { font-size:.78rem;font-weight:950;letter-spacing:.005em; }
+.button-arrow { flex:0 0 auto;margin-left:.15rem;transition:transform 180ms ease; }
+.primary-action:hover .button-arrow,
+.catalog-advisor:hover .button-arrow,
+.formal-secondary-action:hover .button-arrow,
+.header-reserve-button:hover .button-arrow { transform:translateX(3px); }
+
+.whatsapp-cta {
+  border: 1px solid rgba(7,105,58,.2);
+  background: linear-gradient(135deg, #22b96e, #159454);
+  color: #fff;
+  box-shadow: 0 15px 32px rgba(10,125,73,.23), inset 0 1px rgba(255,255,255,.24);
+}
+
+.search-submit {
+  justify-content:flex-start;
+  border:1px solid rgba(2,26,52,.2);
+  background:linear-gradient(110deg,#061b34,#0b4674);
+  color:#fff;
+  box-shadow:0 15px 32px rgba(8,36,71,.2),inset 0 1px rgba(255,255,255,.14);
+}
+
+.search-submit .button-terminal,
+.internal-access-button .button-terminal {
+  width:2rem;
+  height:2rem;
+  margin-left:auto;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:.55rem;
+  background:rgba(255,255,255,.1);
+  color:#ffd56a;
+}
+
+.formal-secondary-action {
+  border:1px solid rgba(255,255,255,.28);
+  background:rgba(255,255,255,.1);
+  color:#fff;
+  box-shadow:inset 0 1px rgba(255,255,255,.14);
+  backdrop-filter:blur(12px);
+}
+
+.formal-secondary-action:hover { transform:translateY(-2px);border-color:rgba(255,213,106,.62);background:rgba(255,255,255,.16); }
+.header-reserve-button { display:inline-flex;min-height:2.85rem;align-items:center;gap:.55rem;border-radius:.72rem;padding:.35rem .55rem;font-size:.75rem;font-weight:950; }
+.header-reserve-button .button-emblem { width:2.1rem;height:2.1rem;border-radius:.58rem; }
+
+.primary-action:active,
+.search-submit:active,
+.catalog-advisor:active,
+.tour-card-cta:active,
+.internal-access-button:active,
+.formal-secondary-action:active { transform:translateY(0) scale(.985); }
+
+.reservation-submit {
+  display:flex;
+  width:100%;
+  min-height:4rem;
+  align-items:center;
+  gap:.7rem;
+  border:1px solid rgba(2,26,52,.18);
+  border-radius:.9rem;
+  background:linear-gradient(105deg,#061b34,#0b4674);
+  padding:.58rem .68rem;
+  color:#fff;
+  text-align:left;
+  box-shadow:0 15px 32px rgba(8,36,71,.2),inset 0 1px rgba(255,255,255,.14);
+  transition:transform 180ms ease,box-shadow 180ms ease;
+}
+
+.reservation-submit .button-emblem { border-color:rgba(255,213,106,.26);background:rgba(255,213,106,.12);color:#ffd56a; }
+.reservation-submit .button-terminal { width:2.1rem;height:2.1rem;margin-left:auto;border:1px solid rgba(255,255,255,.17);border-radius:.58rem;background:rgba(255,255,255,.09);color:#ffd56a; }
+.reservation-submit:hover:not(:disabled) { transform:translateY(-2px);box-shadow:0 20px 38px rgba(8,36,71,.25); }
+.reservation-submit:disabled { cursor:wait;opacity:.7; }
 
 .formal-cta {
   background:
@@ -428,17 +558,11 @@ textarea {
 .catalog-budget input { grid-column:1 / -1; width:100%; accent-color:#0798bd; }
 
 .catalog-advisor {
-  display: inline-flex;
   min-height: 3.6rem;
-  align-items: center;
-  justify-content: center;
-  gap: .5rem;
-  border-radius: .65rem;
+  justify-content: flex-start;
+  border:1px solid rgba(7,105,58,.18);
   background: linear-gradient(100deg, #159454, #20b66c);
-  padding: .75rem 1rem;
   color: #fff;
-  font-size: .78rem;
-  font-weight: 900;
   box-shadow: 0 10px 24px rgba(21, 148, 84, .18);
 }
 
@@ -665,21 +789,21 @@ textarea {
 
 .tour-card-cta {
   display: flex;
+  min-height: 3.85rem;
   align-items: center;
-  justify-content: space-between;
-  gap: .75rem;
+  gap: .65rem;
   margin-top: 1rem;
-  border-radius: .75rem;
-  background: linear-gradient(100deg, #082447, #0b4674);
-  padding: .82rem 1rem;
+  border: 1px solid rgba(2, 26, 52, .18);
+  border-radius: .85rem;
+  background: linear-gradient(105deg, #061b34, #0b4674);
+  padding: .55rem .62rem;
   color: #fff;
-  font-size: .78rem;
-  font-weight: 900;
-  letter-spacing: .01em;
+  box-shadow: 0 14px 28px rgba(8,36,71,.18), inset 0 1px rgba(255,255,255,.14);
 }
 
-.tour-card-cta svg { color:#ffd56a; transition:transform 180ms ease; }
-.tour-card-cta:hover svg { transform:translateX(3px); }
+.tour-card-cta .button-emblem { width:2.55rem;height:2.55rem;border-color:rgba(255,213,106,.28);background:rgba(255,213,106,.12);color:#ffd56a; }
+.tour-card-cta .button-terminal { width:2rem;height:2rem;margin-left:auto;border:1px solid rgba(255,255,255,.17);border-radius:.58rem;background:rgba(255,255,255,.09);color:#ffd56a;transition:transform 180ms ease,background 180ms ease; }
+.tour-card-cta:hover .button-terminal { transform:translateX(2px);background:rgba(255,255,255,.16); }
 
 .tour-card-cta:hover,
 .search-submit:hover,
@@ -847,6 +971,19 @@ textarea {
   box-shadow: 0 10px 24px rgba(8, 36, 71, .09);
 }
 
+.airline-link-terminal {
+  width:2rem;
+  height:2rem;
+  border:1px solid #d3e4ed;
+  border-radius:.6rem;
+  background:#fff;
+  color:#087e76;
+  box-shadow:0 5px 12px rgba(8,36,71,.07);
+  transition:transform 180ms ease,background 180ms ease,color 180ms ease;
+}
+
+.airline-links a:hover .airline-link-terminal { transform:translateX(2px);background:#073b83;color:#fff; }
+
 .airline-links strong,
 .airline-links small {
   display: block;
@@ -879,7 +1016,8 @@ textarea {
 }
 
 .airline-land-note p { margin-top: .18rem; color: #d9ecf3; font-size: .82rem; }
-.airline-land-note a { display: inline-flex; align-items: center; gap: .4rem; color: #ffe399; font-size: .82rem; font-weight: 900; }
+.airline-land-note a { display: inline-flex; align-items: center; gap: .55rem; color: #ffe399; font-size: .82rem; font-weight: 900; }
+.airline-transfer-terminal { width:1.85rem;height:1.85rem;border:1px solid rgba(255,227,153,.3);border-radius:.55rem;background:rgba(255,255,255,.1); }
 .airline-disclaimer { margin-top: .85rem; color: #697c8c; font-size: .74rem; line-height: 1.55; }
 
 .exclusive-section {
@@ -1229,8 +1367,9 @@ textarea {
   transform: translateX(3px);
 }
 
-.internal-header-link { border:1px solid #cfdae4;border-radius:.65rem;padding:.65rem .85rem;color:#0f4c81;font-size:.75rem;font-weight:900;transition:background 180ms ease,border-color 180ms ease }
-.internal-header-link:hover { border-color:#0f4c81;background:#edf6fb }
+.internal-header-link { display:inline-flex;min-height:2.85rem;align-items:center;gap:.5rem;border:1px solid #cfdae4;border-radius:.72rem;background:#fff;padding:.35rem .65rem .35rem .4rem;color:#0f4c81;font-size:.72rem;font-weight:950;box-shadow:0 8px 20px rgba(8,36,71,.06);transition:transform 180ms ease,background 180ms ease,border-color 180ms ease }
+.internal-header-link .button-emblem { width:2.1rem;height:2.1rem;border-color:#d8e8f1;background:#edf7fa;color:#087e76;border-radius:.58rem }
+.internal-header-link:hover { transform:translateY(-1px);border-color:#0f4c81;background:#f7fbfd }
 
 .internal-access-section { background:linear-gradient(180deg,#f8fafc,#eef8f4) }
 .internal-access-section>div { border:1px solid rgba(15,76,129,.16);background:linear-gradient(110deg,#fff,#f2f9fc);box-shadow:0 18px 45px rgba(8,36,71,.08) }
@@ -1238,7 +1377,8 @@ textarea {
 .internal-access-section small { color:#0f7a4f;font-size:.68rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase }
 .internal-access-section h2 { margin:.25rem 0 0;color:#082447;font-size:1.35rem;font-weight:900 }
 .internal-access-section p { margin:.35rem 0 0;color:#64748b;font-size:.82rem;line-height:1.6 }
-.internal-access-button { display:inline-flex;flex:0 0 auto;align-items:center;gap:.5rem;border-radius:.75rem;background:#0f4c81;padding:.8rem 1rem;color:#fff;font-size:.78rem;font-weight:900 }
+.internal-access-button { flex:0 0 auto;border:1px solid rgba(2,26,52,.18);background:linear-gradient(105deg,#061b34,#0f4c81);color:#fff;box-shadow:0 14px 30px rgba(8,36,71,.18) }
+.internal-access-button .button-emblem { border-color:rgba(255,213,106,.25);background:rgba(255,213,106,.12);color:#ffd56a }
 
 .internal-login-layout { display:grid;max-width:58rem;margin:0 auto;overflow:hidden;border:1px solid #dce7ef;border-radius:1.35rem;background:#fff;box-shadow:0 24px 60px rgba(8,36,71,.12) }
 .internal-login-layout>aside { background:linear-gradient(145deg,#061b34,#0f4c81);padding:2rem;color:#fff }

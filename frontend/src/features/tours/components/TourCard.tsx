@@ -34,7 +34,11 @@ export function TourCard({ tour }: { tour: Tour }) {
           <div className="tour-card-price"><small>Desde</small><strong>{tourMoney(tour)}</strong><span>por persona</span></div>
           <div className="tour-card-duration"><CalendarDays size={19} /><span><small>Duración</small><strong>{tour.duration}</strong></span></div>
         </div>
-        <Link to={`/tours/${tour.id}`} className="tour-card-cta">Conocer el paquete <ArrowRight size={18} /></Link>
+        <Link to={`/tours/${tour.id}`} className="tour-card-cta">
+          <span className="button-emblem button-emblem-gold"><Plane size={17} /></span>
+          <span className="button-copy"><small>Información completa</small><strong>Conocer el paquete</strong></span>
+          <span className="button-terminal"><ArrowRight size={17} /></span>
+        </Link>
       </div>
     </article>
   );

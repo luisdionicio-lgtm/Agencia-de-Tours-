@@ -57,7 +57,7 @@ export function AirlineGuideSection() {
                 {item.links.map((airline) => (
                   <a key={airline.name} href={airline.href} target="_blank" rel="noopener noreferrer" aria-label={`Consultar ${airline.name} para ${item.destination} en su sitio oficial`}>
                     <span><strong>{airline.name}</strong><small>{airline.note}</small></span>
-                    <ArrowRight size={18} />
+                    <span className="airline-link-terminal"><ArrowRight size={16} /></span>
                   </a>
                 ))}
               </div>
@@ -68,7 +68,7 @@ export function AirlineGuideSection() {
         <div className="airline-land-note">
           <span><MapPin size={20} /></span>
           <div><strong>Ica y Oxapampa: conexión terrestre</strong><p>Nuestro asesor puede ayudarte a coordinar el traslado desde Lima como parte de la planificación del tour.</p></div>
-          <a href={buildWhatsAppUrl("Hola JhonToursPerú, deseo orientación sobre vuelos y traslados para mi tour.")} target="_blank" rel="noopener noreferrer">Consultar traslado <ArrowRight size={17} /></a>
+          <a href={buildWhatsAppUrl("Hola JhonToursPerú, deseo orientación sobre vuelos y traslados para mi tour.")} target="_blank" rel="noopener noreferrer"><span>Consultar traslado</span><span className="airline-transfer-terminal"><ArrowRight size={16} /></span></a>
         </div>
         <p className="airline-disclaimer">Las rutas, tarifas y condiciones pertenecen a cada aerolínea y pueden cambiar. Antes de pagar, verifica el precio final y los servicios incluidos en su web oficial.</p>
       </div>

@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowRight, Award, CalendarDays, CheckCircle2, Clock3, Copy, Download, FileText, Filter, HeartHandshake, LayoutDashboard, LogOut, Menu, MessageCircle, Search, ShieldCheck, Sparkles, Star, UsersRound, X } from "lucide-react";
+import { ArrowRight, Award, CalendarDays, CheckCircle2, Clock3, Copy, Download, FileText, Filter, HeartHandshake, LayoutDashboard, LogOut, Menu, MessageCircle, Plane, Search, ShieldCheck, Sparkles, Star, UsersRound, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -327,8 +327,8 @@ function Shell() {
             {links.map(([label, to]) => <NavLink key={label} to={to}>{label}</NavLink>)}
           </nav>
           <div className="hidden items-center gap-3 lg:flex">
-            <Link to="/admin" className="internal-header-link">Acceso interno</Link>
-            <Link to="/tours" className="btn-gold rounded-lg px-5 py-2.5 text-sm font-bold shadow-sm">Reservar ahora</Link>
+            <Link to="/admin" className="internal-header-link"><span className="button-emblem"><ShieldCheck size={15} /></span><span>Acceso interno</span></Link>
+            <Link to="/tours" className="btn-gold header-reserve-button"><span className="button-emblem"><CalendarDays size={16} /></span><span>Reservar ahora</span><ArrowRight className="button-arrow" size={16} /></Link>
           </div>
           <button className="menu-button rounded-xl border border-slate-200 p-2 lg:hidden" onClick={() => setOpen(!open)} aria-label={open ? "Cerrar menu" : "Abrir menu"} aria-expanded={open}>
             {open ? <X /> : <Menu />}
@@ -415,8 +415,8 @@ function Home() {
             <h1 className="hero-title text-4xl font-black leading-[1.04] sm:text-5xl md:text-7xl">Tu próximo destino <span>empieza aquí</span></h1>
             <p className="mt-6 max-w-2xl text-base leading-8 text-slate-100 md:text-xl">Tours nacionales e internacionales con atención cercana, itinerarios claros y una reserva simple de S/ 200 por Yape.</p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link to="/tours" className="btn-gold rounded-xl px-7 py-3.5 text-center font-black">Explorar tours</Link>
-              <a href={buildWhatsAppUrl(whatsappMessages.general)} className="whatsapp-cta rounded-xl bg-[#1fa463] px-7 py-3.5 text-center font-black text-white">Cotizar por WhatsApp</a>
+              <Link to="/tours" className="btn-gold primary-action"><span className="button-emblem"><Plane size={18} /></span><span className="button-copy"><small>Descubre destinos</small><strong>Explorar tours</strong></span><ArrowRight className="button-arrow" size={18} /></Link>
+              <a href={buildWhatsAppUrl(whatsappMessages.general)} className="whatsapp-cta primary-action"><span className="button-brand-stage"><img src="/whatsapp-logo.svg" alt="" /></span><span className="button-copy"><small>Atención personalizada</small><strong>Cotizar por WhatsApp</strong></span><ArrowRight className="button-arrow" size={18} /></a>
             </div>
             <div className="mt-6 flex flex-wrap gap-2 text-xs font-bold text-slate-100">
               <span className="trust-pill rounded-full bg-white/10 px-3 py-2 ring-1 ring-white/20">Atención 24/7</span>
@@ -451,7 +451,7 @@ function Home() {
       <section id="contacto" className="formal-cta px-4 py-20 text-white">
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
           <div className="max-w-3xl"><span className="text-sm font-black uppercase tracking-[0.2em] text-amber-300">El mundo te espera</span><h2 className="mt-3 text-4xl font-black md:text-5xl">Tu próxima aventura empieza hoy</h2><p className="mt-4 text-lg text-slate-200">Reserva con JhonToursPerú y vive una experiencia diseñada para sorprenderte.</p></div>
-          <div className="flex flex-col gap-3 sm:flex-row"><a href={buildWhatsAppUrl(whatsappMessages.general)} className="whatsapp-cta inline-flex items-center justify-center gap-2 rounded-xl bg-[#1fa463] px-6 py-3.5 font-black"><MessageCircle /> Hablar por WhatsApp</a><Link to="/tours" className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/30 bg-white/10 px-6 py-3.5 font-black backdrop-blur">Ver paquetes <ArrowRight size={18} /></Link></div>
+          <div className="flex flex-col gap-3 sm:flex-row"><a href={buildWhatsAppUrl(whatsappMessages.general)} className="whatsapp-cta primary-action"><span className="button-brand-stage"><img src="/whatsapp-logo.svg" alt="" /></span><span className="button-copy"><small>Asesoría directa</small><strong>Hablar por WhatsApp</strong></span><ArrowRight className="button-arrow" size={18} /></a><Link to="/tours" className="formal-secondary-action"><span className="button-emblem"><Plane size={17} /></span><span>Ver paquetes</span><ArrowRight className="button-arrow" size={17} /></Link></div>
         </div>
       </section>
     </>
@@ -466,7 +466,7 @@ function InternalAccessPromo() {
           <span className="internal-access-icon"><ShieldCheck /></span>
           <div><small>Área privada de JhonToursPerú</small><h2>Acceso para administradores y trabajadores</h2><p>Gestiona tours, revisa reservas y valida comprobantes Yape según los permisos asignados.</p></div>
         </div>
-        <Link to="/admin" className="internal-access-button">Ingresar al panel <ArrowRight size={18} /></Link>
+        <Link to="/admin" className="internal-access-button"><span className="button-emblem"><ShieldCheck size={17} /></span><span className="button-copy"><small>Área protegida</small><strong>Ingresar al panel</strong></span><span className="button-terminal"><ArrowRight size={16} /></span></Link>
       </div>
     </section>
   );
@@ -601,7 +601,7 @@ function ExclusiveReservationExperience() {
           <span className="exclusive-badge"><Star size={16} fill="currentColor" /> Beneficio exclusivo para viajeros</span>
           <h2 className="mt-5 text-4xl font-black leading-tight md:text-5xl">Tu reserva abre una experiencia más personal</h2>
           <p className="mt-5 text-lg leading-8 text-slate-200">El catálogo te ayuda a elegir. Después de confirmar tu reserva, desbloqueamos información y opciones específicas para complementar el destino que realmente vas a disfrutar.</p>
-          <div className="mt-7 flex flex-col gap-3 sm:flex-row"><Link to="/tours" className="btn-gold inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3.5 font-black">Elegir mi destino <ArrowRight size={18} /></Link><a href={buildWhatsAppUrl("Hola JhonToursPerú, quiero conocer los beneficios que se desbloquean al reservar un tour.")} className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/10 px-6 py-3.5 font-black backdrop-blur"><MessageCircle size={18} /> Consultar beneficios</a></div>
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row"><Link to="/tours" className="btn-gold primary-action"><span className="button-emblem"><Plane size={17} /></span><span className="button-copy"><small>Explora opciones</small><strong>Elegir mi destino</strong></span><ArrowRight className="button-arrow" size={17} /></Link><a href={buildWhatsAppUrl("Hola JhonToursPerú, quiero conocer los beneficios que se desbloquean al reservar un tour.")} className="formal-secondary-action"><span className="button-emblem"><MessageCircle size={17} /></span><span>Consultar beneficios</span><ArrowRight className="button-arrow" size={17} /></a></div>
         </div>
         <div className="exclusive-grid grid gap-4 sm:grid-cols-2">{benefits.map(([icon, title, text]) => <article key={String(title)} className="exclusive-card rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur"><span>{icon}</span><strong className="mt-4 block text-lg">{title}</strong><p className="mt-2 text-sm leading-6 text-slate-200">{text}</p></article>)}</div>
       </div>
@@ -621,7 +621,7 @@ function FrequentlyAskedQuestions() {
   return (
     <section className="faq-section px-4 py-16 lg:px-6 lg:py-20">
       <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[.75fr_1.25fr]">
-        <div><span className="section-kicker">Resolvemos tus dudas</span><h2 className="mt-4 text-4xl font-black text-[#082447] md:text-5xl">Preguntas frecuentes</h2><p className="mt-4 text-lg leading-8 text-slate-600">Queremos que decidas con información clara. Si necesitas una respuesta personal, estamos a un mensaje de distancia.</p><a href={buildWhatsAppUrl("Hola JhonToursPerú, tengo una consulta sobre sus viajes.")} className="mt-7 inline-flex items-center gap-2 rounded-xl bg-[#1fa463] px-6 py-3.5 font-black text-white"><MessageCircle /> Consultar por WhatsApp</a></div>
+        <div><span className="section-kicker">Resolvemos tus dudas</span><h2 className="mt-4 text-4xl font-black text-[#082447] md:text-5xl">Preguntas frecuentes</h2><p className="mt-4 text-lg leading-8 text-slate-600">Queremos que decidas con información clara. Si necesitas una respuesta personal, estamos a un mensaje de distancia.</p><a href={buildWhatsAppUrl("Hola JhonToursPerú, tengo una consulta sobre sus viajes.")} className="whatsapp-cta primary-action mt-7"><span className="button-brand-stage"><img src="/whatsapp-logo.svg" alt="" /></span><span className="button-copy"><small>Respuesta personalizada</small><strong>Consultar por WhatsApp</strong></span><ArrowRight className="button-arrow" size={17} /></a></div>
         <div className="grid gap-3">{questions.map(([question, answer], index) => <details key={question} className="faq-item group rounded-2xl border border-slate-200 bg-white"><summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 font-bold text-[#082447]"><span>{question}</span><span className="faq-plus grid h-8 w-8 shrink-0 place-items-center rounded-full">+</span></summary><div className="px-5 pb-5 pr-16 text-sm leading-7 text-slate-600">{answer}</div>{index === 0 && <span className="sr-only">Abre para ver la respuesta</span>}</details>)}</div>
       </div>
     </section>
@@ -644,7 +644,7 @@ function SearchBox() {
           <option value="">Tipo de viaje</option><option value="NACIONAL">Nacional</option><option value="INTERNACIONAL">Internacional</option>
         </select>
         <input className="rounded-lg border border-slate-200 px-4 py-3" type="number" min="1" placeholder="Personas" />
-        <button className="search-submit inline-flex items-center justify-center gap-2 rounded-xl bg-[#082447] px-5 py-3.5 font-black text-white lg:col-span-2" onClick={() => navigate(`/tours?${new URLSearchParams({ ...(type && { type }), ...(destination && { destination }) }).toString()}`)}><Search /> Buscar experiencia</button>
+        <button className="search-submit lg:col-span-2" onClick={() => navigate(`/tours?${new URLSearchParams({ ...(type && { type }), ...(destination && { destination }) }).toString()}`)}><span className="button-emblem"><Search size={18} /></span><span className="button-copy"><small>Aplicar preferencias</small><strong>Buscar experiencia</strong></span><span className="button-terminal"><ArrowRight size={17} /></span></button>
       </div>
     </div>
   );
@@ -663,7 +663,7 @@ function Tours() {
         <select className="rounded-lg border px-4 py-3" aria-label="Tipo de tour" value={initialType ?? ""} onChange={(e) => setParams(e.target.value ? { type: e.target.value } : {})}><option value="">Todos los tours</option><option value="NACIONAL">Nacionales</option><option value="INTERNACIONAL">Internacionales</option></select>
         <input className="rounded-lg border px-4 py-3" aria-label="Buscar por destino" placeholder="Buscar destino" value={destination} onChange={(e) => setDestination(e.target.value)} />
         <label className="catalog-budget"><span className="catalog-budget-icon"><Filter size={17} /></span><span><small>Presupuesto máximo</small><strong>Hasta {maxPrice.toLocaleString("es-PE")} · S/ o USD</strong></span><input aria-label="Presupuesto máximo por persona" type="range" min="100" max="3000" step="50" value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} /></label>
-        <a href={buildWhatsAppUrl(whatsappMessages.general)} className="catalog-advisor"><MessageCircle size={18} /> Solicitar orientación</a>
+        <a href={buildWhatsAppUrl(whatsappMessages.general)} className="catalog-advisor"><span className="button-brand-stage"><img src="/whatsapp-logo.svg" alt="" /></span><span className="button-copy"><small>Ayuda personalizada</small><strong>Solicitar orientación</strong></span><ArrowRight className="button-arrow" size={17} /></a>
       </div>
       <div className="mb-6 grid gap-4 md:grid-cols-3">
         <CatalogSignal icon={<ShieldCheck />} title="Operador confiable" text="Itinerarios revisados y comunicacion directa." />
@@ -754,8 +754,8 @@ function TourDetail() {
             <p className="flex items-center gap-2"><Clock3 className="text-[#0f4c81]" size={18} /> Confirmacion y seguimiento</p>
             <p className="flex items-center gap-2"><UsersRound className="text-amber-600" size={18} /> Asesoria para tu grupo</p>
           </div>
-          <Link to={`/reservar/${tour.id}`} className="mt-6 flex items-center justify-center gap-2 rounded-lg bg-[#f7b731] px-5 py-3 font-black text-[#082447]">Reservar <ArrowRight /></Link>
-          <a href={buildWhatsAppUrl(whatsappMessages.tour(tour))} className="mt-3 flex items-center justify-center gap-2 rounded-lg bg-[#1fa463] px-5 py-3 font-black text-white"><MessageCircle /> Cotizar por WhatsApp</a>
+          <Link to={`/reservar/${tour.id}`} className="btn-gold primary-action mt-6"><span className="button-emblem"><CalendarDays size={18} /></span><span className="button-copy"><small>Inicia con S/ 200</small><strong>Reservar este tour</strong></span><ArrowRight className="button-arrow" size={18} /></Link>
+          <a href={buildWhatsAppUrl(whatsappMessages.tour(tour))} className="whatsapp-cta primary-action mt-3"><span className="button-brand-stage"><img src="/whatsapp-logo.svg" alt="" /></span><span className="button-copy"><small>Consulta sin compromiso</small><strong>Cotizar por WhatsApp</strong></span><ArrowRight className="button-arrow" size={18} /></a>
         </aside>
       </div>
       <section className="scheduled-departures">
@@ -876,7 +876,7 @@ function ReservationPage() {
         <div className="grid gap-4 sm:grid-cols-2"><input className="rounded-lg border px-4 py-3" type="date" readOnly={Boolean(tour?.departures?.length)} {...form.register("travelDate")} /><input className="rounded-lg border px-4 py-3" type="number" min="1" max={selectedDeparture?.availableSlots ?? tour?.availableSlots ?? 20} {...form.register("peopleCount")} /></div>
         <div className="hold-notice"><Clock3 /><span><strong>Solicitud protegida durante 30 minutos</strong><small>JhonToursPerú mantendrá activa tu solicitud mientras recibe y valida el comprobante Yape.</small></span></div>
         {reservationError && <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700">{reservationError}</p>}
-        <button className="rounded-lg bg-[#082447] px-5 py-3 font-black text-white" disabled={mutation.isPending}>{mutation.isPending ? "Creando reserva..." : "Crear reserva pendiente"}</button>
+        <button className="reservation-submit" disabled={mutation.isPending}><span className="button-emblem"><ShieldCheck size={18} /></span><span className="button-copy"><small>Solicitud protegida</small><strong>{mutation.isPending ? "Creando reserva..." : "Continuar con la reserva"}</strong></span><span className="button-terminal"><ArrowRight size={17} /></span></button>
       </form>
     </Section>
   );
