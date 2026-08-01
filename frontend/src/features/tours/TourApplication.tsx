@@ -489,12 +489,15 @@ function HeroVisualCarousel({ tours }: { tours: Tour[] }) {
       <div className="carousel-inner">
         {tours.map((tour, index) => (
           <div key={tour.id} className={`carousel-item ${index === 0 ? "active" : ""}`} data-bs-interval="3600">
-            <img src={tour.imageUrl} loading={index === 0 ? "eager" : "lazy"} decoding="async" className="d-block h-[250px] w-100 object-cover" alt={tour.title} />
-            <div className="hero-mini-caption">
-              <span>{tour.duration}</span>
-              <strong>{tour.title}</strong>
-              <small>{tour.destination}</small>
-            </div>
+            <Link to={`/tours/${tour.id}`} className="hero-carousel-link" aria-label={`Ver el paquete ${tour.title}`}>
+              <img src={tour.imageUrl} loading={index === 0 ? "eager" : "lazy"} decoding="async" className="d-block h-[250px] w-100 object-cover" alt={tour.title} />
+              <div className="hero-mini-caption">
+                <span>{tour.duration}</span>
+                <strong>{tour.title}</strong>
+                <small>{tour.destination}</small>
+                <em>Ver paquete <ArrowRight size={14} /></em>
+              </div>
+            </Link>
           </div>
         ))}
       </div>

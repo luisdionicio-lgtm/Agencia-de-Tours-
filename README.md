@@ -5,6 +5,7 @@ Web publicitaria fullstack para captar clientes, mostrar tours nacionales e inte
 ## Incluye
 
 - Landing adaptable con la paleta azul, turquesa y amarilla del logo.
+- Carrusel principal con marco azul de marca y acceso directo desde cada imagen al detalle del paquete.
 - Catálogo, filtros, detalle, itinerario, inclusiones y exclusiones de cada tour.
 - Guía breve de aerolíneas por destino con logotipos identificables y enlaces oficiales para comparar precio final, horarios, equipaje y conexiones.
 - Mejor época para viajar, calendario por tour y salidas programadas.
