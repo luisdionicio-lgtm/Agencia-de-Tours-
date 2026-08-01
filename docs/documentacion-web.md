@@ -28,7 +28,7 @@ Estados comunicados al cliente:
 
 ## Orientación de vuelos y traslados
 
-La portada incluye un bloque compacto de orientación con enlaces externos a los sitios oficiales de LATAM, SKY y JetSMART para Cusco; Copa Airlines y Avianca para Orlando; e Iberia y Turkish Airlines para El Cairo. No vende pasajes ni garantiza una tarifa: invita a comparar el costo final, equipaje, escalas, horarios y condiciones antes de pagar.
+La portada incluye un bloque compacto de orientación con los logotipos de LATAM, SKY y JetSMART para Cusco; Copa Airlines y Avianca para Orlando; e Iberia y Turkish Airlines para El Cairo. Cada opción conserva su identidad visual dentro de una tarjeta adaptada a la paleta de JhonToursPerú y enlaza al sitio oficial. La web no vende pasajes ni garantiza una tarifa: invita a comparar el costo final, equipaje, escalas, horarios y condiciones antes de pagar.
 
 Ica y Oxapampa se presentan como conexiones terrestres desde Lima y se ofrece coordinación por WhatsApp. Los enlaces y rutas deben revisarse periódicamente porque dependen de cada aerolínea.
 

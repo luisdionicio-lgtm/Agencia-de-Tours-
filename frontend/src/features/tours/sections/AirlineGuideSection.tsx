@@ -1,4 +1,4 @@
-import { ArrowRight, Globe2, MapPin, Plane, ShieldCheck } from "lucide-react";
+import { ArrowRight, ExternalLink, MapPin, Plane, PlaneTakeoff, ShieldCheck } from "lucide-react";
 import { buildWhatsAppUrl } from "../config/contact";
 
 const airlineRoutes = [
@@ -7,9 +7,9 @@ const airlineRoutes = [
     route: "Lima → Cusco",
     detail: "Vuelo directo · compara horarios y equipaje incluido",
     links: [
-      { name: "LATAM", note: "Más horarios para comparar", href: "https://www.latamairlines.com/pe/es/destinos/vuelos-desde-lima-a-cusco" },
-      { name: "SKY", note: "Alternativa de tarifa ligera", href: "https://www.skyairline.com/flights/es-pe/vuelos-desde-lima-a-cusco" },
-      { name: "JetSMART", note: "Opción low cost", href: "https://jetsmart.com/PE/es/" }
+      { name: "LATAM", brand: "latam", logo: "/airlines/latam.svg", note: "Más horarios para comparar", href: "https://www.latamairlines.com/pe/es/destinos/vuelos-desde-lima-a-cusco" },
+      { name: "SKY", brand: "sky", logo: "/airlines/sky-airline.svg", note: "Alternativa de tarifa ligera", href: "https://www.skyairline.com/flights/es-pe/vuelos-desde-lima-a-cusco" },
+      { name: "JetSMART", brand: "jetsmart", logo: "/airlines/jetsmart.svg", note: "Opción de bajo costo", href: "https://jetsmart.com/PE/es/" }
     ]
   },
   {
@@ -17,8 +17,8 @@ const airlineRoutes = [
     route: "Lima → Orlando",
     detail: "Vuelo con conexión · revisa duración total y escalas",
     links: [
-      { name: "Copa Airlines", note: "Conexión internacional", href: "https://www.copaair.com/en/flights-from-lima-to-orlando?redirecturl=true" },
-      { name: "Avianca", note: "Otra opción para comparar", href: "https://www.avianca.com/us/es/vuelos-desde-lima-a-orlando" }
+      { name: "Copa Airlines", brand: "copa", logo: "/airlines/copa-airlines.png", note: "Conexión internacional", href: "https://www.copaair.com/en/flights-from-lima-to-orlando?redirecturl=true" },
+      { name: "Avianca", brand: "avianca", logo: "/airlines/avianca.svg", note: "Otra opción para comparar", href: "https://www.avianca.com/us/es/vuelos-desde-lima-a-orlando" }
     ]
   },
   {
@@ -26,8 +26,8 @@ const airlineRoutes = [
     route: "Lima → El Cairo",
     detail: "Ruta de larga distancia · compara tiempo y equipaje",
     links: [
-      { name: "Iberia", note: "Búsqueda oficial desde Lima", href: "https://www.iberia.com/pe/vuelos-baratos/Lima-El-Cairo/" },
-      { name: "Turkish Airlines", note: "Conexión vía Estambul", href: "https://www.turkishairlines.com/es-int/flights/flights-to-cairo/" }
+      { name: "Iberia", brand: "iberia", logo: "/airlines/iberia.svg", note: "Búsqueda oficial desde Lima", href: "https://www.iberia.com/pe/vuelos-baratos/Lima-El-Cairo/" },
+      { name: "Turkish Airlines", brand: "turkish", logo: "/airlines/turkish-airlines.svg", note: "Conexión vía Estambul", href: "https://www.turkishairlines.com/es-int/flights/flights-to-cairo/" }
     ]
   }
 ];
@@ -49,15 +49,18 @@ export function AirlineGuideSection() {
           {airlineRoutes.map((item) => (
             <article key={item.destination} className="airline-route-card">
               <div className="airline-route-title">
-                <span><Globe2 size={20} /></span>
+                <span aria-hidden="true"><PlaneTakeoff size={20} /></span>
                 <div><small>{item.route}</small><h3>{item.destination}</h3></div>
               </div>
               <p>{item.detail}</p>
               <div className="airline-links">
                 {item.links.map((airline) => (
-                  <a key={airline.name} href={airline.href} target="_blank" rel="noopener noreferrer" aria-label={`Consultar ${airline.name} para ${item.destination} en su sitio oficial`}>
-                    <span><strong>{airline.name}</strong><small>{airline.note}</small></span>
-                    <span className="airline-link-terminal"><ArrowRight size={16} /></span>
+                  <a key={airline.name} data-airline={airline.brand} href={airline.href} target="_blank" rel="noopener noreferrer" aria-label={`Consultar ${airline.name} para ${item.destination} en su sitio oficial`}>
+                    <span className="airline-logo-frame">
+                      <img src={airline.logo} alt={`Logo de ${airline.name}`} loading="lazy" decoding="async" />
+                    </span>
+                    <span className="airline-link-copy"><strong>{airline.name}</strong><small>{airline.note}</small></span>
+                    <span className="airline-link-terminal" aria-hidden="true"><ExternalLink size={15} /></span>
                   </a>
                 ))}
               </div>

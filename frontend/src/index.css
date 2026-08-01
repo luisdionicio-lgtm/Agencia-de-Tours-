@@ -953,23 +953,54 @@ textarea {
 }
 
 .airline-links a {
-  display: flex;
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
   gap: .75rem;
-  border: 1px solid #dce8f0;
-  border-radius: .9rem;
-  background: #f8fbfd;
-  padding: .85rem;
+  overflow: hidden;
+  border: 1px solid rgba(7, 59, 131, .13);
+  border-inline-start: 3px solid transparent;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fff, #f7fbfd);
+  padding: .62rem .72rem .62rem .6rem;
   color: #082447;
-  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
 }
 
 .airline-links a:hover {
   transform: translateY(-2px);
   border-color: rgba(7, 152, 189, .5);
-  box-shadow: 0 10px 24px rgba(8, 36, 71, .09);
+  background: #fff;
+  box-shadow: 0 12px 26px rgba(8, 36, 71, .1);
 }
+
+.airline-links a[data-airline="latam"] { border-inline-start-color: #4f2b7f; }
+.airline-links a[data-airline="sky"] { border-inline-start-color: #00a6a6; }
+.airline-links a[data-airline="jetsmart"] { border-inline-start-color: #e31b3d; }
+.airline-links a[data-airline="copa"] { border-inline-start-color: #07569b; }
+.airline-links a[data-airline="avianca"] { border-inline-start-color: #d71920; }
+.airline-links a[data-airline="iberia"] { border-inline-start-color: #c8102e; }
+.airline-links a[data-airline="turkish"] { border-inline-start-color: #c70a23; }
+
+.airline-logo-frame {
+  display: grid;
+  width: 4.5rem;
+  height: 2.75rem;
+  place-items: center;
+  border: 1px solid #deebf1;
+  border-radius: .72rem;
+  background: #fff;
+  padding: .42rem;
+  box-shadow: 0 5px 14px rgba(8, 36, 71, .06);
+}
+
+.airline-logo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.airline-link-copy { min-width: 0; }
 
 .airline-link-terminal {
   width:2rem;
@@ -982,7 +1013,7 @@ textarea {
   transition:transform 180ms ease,background 180ms ease,color 180ms ease;
 }
 
-.airline-links a:hover .airline-link-terminal { transform:translateX(2px);background:#073b83;color:#fff; }
+.airline-links a:hover .airline-link-terminal { transform:translate(1px, -1px);background:#073b83;color:#fff; }
 
 .airline-links strong,
 .airline-links small {

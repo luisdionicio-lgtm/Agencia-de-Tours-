@@ -6,7 +6,7 @@ Web publicitaria fullstack para captar clientes, mostrar tours nacionales e inte
 
 - Landing adaptable con la paleta azul, turquesa y amarilla del logo.
 - Catálogo, filtros, detalle, itinerario, inclusiones y exclusiones de cada tour.
-- Guía breve de aerolíneas por destino con enlaces oficiales para comparar precio final, horarios, equipaje y conexiones.
+- Guía breve de aerolíneas por destino con logotipos identificables y enlaces oficiales para comparar precio final, horarios, equipaje y conexiones.
 - Mejor época para viajar, calendario por tour y salidas programadas.
 - Reserva pendiente con código privado, QR informativo y mensaje formal de WhatsApp.
 - Estados visibles desde la creación hasta la confirmación.
