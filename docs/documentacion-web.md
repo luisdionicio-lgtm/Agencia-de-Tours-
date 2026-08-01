@@ -1,4 +1,4 @@
-# Documentación funcional y técnica — John Tours Perú
+# Documentación funcional y técnica — JhonToursPerú
 
 ## Objetivo
 
@@ -8,13 +8,13 @@ La web funciona como una vitrina publicitaria breve: presenta confianza, permite
 
 1. El visitante conoce la propuesta, historia, canales oficiales y redes sociales.
 2. Filtra tours nacionales o internacionales y revisa el paquete.
-3. Elige una salida programada con cupos reales y completa sus datos.
-4. El backend crea una reserva `PENDIENTE`, descuenta temporalmente los cupos y fija el vencimiento del bloqueo.
+3. Elige una fecha programada y completa sus datos.
+4. El backend crea una reserva `PENDIENTE` y mantiene temporalmente activa la solicitud.
 5. La web muestra S/ 200, código de separación, QR e instrucciones de Yape.
 6. El cliente registra código de operación, fecha, monto y un archivo JPG, PNG, WebP o PDF de hasta 5 MB.
 7. El servidor valida tipo, tamaño y firma real del archivo; WhatsApp queda como aviso opcional y no se envía automáticamente.
 8. Un administrador o trabajador valida o rechaza el pago.
-9. Al confirmar, la reserva pasa a `PAGADA`, conserva el cupo ya retenido y registra al trabajador responsable.
+9. Al confirmar, la reserva pasa a `PAGADA` y registra al trabajador responsable.
 10. La confirmación habilita el comprobante PDF, la guía del destino, extras y la preparación de una cita.
 
 Estados comunicados al cliente:
@@ -42,20 +42,19 @@ Ruta discreta: `/admin`. No se publica en la navegación comercial y no contiene
 
 Las cuentas se crean desde el seed y variables de entorno. `ENABLE_DEMO_STAFF` debe permanecer desactivado en producción.
 
-## Salidas, cupos e idempotencia
+## Salidas e idempotencia
 
 - Cada tour muestra su mejor época referencial y un calendario de salidas.
-- Crear una reserva retiene cupos durante `RESERVATION_HOLD_MINUTES` (30 minutos por defecto).
-- Si el bloqueo vence, la reserva se cancela y los cupos se liberan al consultar o procesar operaciones.
+- La web pública no presenta los paquetes como una venta por espacios ni muestra cantidades de cupos.
+- Crear una reserva mantiene la solicitud activa durante `RESERVATION_HOLD_MINUTES` (30 minutos por defecto).
+- Si el tiempo vence, la solicitud pendiente se cancela al consultar o procesar operaciones.
 - Confirmar un pago Yape usa una transacción Prisma.
 - La actualización exige que pago y reserva sigan pendientes.
-- El bloqueo inicial exige disponibilidad suficiente.
-- Repetir una confirmación devuelve conflicto y no modifica cupos nuevamente.
-- Rechazar un comprobante libera los cupos retenidos.
-- Cancelar una reserva pagada devuelve sus cupos una sola vez.
-- Los cupos nunca se decrementan mediante valores enviados por el frontend.
+- La capacidad permanece como control operativo interno y nunca como argumento comercial público.
+- Repetir una confirmación devuelve conflicto y no procesa la reserva nuevamente.
+- Rechazar o cancelar conserva la consistencia del control interno.
 
-El panel muestra alertas de pocos cupos y salidas próximas. El administrador puede programar nuevas salidas con inicio, fin y capacidad.
+El panel interno puede conservar fechas, alertas y capacidad para organización del personal. El administrador puede programar nuevas salidas con inicio, fin y capacidad.
 
 ## Auditoría Yape
 

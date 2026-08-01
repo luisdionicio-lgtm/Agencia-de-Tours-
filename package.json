@@ -5,7 +5,7 @@
   "workspaces": [
     "frontend"
   ],
-  "description": "Aplicacion fullstack profesional para la agencia de turismo John Tours.",
+  "description": "Aplicacion fullstack profesional para la agencia de turismo JhonToursPerú.",
   "scripts": {
     "install:all": "npm install --prefix frontend && npm install --prefix backend",
     "dev:frontend": "npm run dev --prefix frontend",

@@ -4,7 +4,7 @@ import "../src/index.css";
 
 // oxlint-disable-next-line react/only-export-components
 export const metadata: Metadata = {
-  title: "John Tours Perú | Viaja seguro, vive extraordinario",
+  title: "JhonToursPerú | Viaja seguro, vive extraordinario",
   description: "Tours nacionales e internacionales, promociones escolares y grupos. Separa tu viaje con S/ 200 por Yape y atención directa por WhatsApp."
 };
 

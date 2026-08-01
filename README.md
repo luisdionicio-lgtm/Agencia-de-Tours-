@@ -1,4 +1,4 @@
-# John Tours Perú
+# JhonToursPerú
 
 Web publicitaria fullstack para captar clientes, mostrar tours nacionales e internacionales y gestionar reservas con separación de S/ 200 por Yape.
 
@@ -6,13 +6,13 @@ Web publicitaria fullstack para captar clientes, mostrar tours nacionales e inte
 
 - Landing adaptable con la paleta azul, turquesa y amarilla del logo.
 - Catálogo, filtros, detalle, itinerario, inclusiones y exclusiones de cada tour.
-- Mejor época para viajar, calendario por tour, salidas programadas y cupos reales.
+- Mejor época para viajar, calendario por tour y salidas programadas.
 - Reserva pendiente con código privado, QR informativo y mensaje formal de WhatsApp.
 - Estados visibles desde la creación hasta la confirmación.
 - Comprobante PDF por reserva con logo, cliente, tour, fecha, viajeros, pago, itinerario y extras.
 - Guías PDF adicionales por destino, visibles únicamente después de confirmar.
 - Panel interno en `/admin` con roles `ADMIN` y `WORKER`.
-- Bloqueo temporal de cupos y validación profesional de Yape con archivo, fecha, monto, código, trabajador e historial.
+- Protección temporal de la solicitud y validación profesional de Yape con archivo, fecha, monto, código, trabajador e historial.
 - Seguridad con JWT, rate limiting, CORS, cabeceras, validación Zod y variables de entorno.
 
 ## Tecnología

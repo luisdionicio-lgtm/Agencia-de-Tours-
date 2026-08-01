@@ -1,4 +1,4 @@
-# John Tours Perú — Checklist de producción
+# JhonToursPerú — Checklist de producción
 
 ## Infraestructura
 
@@ -64,12 +64,11 @@ npm audit --omit=dev
 npm audit --omit=dev --prefix backend
 ```
 
-- Crear reserva: los cupos no cambian.
+- Crear reserva: la solicitud queda pendiente y el control interno se actualiza una vez.
 - Registrar Yape: el pago queda pendiente.
-- Confirmar una vez: descuenta exactamente el número de viajeros.
-- Confirmar otra vez: responde conflicto y no descuenta.
-- Rechazar: no descuenta.
-- Cancelar pagada: devuelve cupos una sola vez.
+- Confirmar una vez: procesa exactamente una reserva.
+- Confirmar otra vez: responde conflicto y no vuelve a procesar.
+- Rechazar o cancelar: revierte el control interno una sola vez.
 - Descargar comprobante PDF y revisar logo, datos, itinerario y extras.
 - Confirmar que WhatsApp solo abre el mensaje y nunca lo envía automáticamente.
 - Verificar permisos de `ADMIN` y `WORKER`.

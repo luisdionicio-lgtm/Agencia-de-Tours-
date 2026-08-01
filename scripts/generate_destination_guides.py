@@ -85,7 +85,7 @@ def footer(canvas: Canvas, doc: SimpleDocTemplate) -> None:
     canvas.line(1.6 * cm, 1.35 * cm, 19.4 * cm, 1.35 * cm)
     canvas.setFont("Helvetica", 8)
     canvas.setFillColor(colors.HexColor("#64748B"))
-    canvas.drawString(1.6 * cm, 0.92 * cm, "John Tours Perú · Guía exclusiva posterior a la reserva")
+    canvas.drawString(1.6 * cm, 0.92 * cm, "JhonToursPerú · Guía exclusiva posterior a la reserva")
     canvas.drawRightString(19.4 * cm, 0.92 * cm, f"Página {doc.page}")
     canvas.restoreState()
 
