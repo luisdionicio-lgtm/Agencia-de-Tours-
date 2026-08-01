@@ -5,7 +5,7 @@
 
 :root {
   color: #0f172a;
-  background: #f8fafc;
+  background: #eaf8fc;
   font-family: "Source Sans 3", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   /* Paleta oficial inspirada en el logo JhonToursPerú. */
   --brand-navy: #052b5c;
@@ -16,6 +16,10 @@
   --brand-sun: #f5c247;
   --brand-ink: #071d37;
   --brand-surface: #f2faff;
+  --brand-mist: #eaf8fc;
+  --brand-sky-soft: #dff4fb;
+  --brand-blue-soft: #edf6ff;
+  --brand-aqua-soft: #e9fbfa;
   --navy: var(--brand-navy);
   --blue: var(--brand-blue);
   --gold: var(--brand-sun);
@@ -56,7 +60,7 @@
 .promotion-card h3 { margin:.35rem 0; font-size:1.5rem; }.promotion-card p{margin:0;color:#d9effb;line-height:1.6}
 @media(min-width:768px){.promotion-grid{grid-template-columns:repeat(3,1fr)}}
 
-.story-section { background:radial-gradient(circle at 10% 20%,rgba(32,185,231,.13),transparent 28%),linear-gradient(135deg,#effaff,#fff); }
+.story-section { background:radial-gradient(circle at 10% 20%,rgba(22,185,229,.18),transparent 30%),linear-gradient(135deg,var(--brand-blue-soft),#fff 58%,var(--brand-aqua-soft)); }
 .story-logo { display:grid; min-height:390px; place-items:center; border-radius:2rem; background:white; box-shadow:0 30px 70px rgba(7,59,131,.13); transform:perspective(900px) rotateY(3deg); }
 .story-logo img { width:90%; mix-blend-mode:multiply; }
 .social-section{position:relative;overflow:hidden;background:radial-gradient(circle at 92% 8%,rgba(69,214,235,.32),transparent 28%),linear-gradient(115deg,#061f42 0%,var(--brand-blue) 66%,#087f98 100%)}
@@ -103,7 +107,8 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background:
-    linear-gradient(180deg, rgba(248, 250, 252, 0.84), rgba(238, 245, 248, 0.92)),
+    radial-gradient(circle at 92% 8%, rgba(22, 185, 229, 0.16), transparent 28%),
+    linear-gradient(180deg, rgba(242, 250, 255, 0.9), rgba(223, 244, 251, 0.94)),
     url("/tour-world-background.png") center top/cover fixed;
 }
 
@@ -205,14 +210,14 @@ textarea {
 
 .site-shell {
   background:
-    linear-gradient(180deg, rgba(248, 250, 252, 0.16) 0%, rgba(248, 250, 252, 0.9) 58%, #f8fafc 100%);
+    linear-gradient(180deg, rgba(234, 248, 252, 0.12) 0%, rgba(237, 246, 255, 0.84) 58%, var(--brand-mist) 100%);
 }
 
 .hero-bg {
   background:
-    radial-gradient(circle at 20% 16%, rgba(247, 183, 49, 0.24), transparent 25%),
-    radial-gradient(circle at 88% 28%, rgba(36, 180, 170, 0.18), transparent 26%),
-    linear-gradient(90deg, rgba(3, 18, 38, 0.98) 0%, rgba(7, 37, 73, 0.87) 48%, rgba(7, 37, 73, 0.25) 100%),
+    radial-gradient(circle at 18% 14%, rgba(22, 185, 229, 0.22), transparent 27%),
+    radial-gradient(circle at 88% 28%, rgba(11, 184, 199, 0.2), transparent 28%),
+    linear-gradient(90deg, rgba(5, 43, 92, 0.98) 0%, rgba(7, 90, 158, 0.86) 48%, rgba(5, 43, 92, 0.22) 100%),
     url("/tour-world-background.png") center/cover;
   position: relative;
   overflow: hidden;
@@ -258,7 +263,7 @@ textarea {
   inset: auto 0 0;
   height: 5rem;
   content: "";
-  background: linear-gradient(180deg, transparent, #fff);
+  background: linear-gradient(180deg, transparent, var(--brand-blue-soft));
   pointer-events: none;
 }
 
@@ -873,7 +878,7 @@ textarea {
 }
 
 .section-pro:nth-of-type(even) {
-  background: rgba(255, 255, 255, 0.42);
+  background: linear-gradient(135deg, rgba(237, 246, 255, 0.72), rgba(234, 248, 252, 0.82));
 }
 
 .section-pro h2,
@@ -886,7 +891,8 @@ textarea {
 
 .confidence-panel {
   background:
-    linear-gradient(135deg, #ffffff 0%, #eef8f4 48%, #f8fbff 100%);
+    radial-gradient(circle at 12% 0%, rgba(22, 185, 229, .12), transparent 28%),
+    linear-gradient(135deg, #ffffff 0%, var(--brand-blue-soft) 48%, var(--brand-aqua-soft) 100%);
 }
 
 /* Landing pública: orientación de aerolíneas y traslados */
@@ -894,8 +900,8 @@ textarea {
   position: relative;
   overflow: hidden;
   background:
-    radial-gradient(circle at 92% 8%, rgba(18, 168, 204, .14), transparent 25%),
-    linear-gradient(180deg, #f7fbfe, #eef8f7);
+    radial-gradient(circle at 92% 8%, rgba(22, 185, 229, .2), transparent 27%),
+    linear-gradient(180deg, #f7fcff, var(--brand-sky-soft));
 }
 
 .airline-guide-heading {
@@ -1135,7 +1141,7 @@ textarea {
 .exclusive-card>span { display:grid;width:2.8rem;height:2.8rem;place-items:center;border-radius:.9rem;background:linear-gradient(135deg,#f8c14a,#d9a122);color:#082447;box-shadow:0 12px 25px rgba(0,0,0,.15) }
 .exclusive-card:hover { transform:translateY(-5px);border-color:rgba(255,217,119,.5);background:rgba(255,255,255,.15) }
 
-.verification-section { background:linear-gradient(180deg,#f8fafc,#eef8f4 55%,#f8fafc) }
+.verification-section { background:linear-gradient(180deg,var(--brand-blue-soft),var(--brand-aqua-soft) 55%,#f7fcff) }
 .verification-section>div { box-shadow:0 28px 70px rgba(8,36,71,.12) }
 .verification-card { background:linear-gradient(145deg,#fff,#f8fbfd);transition:transform 200ms ease,border-color 200ms ease,box-shadow 200ms ease }
 .verification-card>span { display:inline-grid;width:2.25rem;height:2.25rem;place-items:center;border-radius:.7rem;background:#082447;color:#ffd56a;font-size:.75rem;font-weight:900 }
@@ -1175,7 +1181,7 @@ textarea {
 }
 
 .enjoy-section {
-  background: linear-gradient(180deg, #f8fafc, #fff 60%);
+  background: linear-gradient(180deg, var(--brand-mist), #fff 60%, var(--brand-blue-soft));
 }
 
 .enjoy-visual {
@@ -1241,7 +1247,9 @@ textarea {
 }
 
 .faq-section {
-  background: linear-gradient(135deg, #f8fafc, #eef8f4 55%, #f8fbff);
+  background:
+    radial-gradient(circle at 88% 18%, rgba(11,184,199,.13), transparent 27%),
+    linear-gradient(135deg, var(--brand-blue-soft), #fff 52%, var(--brand-mist));
 }
 
 .faq-item {
