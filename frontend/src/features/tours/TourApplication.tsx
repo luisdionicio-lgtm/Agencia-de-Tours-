@@ -327,7 +327,6 @@ function Shell() {
             {links.map(([label, to]) => <NavLink key={label} to={to}>{label}</NavLink>)}
           </nav>
           <div className="hidden items-center gap-3 lg:flex">
-            <Link to="/admin" className="internal-header-link"><span className="button-emblem"><ShieldCheck size={15} /></span><span>Acceso interno</span></Link>
             <Link to="/tours" className="btn-gold header-reserve-button"><span className="button-emblem"><CalendarDays size={16} /></span><span>Reservar ahora</span><ArrowRight className="button-arrow" size={16} /></Link>
           </div>
           <button className="menu-button rounded-xl border border-slate-200 p-2 lg:hidden" onClick={() => setOpen(!open)} aria-label={open ? "Cerrar menu" : "Abrir menu"} aria-expanded={open}>
@@ -337,7 +336,6 @@ function Shell() {
         {open && (
           <div className="mobile-menu border-t border-slate-200 bg-white/95 px-4 py-4 backdrop-blur-xl lg:hidden">
             {links.map(([label, to]) => <Link key={label} to={to} onClick={() => setOpen(false)} className="block rounded-lg px-3 py-3 font-semibold text-slate-700">{label}</Link>)}
-            <Link to="/admin" onClick={() => setOpen(false)} className="block rounded-lg bg-[#edf6fb] px-3 py-3 font-black text-[#0f4c81]">Acceso interno</Link>
           </div>
         )}
       </header>
@@ -447,7 +445,6 @@ function Home() {
       <Testimonials />
       <SocialSpotlight />
       <FrequentlyAskedQuestions />
-      <InternalAccessPromo />
       <section id="contacto" className="formal-cta px-4 py-20 text-white">
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
           <div className="max-w-3xl"><span className="text-sm font-black uppercase tracking-[0.2em] text-amber-300">El mundo te espera</span><h2 className="mt-3 text-4xl font-black md:text-5xl">Tu próxima aventura empieza hoy</h2><p className="mt-4 text-lg text-slate-200">Reserva con JhonToursPerú y vive una experiencia diseñada para sorprenderte.</p></div>
@@ -455,20 +452,6 @@ function Home() {
         </div>
       </section>
     </>
-  );
-}
-
-function InternalAccessPromo() {
-  return (
-    <section className="internal-access-section px-4 py-12">
-      <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-5 rounded-2xl p-6 md:flex-row md:items-center md:p-8">
-        <div className="flex max-w-3xl gap-4">
-          <span className="internal-access-icon"><ShieldCheck /></span>
-          <div><small>Área privada de JhonToursPerú</small><h2>Acceso para administradores y trabajadores</h2><p>Gestiona tours, revisa reservas y valida comprobantes Yape según los permisos asignados.</p></div>
-        </div>
-        <Link to="/admin" className="internal-access-button"><span className="button-emblem"><ShieldCheck size={17} /></span><span className="button-copy"><small>Área protegida</small><strong>Ingresar al panel</strong></span><span className="button-terminal"><ArrowRight size={16} /></span></Link>
-      </div>
-    </section>
   );
 }
 

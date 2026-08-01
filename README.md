@@ -5,6 +5,7 @@ Web publicitaria fullstack para captar clientes, mostrar tours nacionales e inte
 ## Incluye
 
 - Landing adaptable con la paleta azul, turquesa y amarilla del logo.
+- Tipografía profesional con Montserrat para títulos y Source Sans 3 para lectura clara.
 - Carrusel principal con marco azul de marca y acceso directo desde cada imagen al detalle del paquete.
 - Catálogo, filtros, detalle, itinerario, inclusiones y exclusiones de cada tour.
 - Guía breve de aerolíneas por destino con logotipos identificables y enlaces oficiales para comparar precio final, horarios, equipaje y conexiones.
@@ -13,7 +14,7 @@ Web publicitaria fullstack para captar clientes, mostrar tours nacionales e inte
 - Estados visibles desde la creación hasta la confirmación.
 - Comprobante PDF por reserva con logo, cliente, tour, fecha, viajeros, pago, itinerario y extras.
 - Guías PDF adicionales por destino, visibles únicamente después de confirmar.
-- Panel interno en `/admin` con roles `ADMIN` y `WORKER`.
+- Panel interno en `/admin` con roles `ADMIN` y `WORKER`, accesible solo por ruta directa y sin promoción en la navegación pública.
 - Protección temporal de la solicitud y validación profesional de Yape con archivo, fecha, monto, código, trabajador e historial.
 - Seguridad con JWT, rate limiting, CORS, cabeceras, validación Zod y variables de entorno.
 

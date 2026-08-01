@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Source+Sans+3:wght@400;500;600;700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,7 +6,7 @@
 :root {
   color: #0f172a;
   background: #f8fafc;
-  font-family: "DM Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: "Source Sans 3", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   /* Paleta oficial inspirada en el logo JhonToursPerú. */
   --brand-navy: #052b5c;
   --brand-blue: #075a9e;
@@ -83,7 +83,15 @@
 .yape-qr-card{position:relative;overflow:hidden;border-color:#ddc6e8;background:radial-gradient(circle at 100% 0,rgba(143,61,174,.14),transparent 34%),linear-gradient(180deg,#fff,#fbf6fd)}.yape-qr-card::before{position:absolute;inset:0 0 auto;height:6px;content:"";background:linear-gradient(90deg,#5b2081,#8e3eae,#22c5c7)}.yape-qr-heading{display:flex;align-items:center;justify-content:center;gap:.75rem;color:#6f2c91;text-align:left}.yape-qr-heading img{width:58px;height:58px;margin:0;border:0;border-radius:14px;padding:0;box-shadow:0 10px 22px rgba(111,44,145,.18)}.yape-qr-heading strong,.yape-qr-heading small{display:block}.yape-qr-heading strong{font-size:1.2rem}.yape-qr-heading small{color:#805b91}.yape-qr-frame{width:min(100%,324px);margin:1rem auto;border-radius:1.5rem;background:linear-gradient(135deg,#6f2c91,#9e4cba);padding:.65rem;box-shadow:0 20px 38px rgba(111,44,145,.25)}.yape-qr-frame img{width:100%;margin:0;border:0;border-radius:1rem;background:white;padding:.7rem}.yape-qr-card>strong{color:#6f2c91}
 
 h1, h2, h3, h4, h5, h6, strong {
-  font-family: "Manrope", "DM Sans", sans-serif;
+  font-family: "Montserrat", "Source Sans 3", sans-serif;
+  letter-spacing: -.018em;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
 }
 
 html {
@@ -325,7 +333,6 @@ textarea {
 .primary-action,
 .search-submit,
 .catalog-advisor,
-.internal-access-button,
 .formal-secondary-action {
   display: inline-flex;
   min-height: 3.7rem;
@@ -394,8 +401,7 @@ textarea {
   box-shadow:0 15px 32px rgba(8,36,71,.2),inset 0 1px rgba(255,255,255,.14);
 }
 
-.search-submit .button-terminal,
-.internal-access-button .button-terminal {
+.search-submit .button-terminal {
   width:2rem;
   height:2rem;
   margin-left:auto;
@@ -421,7 +427,6 @@ textarea {
 .search-submit:active,
 .catalog-advisor:active,
 .tour-card-cta:active,
-.internal-access-button:active,
 .formal-secondary-action:active { transform:translateY(0) scale(.985); }
 
 .reservation-submit {
@@ -1430,7 +1435,7 @@ textarea {
 .appointment-preview-bar strong,.appointment-preview-bar small { display:block }
 .appointment-preview-bar strong { color:#082447;font-size:.82rem }
 .appointment-preview-bar small { margin-top:.1rem;color:#64748b;font-size:.68rem }
-.appointment-preview pre { max-height:20rem;overflow:auto;margin:0;padding:1rem;white-space:pre-wrap;color:#27495a;font-family:"DM Sans",sans-serif;font-size:.72rem;line-height:1.55 }
+.appointment-preview pre { max-height:20rem;overflow:auto;margin:0;padding:1rem;white-space:pre-wrap;color:#27495a;font-family:"Source Sans 3",sans-serif;font-size:.72rem;line-height:1.55 }
 .appointment-actions { display:flex;flex-wrap:wrap;gap:.55rem;border-top:1px solid #cfe4d8;background:#fff;padding:.75rem }
 .appointment-actions button,.appointment-actions a { display:inline-flex;align-items:center;justify-content:center;gap:.4rem;border:0;border-radius:.7rem;padding:.65rem .8rem;font-size:.72rem;font-weight:900 }
 .appointment-actions button { background:#082447;color:#fff }
@@ -1452,19 +1457,6 @@ textarea {
   color: #fcd978;
   transform: translateX(3px);
 }
-
-.internal-header-link { display:inline-flex;min-height:2.85rem;align-items:center;gap:.5rem;border:1px solid #cfdae4;border-radius:.72rem;background:#fff;padding:.35rem .65rem .35rem .4rem;color:#0f4c81;font-size:.72rem;font-weight:950;box-shadow:0 8px 20px rgba(8,36,71,.06);transition:transform 180ms ease,background 180ms ease,border-color 180ms ease }
-.internal-header-link .button-emblem { width:2.1rem;height:2.1rem;border-color:#d8e8f1;background:#edf7fa;color:#087e76;border-radius:.58rem }
-.internal-header-link:hover { transform:translateY(-1px);border-color:#0f4c81;background:#f7fbfd }
-
-.internal-access-section { background:linear-gradient(180deg,#f8fafc,#eef8f4) }
-.internal-access-section>div { border:1px solid rgba(15,76,129,.16);background:linear-gradient(110deg,#fff,#f2f9fc);box-shadow:0 18px 45px rgba(8,36,71,.08) }
-.internal-access-icon { display:grid;width:3rem;height:3rem;flex:0 0 3rem;place-items:center;border-radius:.85rem;background:#082447;color:#ffd56a }
-.internal-access-section small { color:#0f7a4f;font-size:.68rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase }
-.internal-access-section h2 { margin:.25rem 0 0;color:#082447;font-size:1.35rem;font-weight:900 }
-.internal-access-section p { margin:.35rem 0 0;color:#64748b;font-size:.82rem;line-height:1.6 }
-.internal-access-button { flex:0 0 auto;border:1px solid rgba(2,26,52,.18);background:linear-gradient(105deg,#061b34,#0f4c81);color:#fff;box-shadow:0 14px 30px rgba(8,36,71,.18) }
-.internal-access-button .button-emblem { border-color:rgba(255,213,106,.25);background:rgba(255,213,106,.12);color:#ffd56a }
 
 .internal-login-layout { display:grid;max-width:58rem;margin:0 auto;overflow:hidden;border:1px solid #dce7ef;border-radius:1.35rem;background:#fff;box-shadow:0 24px 60px rgba(8,36,71,.12) }
 .internal-login-layout>aside { background:linear-gradient(145deg,#061b34,#0f4c81);padding:2rem;color:#fff }
