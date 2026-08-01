@@ -117,6 +117,10 @@ export function useNavigate() {
   return useRouter().navigate;
 }
 
+export function usePathname() {
+  return useRouter().pathname;
+}
+
 export function useSearchParams(): [URLSearchParams, (next: Record<string, string> | URLSearchParams) => void] {
   const { pathname, search, navigate } = useRouter();
   const params = useMemo(() => new URLSearchParams(search), [search]);

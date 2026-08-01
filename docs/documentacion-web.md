@@ -85,7 +85,11 @@ El panel interno puede conservar fechas, alertas y capacidad para organización 
 
 ## Arquitectura
 
-- `frontend/src/features/tours/TourApplication.tsx`: experiencia pública, reserva, Yape, confirmación y panel.
+- `frontend/src/features/tours/TourApplication.tsx`: coordinación de rutas, experiencia pública, reserva, Yape, confirmación y panel.
+- `frontend/src/features/tours/components`: componentes reutilizables del catálogo.
+- `frontend/src/features/tours/sections`: apartados completos de la landing.
+- `frontend/src/features/tours/config`: contacto, redes, WhatsApp y configuración de demostración.
+- `frontend/src/features/tours/lib`: formato de precios, códigos y utilidades de presentación.
 - `frontend/src/index.css`: sistema visual adaptable.
 - `frontend/src/infrastructure/api/client.ts`: cliente HTTP y sesión interna.
 - `backend/src/services`: reglas de reservas, pagos, tours, correo y operaciones.
