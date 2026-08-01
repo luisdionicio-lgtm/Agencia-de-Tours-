@@ -6,6 +6,7 @@ Web publicitaria fullstack para captar clientes, mostrar tours nacionales e inte
 
 - Landing adaptable con la paleta azul, turquesa y amarilla del logo.
 - Tipografía profesional con Montserrat para títulos y Source Sans 3 para lectura clara.
+- Código organizado por responsabilidades: estructura pública, catálogo, secciones, configuración y utilidades.
 - Carrusel principal con marco azul de marca y acceso directo desde cada imagen al detalle del paquete.
 - Catálogo, filtros, detalle, itinerario, inclusiones y exclusiones de cada tour.
 - Guía breve de aerolíneas por destino con logotipos identificables y enlaces oficiales para comparar precio final, horarios, equipaje y conexiones.
