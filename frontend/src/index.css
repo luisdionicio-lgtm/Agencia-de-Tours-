@@ -391,6 +391,13 @@ textarea {
 
 .tour-card {
   position: relative;
+  display: flex;
+  min-height: 100%;
+  overflow: hidden;
+  flex-direction: column;
+  border: 1px solid rgba(8, 36, 71, .11);
+  border-radius: 1.15rem;
+  background: #fff;
   box-shadow: 0 18px 45px rgba(8, 36, 71, 0.1);
   transform-style: preserve-3d;
   will-change: transform;
@@ -407,13 +414,185 @@ textarea {
   transition: border-color 240ms ease, box-shadow 240ms ease;
 }
 
-.tour-card img {
+.tour-card-media {
+  position: relative;
+  height: 14rem;
+  overflow: hidden;
+  background: #dce8ef;
+}
+
+.tour-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   transition: transform 420ms ease;
 }
 
-.tour-card:hover img {
+.tour-card:hover .tour-card-media img {
   transform: scale(1.075);
 }
+
+.tour-card-media-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(4, 24, 47, .05) 35%, rgba(4, 24, 47, .78));
+  pointer-events: none;
+}
+
+.tour-type-badge,
+.tour-verified-badge {
+  position: absolute;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  border-radius: .55rem;
+  font-size: .65rem;
+  font-weight: 900;
+  letter-spacing: .055em;
+  text-transform: uppercase;
+}
+
+.tour-type-badge {
+  top: .9rem;
+  left: .9rem;
+  background: rgba(255, 255, 255, .94);
+  padding: .48rem .65rem;
+  color: #073b83;
+  box-shadow: 0 8px 20px rgba(8, 36, 71, .14);
+  backdrop-filter: blur(8px);
+}
+
+.tour-verified-badge {
+  bottom: .85rem;
+  left: .9rem;
+  border: 1px solid rgba(255, 255, 255, .24);
+  background: rgba(7, 59, 131, .9);
+  padding: .48rem .65rem;
+  color: #fff1b9;
+  backdrop-filter: blur(8px);
+}
+
+.tour-card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 1.15rem;
+}
+
+.tour-card-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .65rem;
+}
+
+.tour-location {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  gap: .3rem;
+  color: #087e76;
+  font-size: .74rem;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.tour-location svg { flex: 0 0 auto; margin-top: .05rem; }
+
+.tour-recommended {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: .3rem;
+  border: 1px solid #f5d47b;
+  border-radius: 999px;
+  background: #fff8df;
+  padding: .38rem .55rem;
+  color: #9a5a08;
+  font-size: .61rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.tour-card-body > h3 {
+  margin-top: .6rem;
+  color: #082447;
+  font-size: 1.35rem;
+  font-weight: 900;
+  letter-spacing: -.025em;
+  line-height: 1.15;
+}
+
+.tour-card-description {
+  display: -webkit-box;
+  min-height: 3rem;
+  margin-top: .65rem;
+  overflow: hidden;
+  color: #5b6e82;
+  font-size: .79rem;
+  line-height: 1.55;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.tour-benefits {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .45rem;
+  margin-top: 1rem;
+}
+
+.tour-benefits > span {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: .35rem;
+  border: 1px solid #e7eef3;
+  border-radius: .65rem;
+  background: #f8fbfc;
+  padding: .48rem .42rem;
+  color: #344b62;
+  font-size: .64rem;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.tour-benefits i {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  color: #087e76;
+  font-style: normal;
+}
+
+.tour-card-summary {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: .8rem;
+  margin-top: 1rem;
+  border-top: 1px solid #e8eef3;
+  padding-top: .9rem;
+}
+
+.tour-card-price small,
+.tour-card-price span,
+.tour-card-duration small,
+.tour-card-duration strong { display: block; }
+.tour-card-price small { color: #708194; font-size: .62rem; font-weight: 800; text-transform: uppercase; }
+.tour-card-price strong { display:block; margin-top:.05rem; color:#082447; font-size:1.42rem; font-weight:950; letter-spacing:-.035em; line-height:1.05; }
+.tour-card-price span { margin-top:.18rem; color:#7a8998; font-size:.58rem; }
+
+.tour-card-duration {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  color: #087e76;
+}
+
+.tour-card-duration small { color:#7a8998; font-size:.58rem; font-weight:700; }
+.tour-card-duration strong { max-width:6.8rem; margin-top:.1rem; color:#42596e; font-size:.67rem; line-height:1.2; }
 
 .tour-card:hover {
   transform: perspective(1000px) translateY(-9px) rotateX(1.5deg) rotateY(-1deg);
@@ -430,6 +609,24 @@ textarea {
 .whatsapp-cta {
   transition: transform 200ms ease, box-shadow 200ms ease, background 200ms ease;
 }
+
+.tour-card-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  margin-top: 1rem;
+  border-radius: .75rem;
+  background: linear-gradient(100deg, #082447, #0b4674);
+  padding: .82rem 1rem;
+  color: #fff;
+  font-size: .78rem;
+  font-weight: 900;
+  letter-spacing: .01em;
+}
+
+.tour-card-cta svg { color:#ffd56a; transition:transform 180ms ease; }
+.tour-card-cta:hover svg { transform:translateX(3px); }
 
 .tour-card-cta:hover,
 .search-submit:hover,
@@ -1215,6 +1412,7 @@ a:focus-visible {
   .hero-bg { background-position: 38% center; }
 
   .hero-bg::before { opacity: .45; }
+  .tour-card-media { height:13rem; }
   .airline-guide-heading { align-items:flex-start; flex-direction:column; }
   .airline-route-grid { grid-template-columns:1fr; }
   .airline-route-card { min-height:auto; }

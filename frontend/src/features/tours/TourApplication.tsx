@@ -427,33 +427,37 @@ function useTours(type?: TourType | null) {
 }
 
 function TourCard({ tour }: { tour: Tour }) {
+  const benefits = [
+    { icon: <ShieldCheck size={17} />, label: "Viaje seguro" },
+    { icon: <Hotel size={17} />, label: "Alojamiento" },
+    { icon: <UsersRound size={17} />, label: "Asistencia" }
+  ];
+
   return (
-    <article className="tour-card group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-      <div className="relative overflow-hidden">
-        <img src={tour.imageUrl} alt={tour.title} loading="lazy" decoding="async" className="h-60 w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#061b34]/70 via-transparent to-transparent opacity-90" />
-        <span className="absolute left-4 top-4 rounded-lg bg-white/95 px-3 py-1 text-xs font-black uppercase text-[#082447] shadow-sm">{tour.type}</span>
-        <span className="absolute bottom-4 left-4 inline-flex items-center gap-1 rounded-lg bg-[#082447]/90 px-3 py-1 text-xs font-black text-amber-200"><Star size={14} fill="currentColor" /> Verificado</span>
+    <article className="tour-card group">
+      <div className="tour-card-media">
+        <img src={tour.imageUrl} alt={tour.title} loading="lazy" decoding="async" />
+        <div className="tour-card-media-shade" />
+        <span className="tour-type-badge"><Plane size={13} /> {tour.type === "NACIONAL" ? "Tour nacional" : "Tour internacional"}</span>
+        <span className="tour-verified-badge"><ShieldCheck size={14} /> Experiencia verificada</span>
       </div>
-      <div className="space-y-4 p-5">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <p className="flex items-center gap-1 text-sm font-semibold text-[#0f7a4f]"><MapPin size={16} /> {tour.destination}</p>
-            <h3 className="mt-1 text-xl font-bold text-[#082447]">{tour.title}</h3>
-          </div>
-          <span className="rounded-lg bg-amber-100 px-3 py-1 text-sm font-bold text-amber-700">Recomendado</span>
+      <div className="tour-card-body">
+        <div className="tour-card-heading">
+          <p className="tour-location"><MapPin size={15} /> {tour.destination}</p>
+          <span className="tour-recommended"><Award size={15} /> Selección JhonTours</span>
         </div>
-        <p className="line-clamp-2 text-sm leading-6 text-slate-600">{tour.description}</p>
-        <div className="grid grid-cols-3 gap-2 text-center text-xs font-bold text-slate-600">
-          <span className="rounded-lg bg-slate-50 px-2 py-2"><ShieldCheck className="mx-auto mb-1 text-[#0f7a4f]" size={16} />Seguro</span>
-          <span className="rounded-lg bg-slate-50 px-2 py-2"><Hotel className="mx-auto mb-1 text-[#0f4c81]" size={16} />Hotel</span>
-          <span className="rounded-lg bg-slate-50 px-2 py-2"><UsersRound className="mx-auto mb-1 text-amber-600" size={16} />Guia</span>
+        <h3>{tour.title}</h3>
+        <p className="tour-card-description">{tour.description}</p>
+        <div className="tour-benefits" aria-label="Características del paquete">
+          {benefits.map((benefit) => (
+            <span key={benefit.label}><i>{benefit.icon}</i>{benefit.label}</span>
+          ))}
         </div>
-        <div className="flex items-center justify-between border-t border-slate-100 pt-4">
-          <span className="text-2xl font-black text-[#082447]">{tourMoney(tour)}</span>
-          <span className="flex items-center gap-1 text-sm text-slate-500"><CalendarDays size={16} /> {tour.duration}</span>
+        <div className="tour-card-summary">
+          <div className="tour-card-price"><small>Desde</small><strong>{tourMoney(tour)}</strong><span>por persona</span></div>
+          <div className="tour-card-duration"><CalendarDays size={19} /><span><small>Duración</small><strong>{tour.duration}</strong></span></div>
         </div>
-        <Link to={`/tours/${tour.id}`} className="tour-card-cta flex items-center justify-center gap-2 rounded-xl bg-[#082447] px-4 py-3 font-bold text-white">Ver experiencia <ArrowRight size={18} /></Link>
+        <Link to={`/tours/${tour.id}`} className="tour-card-cta">Conocer el paquete <ArrowRight size={18} /></Link>
       </div>
     </article>
   );
