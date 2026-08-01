@@ -13,7 +13,7 @@ Web publicitaria fullstack para captar clientes, mostrar tours nacionales e inte
 - Mejor época para viajar, calendario por tour y salidas programadas.
 - Reserva pendiente con código privado, QR informativo y mensaje formal de WhatsApp.
 - Estados visibles desde la creación hasta la confirmación.
-- Comprobante PDF por reserva con logo, cliente, tour, fecha, viajeros, pago, itinerario y extras.
+- Constancia PDF demostrativa con logo, resumen económico, saldo, itinerario día por día, incluidos, exclusiones y extras opcionales; actualmente no representa una boleta tributaria ni un cobro real.
 - Guías PDF adicionales por destino, visibles únicamente después de confirmar.
 - Panel interno en `/admin` con roles `ADMIN` y `WORKER`, accesible solo por ruta directa y sin promoción en la navegación pública.
 - Protección temporal de la solicitud y validación profesional de Yape con archivo, fecha, monto, código, trabajador e historial.

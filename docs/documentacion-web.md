@@ -16,7 +16,7 @@ La web funciona como una vitrina publicitaria breve: presenta confianza, permite
 8. El servidor valida tipo, tamaño y firma real del archivo; WhatsApp queda como aviso opcional y no se envía automáticamente.
 9. Un administrador o trabajador valida o rechaza el pago.
 10. Al confirmar, la reserva pasa a `PAGADA` y registra al trabajador responsable.
-11. La confirmación habilita el comprobante PDF, la guía del destino, extras y la preparación de una cita.
+11. La confirmación simulada habilita la constancia PDF demostrativa, la guía del destino, extras y la preparación de una cita.
 
 Estados comunicados al cliente:
 
@@ -34,7 +34,9 @@ Ica y Oxapampa se presentan como conexiones terrestres desde Lima y se ofrece co
 
 ## Comprobantes y contenido posterior
 
-El comprobante dinámico por reserva incluye logo, código, cliente, contacto, paquete, destino, fecha, viajeros, método Yape, monto, estado, itinerario, especificaciones, extras y contacto oficial.
+La constancia dinámica incluye logo, código, cliente, contacto, paquete, destino, fecha, viajeros, resumen económico, separación, saldo, estado, itinerario detallado, incluidos, exclusiones, extras opcionales y contacto oficial. En la versión actual se marca como demostración, sin cobro real y sin valor tributario. Una boleta electrónica real requerirá posteriormente los datos fiscales definitivos y la integración autorizada que se seleccione.
+
+Los itinerarios actuales son referenciales y sirven para demostrar la presentación día por día. Se reemplazarán con horarios, proveedores, puntos de encuentro y condiciones confirmadas cuando la empresa entregue la información comercial final.
 
 Las guías por destino son documentos adicionales y conservan imagen referencial a color, logo y servicios opcionales. Existen variantes para Cusco, Orlando, Oxapampa, Ica y Egipto, más una guía general. Los extras no se presentan como incluidos en el precio principal.
 

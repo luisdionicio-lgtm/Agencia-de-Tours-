@@ -8,5 +8,6 @@ La funcionalidad se divide por responsabilidad para que cada mejora pueda realiz
 - `sections/`: apartados completos de la landing, como la orientación de aerolíneas.
 - `config/`: datos de contacto, WhatsApp, redes y configuración de demostración.
 - `lib/`: formato de precios, códigos y utilidades de presentación.
+- `lib/reservationReceipt.ts`: generación de la constancia PDF demostrativa y separación clara de itinerario, incluidos, exclusiones y opcionales.
 
 Las reglas de negocio y llamadas HTTP permanecen separadas en el backend y en `infrastructure/api`.

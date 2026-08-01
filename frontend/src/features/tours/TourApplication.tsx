@@ -11,6 +11,7 @@ import { SiteShell } from "./components/SiteShell";
 import { TourCard } from "./components/TourCard";
 import { buildWhatsAppUrl, demoStaffAccounts, isDemoMode, reservationAmount, socialLinks, whatsappMessages } from "./config/contact";
 import { destinationImage, paymentMoney, reservationCode, tourCurrency, tourMoney, type TourDeparture } from "./lib/presentation";
+import { downloadReservationReceipt } from "./lib/reservationReceipt";
 import { AirlineGuideSection } from "./sections/AirlineGuideSection";
 
 const demoDepartures = (_tourId: number, items: [number, string, string, number, number][]): TourDeparture[] =>
@@ -30,9 +31,14 @@ const demoTours: Tour[] = [
     imageUrl: destinationImage("photo-1587595431973-160d0d94add1"),
     isFeatured: true,
     status: "ACTIVO",
-    itinerary: ["Recepcion en Cusco y aclimatacion", "Valle Sagrado con guia local", "Ingreso a Machu Picchu", "Retorno asistido a Lima"],
-    includes: ["Hotel seleccionado", "Traslados", "Guiado profesional", "Asistencia JhonToursPerú"],
-    excludes: ["Gastos personales", "Servicios no mencionados"],
+    itinerary: [
+      "Recepción en Cusco, traslado al alojamiento, orientación inicial y tiempo de aclimatación.",
+      "Recorrido guiado por el Valle Sagrado, paradas culturales y retorno coordinado al alojamiento.",
+      "Traslado hacia Machu Picchu, ingreso programado, visita guiada y retorno asistido a Cusco.",
+      "Desayuno, tiempo libre según horario y traslado coordinado para el viaje de retorno."
+    ],
+    includes: ["Alojamiento seleccionado por 3 noches", "Traslados indicados en el programa", "Guiado profesional en los recorridos señalados", "Asistencia de JhonToursPerú durante el viaje"],
+    excludes: ["Vuelos o transporte hasta Cusco, salvo indicación expresa", "Alimentación no detallada en el programa", "Gastos personales y servicios opcionales"],
     departures: demoDepartures(1, [[101, "2026-08-08", "2026-08-11", 16, 3], [102, "2026-08-29", "2026-09-01", 18, 11], [103, "2026-10-10", "2026-10-13", 20, 18]])
   },
   {
@@ -48,6 +54,17 @@ const demoTours: Tour[] = [
     imageUrl: destinationImage("photo-1597466599360-3b9775841aec"),
     isFeatured: true,
     status: "ACTIVO",
+    itinerary: [
+      "Llegada a Orlando, recepción coordinada, traslado al hotel y orientación sobre el programa.",
+      "Visita referencial a Magic Kingdom con acompañamiento y horarios previamente coordinados.",
+      "Experiencia en EPCOT y tiempo destinado a sus principales atracciones y espectáculos.",
+      "Jornada en Disney's Hollywood Studios según entradas y disponibilidad seleccionadas.",
+      "Día de compras y recorrido por establecimientos previamente recomendados.",
+      "Día flexible para parque adicional o actividad opcional, sujeto a cotización.",
+      "Salida del hotel y traslado coordinado al aeropuerto para el viaje de retorno."
+    ],
+    includes: ["Alojamiento seleccionado por 6 noches", "Traslados aeropuerto-hotel-aeropuerto", "Orientación para visitas y reservas", "Asistencia remota de JhonToursPerú"],
+    excludes: ["Vuelos internacionales", "Entradas no indicadas expresamente", "Alimentación, equipaje y gastos personales no especificados"],
     departures: demoDepartures(2, [[201, "2026-08-24", "2026-08-30", 14, 4], [202, "2026-09-26", "2026-10-02", 16, 12], [203, "2026-11-07", "2026-11-13", 18, 18]])
   },
   {
@@ -63,6 +80,13 @@ const demoTours: Tour[] = [
     imageUrl: "https://inforegion.pe/wp-content/uploads/2025/01/baf433a5-dji_20241114093018_0090_d-2.jpg",
     isFeatured: false,
     status: "ACTIVO",
+    itinerary: [
+      "Salida coordinada hacia Oxapampa, recepción local, instalación y recorrido introductorio por la ciudad.",
+      "Visita referencial a cataratas, experiencia de café y puntos naturales con guía local.",
+      "Desayuno, visita cultural breve, tiempo para compras locales y retorno coordinado."
+    ],
+    includes: ["Alojamiento seleccionado por 2 noches", "Movilidad turística durante los recorridos indicados", "Guía local", "Asistencia de JhonToursPerú"],
+    excludes: ["Transporte no indicado en el programa", "Alimentación no especificada", "Actividades opcionales y gastos personales"],
     departures: demoDepartures(3, [[301, "2026-08-05", "2026-08-07", 15, 2], [302, "2026-08-26", "2026-08-28", 18, 10], [303, "2026-09-23", "2026-09-25", 20, 19]])
   },
   {
@@ -78,6 +102,12 @@ const demoTours: Tour[] = [
     imageUrl: "https://www.stampbystamptravel.com/wp-content/uploads/2025/02/laguna-huacachina-ica.jpg.webp",
     isFeatured: true,
     status: "ACTIVO",
+    itinerary: [
+      "Salida hacia Ica, recepción, visita referencial a una bodega seleccionada y recorrido por Huacachina al atardecer.",
+      "Experiencia programada en las dunas, tiempo libre en el oasis y retorno coordinado al punto acordado."
+    ],
+    includes: ["Alojamiento seleccionado por 1 noche", "Movilidad turística para las visitas indicadas", "Coordinación de actividades", "Asistencia de JhonToursPerú"],
+    excludes: ["Alimentación no detallada", "Actividades adicionales no indicadas", "Gastos personales"],
     departures: demoDepartures(4, [[401, "2026-08-02", "2026-08-03", 20, 3], [402, "2026-08-16", "2026-08-17", 22, 14], [403, "2026-09-08", "2026-09-09", 24, 22]])
   },
   {
@@ -93,9 +123,18 @@ const demoTours: Tour[] = [
     imageUrl: "https://www.barcelo.com/guia-turismo/wp-content/uploads/2022/05/el-cairo1.jpg",
     isFeatured: true,
     status: "ACTIVO",
-    itinerary: ["Llegada asistida a El Cairo", "Piramides de Giza y Esfinge con guia", "Museo Egipcio y barrio historico", "Crucero por el Nilo y templos principales", "Retorno con seguimiento del asesor"],
-    includes: ["Hoteles seleccionados", "Traslados programados", "Guia especializado en espanol", "Asistencia JhonToursPerú por WhatsApp"],
-    excludes: ["Vuelos internacionales", "Gastos personales", "Propinas y servicios no mencionados"],
+    itinerary: [
+      "Llegada a El Cairo, recepción coordinada, traslado al hotel y orientación inicial del programa.",
+      "Visita guiada a las Pirámides de Giza, la Esfinge y puntos panorámicos autorizados.",
+      "Recorrido por el Museo Egipcio y sectores históricos de El Cairo con guía especializado.",
+      "Traslado programado para iniciar la experiencia referencial de crucero por el Nilo.",
+      "Navegación y visita a templos principales según el itinerario confirmado por el operador.",
+      "Continuación de visitas culturales y tiempo de descanso a bordo o en alojamiento seleccionado.",
+      "Retorno a El Cairo, tiempo coordinado para compras o actividad opcional previamente cotizada.",
+      "Traslado al aeropuerto y acompañamiento remoto hasta finalizar el viaje."
+    ],
+    includes: ["Alojamiento seleccionado por 7 noches", "Traslados programados en destino", "Guía especializado en español durante las visitas indicadas", "Asistencia de JhonToursPerú por WhatsApp"],
+    excludes: ["Vuelos internacionales", "Visa, seguros y propinas salvo indicación expresa", "Comidas, gastos personales y servicios no mencionados"],
     departures: demoDepartures(5, [[501, "2026-09-07", "2026-09-14", 12, 2], [502, "2026-10-12", "2026-10-19", 14, 9], [503, "2026-11-16", "2026-11-23", 16, 15]])
   }
 ];
@@ -143,129 +182,6 @@ function guideForTour(tour: Tour) {
     key: "general", label: tour.title, imageUrl: tour.imageUrl || destinationImage("photo-1488646953014-85cb44e25828"),
     extras: ["Traslados", "Alojamiento adicional", "Alimentación", "Equipaje", "Seguro de viaje", "Asistencia personalizada"]
   };
-}
-
-async function imageAsDataUrl(path: string) {
-  const response = await fetch(path);
-  if (!response.ok) throw new Error("No se pudo cargar el logo");
-  const blob = await response.blob();
-  return await new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result));
-    reader.onerror = () => reject(reader.error);
-    reader.readAsDataURL(blob);
-  });
-}
-
-async function downloadReservationReceipt(reservation: Reservation) {
-  const { jsPDF } = await import("jspdf");
-  const doc = new jsPDF({ format: "a4", unit: "mm" });
-  const navy: [number, number, number] = [8, 36, 71];
-  const blue: [number, number, number] = [15, 76, 129];
-  const teal: [number, number, number] = [9, 168, 137];
-  const gold: [number, number, number] = [247, 183, 49];
-  const muted: [number, number, number] = [71, 85, 105];
-  const code = reservationCode(reservation.id);
-
-  doc.setFillColor(...navy);
-  doc.rect(0, 0, 210, 43, "F");
-  doc.setFillColor(...gold);
-  doc.rect(0, 43, 210, 2, "F");
-  try {
-    const logo = await imageAsDataUrl("/john-tours-logo-cropped.png");
-    doc.addImage(logo, "PNG", 14, 8, 58, 25, undefined, "FAST");
-  } catch {
-    doc.setTextColor(255, 255, 255);
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(16);
-    doc.text("JHONTOURSPERÚ", 14, 23);
-  }
-
-  doc.setTextColor(255, 255, 255);
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(15);
-  doc.text("COMPROBANTE DE RESERVA", 196, 17, { align: "right" });
-  doc.setFontSize(9);
-  doc.text(`Código ${code}`, 196, 25, { align: "right" });
-  doc.setFont("helvetica", "normal");
-  doc.text("Documento de separación sujeto a validación", 196, 32, { align: "right" });
-
-  let y = 57;
-  const sectionTitle = (title: string) => {
-    doc.setFillColor(239, 248, 247);
-    doc.roundedRect(14, y - 5, 182, 10, 2, 2, "F");
-    doc.setTextColor(...blue);
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(10);
-    doc.text(title.toUpperCase(), 18, y + 1);
-    y += 12;
-  };
-  const field = (label: string, value: string, x: number, width: number) => {
-    doc.setTextColor(...muted);
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(8);
-    doc.text(label.toUpperCase(), x, y);
-    doc.setTextColor(...navy);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(10);
-    const lines = doc.splitTextToSize(value || "Por confirmar", width);
-    doc.text(lines, x, y + 5);
-  };
-
-  sectionTitle("Datos de la reserva");
-  field("Cliente", reservation.customer.fullName, 18, 80);
-  field("Documento / contacto", reservation.customer.phone || reservation.customer.email, 108, 80);
-  y += 18;
-  field("Paquete", reservation.tour.title, 18, 80);
-  field("Destino", reservation.tour.destination, 108, 80);
-  y += 18;
-  field("Fecha de viaje", reservation.travelDate, 18, 80);
-  field("Viajeros", String(reservation.peopleCount), 108, 80);
-  y += 20;
-
-  sectionTitle("Pago y validación");
-  field("Método", "Yape", 18, 52);
-  field("Separación", `S/ ${reservationAmount}.00`, 74, 52);
-  field("Estado", reservation.status === "PAGADA" ? "Pago validado" : "Validación pendiente", 132, 56);
-  y += 20;
-
-  const itinerary = reservation.tour.itinerary?.length ? reservation.tour.itinerary : ["Coordinación del itinerario final con un asesor"];
-  sectionTitle("Itinerario del paquete");
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(9);
-  doc.setTextColor(...navy);
-  itinerary.forEach((item, index) => {
-    doc.setFillColor(...teal);
-    doc.circle(19, y - 1.2, 1.4, "F");
-    const lines = doc.splitTextToSize(`Día ${index + 1}: ${item}`, 169);
-    doc.text(lines, 24, y);
-    y += Math.max(7, lines.length * 4.5);
-  });
-  y += 4;
-
-  sectionTitle("Especificaciones y extras");
-  const details = [...(reservation.tour.includes ?? []), ...guideForTour(reservation.tour).extras];
-  doc.setFontSize(8.7);
-  details.slice(0, 10).forEach((item) => {
-    if (y > 268) {
-      doc.addPage();
-      y = 20;
-    }
-    doc.setTextColor(...teal);
-    doc.text("✓", 19, y);
-    doc.setTextColor(...navy);
-    doc.text(doc.splitTextToSize(item, 168), 24, y);
-    y += 6;
-  });
-
-  const footerY = 283;
-  doc.setDrawColor(214, 226, 235);
-  doc.line(14, footerY - 9, 196, footerY - 9);
-  doc.setTextColor(...muted);
-  doc.setFontSize(8);
-  doc.text("Contacto: +51 966 779 705 · johntoursperu29@gmail.com", 14, footerY);
-  doc.text("Conserva este comprobante y envíalo por WhatsApp para la validación final.", 196, footerY, { align: "right" });
-  doc.save(`comprobante-reserva-${code}.pdf`);
 }
 
 function TourApplication() {
@@ -892,10 +808,11 @@ function buildAppointmentMessage(reservation: Reservation, date: string, time: s
 
 function ReceiptDownload({ reservation }: { reservation: Reservation }) {
   const [generating, setGenerating] = useState(false);
+  const isDemo = Boolean(reservation.isDemo);
   const generate = async () => {
     setGenerating(true);
     try {
-      await downloadReservationReceipt(reservation);
+      await downloadReservationReceipt(reservation, guideForTour(reservation.tour).extras);
     } finally {
       setGenerating(false);
     }
@@ -903,7 +820,7 @@ function ReceiptDownload({ reservation }: { reservation: Reservation }) {
   return (
     <button type="button" onClick={generate} disabled={generating} className="receipt-download mt-7">
       <FileText />
-      <span><strong>{generating ? "Generando comprobante..." : "Descargar comprobante de reserva"}</strong><small>PDF con logo, código, pago Yape, itinerario y extras</small></span>
+      <span><strong>{generating ? "Generando constancia..." : isDemo ? "Descargar constancia demostrativa" : "Descargar constancia de reserva"}</strong><small>{isDemo ? "PDF de prueba: sin cobro y sin valor tributario" : "PDF con código, resumen económico e itinerario detallado"}</small></span>
       <Download />
     </button>
   );
@@ -945,7 +862,7 @@ function ConfirmationPage() {
   const isDemo = searchParams.get("demo") === "1";
   const { data: reservation } = useQuery<Reservation>({ queryKey: ["reservation", id], queryFn: async () => { const saved = sessionStorage.getItem(`john-reservation-${id}`); if (!saved) throw new Error("Reserva no encontrada en esta sesión"); return JSON.parse(saved) as Reservation; } });
   const guide = reservation ? guideForTour(reservation.tour) : null;
-  return <Section title={isDemo ? "Demostración: reserva confirmada" : "Reserva confirmada"} subtitle={`${isDemo ? "Simulación de presentación · " : ""}Código de reserva #${id}`}>{reservation && guide && <div className="mx-auto max-w-5xl rounded-2xl border bg-white p-6 text-center shadow-sm sm:p-8">{isDemo && <div className="mb-6 rounded-xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold text-[#087db8]">Modo demostración: no se realizó ningún cobro ni se registró una operación bancaria.</div>}<CheckCircle2 className="mx-auto text-[#09a889]" size={64} /><h3 className="mt-4 text-2xl font-black text-[#073b83]">{reservation.tour.title}</h3><p className="mt-2 text-slate-600">Gracias, {reservation.customer.fullName}. La separación de S/ 200 ha sido validada y tu solicitud de reserva quedó registrada.</p><div className="post-payment-guide mx-auto mt-7 overflow-hidden rounded-2xl border border-slate-200 bg-[#f3f9fd] text-left"><img src={guide.imageUrl} alt={`Imagen referencial de ${guide.label}`} className="h-60 w-full object-cover md:h-auto" /><div className="p-5"><span className="text-xs font-black uppercase tracking-widest text-[#087db8]">Contenido desbloqueado después del pago</span><h4 className="mt-2 text-xl font-black text-[#073b83]">Extras disponibles para {guide.label}</h4><p className="mt-2 text-sm leading-6 text-slate-600">Estas opciones no aparecen en el catálogo principal. Se muestran ahora porque tu reserva confirma el interés en adquirir el paquete.</p><div className="mt-4 grid gap-2 sm:grid-cols-2">{guide.extras.map((extra) => <span key={extra} className="flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-bold text-[#34536b]"><CheckCircle2 size={16} className="text-[#09a889]" />{extra}</span>)}</div><a href={guide.key === "general" ? "/servicios-adicionales-john-tours.pdf" : `/guia-extras-${guide.key}-john-tours.pdf`} download className="download-guide mt-5"><FileText /><span><strong>Descargar guía PDF de {guide.label}</strong><small>Incluye logo, imagen referencial y detalles de cada extra</small></span><Download /></a></div></div><AppointmentPlanner reservation={reservation} isDemo={isDemo} /><div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row"><Link className="rounded-lg bg-[#073b83] px-5 py-3 font-bold text-white" to="/">Volver al inicio</Link><Link className="rounded-lg bg-[#09a889] px-5 py-3 font-bold text-white" to="/tours">Ver otros paquetes</Link></div></div>}</Section>;
+  return <Section title={isDemo ? "Demostración: reserva confirmada" : "Reserva confirmada"} subtitle={`${isDemo ? "Simulación de presentación · " : ""}Código de reserva #${id}`}>{reservation && guide && <div className="mx-auto max-w-5xl rounded-2xl border bg-white p-6 text-center shadow-sm sm:p-8">{isDemo && <div className="mb-6 rounded-xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold text-[#087db8]">Modo demostración: no se realizó ningún cobro ni se registró una operación bancaria. La constancia descargable no es una boleta tributaria.</div>}<CheckCircle2 className="mx-auto text-[#09a889]" size={64} /><h3 className="mt-4 text-2xl font-black text-[#073b83]">{reservation.tour.title}</h3><p className="mt-2 text-slate-600">{isDemo ? `Esta vista simula la aprobación de la separación para ${reservation.customer.fullName}.` : `Gracias, ${reservation.customer.fullName}. La separación de S/ 200 ha sido validada y tu solicitud de reserva quedó registrada.`}</p><div className="post-payment-guide mx-auto mt-7 overflow-hidden rounded-2xl border border-slate-200 bg-[#f3f9fd] text-left"><img src={guide.imageUrl} alt={`Imagen referencial de ${guide.label}`} className="h-60 w-full object-cover md:h-auto" /><div className="p-5"><span className="text-xs font-black uppercase tracking-widest text-[#087db8]">{isDemo ? "Vista previa del contenido posterior al pago" : "Contenido desbloqueado después del pago"}</span><h4 className="mt-2 text-xl font-black text-[#073b83]">Extras disponibles para {guide.label}</h4><p className="mt-2 text-sm leading-6 text-slate-600">Estas opciones no aparecen en el catálogo principal. Se muestran ahora porque tu reserva confirma el interés en adquirir el paquete.</p><div className="mt-4 grid gap-2 sm:grid-cols-2">{guide.extras.map((extra) => <span key={extra} className="flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-bold text-[#34536b]"><CheckCircle2 size={16} className="text-[#09a889]" />{extra}</span>)}</div><a href={guide.key === "general" ? "/servicios-adicionales-john-tours.pdf" : `/guia-extras-${guide.key}-john-tours.pdf`} download className="download-guide mt-5"><FileText /><span><strong>Descargar guía PDF de {guide.label}</strong><small>Incluye logo, imagen referencial y detalles de cada extra</small></span><Download /></a></div></div><AppointmentPlanner reservation={reservation} isDemo={isDemo} /><div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row"><Link className="rounded-lg bg-[#073b83] px-5 py-3 font-bold text-white" to="/">Volver al inicio</Link><Link className="rounded-lg bg-[#09a889] px-5 py-3 font-bold text-white" to="/tours">Ver otros paquetes</Link></div></div>}</Section>;
 }
 
 function AdminPage() {
