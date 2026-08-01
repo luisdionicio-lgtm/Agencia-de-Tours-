@@ -455,6 +455,182 @@ textarea {
     linear-gradient(135deg, #ffffff 0%, #eef8f4 48%, #f8fbff 100%);
 }
 
+.airline-guide {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 92% 8%, rgba(18, 168, 204, .14), transparent 25%),
+    linear-gradient(180deg, #f7fbfe, #eef8f7);
+}
+
+.airline-guide-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 1.75rem;
+}
+
+.airline-guide-heading h2 {
+  margin-top: .75rem;
+  color: #073b83;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900;
+  letter-spacing: -.04em;
+  line-height: 1.05;
+}
+
+.airline-guide-heading p {
+  max-width: 44rem;
+  margin-top: .75rem;
+  color: #52677b;
+  line-height: 1.75;
+}
+
+.airline-guide-kicker,
+.airline-guide-trust {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  border-radius: 999px;
+  font-size: .75rem;
+  font-weight: 900;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.airline-guide-kicker {
+  background: #dff7f4;
+  padding: .55rem .85rem;
+  color: #087e76;
+}
+
+.airline-guide-trust {
+  flex: 0 0 auto;
+  border: 1px solid rgba(7, 59, 131, .14);
+  background: rgba(255, 255, 255, .82);
+  padding: .65rem .9rem;
+  color: #073b83;
+}
+
+.airline-route-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.airline-route-card {
+  display: flex;
+  min-height: 25rem;
+  flex-direction: column;
+  border: 1px solid rgba(7, 59, 131, .11);
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, .92);
+  padding: 1.25rem;
+  box-shadow: 0 18px 45px rgba(8, 36, 71, .08);
+}
+
+.airline-route-title {
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+}
+
+.airline-route-title > span {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex: 0 0 2.75rem;
+  place-items: center;
+  border-radius: .85rem;
+  background: linear-gradient(135deg, #073b83, #0798bd);
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(7, 59, 131, .2);
+}
+
+.airline-route-title small {
+  display: block;
+  color: #0b8c84;
+  font-size: .7rem;
+  font-weight: 900;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+.airline-route-title h3 {
+  margin-top: .15rem;
+  color: #082447;
+  font-size: 1.12rem;
+  font-weight: 900;
+}
+
+.airline-route-card > p {
+  margin: 1rem 0;
+  color: #607287;
+  font-size: .86rem;
+  line-height: 1.6;
+}
+
+.airline-links {
+  display: grid;
+  gap: .65rem;
+  margin-top: auto;
+}
+
+.airline-links a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  border: 1px solid #dce8f0;
+  border-radius: .9rem;
+  background: #f8fbfd;
+  padding: .85rem;
+  color: #082447;
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.airline-links a:hover {
+  transform: translateY(-2px);
+  border-color: rgba(7, 152, 189, .5);
+  box-shadow: 0 10px 24px rgba(8, 36, 71, .09);
+}
+
+.airline-links strong,
+.airline-links small {
+  display: block;
+}
+
+.airline-links strong { font-size: .92rem; }
+.airline-links small { margin-top: .15rem; color: #62778a; font-size: .72rem; }
+
+.airline-land-note {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  border-radius: 1rem;
+  background: linear-gradient(100deg, #073b83, #075f7e);
+  padding: 1rem 1.15rem;
+  color: #fff;
+  box-shadow: 0 16px 38px rgba(7, 59, 131, .17);
+}
+
+.airline-land-note > span {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border-radius: .75rem;
+  background: #f7b731;
+  color: #082447;
+}
+
+.airline-land-note p { margin-top: .18rem; color: #d9ecf3; font-size: .82rem; }
+.airline-land-note a { display: inline-flex; align-items: center; gap: .4rem; color: #ffe399; font-size: .82rem; font-weight: 900; }
+.airline-disclaimer { margin-top: .85rem; color: #697c8c; font-size: .74rem; line-height: 1.55; }
+
 .exclusive-section {
   position: relative;
   overflow: hidden;
@@ -1039,6 +1215,11 @@ a:focus-visible {
   .hero-bg { background-position: 38% center; }
 
   .hero-bg::before { opacity: .45; }
+  .airline-guide-heading { align-items:flex-start; flex-direction:column; }
+  .airline-route-grid { grid-template-columns:1fr; }
+  .airline-route-card { min-height:auto; }
+  .airline-land-note { grid-template-columns:auto 1fr; }
+  .airline-land-note a { grid-column:2; }
   .enjoy-visual {
     min-height: 350px;
     transform: none;

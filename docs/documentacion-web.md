@@ -7,15 +7,16 @@ La web funciona como una vitrina publicitaria breve: presenta confianza, permite
 ## Recorrido público
 
 1. El visitante conoce la propuesta, historia, canales oficiales y redes sociales.
-2. Filtra tours nacionales o internacionales y revisa el paquete.
-3. Elige una fecha programada y completa sus datos.
-4. El backend crea una reserva `PENDIENTE` y mantiene temporalmente activa la solicitud.
-5. La web muestra S/ 200, código de separación, QR e instrucciones de Yape.
-6. El cliente registra código de operación, fecha, monto y un archivo JPG, PNG, WebP o PDF de hasta 5 MB.
-7. El servidor valida tipo, tamaño y firma real del archivo; WhatsApp queda como aviso opcional y no se envía automáticamente.
-8. Un administrador o trabajador valida o rechaza el pago.
-9. Al confirmar, la reserva pasa a `PAGADA` y registra al trabajador responsable.
-10. La confirmación habilita el comprobante PDF, la guía del destino, extras y la preparación de una cita.
+2. Revisa opciones de aerolíneas mediante enlaces oficiales y compara precio final, horarios, equipaje y conexiones.
+3. Filtra tours nacionales o internacionales y revisa el paquete.
+4. Elige una fecha programada y completa sus datos.
+5. El backend crea una reserva `PENDIENTE` y mantiene temporalmente activa la solicitud.
+6. La web muestra S/ 200, código de separación, QR e instrucciones de Yape.
+7. El cliente registra código de operación, fecha, monto y un archivo JPG, PNG, WebP o PDF de hasta 5 MB.
+8. El servidor valida tipo, tamaño y firma real del archivo; WhatsApp queda como aviso opcional y no se envía automáticamente.
+9. Un administrador o trabajador valida o rechaza el pago.
+10. Al confirmar, la reserva pasa a `PAGADA` y registra al trabajador responsable.
+11. La confirmación habilita el comprobante PDF, la guía del destino, extras y la preparación de una cita.
 
 Estados comunicados al cliente:
 
@@ -24,6 +25,12 @@ Estados comunicados al cliente:
 - Comprobante generado.
 - Validación pendiente.
 - Reserva confirmada.
+
+## Orientación de vuelos y traslados
+
+La portada incluye un bloque compacto de orientación con enlaces externos a los sitios oficiales de LATAM, SKY y JetSMART para Cusco; Copa Airlines y Avianca para Orlando; e Iberia y Turkish Airlines para El Cairo. No vende pasajes ni garantiza una tarifa: invita a comparar el costo final, equipaje, escalas, horarios y condiciones antes de pagar.
+
+Ica y Oxapampa se presentan como conexiones terrestres desde Lima y se ofrece coordinación por WhatsApp. Los enlaces y rutas deben revisarse periódicamente porque dependen de cada aerolínea.
 
 ## Comprobantes y contenido posterior
 
