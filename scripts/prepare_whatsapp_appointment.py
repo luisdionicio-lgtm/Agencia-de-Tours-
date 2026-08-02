@@ -1,4 +1,4 @@
-"""Prepara mensajes formales de cita para reservas pagadas de JhonToursPerú.
+"""Prepara mensajes formales de cita para reservas pagadas de JohnToursPerú.
 
 Este módulo no se conecta con WhatsApp ni envía mensajes. Solo valida los datos,
 genera un código de separación estable y devuelve texto/URL para revisión humana.
@@ -62,7 +62,7 @@ def build_message(request: AppointmentRequest) -> str:
     receipt_line = f"Referencia de boleta/comprobante: {request.receipt_reference}" if request.receipt_reference else "Boleta/comprobante: se adjuntará en este chat"
     return "\n".join(
         [
-            "SOLICITUD DE CITA - JHONTOURSPERÚ",
+            "SOLICITUD DE CITA - JOHNTOURSPERÚ",
             "",
             f"Estimados, mi nombre es {request.customer_name.strip()}. Solicito coordinar una cita para revisar formalmente el paquete {request.tour_title.strip()}.",
             "",

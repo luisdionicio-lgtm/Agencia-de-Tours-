@@ -21,7 +21,7 @@ export function TourCard({ tour }: { tour: Tour }) {
       <div className="tour-card-body">
         <div className="tour-card-heading">
           <p className="tour-location"><MapPin size={15} /> {tour.destination}</p>
-          <span className="tour-recommended"><Award size={15} /> Selección JhonTours</span>
+          <span className="tour-recommended"><Award size={15} /> Selección JohnTours</span>
         </div>
         <h3>{tour.title}</h3>
         <p className="tour-card-description">{tour.description}</p>

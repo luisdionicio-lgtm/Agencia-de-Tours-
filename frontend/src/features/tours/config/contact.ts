@@ -19,7 +19,7 @@ export const socialLinks = {
 export const buildWhatsAppUrl = (message: string) => `https://wa.me/${whatsapp}?text=${encodeURIComponent(message)}`;
 
 export const whatsappMessages = {
-  general: "Hola JhonToursPerú, deseo información para cotizar un viaje.",
-  tour: (tour: Tour) => `Hola JhonToursPerú, deseo cotizar el tour ${tour.title} para ${tour.destination}.`,
-  reservation: (reservation: Reservation) => `Hola JhonToursPerú, deseo confirmar mi reserva #${reservation.id} para ${reservation.tour.title}.`
+  general: "Hola JohnToursPerú, deseo información para cotizar un viaje.",
+  tour: (tour: Tour) => `Hola JohnToursPerú, deseo cotizar el tour ${tour.title} para ${tour.destination}.`,
+  reservation: (reservation: Reservation) => `Hola JohnToursPerú, deseo confirmar mi reserva #${reservation.id} para ${reservation.tour.title}.`
 };

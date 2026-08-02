@@ -22,7 +22,7 @@ async function main() {
     where: { email: process.env.ADMIN_EMAIL ?? "admin@johntours.com" },
     update: { password, role: Role.ADMIN },
     create: {
-      name: "Administrador JhonToursPerú",
+      name: "Administrador JohnToursPerú",
       email: process.env.ADMIN_EMAIL ?? "admin@johntours.com",
       password,
       role: Role.ADMIN
@@ -40,7 +40,7 @@ async function main() {
       where: { email: workerEmail },
       update: { password: workerHash, role: Role.WORKER },
       create: {
-        name: "Asesor JhonToursPerú",
+        name: "Asesor JohnToursPerú",
         email: workerEmail,
         password: workerHash,
         role: Role.WORKER
@@ -119,7 +119,7 @@ async function main() {
       availableSlots: 10,
       isFeatured: true,
       itinerary: ["Llegada asistida a El Cairo", "Piramides de Giza y Esfinge con guia", "Museo Egipcio y barrio historico", "Crucero por el Nilo y templos principales", "Retorno con seguimiento del asesor"],
-      includes: ["Hoteles seleccionados", "Traslados programados", "Guia especializado en espanol", "Asistencia JhonToursPerú por WhatsApp"],
+      includes: ["Hoteles seleccionados", "Traslados programados", "Guía especializada en español", "Asistencia JohnToursPerú por WhatsApp"],
       excludes: ["Vuelos internacionales", "Gastos personales", "Propinas y servicios no mencionados"]
     }
   ];
@@ -130,13 +130,13 @@ async function main() {
       update: {
         ...tour,
         itinerary: tour.itinerary ?? ["Llegada y bienvenida", "Tour principal guiado", "Experiencias locales", "Retorno"],
-        includes: tour.includes ?? ["Alojamiento", "Traslados", "Guia especializado", "Asistencia JhonToursPerú"],
+        includes: tour.includes ?? ["Alojamiento", "Traslados", "Guía especializada", "Asistencia JohnToursPerú"],
         excludes: tour.excludes ?? ["Gastos personales", "Propinas", "Servicios no mencionados"]
       },
       create: {
         ...tour,
         itinerary: tour.itinerary ?? ["Llegada y bienvenida", "Tour principal guiado", "Experiencias locales", "Retorno"],
-        includes: tour.includes ?? ["Alojamiento", "Traslados", "Guia especializado", "Asistencia JhonToursPerú"],
+        includes: tour.includes ?? ["Alojamiento", "Traslados", "Guía especializada", "Asistencia JohnToursPerú"],
         excludes: tour.excludes ?? ["Gastos personales", "Propinas", "Servicios no mencionados"]
       }
     });
@@ -175,7 +175,7 @@ async function main() {
   });
 
   await prisma.businessSettings.upsert({
-    where: { id: 1 }, update: { tradeName: "JhonToursPerú" }, create: { id: 1, tradeName: "JhonToursPerú", policiesPublished: false }
+    where: { id: 1 }, update: { tradeName: "JohnToursPerú" }, create: { id: 1, tradeName: "JohnToursPerú", policiesPublished: false }
   });
 }
 

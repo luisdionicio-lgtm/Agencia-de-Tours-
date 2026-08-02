@@ -52,7 +52,7 @@ export async function createReservationReceipt(reservation: Reservation, options
       doc.setTextColor(255, 255, 255);
       doc.setFont("helvetica", "bold");
       doc.setFontSize(15);
-      doc.text("JHONTOURSPERÚ", 14, 23);
+      doc.text("JOHNTOURSPERÚ", 14, 23);
     }
     doc.setTextColor(255, 255, 255);
     doc.setFont("helvetica", "bold");
@@ -61,7 +61,7 @@ export async function createReservationReceipt(reservation: Reservation, options
     doc.setFontSize(9);
     doc.text(`Código de reserva: ${code}`, 196, 24, { align: "right" });
     doc.setFont("helvetica", "normal");
-    doc.text("JhonToursPerú - Agencia de viajes y turismo", 196, 31, { align: "right" });
+    doc.text("JohnToursPerú - Agencia de viajes y turismo", 196, 31, { align: "right" });
     y = 54;
     if (isDemo) {
       doc.setFillColor(255, 247, 220);
@@ -157,10 +157,10 @@ export async function createReservationReceipt(reservation: Reservation, options
   y += 20;
 
   sectionTitle(isDemo ? "Itinerario referencial de demostración" : "Itinerario del paquete");
-  const itinerary = reservation.tour.itinerary?.length ? reservation.tour.itinerary : ["Coordinación del itinerario final con un asesor de JhonToursPerú."];
+  const itinerary = reservation.tour.itinerary?.length ? reservation.tour.itinerary : ["Coordinación del itinerario final con un asesor de JohnToursPerú."];
   itemList(itinerary, true);
 
-  const includedServices = reservation.tour.includes?.length ? reservation.tour.includes : ["Asistencia y coordinación de JhonToursPerú"];
+  const includedServices = reservation.tour.includes?.length ? reservation.tour.includes : ["Asistencia y coordinación de JohnToursPerú"];
   ensureSpace(listHeight(includedServices));
   sectionTitle("Servicios incluidos");
   itemList(includedServices);
@@ -181,7 +181,7 @@ export async function createReservationReceipt(reservation: Reservation, options
   doc.setFontSize(8);
   doc.text(doc.splitTextToSize(isDemo
     ? "Documento generado para demostración. Las fechas, servicios, precios e itinerarios son referenciales y se reemplazarán con la información comercial definitiva antes de activar pagos reales."
-    : "La reserva y el itinerario quedan sujetos a validación final de disponibilidad, proveedores y condiciones comunicadas por JhonToursPerú.", 174), 18, y + 3);
+    : "La reserva y el itinerario quedan sujetos a validación final de disponibilidad, proveedores y condiciones comunicadas por JohnToursPerú.", 174), 18, y + 3);
 
   const pageCount = doc.getNumberOfPages();
   for (let page = 1; page <= pageCount; page += 1) {

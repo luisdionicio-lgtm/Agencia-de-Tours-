@@ -48,9 +48,9 @@ export function AirlineGuideSection() {
         <div className="airline-land-note">
           <span><MapPin size={20} /></span>
           <div><strong>Ica y Oxapampa: conexión terrestre</strong><p>Nuestro asesor puede ayudarte a coordinar el traslado desde Lima como parte de la planificación del tour.</p></div>
-          <a href={buildWhatsAppUrl("Hola JhonToursPerú, deseo orientación sobre vuelos y traslados para mi tour.")} target="_blank" rel="noopener noreferrer"><span>Consultar traslado</span><span className="airline-transfer-terminal"><ArrowRight size={16} /></span></a>
+          <a href={buildWhatsAppUrl("Hola JohnToursPerú, deseo orientación sobre vuelos y traslados para mi tour.")} target="_blank" rel="noopener noreferrer"><span>Consultar traslado</span><span className="airline-transfer-terminal"><ArrowRight size={16} /></span></a>
         </div>
-        <p className="airline-disclaimer"><Plane size={14} /> JhonToursPerú no vende el boleto aéreo desde este bloque. Las rutas, tarifas y condiciones pertenecen a cada aerolínea y pueden cambiar; confirma siempre el precio final y los servicios incluidos en su web oficial.</p>
+        <p className="airline-disclaimer"><Plane size={14} /> JohnToursPerú no vende el boleto aéreo desde este bloque. Las rutas, tarifas y condiciones pertenecen a cada aerolínea y pueden cambiar; confirma siempre el precio final y los servicios incluidos en su web oficial.</p>
       </div>
     </section>
   );

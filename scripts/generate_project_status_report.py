@@ -205,7 +205,7 @@ def configure_page(doc):
     header = section.header
     paragraph = header.paragraphs[0]
     paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    set_run(paragraph.add_run("JHONTOURSPERÚ  |  INFORME DE ESTADO"), size=8, color=GRAY, bold=True)
+    set_run(paragraph.add_run("JOHNTOURSPERÚ  |  INFORME DE ESTADO"), size=8, color=GRAY, bold=True)
     footer = section.footer
     footer_paragraph = footer.paragraphs[0]
     footer_paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -226,13 +226,13 @@ def build_report():
         paragraph.paragraph_format.space_after = Pt(12)
         paragraph.add_run().add_picture(str(LOGO), width=Inches(2.65))
     add_paragraph(doc, "INFORME DE ESTADO Y HOJA DE RUTA", bold=True, color=GOLD, size=10, after=2)
-    add_paragraph(doc, "Plataforma web JhonToursPerú", bold=True, color=NAVY, size=28, after=5)
+    add_paragraph(doc, "Plataforma web JohnToursPerú", bold=True, color=NAVY, size=28, after=5)
     add_paragraph(doc, "Funciones implementadas, preparación para producción y pendientes de dominio, hosting y correos corporativos", color=GRAY, size=13, after=18)
 
     metadata = doc.add_table(rows=2, cols=2)
     metadata.alignment = WD_TABLE_ALIGNMENT.LEFT
     set_table_geometry(metadata, [4680, 4680])
-    entries = (("Fecha de actualización", "22 de julio de 2026"), ("Estado general", "Demostración funcional / preparación para producción"), ("Proyecto", "Agencia de Tours - JhonToursPerú"), ("Próxima etapa", "Infraestructura y datos empresariales reales"))
+    entries = (("Fecha de actualización", "22 de julio de 2026"), ("Estado general", "Demostración funcional / preparación para producción"), ("Proyecto", "Agencia de Tours - JohnToursPerú"), ("Próxima etapa", "Infraestructura y datos empresariales reales"))
     for index, (label, value) in enumerate(entries):
         cell = metadata.cell(index // 2, index % 2)
         set_cell_fill(cell, PALE_BLUE if index % 2 == 0 else PALE_GREEN)
@@ -312,7 +312,7 @@ def build_report():
         add_bullet(doc, item)
 
     add_heading(doc, "5. Implementación futura: dominio, hosting y correos", 1)
-    add_paragraph(doc, "Esta fase está prevista, pero no debe activarse hasta que JhonToursPerú entregue los datos oficiales y seleccione proveedores. La web conservará el diseño actual y sustituirá progresivamente los datos demostrativos.", color=GRAY)
+    add_paragraph(doc, "Esta fase está prevista, pero no debe activarse hasta que JohnToursPerú entregue los datos oficiales y seleccione proveedores. La web conservará el diseño actual y sustituirá progresivamente los datos demostrativos.", color=GRAY)
 
     add_heading(doc, "5.1 Dominio", 2)
     for item in (
@@ -398,10 +398,10 @@ def build_report():
 
     add_callout(doc, "RECOMENDACIÓN FINAL", "Mantener la web en modo demostración hasta completar las prioridades altas. El siguiente avance recomendado es definir dominio y datos empresariales; después se configuran hosting, base de datos, pagos reales y correos corporativos en un ambiente de pruebas antes de publicar.", fill=PALE_BLUE, accent=BLUE)
 
-    doc.core_properties.title = "Informe de estado y hoja de ruta - JhonToursPerú"
+    doc.core_properties.title = "Informe de estado y hoja de ruta - JohnToursPerú"
     doc.core_properties.subject = "Funciones implementadas y pendientes para producción"
-    doc.core_properties.author = "JhonToursPerú"
-    doc.core_properties.keywords = "JhonToursPerú, web, dominio, hosting, correos corporativos, producción"
+    doc.core_properties.author = "JohnToursPerú"
+    doc.core_properties.keywords = "JohnToursPerú, web, dominio, hosting, correos corporativos, producción"
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     doc.save(OUTPUT)
     print(OUTPUT)

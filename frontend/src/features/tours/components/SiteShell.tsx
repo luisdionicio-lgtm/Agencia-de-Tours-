@@ -18,7 +18,7 @@ const advisorMessages = [
   "Cotiza sin compromiso"
 ];
 
-const budgetOrientationMessage = "Hola JhonToursPerú, deseo orientación según mi presupuesto para elegir un viaje. Mi presupuesto aproximado es: [indicar monto]. Viajaríamos: [cantidad de personas]. Fechas estimadas: [indicar fechas]. Destino de interés: [indicar destino o solicitar recomendación].";
+const budgetOrientationMessage = "Hola JohnToursPerú, deseo orientación según mi presupuesto para elegir un viaje. Mi presupuesto aproximado es: [indicar monto]. Viajaríamos: [cantidad de personas]. Fechas estimadas: [indicar fechas]. Destino de interés: [indicar destino o solicitar recomendación].";
 
 export function SiteShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -74,10 +74,10 @@ function PublicHeader({ menuOpen, scrollProgress, onToggleMenu, onCloseMenu }: {
       </div>
 
       <div className="header-main mx-auto flex max-w-7xl items-center justify-between px-4 py-3 lg:px-6">
-        <Link to="/" className="brand-lockup flex items-center gap-3" aria-label="JhonToursPerú, inicio">
+        <Link to="/" className="brand-lockup flex items-center gap-3" aria-label="JohnToursPerú, inicio">
           <span className="header-brand-stage">
             <span className="header-brand-glow" aria-hidden="true" />
-            <img src="/john-tours-logo-cropped.png" alt="JhonToursPerú" className="header-logo" />
+            <img src="/john-tours-logo-cropped.png" alt="JohnToursPerú" className="header-logo" />
             <span className="header-brand-carousel" aria-hidden="true"><i>Viajes</i><i>Tours</i><i>Experiencias</i></span>
           </span>
         </Link>
@@ -124,7 +124,7 @@ function FloatingWhatsApp() {
   return (
     <div className={`floating-whatsapp-wrap ${expanded ? "is-expanded" : ""}`} onMouseEnter={() => setExpanded(true)} onMouseLeave={() => setExpanded(false)}>
       <div className="floating-whatsapp-message" role="status"><span className="advisor-status" /> <strong>Asesoría disponible</strong><small>{advisorMessages[messageIndex]}</small></div>
-      <a href={buildWhatsAppUrl(budgetOrientationMessage)} className="floating-whatsapp" target="_blank" rel="noreferrer" aria-label="Recibir orientación de JhonToursPerú según mi presupuesto por WhatsApp">
+      <a href={buildWhatsAppUrl(budgetOrientationMessage)} className="floating-whatsapp" target="_blank" rel="noreferrer" aria-label="Recibir orientación de JohnToursPerú según mi presupuesto por WhatsApp">
         <span className="floating-whatsapp-rings" aria-hidden="true" />
         <img src="/whatsapp-logo.svg" alt="" />
         <span className="floating-whatsapp-label"><strong>Según tu presupuesto</strong><small>Orientación por WhatsApp</small></span>
@@ -139,15 +139,15 @@ function PublicFooter() {
     <footer className="footer-pro border-t px-4 pb-8 pt-14 text-white">
       <div className="mx-auto grid max-w-7xl gap-10 sm:grid-cols-2 lg:grid-cols-5">
         <div className="sm:col-span-2">
-          <img src="/john-tours-logo-cropped.png" alt="JhonToursPerú" className="h-20 w-auto rounded-xl bg-white p-2" />
+          <img src="/john-tours-logo-cropped.png" alt="JohnToursPerú" className="h-20 w-auto rounded-xl bg-white p-2" />
           <p className="mt-5 max-w-xl leading-7 text-slate-300">Agencia de viajes y turismo para experiencias nacionales e internacionales, promociones escolares y grupos, con atención humana y reserva por Yape.</p>
         </div>
         <div>
           <strong className="text-cyan-200">Explora</strong>
           <nav className="mt-4 grid gap-3 text-sm text-slate-300" aria-label="Enlaces del sitio">
             <Link to="/">Inicio</Link><Link to="/tours">Todos los tours</Link><Link to="/#nosotros">Nuestra historia</Link>
-            <a href={socialLinks.tiktok} target="_blank" rel="noreferrer" aria-label="Abrir TikTok de JhonToursPerú">TikTok</a>
-            <a href={socialLinks.instagram} target="_blank" rel="noreferrer" aria-label="Abrir Instagram de JhonToursPerú">Instagram</a>
+            <a href={socialLinks.tiktok} target="_blank" rel="noreferrer" aria-label="Abrir TikTok de JohnToursPerú">TikTok</a>
+            <a href={socialLinks.instagram} target="_blank" rel="noreferrer" aria-label="Abrir Instagram de JohnToursPerú">Instagram</a>
           </nav>
         </div>
         <div>
@@ -163,7 +163,7 @@ function PublicFooter() {
         </div>
       </div>
       <div className="mx-auto mt-10 flex max-w-7xl flex-col justify-between gap-3 border-t border-white/10 pt-6 text-xs text-slate-400 sm:flex-row">
-        <span>© {new Date().getFullYear()} JhonToursPerú. Todos los derechos reservados.</span>
+        <span>© {new Date().getFullYear()} JohnToursPerú. Todos los derechos reservados.</span>
         <span>Viaja seguro · Vive extraordinario</span>
       </div>
     </footer>

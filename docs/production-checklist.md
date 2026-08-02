@@ -1,4 +1,4 @@
-# JhonToursPerú — Checklist de producción
+# JohnToursPerú — Checklist de producción
 
 ## Infraestructura
 

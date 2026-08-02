@@ -1,4 +1,4 @@
-# Documentación funcional y técnica — JhonToursPerú
+# Documentación funcional y técnica — JohnToursPerú
 
 ## Objetivo
 
@@ -28,7 +28,7 @@ Estados comunicados al cliente:
 
 ## Orientación de vuelos y traslados
 
-La portada incluye una guía de decisión con los logotipos de LATAM, SKY y JetSMART para Cusco; Copa Airlines y Avianca para Orlando; e Iberia y Turkish Airlines para El Cairo. Cada destino explica el objetivo de la conexión según el ritmo del tour y propone criterios como horario de llegada, duración total, escalas, equipaje y flexibilidad. Cada opción conserva su identidad visual dentro de una tarjeta adaptada a la paleta de JhonToursPerú y enlaza al sitio oficial. La web no vende pasajes ni garantiza una tarifa.
+La portada incluye una guía de decisión con los logotipos de LATAM, SKY y JetSMART para Cusco; Copa Airlines y Avianca para Orlando; e Iberia y Turkish Airlines para El Cairo. Cada destino explica el objetivo de la conexión según el ritmo del tour y propone criterios como horario de llegada, duración total, escalas, equipaje y flexibilidad. Cada opción conserva su identidad visual dentro de una tarjeta adaptada a la paleta de JohnToursPerú y enlaza al sitio oficial. La web no vende pasajes ni garantiza una tarifa.
 
 Ica y Oxapampa se presentan como conexiones terrestres desde Lima y se ofrece coordinación por WhatsApp. Los enlaces y rutas deben revisarse periódicamente porque dependen de cada aerolínea.
 

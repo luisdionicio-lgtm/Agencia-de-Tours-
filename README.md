@@ -1,4 +1,4 @@
-# JhonToursPerú
+# JohnToursPerú
 
 Web publicitaria fullstack para captar clientes, mostrar tours nacionales e internacionales y gestionar reservas con separación de S/ 200 por Yape.
 

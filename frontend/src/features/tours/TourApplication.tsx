@@ -37,7 +37,7 @@ const demoTours: Tour[] = [
       "Traslado hacia Machu Picchu, ingreso programado, visita guiada y retorno asistido a Cusco.",
       "Desayuno, tiempo libre según horario y traslado coordinado para el viaje de retorno."
     ],
-    includes: ["Alojamiento seleccionado por 3 noches", "Traslados indicados en el programa", "Guiado profesional en los recorridos señalados", "Asistencia de JhonToursPerú durante el viaje"],
+    includes: ["Alojamiento seleccionado por 3 noches", "Traslados indicados en el programa", "Guiado profesional en los recorridos señalados", "Asistencia de JohnToursPerú durante el viaje"],
     excludes: ["Vuelos o transporte hasta Cusco, salvo indicación expresa", "Alimentación no detallada en el programa", "Gastos personales y servicios opcionales"],
     departures: demoDepartures(1, [[101, "2026-08-08", "2026-08-11", 16, 3], [102, "2026-08-29", "2026-09-01", 18, 11], [103, "2026-10-10", "2026-10-13", 20, 18]])
   },
@@ -63,7 +63,7 @@ const demoTours: Tour[] = [
       "Día flexible para parque adicional o actividad opcional, sujeto a cotización.",
       "Salida del hotel y traslado coordinado al aeropuerto para el viaje de retorno."
     ],
-    includes: ["Alojamiento seleccionado por 6 noches", "Traslados aeropuerto-hotel-aeropuerto", "Orientación para visitas y reservas", "Asistencia remota de JhonToursPerú"],
+    includes: ["Alojamiento seleccionado por 6 noches", "Traslados aeropuerto-hotel-aeropuerto", "Orientación para visitas y reservas", "Asistencia remota de JohnToursPerú"],
     excludes: ["Vuelos internacionales", "Entradas no indicadas expresamente", "Alimentación, equipaje y gastos personales no especificados"],
     departures: demoDepartures(2, [[201, "2026-08-24", "2026-08-30", 14, 4], [202, "2026-09-26", "2026-10-02", 16, 12], [203, "2026-11-07", "2026-11-13", 18, 18]])
   },
@@ -85,7 +85,7 @@ const demoTours: Tour[] = [
       "Visita referencial a cataratas, experiencia de café y puntos naturales con guía local.",
       "Desayuno, visita cultural breve, tiempo para compras locales y retorno coordinado."
     ],
-    includes: ["Alojamiento seleccionado por 2 noches", "Movilidad turística durante los recorridos indicados", "Guía local", "Asistencia de JhonToursPerú"],
+    includes: ["Alojamiento seleccionado por 2 noches", "Movilidad turística durante los recorridos indicados", "Guía local", "Asistencia de JohnToursPerú"],
     excludes: ["Transporte no indicado en el programa", "Alimentación no especificada", "Actividades opcionales y gastos personales"],
     departures: demoDepartures(3, [[301, "2026-08-05", "2026-08-07", 15, 2], [302, "2026-08-26", "2026-08-28", 18, 10], [303, "2026-09-23", "2026-09-25", 20, 19]])
   },
@@ -106,7 +106,7 @@ const demoTours: Tour[] = [
       "Salida hacia Ica, recepción, visita referencial a una bodega seleccionada y recorrido por Huacachina al atardecer.",
       "Experiencia programada en las dunas, tiempo libre en el oasis y retorno coordinado al punto acordado."
     ],
-    includes: ["Alojamiento seleccionado por 1 noche", "Movilidad turística para las visitas indicadas", "Coordinación de actividades", "Asistencia de JhonToursPerú"],
+    includes: ["Alojamiento seleccionado por 1 noche", "Movilidad turística para las visitas indicadas", "Coordinación de actividades", "Asistencia de JohnToursPerú"],
     excludes: ["Alimentación no detallada", "Actividades adicionales no indicadas", "Gastos personales"],
     departures: demoDepartures(4, [[401, "2026-08-02", "2026-08-03", 20, 3], [402, "2026-08-16", "2026-08-17", 22, 14], [403, "2026-09-08", "2026-09-09", 24, 22]])
   },
@@ -133,7 +133,7 @@ const demoTours: Tour[] = [
       "Retorno a El Cairo, tiempo coordinado para compras o actividad opcional previamente cotizada.",
       "Traslado al aeropuerto y acompañamiento remoto hasta finalizar el viaje."
     ],
-    includes: ["Alojamiento seleccionado por 7 noches", "Traslados programados en destino", "Guía especializado en español durante las visitas indicadas", "Asistencia de JhonToursPerú por WhatsApp"],
+    includes: ["Alojamiento seleccionado por 7 noches", "Traslados programados en destino", "Guía especializado en español durante las visitas indicadas", "Asistencia de JohnToursPerú por WhatsApp"],
     excludes: ["Vuelos internacionales", "Visa, seguros y propinas salvo indicación expresa", "Comidas, gastos personales y servicios no mencionados"],
     departures: demoDepartures(5, [[501, "2026-09-07", "2026-09-14", 12, 2], [502, "2026-10-12", "2026-10-19", 14, 9], [503, "2026-11-16", "2026-11-23", 16, 15]])
   }
@@ -265,7 +265,7 @@ function Home() {
       <FrequentlyAskedQuestions />
       <section id="contacto" className="formal-cta px-4 py-20 text-white">
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
-          <div className="max-w-3xl"><span className="text-sm font-black uppercase tracking-[0.2em] text-amber-300">El mundo te espera</span><h2 className="mt-3 text-4xl font-black md:text-5xl">Tu próxima aventura empieza hoy</h2><p className="mt-4 text-lg text-slate-200">Reserva con JhonToursPerú y vive una experiencia diseñada para sorprenderte.</p></div>
+          <div className="max-w-3xl"><span className="text-sm font-black uppercase tracking-[0.2em] text-amber-300">El mundo te espera</span><h2 className="mt-3 text-4xl font-black md:text-5xl">Tu próxima aventura empieza hoy</h2><p className="mt-4 text-lg text-slate-200">Reserva con JohnToursPerú y vive una experiencia diseñada para sorprenderte.</p></div>
           <div className="flex flex-col gap-3 sm:flex-row"><a href={buildWhatsAppUrl(whatsappMessages.general)} className="whatsapp-cta primary-action"><span className="button-brand-stage"><img src="/whatsapp-logo.svg" alt="" /></span><span className="button-copy"><small>Asesoría directa</small><strong>Hablar por WhatsApp</strong></span><ArrowRight className="button-arrow" size={18} /></a><Link to="/tours" className="formal-secondary-action"><span className="button-emblem"><Plane size={17} /></span><span>Ver paquetes</span><ArrowRight className="button-arrow" size={17} /></Link></div>
         </div>
       </section>
@@ -316,16 +316,16 @@ function HeroVisualCarousel({ tours }: { tours: Tour[] }) {
 
 function LogoShowcase() {
   return (
-    <div className="logo-stage" aria-label="JhonToursPerú">
+    <div className="logo-stage" aria-label="JohnToursPerú">
       <div className="logo-orbit" aria-hidden="true" />
-      <img src="/john-tours-logo-cropped.png" alt="Logo oficial de JhonToursPerú" />
+      <img src="/john-tours-logo-cropped.png" alt="Logo oficial de JohnToursPerú" />
       <span>Agencia de Viajes y Turismo</span>
     </div>
   );
 }
 
 function OurStory() {
-  return <section id="nosotros" className="story-section px-4 py-20 lg:px-6"><div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[.85fr_1.15fr] lg:items-center"><div className="story-logo"><img src="/john-tours-logo-cropped.png" alt="JhonToursPerú" /></div><div><span className="section-kicker">Nuestra historia</span><h2 className="mt-4 text-4xl font-black text-[#073b83] md:text-5xl">¿Cómo nace JhonToursPerú?</h2><p className="mt-5 text-lg leading-8 text-slate-600">JhonToursPerú nace con la convicción de que viajar debe sentirse cercano, claro y bien acompañado. Desde Santa Clara, Ate, y Cusco, conectamos a familias, colegios, grupos y viajeros con experiencias nacionales e internacionales.</p><p className="mt-4 leading-8 text-slate-600">Nuestro trabajo se sostiene en escuchar primero, explicar cada detalle y mantener un contacto humano antes, durante y después del viaje. Esa cercanía es la que convierte una reserva en confianza.</p><div className="mt-7 grid gap-3 sm:grid-cols-3">{["Atención directa", "Itinerarios claros", "Acompañamiento real"].map(item => <span key={item} className="rounded-xl bg-white p-4 text-center font-bold text-[#087db8] shadow-sm">{item}</span>)}</div></div></div></section>;
+  return <section id="nosotros" className="story-section px-4 py-20 lg:px-6"><div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[.85fr_1.15fr] lg:items-center"><div className="story-logo"><img src="/john-tours-logo-cropped.png" alt="JohnToursPerú" /></div><div><span className="section-kicker">Nuestra historia</span><h2 className="mt-4 text-4xl font-black text-[#073b83] md:text-5xl">¿Cómo nace JohnToursPerú?</h2><p className="mt-5 text-lg leading-8 text-slate-600">JohnToursPerú nace con la convicción de que viajar debe sentirse cercano, claro y bien acompañado. Desde Santa Clara, Ate, y Cusco, conectamos a familias, colegios, grupos y viajeros con experiencias nacionales e internacionales.</p><p className="mt-4 leading-8 text-slate-600">Nuestro trabajo se sostiene en escuchar primero, explicar cada detalle y mantener un contacto humano antes, durante y después del viaje. Esa cercanía es la que convierte una reserva en confianza.</p><div className="mt-7 grid gap-3 sm:grid-cols-3">{["Atención directa", "Itinerarios claros", "Acompañamiento real"].map(item => <span key={item} className="rounded-xl bg-white p-4 text-center font-bold text-[#087db8] shadow-sm">{item}</span>)}</div></div></div></section>;
 }
 
 function SocialSpotlight() {
@@ -337,14 +337,14 @@ function SocialSpotlight() {
     <section className="social-section px-4 py-16 text-white lg:px-6" aria-labelledby="social-title">
       <div className="social-shell mx-auto max-w-7xl">
         <div className="social-copy">
-          <span className="social-kicker"><Sparkles size={16} /> Comunidad JhonToursPerú</span>
+          <span className="social-kicker"><Sparkles size={16} /> Comunidad JohnToursPerú</span>
           <h2 id="social-title">Inspírate para tu próximo viaje</h2>
           <p>Síguenos en nuestros canales oficiales y descubre promociones, nuevas salidas y experiencias de viajeros.</p>
-          <span className="social-official"><ShieldCheck size={17} /> Perfiles oficiales de JhonToursPerú</span>
+          <span className="social-official"><ShieldCheck size={17} /> Perfiles oficiales de JohnToursPerú</span>
         </div>
         <div className="social-cards">
           {networks.map((network) => (
-            <a key={network.name} href={network.href} target="_blank" rel="noreferrer" className={`social-button ${network.className}`} aria-label={`Abrir el perfil oficial de JhonToursPerú en ${network.name}`}>
+            <a key={network.name} href={network.href} target="_blank" rel="noreferrer" className={`social-button ${network.className}`} aria-label={`Abrir el perfil oficial de JohnToursPerú en ${network.name}`}>
               <span className={`social-logo-stage social-logo-stage-${network.name.toLowerCase()}`}>
                 <img src={network.logo} alt="" />
               </span>
@@ -396,7 +396,7 @@ function ExclusiveReservationExperience() {
     [<Sparkles key="sparkles" />, "Guía privada del destino", "Después de confirmar la reserva recibes una guía visual vinculada al viaje elegido."],
     [<Award key="award" />, "Extras seleccionados", "Accedes a opciones complementarias pensadas para ese destino, sin saturar el paquete principal."],
     [<HeartHandshake key="support" />, "Coordinación personal", "Un asesor revisa contigo fechas, disponibilidad y condiciones antes de agregar cualquier servicio."],
-    [<FileText key="file" />, "Información para conservar", "Descarga un PDF con el logo de JhonToursPerú, imagen referencial y detalles útiles para tu viaje."]
+    [<FileText key="file" />, "Información para conservar", "Descarga un PDF con el logo de JohnToursPerú, imagen referencial y detalles útiles para tu viaje."]
   ];
   return (
     <section className="exclusive-section px-4 py-16 text-white lg:px-6 lg:py-20">
@@ -405,7 +405,7 @@ function ExclusiveReservationExperience() {
           <span className="exclusive-badge"><Star size={16} fill="currentColor" /> Beneficio exclusivo para viajeros</span>
           <h2 className="mt-5 text-4xl font-black leading-tight md:text-5xl">Tu reserva abre una experiencia más personal</h2>
           <p className="mt-5 text-lg leading-8 text-slate-200">El catálogo te ayuda a elegir. Después de confirmar tu reserva, desbloqueamos información y opciones específicas para complementar el destino que realmente vas a disfrutar.</p>
-          <div className="mt-7 flex flex-col gap-3 sm:flex-row"><Link to="/tours" className="btn-gold primary-action"><span className="button-emblem"><Plane size={17} /></span><span className="button-copy"><small>Explora opciones</small><strong>Elegir mi destino</strong></span><ArrowRight className="button-arrow" size={17} /></Link><a href={buildWhatsAppUrl("Hola JhonToursPerú, quiero conocer los beneficios que se desbloquean al reservar un tour.")} className="formal-secondary-action"><span className="button-emblem"><MessageCircle size={17} /></span><span>Consultar beneficios</span><ArrowRight className="button-arrow" size={17} /></a></div>
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row"><Link to="/tours" className="btn-gold primary-action"><span className="button-emblem"><Plane size={17} /></span><span className="button-copy"><small>Explora opciones</small><strong>Elegir mi destino</strong></span><ArrowRight className="button-arrow" size={17} /></Link><a href={buildWhatsAppUrl("Hola JohnToursPerú, quiero conocer los beneficios que se desbloquean al reservar un tour.")} className="formal-secondary-action"><span className="button-emblem"><MessageCircle size={17} /></span><span>Consultar beneficios</span><ArrowRight className="button-arrow" size={17} /></a></div>
         </div>
         <div className="exclusive-grid grid gap-4 sm:grid-cols-2">{benefits.map(([icon, title, text]) => <article key={String(title)} className="exclusive-card rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur"><span>{icon}</span><strong className="mt-4 block text-lg">{title}</strong><p className="mt-2 text-sm leading-6 text-slate-200">{text}</p></article>)}</div>
       </div>
@@ -425,7 +425,7 @@ function FrequentlyAskedQuestions() {
   return (
     <section className="faq-section px-4 py-16 lg:px-6 lg:py-20">
       <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[.75fr_1.25fr]">
-        <div><span className="section-kicker">Resolvemos tus dudas</span><h2 className="mt-4 text-4xl font-black text-[#082447] md:text-5xl">Preguntas frecuentes</h2><p className="mt-4 text-lg leading-8 text-slate-600">Queremos que decidas con información clara. Si necesitas una respuesta personal, estamos a un mensaje de distancia.</p><a href={buildWhatsAppUrl("Hola JhonToursPerú, tengo una consulta sobre sus viajes.")} className="whatsapp-cta primary-action mt-7"><span className="button-brand-stage"><img src="/whatsapp-logo.svg" alt="" /></span><span className="button-copy"><small>Respuesta personalizada</small><strong>Consultar por WhatsApp</strong></span><ArrowRight className="button-arrow" size={17} /></a></div>
+        <div><span className="section-kicker">Resolvemos tus dudas</span><h2 className="mt-4 text-4xl font-black text-[#082447] md:text-5xl">Preguntas frecuentes</h2><p className="mt-4 text-lg leading-8 text-slate-600">Queremos que decidas con información clara. Si necesitas una respuesta personal, estamos a un mensaje de distancia.</p><a href={buildWhatsAppUrl("Hola JohnToursPerú, tengo una consulta sobre sus viajes.")} className="whatsapp-cta primary-action mt-7"><span className="button-brand-stage"><img src="/whatsapp-logo.svg" alt="" /></span><span className="button-copy"><small>Respuesta personalizada</small><strong>Consultar por WhatsApp</strong></span><ArrowRight className="button-arrow" size={17} /></a></div>
         <div className="grid gap-3">{questions.map(([question, answer], index) => <details key={question} className="faq-item group rounded-2xl border border-slate-200 bg-white"><summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 font-bold text-[#082447]"><span>{question}</span><span className="faq-plus grid h-8 w-8 shrink-0 place-items-center rounded-full">+</span></summary><div className="px-5 pb-5 pr-16 text-sm leading-7 text-slate-600">{answer}</div>{index === 0 && <span className="sr-only">Abre para ver la respuesta</span>}</details>)}</div>
       </div>
     </section>
@@ -571,7 +571,7 @@ function TourDetail() {
         <DepartureCalendar tour={tour} />
       </section>
       <div className="mt-10 grid gap-6 lg:grid-cols-3">
-        <Info title="Descripción" items={[tour.description ?? "Experiencia seleccionada por JhonToursPerú."]} />
+        <Info title="Descripción" items={[tour.description ?? "Experiencia seleccionada por JohnToursPerú."]} />
         <Info title="Itinerario" items={itinerary} ordered />
         <Info title="Incluye / No incluye" items={[...includes.map((i) => `Incluye: ${i}`), ...excludes.map((i) => `No incluye: ${i}`)]} />
       </div>
@@ -621,7 +621,7 @@ const emptyAdminTourForm: AdminTourForm = {
   isFeatured: false,
   status: "ACTIVO",
   itineraryText: "Llegada y bienvenida\nTour principal guiado\nExperiencias locales\nRetorno",
-  includesText: "Alojamiento\nTraslados\nGuia especializado\nAsistencia JhonToursPerú",
+  includesText: "Alojamiento\nTraslados\nGuía especializada\nAsistencia JohnToursPerú",
   excludesText: "Gastos personales\nPropinas\nServicios no mencionados"
 };
 
@@ -678,7 +678,7 @@ function ReservationPage() {
         {["fullName", "email", "phone", "documentNumber"].map((name) => <input key={name} className="rounded-lg border px-4 py-3" placeholder={{ fullName: "Nombre completo", email: "Correo", phone: "Teléfono", documentNumber: "Documento" }[name]} {...form.register(name as never)} />)}
         {tour && <div className="reservation-departures"><strong>Selecciona tu salida</strong><DepartureCalendar tour={tour} selectedId={selectedDeparture?.id} onSelect={(departure) => { setSelectedDeparture(departure); form.setValue("travelDate", departure.startDate.slice(0, 10)); }} /></div>}
         <div className="grid gap-4 sm:grid-cols-2"><input className="rounded-lg border px-4 py-3" type="date" readOnly={Boolean(tour?.departures?.length)} {...form.register("travelDate")} /><input className="rounded-lg border px-4 py-3" type="number" min="1" max={selectedDeparture?.availableSlots ?? tour?.availableSlots ?? 20} {...form.register("peopleCount")} /></div>
-        <div className="hold-notice"><Clock3 /><span><strong>Solicitud protegida durante 30 minutos</strong><small>JhonToursPerú mantendrá activa tu solicitud mientras recibe y valida el comprobante Yape.</small></span></div>
+        <div className="hold-notice"><Clock3 /><span><strong>Solicitud protegida durante 30 minutos</strong><small>JohnToursPerú mantendrá activa tu solicitud mientras recibe y valida el comprobante Yape.</small></span></div>
         {reservationError && <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700">{reservationError}</p>}
         <button className="reservation-submit" disabled={mutation.isPending}><span className="button-emblem"><ShieldCheck size={18} /></span><span className="button-copy"><small>Solicitud protegida</small><strong>{mutation.isPending ? "Creando reserva..." : "Continuar con la reserva"}</strong></span><span className="button-terminal"><ArrowRight size={17} /></span></button>
       </form>
@@ -732,7 +732,7 @@ function YapeReservationPage() {
   const paymentCode = useMemo(() => reservationCode(id), [id]);
   if (!reservation) return <Section title="Preparando tu reserva" subtitle="Estamos generando tu código seguro de pago." />;
   const message = [
-    "COMPROBANTE DE SEPARACIÓN - JHONTOURSPERÚ",
+    "COMPROBANTE DE SEPARACIÓN - JOHNTOURSPERÚ",
     "",
     `Estimados, soy ${reservation.customer.fullName}. Solicito validar el pago Yape correspondiente a mi reserva.`,
     `Código de separación: ${paymentCode}`,
@@ -786,7 +786,7 @@ function appointmentSeparationCode(reservationId: string) {
 function buildAppointmentMessage(reservation: Reservation, date: string, time: string, channel: string, subject: string) {
   const formattedDate = date ? new Intl.DateTimeFormat("es-PE", { dateStyle: "long", timeZone: "UTC" }).format(new Date(`${date}T12:00:00Z`)) : "por coordinar";
   return [
-    "SOLICITUD DE CITA - JHONTOURSPERÚ",
+    "SOLICITUD DE CITA - JOHNTOURSPERÚ",
     "",
     `Estimados, mi nombre es ${reservation.customer.fullName}. Solicito coordinar una cita para revisar formalmente el paquete ${reservation.tour.title}.`,
     "",
@@ -1001,7 +1001,7 @@ function AdminPage() {
       queryClient.setQueryData<Tour[]>(["tours", undefined], (current = demoTours) => current.filter((tour) => tour.id !== id));
     }
   });
-  if (!token) return <Section title="Acceso interno" subtitle="Inicio de sesión exclusivo para administradores y trabajadores de JhonToursPerú."><div className="internal-login-layout"><aside><span><ShieldCheck /></span><small>Panel protegido</small><h3>Operación organizada y con permisos</h3><p>Los administradores gestionan tours y configuración. Los trabajadores revisan reservas y validan comprobantes Yape.</p><ul><li>Sesión privada y temporal</li><li>Permisos separados por rol</li><li>Acciones de pago registradas</li></ul></aside><form onSubmit={form.handleSubmit((v) => login.mutate(v))}><div className="internal-login-heading"><strong>Iniciar sesión</strong><small>Usa la cuenta asignada por JhonToursPerú</small></div>{isDemoMode && <div className="demo-mode-banner"><Sparkles size={18} /><span><strong>Panel de demostración</strong><small>Las cuentas de prueba solo controlan datos ficticios de esta presentación.</small></span></div>}<label>Correo corporativo<input placeholder="nombre@johntours.pe" autoComplete="username" {...form.register("email")} /></label><label>Contraseña<input type="password" placeholder="••••••••••••" autoComplete="current-password" {...form.register("password")} /></label>{login.isError && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm font-bold text-red-700">Credenciales inválidas o servicio no disponible.</p>}<button disabled={login.isPending}>{login.isPending ? "Verificando acceso..." : "Ingresar al panel"}</button><Link to="/" className="internal-login-back">Volver a la web pública</Link></form></div></Section>;
+  if (!token) return <Section title="Acceso interno" subtitle="Inicio de sesión exclusivo para administradores y trabajadores de JohnToursPerú."><div className="internal-login-layout"><aside><span><ShieldCheck /></span><small>Panel protegido</small><h3>Operación organizada y con permisos</h3><p>Los administradores gestionan tours y configuración. Los trabajadores revisan reservas y validan comprobantes Yape.</p><ul><li>Sesión privada y temporal</li><li>Permisos separados por rol</li><li>Acciones de pago registradas</li></ul></aside><form onSubmit={form.handleSubmit((v) => login.mutate(v))}><div className="internal-login-heading"><strong>Iniciar sesión</strong><small>Usa la cuenta asignada por JohnToursPerú</small></div>{isDemoMode && <div className="demo-mode-banner"><Sparkles size={18} /><span><strong>Panel de demostración</strong><small>Las cuentas de prueba solo controlan datos ficticios de esta presentación.</small></span></div>}<label>Correo corporativo<input placeholder="nombre@johntours.pe" autoComplete="username" {...form.register("email")} /></label><label>Contraseña<input type="password" placeholder="••••••••••••" autoComplete="current-password" {...form.register("password")} /></label>{login.isError && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm font-bold text-red-700">Credenciales inválidas o servicio no disponible.</p>}<button disabled={login.isPending}>{login.isPending ? "Verificando acceso..." : "Ingresar al panel"}</button><Link to="/" className="internal-login-back">Volver a la web pública</Link></form></div></Section>;
   if (staffRole === "WORKER") return <Section title="Panel de operaciones" subtitle="Validación de reservas, salidas y comprobantes Yape."><button onClick={() => { sessionStorage.removeItem("adminToken"); sessionStorage.removeItem("staffRole"); setToken(null); }} className="mb-5 inline-flex items-center gap-2 rounded-lg border bg-white px-4 py-2 font-bold"><LogOut size={18} /> Salir</button><div className="mb-6 grid gap-4 md:grid-cols-3"><AdminMetric label="Reservas" value={String(reservations.data?.length ?? 0)} /><AdminMetric label="Pagos" value={String(payments.data?.length ?? 0)} /><AdminMetric label="Rol" value="Asesor" /></div><DepartureOperations tours={tours.data ?? []} token={token} canCreate={false} /><div className="grid gap-6 lg:grid-cols-2"><ReservationsQueue reservations={reservations.data ?? []} token={token} /><PaymentsQueue payments={payments.data ?? []} token={token} /></div></Section>;
   return (
     <Section title="Panel administrativo" subtitle="Gestion de reservas, pagos y operaciones.">
@@ -1164,7 +1164,7 @@ function PaymentsQueue({ payments, token }: { payments: Payment[]; token: string
   );
 }
 
-const blankSettings: BusinessSettings = { tradeName: "JhonToursPerú", policiesPublished: false };
+const blankSettings: BusinessSettings = { tradeName: "JohnToursPerú", policiesPublished: false };
 
 function BusinessSettingsPanel() {
   const [settings, setSettings] = useState<BusinessSettings>(blankSettings);
@@ -1209,7 +1209,7 @@ function Testimonials() {
     placeholderData: demoTestimonials
   });
   return (
-    <Section title="Historias de viajeros felices" subtitle="Experiencias reales de personas que confiaron sus viajes a JhonToursPerú.">
+    <Section title="Historias de viajeros felices" subtitle="Experiencias reales de personas que confiaron sus viajes a JohnToursPerú.">
       <div id="testimonialCarousel" className="carousel slide testimonial-carousel rounded-lg bg-white p-4 shadow-xl" data-bs-ride="carousel">
         <div className="carousel-inner">
           {data.map((item, index) => (
@@ -1238,7 +1238,7 @@ function Testimonials() {
 }
 
 function Section({ title, subtitle, children }: { title: string; subtitle: string; children?: React.ReactNode }) {
-  return <section className="section-pro px-4 py-14 lg:px-6"><div className="mx-auto max-w-7xl"><div className="mb-8 max-w-3xl"><p className="mb-2 inline-flex items-center gap-2 rounded-lg bg-emerald-50 px-3 py-1 text-sm font-bold text-[#0f7a4f]"><ShieldCheck size={16} /> JhonToursPerú</p><h2 className="text-3xl font-black text-[#082447] md:text-4xl">{title}</h2><p className="mt-3 leading-7 text-slate-600">{subtitle}</p></div>{children}</div></section>;
+  return <section className="section-pro px-4 py-14 lg:px-6"><div className="mx-auto max-w-7xl"><div className="mb-8 max-w-3xl"><p className="mb-2 inline-flex items-center gap-2 rounded-lg bg-emerald-50 px-3 py-1 text-sm font-bold text-[#0f7a4f]"><ShieldCheck size={16} /> JohnToursPerú</p><h2 className="text-3xl font-black text-[#082447] md:text-4xl">{title}</h2><p className="mt-3 leading-7 text-slate-600">{subtitle}</p></div>{children}</div></section>;
 }
 
 function Info({ title, items, ordered = false }: { title: string; items: string[]; ordered?: boolean }) {

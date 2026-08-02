@@ -15,7 +15,7 @@ import { businessSettingsSchema, contactSchema, departureSchema, loginSchema, pa
 
 export const routes = Router();
 
-routes.get("/health", (_req, res) => res.json({ status: "ok", service: "JhonToursPerú API" }));
+routes.get("/health", (_req, res) => res.json({ status: "ok", service: "JohnToursPerú API" }));
 routes.get("/health/integrations", requireAdmin, (_req, res) => res.json(getIntegrationStatus()));
 
 routes.post("/auth/login", createRateLimiter({ windowMs: 15 * 60_000, max: 5 }), validate(loginSchema), asyncHandler(authController.login));
