@@ -5,9 +5,9 @@ import { tourMoney } from "../lib/presentation";
 
 export function TourCard({ tour }: { tour: Tour }) {
   const benefits = [
-    { icon: <ShieldCheck size={17} />, label: "Viaje seguro" },
-    { icon: <Hotel size={17} />, label: "Alojamiento" },
-    { icon: <UsersRound size={17} />, label: "Asistencia" }
+    { icon: <ShieldCheck size={17} />, label: "Plan verificado" },
+    { icon: <Hotel size={17} />, label: "Hotel coordinado" },
+    { icon: <UsersRound size={17} />, label: "Asesor humano" }
   ];
 
   return (
@@ -16,7 +16,7 @@ export function TourCard({ tour }: { tour: Tour }) {
         <img src={tour.imageUrl} alt={tour.title} loading="lazy" decoding="async" />
         <div className="tour-card-media-shade" />
         <span className="tour-type-badge"><Plane size={13} /> {tour.type === "NACIONAL" ? "Tour nacional" : "Tour internacional"}</span>
-        <span className="tour-verified-badge"><ShieldCheck size={14} /> Experiencia verificada</span>
+        <span className="tour-verified-badge"><ShieldCheck size={14} /> Selección confiable</span>
       </div>
       <div className="tour-card-body">
         <div className="tour-card-heading">

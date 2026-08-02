@@ -7,7 +7,7 @@ La web funciona como una vitrina publicitaria breve: presenta confianza, permite
 ## Recorrido público
 
 1. El visitante conoce la propuesta, historia, canales oficiales y redes sociales.
-2. Revisa opciones de aerolíneas mediante enlaces oficiales y compara precio final, horarios, equipaje y conexiones.
+2. Revisa el objetivo de conexión de cada destino, compara criterios prácticos y accede a las aerolíneas mediante enlaces oficiales.
 3. Filtra tours nacionales o internacionales y revisa el paquete.
 4. Elige una fecha programada y completa sus datos.
 5. El backend crea una reserva `PENDIENTE` y mantiene temporalmente activa la solicitud.
@@ -28,7 +28,7 @@ Estados comunicados al cliente:
 
 ## Orientación de vuelos y traslados
 
-La portada incluye un bloque compacto de orientación con los logotipos de LATAM, SKY y JetSMART para Cusco; Copa Airlines y Avianca para Orlando; e Iberia y Turkish Airlines para El Cairo. Cada opción conserva su identidad visual dentro de una tarjeta adaptada a la paleta de JhonToursPerú y enlaza al sitio oficial. La web no vende pasajes ni garantiza una tarifa: invita a comparar el costo final, equipaje, escalas, horarios y condiciones antes de pagar.
+La portada incluye una guía de decisión con los logotipos de LATAM, SKY y JetSMART para Cusco; Copa Airlines y Avianca para Orlando; e Iberia y Turkish Airlines para El Cairo. Cada destino explica el objetivo de la conexión según el ritmo del tour y propone criterios como horario de llegada, duración total, escalas, equipaje y flexibilidad. Cada opción conserva su identidad visual dentro de una tarjeta adaptada a la paleta de JhonToursPerú y enlaza al sitio oficial. La web no vende pasajes ni garantiza una tarifa.
 
 Ica y Oxapampa se presentan como conexiones terrestres desde Lima y se ofrece coordinación por WhatsApp. Los enlaces y rutas deben revisarse periódicamente porque dependen de cada aerolínea.
 

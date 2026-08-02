@@ -52,16 +52,16 @@ export async function createReservationReceipt(reservation: Reservation, options
       doc.setTextColor(255, 255, 255);
       doc.setFont("helvetica", "bold");
       doc.setFontSize(15);
-      doc.text("JHONTOURSPERU", 14, 23);
+      doc.text("JHONTOURSPERÚ", 14, 23);
     }
     doc.setTextColor(255, 255, 255);
     doc.setFont("helvetica", "bold");
     doc.setFontSize(14);
     doc.text(isDemo ? "CONSTANCIA DEMOSTRATIVA" : "CONSTANCIA DE RESERVA", 196, 16, { align: "right" });
     doc.setFontSize(9);
-    doc.text(`Codigo de reserva: ${code}`, 196, 24, { align: "right" });
+    doc.text(`Código de reserva: ${code}`, 196, 24, { align: "right" });
     doc.setFont("helvetica", "normal");
-    doc.text("JhonToursPeru - Agencia de viajes y turismo", 196, 31, { align: "right" });
+    doc.text("JhonToursPerú - Agencia de viajes y turismo", 196, 31, { align: "right" });
     y = 54;
     if (isDemo) {
       doc.setFillColor(255, 247, 220);
@@ -110,7 +110,7 @@ export async function createReservationReceipt(reservation: Reservation, options
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8.8);
     items.forEach((item, index) => {
-      const prefix = ordered ? `Dia ${index + 1}` : "-";
+      const prefix = ordered ? `Día ${index + 1}` : "-";
       const lines = doc.splitTextToSize(item, 158);
       const itemHeight = Math.max(7, lines.length * 4.4 + 1.5);
       ensureSpace(itemHeight);
@@ -147,20 +147,20 @@ export async function createReservationReceipt(reservation: Reservation, options
   field("Viajeros", String(reservation.peopleCount), 108, 80);
   y += 20;
 
-  sectionTitle("Resumen economico");
+  sectionTitle("Resumen económico");
   field("Valor referencial", `S/ ${money(total)}`, 18, 52);
-  field("Separacion", `S/ ${money(reservationAmount)}`, 74, 52);
+  field("Separación", `S/ ${money(reservationAmount)}`, 74, 52);
   field("Saldo estimado", `S/ ${money(balance)}`, 132, 56);
   y += 18;
-  field("Metodo", "Yape", 18, 52);
-  field("Estado", isDemo ? "Simulacion sin cobro" : reservation.status === "PAGADA" ? "Pago validado" : "Validacion pendiente", 74, 114);
+  field("Método", "Yape", 18, 52);
+  field("Estado", isDemo ? "Simulación sin cobro" : reservation.status === "PAGADA" ? "Pago validado" : "Validación pendiente", 74, 114);
   y += 20;
 
-  sectionTitle(isDemo ? "Itinerario referencial de demostracion" : "Itinerario del paquete");
-  const itinerary = reservation.tour.itinerary?.length ? reservation.tour.itinerary : ["Coordinacion del itinerario final con un asesor de JhonToursPeru."];
+  sectionTitle(isDemo ? "Itinerario referencial de demostración" : "Itinerario del paquete");
+  const itinerary = reservation.tour.itinerary?.length ? reservation.tour.itinerary : ["Coordinación del itinerario final con un asesor de JhonToursPerú."];
   itemList(itinerary, true);
 
-  const includedServices = reservation.tour.includes?.length ? reservation.tour.includes : ["Asistencia y coordinacion de JhonToursPeru"];
+  const includedServices = reservation.tour.includes?.length ? reservation.tour.includes : ["Asistencia y coordinación de JhonToursPerú"];
   ensureSpace(listHeight(includedServices));
   sectionTitle("Servicios incluidos");
   itemList(includedServices);
@@ -180,8 +180,8 @@ export async function createReservationReceipt(reservation: Reservation, options
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8);
   doc.text(doc.splitTextToSize(isDemo
-    ? "Documento generado para demostracion. Las fechas, servicios, precios e itinerarios son referenciales y se reemplazaran con la informacion comercial definitiva antes de activar pagos reales."
-    : "La reserva y el itinerario quedan sujetos a validacion final de disponibilidad, proveedores y condiciones comunicadas por JhonToursPeru.", 174), 18, y + 3);
+    ? "Documento generado para demostración. Las fechas, servicios, precios e itinerarios son referenciales y se reemplazarán con la información comercial definitiva antes de activar pagos reales."
+    : "La reserva y el itinerario quedan sujetos a validación final de disponibilidad, proveedores y condiciones comunicadas por JhonToursPerú.", 174), 18, y + 3);
 
   const pageCount = doc.getNumberOfPages();
   for (let page = 1; page <= pageCount; page += 1) {
@@ -192,7 +192,7 @@ export async function createReservationReceipt(reservation: Reservation, options
     doc.setFont("helvetica", "normal");
     doc.setFontSize(7.5);
     doc.text("Contacto: +51 966 779 705 - johntoursperu29@gmail.com", 14, 283);
-    doc.text(`Pagina ${page} de ${pageCount}`, 196, 283, { align: "right" });
+    doc.text(`Página ${page} de ${pageCount}`, 196, 283, { align: "right" });
   }
 
   return doc;

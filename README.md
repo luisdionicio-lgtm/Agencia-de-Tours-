@@ -9,7 +9,8 @@ Web publicitaria fullstack para captar clientes, mostrar tours nacionales e inte
 - Código organizado por responsabilidades: estructura pública, catálogo, secciones, configuración y utilidades.
 - Carrusel principal con marco azul de marca y acceso directo desde cada imagen al detalle del paquete.
 - Catálogo, filtros, detalle, itinerario, inclusiones y exclusiones de cada tour.
-- Guía breve de aerolíneas por destino con logotipos identificables y enlaces oficiales para comparar precio final, horarios, equipaje y conexiones.
+- Guía de aerolíneas por destino con logotipos, objetivo de conexión, criterios de decisión y enlaces oficiales para comparar precio final, horarios, equipaje y escalas.
+- Diseño minimalista con tarjetas jerarquizadas, iconografía profesional y microinteracciones alineadas con la paleta del logo.
 - Mejor época para viajar, calendario por tour y salidas programadas.
 - Reserva pendiente con código privado, QR informativo y mensaje formal de WhatsApp.
 - Estados visibles desde la creación hasta la confirmación.

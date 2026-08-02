@@ -22,10 +22,10 @@ const demoTours: Tour[] = [
     id: 1,
     title: "Machu Picchu",
     slug: "machu-picchu",
-    destination: "Cusco, Peru",
-    description: "Explora la ciudadela inca, el Valle Sagrado y la magia cultural de Cusco con guias expertos y asistencia permanente.",
+    destination: "Cusco, Perú",
+    description: "Explora la ciudadela inca, el Valle Sagrado y la riqueza cultural de Cusco con guías expertos y asistencia permanente.",
     price: 1550,
-    duration: "4 dias / 3 noches",
+    duration: "4 días / 3 noches",
     type: "NACIONAL",
     availableSlots: 18,
     imageUrl: destinationImage("photo-1587595431973-160d0d94add1"),
@@ -46,9 +46,9 @@ const demoTours: Tour[] = [
     title: "Disney Orlando",
     slug: "disney-orlando",
     destination: "Orlando, Estados Unidos",
-    description: "Vive parques tematicos, compras y experiencias familiares con una ruta clara, segura y organizada.",
+    description: "Vive parques temáticos, compras y experiencias familiares con una ruta clara, segura y organizada.",
     price: 1890,
-    duration: "7 dias / 6 noches",
+    duration: "7 días / 6 noches",
     type: "INTERNACIONAL",
     availableSlots: 12,
     imageUrl: destinationImage("photo-1597466599360-3b9775841aec"),
@@ -71,10 +71,10 @@ const demoTours: Tour[] = [
     id: 3,
     title: "Oxapampa",
     slug: "oxapampa",
-    destination: "Pasco, Peru",
-    description: "Naturaleza, cataratas, cafe y tradiciones locales en una escapada de aire puro.",
+    destination: "Pasco, Perú",
+    description: "Naturaleza, cataratas, café y tradiciones locales en una escapada de aire puro.",
     price: 950,
-    duration: "3 dias / 2 noches",
+    duration: "3 días / 2 noches",
     type: "NACIONAL",
     availableSlots: 20,
     imageUrl: "https://inforegion.pe/wp-content/uploads/2025/01/baf433a5-dji_20241114093018_0090_d-2.jpg",
@@ -93,10 +93,10 @@ const demoTours: Tour[] = [
     id: 4,
     title: "Ica y Huacachina",
     slug: "ica-y-huacachina",
-    destination: "Ica, Peru",
+    destination: "Ica, Perú",
     description: "Dunas, tubulares, sandboard, bodegas pisqueras y atardeceres inolvidables en el oasis.",
     price: 650,
-    duration: "2 dias / 1 noche",
+    duration: "2 días / 1 noche",
     type: "NACIONAL",
     availableSlots: 25,
     imageUrl: "https://www.stampbystamptravel.com/wp-content/uploads/2025/02/laguna-huacachina-ica.jpg.webp",
@@ -115,9 +115,9 @@ const demoTours: Tour[] = [
     title: "Egipto",
     slug: "egipto",
     destination: "El Cairo, Egipto",
-    description: "Piramides de Giza, El Cairo historico y crucero por el Nilo con itinerario claro, hoteles seleccionados y acompanamiento en cada etapa.",
+    description: "Pirámides de Giza, El Cairo histórico y crucero por el Nilo con itinerario claro, hoteles seleccionados y acompañamiento en cada etapa.",
     price: 2700,
-    duration: "8 dias / 7 noches",
+    duration: "8 días / 7 noches",
     type: "INTERNACIONAL",
     availableSlots: 10,
     imageUrl: "https://www.barcelo.com/guia-turismo/wp-content/uploads/2022/05/el-cairo1.jpg",
@@ -140,9 +140,9 @@ const demoTours: Tour[] = [
 ];
 
 const demoTestimonials = [
-  { name: "Maria Fernandez", location: "Lima", comment: "La reserva fue rapida, los precios fueron claros y el viaje a Cusco estuvo muy bien organizado.", rating: 5 },
+  { name: "María Fernández", location: "Lima", comment: "La reserva fue rápida, los precios fueron claros y el viaje a Cusco estuvo muy bien organizado.", rating: 5 },
   { name: "Carlos Medina", location: "Trujillo", comment: "Me atendieron por WhatsApp con paciencia y todo el itinerario estuvo explicado antes de pagar.", rating: 5 },
-  { name: "Rosa Salazar", location: "Arequipa", comment: "El paquete familiar a Orlando supero nuestras expectativas. Se sintio seguro de inicio a fin.", rating: 5 }
+  { name: "Rosa Salazar", location: "Arequipa", comment: "El paquete familiar a Orlando superó nuestras expectativas. Se sintió seguro de inicio a fin.", rating: 5 }
 ];
 
 const demoReservation: Reservation = {
@@ -229,7 +229,7 @@ function Home() {
           <div className="animate-rise max-w-3xl text-white">
             <p className="hero-eyebrow mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-bold text-cyan-100 ring-1 ring-white/20"><Sparkles size={17} /> Viaja seguro · Vive extraordinario</p>
             <h1 className="hero-title text-4xl font-black leading-[1.04] sm:text-5xl md:text-7xl">Tu próximo destino <span>empieza aquí</span></h1>
-            <p className="mt-6 max-w-2xl text-base leading-8 text-slate-100 md:text-xl">Tours nacionales e internacionales con atención cercana, itinerarios claros y una reserva simple de S/ 200 por Yape.</p>
+            <p className="mt-6 max-w-2xl text-base leading-8 text-slate-100 md:text-xl">Elige una experiencia, comprende cada detalle y viaja con una ruta clara, atención humana y reserva desde S/ 200 por Yape.</p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link to="/tours" className="btn-gold primary-action"><span className="button-emblem"><Plane size={18} /></span><span className="button-copy"><small>Descubre destinos</small><strong>Explorar tours</strong></span><ArrowRight className="button-arrow" size={18} /></Link>
               <a href={buildWhatsAppUrl(whatsappMessages.general)} className="whatsapp-cta primary-action"><span className="button-brand-stage"><img src="/whatsapp-logo.svg" alt="" /></span><span className="button-copy"><small>Atención personalizada</small><strong>Cotizar por WhatsApp</strong></span><ArrowRight className="button-arrow" size={18} /></a>
@@ -242,8 +242,8 @@ function Home() {
             </div>
             <div className="mt-8 grid max-w-2xl grid-cols-3 gap-2 sm:gap-3">
               <MiniTrust icon={<ShieldCheck />} value="Reserva segura" label="Yape, código único y comprobante" />
-              <MiniTrust icon={<Clock3 />} value="Respuesta clara" label="Atencion por WhatsApp" />
-              <MiniTrust icon={<HeartHandshake />} value="Viaje acompanado" label="Antes, durante y despues" />
+              <MiniTrust icon={<Clock3 />} value="Respuesta clara" label="Atención por WhatsApp" />
+              <MiniTrust icon={<HeartHandshake />} value="Viaje acompañado" label="Antes, durante y después" />
             </div>
           </div>
           <div className="space-y-4 lg:pl-2">
@@ -253,7 +253,7 @@ function Home() {
           </div>
         </div>
       </section>
-      <Section title="Tours destacados" subtitle="Paquetes elegidos para viajar con confianza y asistencia desde la primera cotizacion.">
+      <Section title="Tours destacados" subtitle="Paquetes elegidos para viajar con confianza y asistencia desde la primera cotización.">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">{featured.map((tour) => <TourCard key={tour.id} tour={tour} />)}</div>
       </Section>
       <AirlineGuideSection />
@@ -275,8 +275,8 @@ function Home() {
 
 function MiniTrust({ icon, value, label }: { icon: React.ReactNode; value: string; label: string }) {
   return (
-    <div className="rounded-lg bg-white/12 p-2 ring-1 ring-white/20 backdrop-blur sm:p-3 lg:p-4">
-      <span className="mb-2 grid h-8 w-8 place-items-center rounded-lg bg-amber-300 text-[#082447] sm:h-9 sm:w-9">{icon}</span>
+    <div className="mini-trust-card rounded-lg bg-white/12 p-2 ring-1 ring-white/20 backdrop-blur sm:p-3 lg:p-4">
+      <span className="mini-trust-icon mb-2 grid h-8 w-8 place-items-center rounded-lg bg-amber-300 text-[#082447] sm:h-9 sm:w-9">{icon}</span>
       <strong className="block text-xs leading-snug sm:text-sm">{value}</strong>
       <span className="mt-1 block text-[11px] leading-snug text-slate-200 sm:text-xs">{label}</span>
     </div>
@@ -365,9 +365,9 @@ function SocialSpotlight() {
 
 function ConfidencePanel() {
   const promises = [
-    ["Itinerario visible", "Sabes que incluye tu paquete, que no incluye y como se organiza cada dia."],
-    ["Asesor humano", "Un contacto directo te acompana para resolver dudas antes de reservar."],
-    ["Reserva sin presion", "Puedes cotizar por WhatsApp y revisar disponibilidad antes de pagar."]
+    ["Itinerario visible", "Sabes qué incluye tu paquete, qué no incluye y cómo se organiza cada día."],
+    ["Asesor humano", "Un contacto directo te acompaña para resolver dudas antes de reservar."],
+    ["Reserva sin presión", "Puedes cotizar por WhatsApp y revisar disponibilidad antes de pagar."]
   ];
   return (
     <section className="confidence-panel px-4 py-12 lg:px-6">
@@ -438,7 +438,7 @@ function SearchBox() {
   const [type, setType] = useState("");
   return (
     <div className="glass search-panel rounded-2xl p-5 shadow-2xl lg:p-6">
-      <p className="mb-2 text-xs font-black uppercase tracking-widest text-[#0f7a4f]">Cotizacion rapida</p>
+      <p className="mb-2 text-xs font-black uppercase tracking-widest text-[#0f7a4f]">Cotización rápida</p>
       <h2 className="text-xl font-black text-[#082447] lg:text-2xl">Diseña tu próxima experiencia</h2>
       <p className="mt-1 text-sm leading-6 text-slate-600">Filtra por destino, fecha y tipo de viaje. Luego un asesor puede ayudarte por WhatsApp.</p>
       <div className="mt-5 grid gap-3 lg:grid-cols-2">
@@ -462,7 +462,7 @@ function Tours() {
   const [maxPrice, setMaxPrice] = useState(3000);
   const filtered = useMemo(() => tours.filter((tour) => tour.destination.toLowerCase().includes(destination.toLowerCase()) && Number(tour.price) <= maxPrice), [tours, destination, maxPrice]);
   return (
-    <Section title="Catalogo de tours" subtitle="Filtra paquetes nacionales e internacionales por destino, precio y estilo.">
+    <Section title="Catálogo de tours" subtitle="Filtra paquetes nacionales e internacionales por destino, precio y estilo.">
       <div className="catalog-filters mb-6 grid gap-3 rounded-lg border border-slate-200 bg-white p-4 shadow-sm lg:grid-cols-4">
         <select className="rounded-lg border px-4 py-3" aria-label="Tipo de tour" value={initialType ?? ""} onChange={(e) => setParams(e.target.value ? { type: e.target.value } : {})}><option value="">Todos los tours</option><option value="NACIONAL">Nacionales</option><option value="INTERNACIONAL">Internacionales</option></select>
         <input className="rounded-lg border px-4 py-3" aria-label="Buscar por destino" placeholder="Buscar destino" value={destination} onChange={(e) => setDestination(e.target.value)} />
@@ -470,7 +470,7 @@ function Tours() {
         <a href={buildWhatsAppUrl(whatsappMessages.general)} className="catalog-advisor"><span className="button-brand-stage"><img src="/whatsapp-logo.svg" alt="" /></span><span className="button-copy"><small>Ayuda personalizada</small><strong>Solicitar orientación</strong></span><ArrowRight className="button-arrow" size={17} /></a>
       </div>
       <div className="mb-6 grid gap-4 md:grid-cols-3">
-        <CatalogSignal icon={<ShieldCheck />} title="Operador confiable" text="Itinerarios revisados y comunicacion directa." />
+        <CatalogSignal icon={<ShieldCheck />} title="Operador confiable" text="Itinerarios revisados y comunicación directa." />
         <CatalogSignal icon={<ShieldCheck />} title="Reserva protegida" text="Separa con S/ 200, código único y validación del comprobante." />
         <CatalogSignal icon={<MessageCircle />} title="Asesor humano" text="Soporte por WhatsApp para cotizar y confirmar." />
       </div>
@@ -535,8 +535,8 @@ function TourDetail() {
     placeholderData: demoTours.find((item) => item.id === Number(id)) ?? demoTours[0]
   });
   if (isLoading || !tour) return <Section title="Cargando tour" subtitle="Preparando detalles..." />;
-  const itinerary = tour.itinerary ?? ["Recepcion y briefing", "Experiencia principal", "Actividades libres", "Retorno"];
-  const includes = tour.includes ?? ["Asistencia", "Traslados", "Guia"];
+  const itinerary = tour.itinerary ?? ["Recepción y orientación", "Experiencia principal", "Actividades libres", "Retorno"];
+  const includes = tour.includes ?? ["Asistencia", "Traslados", "Guía"];
   const excludes = tour.excludes ?? ["Gastos personales"];
   const season = tourSeason(tour);
   return (
@@ -555,8 +555,8 @@ function TourDetail() {
           <p className="mt-3 text-4xl font-black text-[#082447]">{tourMoney(tour)}</p>
           <div className="mt-5 space-y-3 text-sm text-slate-600">
             <p className="flex items-center gap-2"><ShieldCheck className="text-[#0f7a4f]" size={18} /> Reserva con datos protegidos</p>
-            <p className="flex items-center gap-2"><Clock3 className="text-[#0f4c81]" size={18} /> Confirmacion y seguimiento</p>
-            <p className="flex items-center gap-2"><UsersRound className="text-amber-600" size={18} /> Asesoria para tu grupo</p>
+            <p className="flex items-center gap-2"><Clock3 className="text-[#0f4c81]" size={18} /> Confirmación y seguimiento</p>
+            <p className="flex items-center gap-2"><UsersRound className="text-amber-600" size={18} /> Asesoría para tu grupo</p>
           </div>
           <Link to={`/reservar/${tour.id}`} className="btn-gold primary-action mt-6"><span className="button-emblem"><CalendarDays size={18} /></span><span className="button-copy"><small>Inicia con S/ 200</small><strong>Reservar este tour</strong></span><ArrowRight className="button-arrow" size={18} /></Link>
           <a href={buildWhatsAppUrl(whatsappMessages.tour(tour))} className="whatsapp-cta primary-action mt-3"><span className="button-brand-stage"><img src="/whatsapp-logo.svg" alt="" /></span><span className="button-copy"><small>Consulta sin compromiso</small><strong>Cotizar por WhatsApp</strong></span><ArrowRight className="button-arrow" size={18} /></a>
@@ -571,7 +571,7 @@ function TourDetail() {
         <DepartureCalendar tour={tour} />
       </section>
       <div className="mt-10 grid gap-6 lg:grid-cols-3">
-        <Info title="Descripcion" items={[tour.description ?? "Experiencia seleccionada por JhonToursPerú."]} />
+        <Info title="Descripción" items={[tour.description ?? "Experiencia seleccionada por JhonToursPerú."]} />
         <Info title="Itinerario" items={itinerary} ordered />
         <Info title="Incluye / No incluye" items={[...includes.map((i) => `Incluye: ${i}`), ...excludes.map((i) => `No incluye: ${i}`)]} />
       </div>
@@ -675,7 +675,7 @@ function ReservationPage() {
     <Section title="Reserva tu viaje" subtitle={tour ? `${tour.title} · Inicia tu reserva con S/ ${reservationAmount}` : "Completa tus datos"}>
       <form onSubmit={form.handleSubmit((v) => mutation.mutate(v))} className="mx-auto grid max-w-3xl gap-4 rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
         {isDemoMode && <div className="demo-mode-banner"><Sparkles size={18} /><span><strong>Demostración interactiva</strong><small>Podrás recorrer la reserva, Yape, estados, PDF y panel sin realizar pagos ni guardar datos en una base real.</small></span></div>}
-        {["fullName", "email", "phone", "documentNumber"].map((name) => <input key={name} className="rounded-lg border px-4 py-3" placeholder={{ fullName: "Nombre completo", email: "Correo", phone: "Telefono", documentNumber: "Documento" }[name]} {...form.register(name as never)} />)}
+        {["fullName", "email", "phone", "documentNumber"].map((name) => <input key={name} className="rounded-lg border px-4 py-3" placeholder={{ fullName: "Nombre completo", email: "Correo", phone: "Teléfono", documentNumber: "Documento" }[name]} {...form.register(name as never)} />)}
         {tour && <div className="reservation-departures"><strong>Selecciona tu salida</strong><DepartureCalendar tour={tour} selectedId={selectedDeparture?.id} onSelect={(departure) => { setSelectedDeparture(departure); form.setValue("travelDate", departure.startDate.slice(0, 10)); }} /></div>}
         <div className="grid gap-4 sm:grid-cols-2"><input className="rounded-lg border px-4 py-3" type="date" readOnly={Boolean(tour?.departures?.length)} {...form.register("travelDate")} /><input className="rounded-lg border px-4 py-3" type="number" min="1" max={selectedDeparture?.availableSlots ?? tour?.availableSlots ?? 20} {...form.register("peopleCount")} /></div>
         <div className="hold-notice"><Clock3 /><span><strong>Solicitud protegida durante 30 minutos</strong><small>JhonToursPerú mantendrá activa tu solicitud mientras recibe y valida el comprobante Yape.</small></span></div>
@@ -1027,7 +1027,7 @@ function AdminPage() {
             <label className="grid gap-1 text-sm font-bold text-slate-700">Moneda<select className="rounded-lg border px-3 py-3" value={tourForm.currency} onChange={(event) => setTourForm({ ...tourForm, currency: event.target.value as "PEN" | "USD" })}><option value="PEN">Soles (PEN)</option><option value="USD">Dolares (USD)</option></select></label>
             <label className="grid gap-1 text-sm font-bold text-slate-700">Modalidad de pago<select className="rounded-lg border px-3 py-3" value={tourForm.paymentMode} onChange={(event) => setTourForm({ ...tourForm, paymentMode: event.target.value as "FULL" | "DEPOSIT" })}><option value="FULL">Pago total</option><option value="DEPOSIT">Adelanto</option></select></label>
             {tourForm.paymentMode === "DEPOSIT" && <AdminField label="Adelanto (%)" type="number" value={tourForm.depositPercent} onChange={(value) => setTourForm({ ...tourForm, depositPercent: value })} required />}
-            <AdminField label="Duracion" value={tourForm.duration} onChange={(value) => setTourForm({ ...tourForm, duration: value })} />
+            <AdminField label="Duración" value={tourForm.duration} onChange={(value) => setTourForm({ ...tourForm, duration: value })} />
             <AdminField label="Capacidad interna" type="number" value={tourForm.availableSlots} onChange={(value) => setTourForm({ ...tourForm, availableSlots: value })} />
             <label className="grid gap-1 text-sm font-bold text-slate-700">Tipo<select className="rounded-lg border px-3 py-3" value={tourForm.type} onChange={(event) => setTourForm({ ...tourForm, type: event.target.value as TourType })}><option value="NACIONAL">Nacional</option><option value="INTERNACIONAL">Internacional</option></select></label>
             <label className="grid gap-1 text-sm font-bold text-slate-700">Estado<select className="rounded-lg border px-3 py-3" value={tourForm.status} onChange={(event) => setTourForm({ ...tourForm, status: event.target.value as TourStatus })}><option value="ACTIVO">Activo</option><option value="INACTIVO">Inactivo</option></select></label>
@@ -1035,7 +1035,7 @@ function AdminPage() {
           </div>
           <AdminField label="Imagen URL" value={tourForm.imageUrl} onChange={(value) => setTourForm({ ...tourForm, imageUrl: value })} />
           <AdminField label="Credito o licencia de imagen" value={tourForm.imageCredit} onChange={(value) => setTourForm({ ...tourForm, imageCredit: value })} />
-          <label className="mt-3 grid gap-1 text-sm font-bold text-slate-700">Descripcion<textarea className="min-h-24 rounded-lg border px-3 py-3" value={tourForm.description} onChange={(event) => setTourForm({ ...tourForm, description: event.target.value })} /></label>
+          <label className="mt-3 grid gap-1 text-sm font-bold text-slate-700">Descripción<textarea className="min-h-24 rounded-lg border px-3 py-3" value={tourForm.description} onChange={(event) => setTourForm({ ...tourForm, description: event.target.value })} /></label>
           <div className="mt-3 grid gap-3 md:grid-cols-3">
             <AdminTextArea label="Itinerario" value={tourForm.itineraryText} onChange={(value) => setTourForm({ ...tourForm, itineraryText: value })} />
             <AdminTextArea label="Incluye" value={tourForm.includesText} onChange={(value) => setTourForm({ ...tourForm, includesText: value })} />
@@ -1067,7 +1067,7 @@ function AdminPage() {
         <ReservationsQueue reservations={reservations.data ?? []} token={token} />
         <PaymentsQueue payments={payments.data ?? []} token={token} />
       </div>
-      <div className="mt-6 rounded-lg border bg-white p-6 shadow-sm"><h3 className="mb-3 flex items-center gap-2 text-xl font-black text-[#082447]"><LayoutDashboard /> Operacion lista</h3><p className="text-slate-600">El panel ya usa POST, PUT y DELETE protegidos con JWT para manejar tours desde la interfaz.</p></div>
+      <div className="mt-6 rounded-lg border bg-white p-6 shadow-sm"><h3 className="mb-3 flex items-center gap-2 text-xl font-black text-[#082447]"><LayoutDashboard /> Operación lista</h3><p className="text-slate-600">El panel ya usa POST, PUT y DELETE protegidos con JWT para manejar tours desde la interfaz.</p></div>
     </Section>
   );
 }

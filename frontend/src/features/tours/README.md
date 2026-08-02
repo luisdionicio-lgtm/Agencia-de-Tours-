@@ -6,7 +6,7 @@ La funcionalidad se divide por responsabilidad para que cada mejora pueda realiz
 - `components/SiteShell.tsx`: cabecera pública, navegación adaptable, pie de página y orientación flotante por WhatsApp.
 - `components/`: piezas reutilizables del catálogo y la estructura general del sitio.
 - `sections/`: apartados completos de la landing, como la orientación de aerolíneas.
-- `config/`: datos de contacto, WhatsApp, redes y configuración de demostración.
+- `config/`: datos de contacto, WhatsApp, redes, configuración de demostración y guía estructurada de aerolíneas por destino.
 - `lib/`: formato de precios, códigos y utilidades de presentación.
 - `lib/reservationReceipt.ts`: generación de la constancia PDF demostrativa y separación clara de itinerario, incluidos, exclusiones y opcionales.
 
