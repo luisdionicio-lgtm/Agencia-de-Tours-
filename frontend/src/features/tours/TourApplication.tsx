@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowRight, Award, CalendarDays, CheckCircle2, Clock3, Copy, Download, FileText, Filter, HeartHandshake, LayoutDashboard, LogOut, MessageCircle, Plane, Search, ShieldCheck, Sparkles, Star, UsersRound } from "lucide-react";
+import { ArrowRight, Award, CalendarDays, CheckCircle2, Clock3, Copy, Download, FileText, Filter, HeartHandshake, LayoutDashboard, LogOut, MapPin, MessageCircle, Plane, Search, ShieldCheck, Sparkles, Star, UsersRound } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -13,6 +13,9 @@ import { buildWhatsAppUrl, demoStaffAccounts, isDemoMode, reservationAmount, soc
 import { destinationImage, paymentMoney, reservationCode, tourCurrency, tourMoney, type TourDeparture } from "./lib/presentation";
 import { downloadReservationReceipt } from "./lib/reservationReceipt";
 import { AirlineGuideSection } from "./sections/AirlineGuideSection";
+import { DestinationCarousel } from "./components/DestinationCarousel";
+import { HowItWorksSection } from "./sections/HowItWorksSection";
+import { TrustSection } from "./sections/TrustSection";
 
 const demoDepartures = (_tourId: number, items: [number, string, string, number, number][]): TourDeparture[] =>
   items.map(([id, startDate, endDate, capacity, availableSlots]) => ({ id, startDate, endDate, capacity, availableSlots, status: "ACTIVO" }));
@@ -140,9 +143,9 @@ const demoTours: Tour[] = [
 ];
 
 const demoTestimonials = [
-  { name: "María Fernández", location: "Lima", comment: "La reserva fue rápida, los precios fueron claros y el viaje a Cusco estuvo muy bien organizado.", rating: 5 },
-  { name: "Carlos Medina", location: "Trujillo", comment: "Me atendieron por WhatsApp con paciencia y todo el itinerario estuvo explicado antes de pagar.", rating: 5 },
-  { name: "Rosa Salazar", location: "Arequipa", comment: "El paquete familiar a Orlando superó nuestras expectativas. Se sintió seguro de inicio a fin.", rating: 5 }
+  { name: "María Fernández", location: "Lima", tour: "Machu Picchu", comment: "La reserva fue rápida, los precios fueron claros y el viaje a Cusco estuvo muy bien organizado.", rating: 5 },
+  { name: "Carlos Medina", location: "Trujillo", tour: "Ica y Huacachina", comment: "Me atendieron por WhatsApp con paciencia y todo el itinerario estuvo explicado antes de pagar.", rating: 5 },
+  { name: "Rosa Salazar", location: "Arequipa", tour: "Disney Orlando", comment: "El paquete familiar a Orlando superó nuestras expectativas. Se sintió seguro de inicio a fin.", rating: 5 }
 ];
 
 const demoReservation: Reservation = {
@@ -228,17 +231,18 @@ function Home() {
         <div className="mx-auto grid min-h-[calc(100svh-80px)] max-w-7xl items-center gap-8 px-4 py-10 lg:min-h-[660px] lg:grid-cols-[1.05fr_.95fr] lg:gap-10 lg:px-6 lg:py-14">
           <div className="animate-rise max-w-3xl text-white">
             <p className="hero-eyebrow mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-bold text-cyan-100 ring-1 ring-white/20"><Sparkles size={17} /> Viaja seguro · Vive extraordinario</p>
-            <h1 className="hero-title text-4xl font-black leading-[1.04] sm:text-5xl md:text-7xl">Tu próximo destino <span>empieza aquí</span></h1>
-            <p className="mt-6 max-w-2xl text-base leading-8 text-slate-100 md:text-xl">Elige una experiencia, comprende cada detalle y viaja con una ruta clara, atención humana y reserva desde S/ 200 por Yape.</p>
+            <h1 className="hero-title text-4xl font-black leading-[1.04] sm:text-5xl md:text-7xl">Descubre experiencias inolvidables con <span>JohnToursPerú</span></h1>
+            <p className="mt-6 max-w-2xl text-base leading-8 text-slate-100 md:text-xl">Tours nacionales e internacionales diseñados para viajar seguro y vivir momentos extraordinarios.</p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link to="/tours" className="btn-gold primary-action"><span className="button-emblem"><Plane size={18} /></span><span className="button-copy"><small>Descubre destinos</small><strong>Explorar tours</strong></span><ArrowRight className="button-arrow" size={18} /></Link>
-              <a href={buildWhatsAppUrl(whatsappMessages.general)} className="whatsapp-cta primary-action"><span className="button-brand-stage"><img src="/whatsapp-logo.svg" alt="" /></span><span className="button-copy"><small>Atención personalizada</small><strong>Cotizar por WhatsApp</strong></span><ArrowRight className="button-arrow" size={18} /></a>
+              <a href={buildWhatsAppUrl(whatsappMessages.general)} className="whatsapp-cta primary-action"><span className="button-brand-stage"><img src="/whatsapp-logo.svg" alt="" /></span><span className="button-copy"><small>Atención personalizada</small><strong>Reservar por WhatsApp</strong></span><ArrowRight className="button-arrow" size={18} /></a>
             </div>
             <div className="mt-6 flex flex-wrap gap-2 text-xs font-bold text-slate-100">
-              <span className="trust-pill rounded-full bg-white/10 px-3 py-2 ring-1 ring-white/20">Atención 24/7</span>
-              <span className="trust-pill rounded-full bg-white/10 px-3 py-2 ring-1 ring-white/20">Reserva S/ 200</span>
-              <span className="trust-pill rounded-full bg-white/10 px-3 py-2 ring-1 ring-white/20">Experiencias premium</span>
-              <span className="trust-pill rounded-full bg-white/10 px-3 py-2 ring-1 ring-white/20">Agencia confiable</span>
+              <span className="trust-pill rounded-full bg-white/10 px-3 py-2 ring-1 ring-white/20">Reservas online</span>
+              <span className="trust-pill rounded-full bg-white/10 px-3 py-2 ring-1 ring-white/20">Pago por Yape</span>
+              <span className="trust-pill rounded-full bg-white/10 px-3 py-2 ring-1 ring-white/20">Atención personalizada</span>
+              <span className="trust-pill rounded-full bg-white/10 px-3 py-2 ring-1 ring-white/20">Comprobante PDF</span>
+              <span className="trust-pill rounded-full bg-white/10 px-3 py-2 ring-1 ring-white/20">Itinerarios incluidos</span>
             </div>
             <div className="mt-8 grid max-w-2xl grid-cols-3 gap-2 sm:gap-3">
               <MiniTrust icon={<ShieldCheck />} value="Reserva segura" label="Yape, código único y comprobante" />
@@ -253,11 +257,13 @@ function Home() {
           </div>
         </div>
       </section>
+      <DestinationCarousel tours={tours.length ? tours : demoTours} />
       <Section title="Tours destacados" subtitle="Paquetes elegidos para viajar con confianza y asistencia desde la primera cotización.">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">{featured.map((tour) => <TourCard key={tour.id} tour={tour} />)}</div>
       </Section>
       <AirlineGuideSection />
-      <ConfidencePanel />
+      <TrustSection />
+      <HowItWorksSection />
       <ExclusiveReservationExperience />
       <OurStory />
       <Testimonials />
@@ -325,7 +331,8 @@ function LogoShowcase() {
 }
 
 function OurStory() {
-  return <section id="nosotros" className="story-section px-4 py-20 lg:px-6"><div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[.85fr_1.15fr] lg:items-center"><div className="story-logo"><img src="/john-tours-logo-cropped.png" alt="JohnToursPerú" /></div><div><span className="section-kicker">Nuestra historia</span><h2 className="mt-4 text-4xl font-black text-[#073b83] md:text-5xl">¿Cómo nace JohnToursPerú?</h2><p className="mt-5 text-lg leading-8 text-slate-600">JohnToursPerú nace con la convicción de que viajar debe sentirse cercano, claro y bien acompañado. Desde Santa Clara, Ate, y Cusco, conectamos a familias, colegios, grupos y viajeros con experiencias nacionales e internacionales.</p><p className="mt-4 leading-8 text-slate-600">Nuestro trabajo se sostiene en escuchar primero, explicar cada detalle y mantener un contacto humano antes, durante y después del viaje. Esa cercanía es la que convierte una reserva en confianza.</p><div className="mt-7 grid gap-3 sm:grid-cols-3">{["Atención directa", "Itinerarios claros", "Acompañamiento real"].map(item => <span key={item} className="rounded-xl bg-white p-4 text-center font-bold text-[#087db8] shadow-sm">{item}</span>)}</div></div></div></section>;
+  const values = [["Misión", "Crear viajes claros, seguros y memorables."], ["Visión", "Ser una agencia cercana y confiable para cada viajero."], ["Compromiso", "Cumplir lo coordinado con transparencia."], ["Atención", "Acompañar antes, durante y después del viaje."]];
+  return <section id="nosotros" className="story-section px-4 py-20 lg:px-6"><div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[.85fr_1.15fr] lg:items-center"><div className="story-logo"><img src="/john-tours-logo-cropped.png" alt="JohnToursPerú" /></div><div><span className="section-kicker">Nuestra historia</span><h2 className="mt-4 text-4xl font-black text-[#073b83] md:text-5xl">Más que una agencia, somos tus aliados de viaje</h2><p className="mt-5 text-lg leading-8 text-slate-600">JohnToursPerú nace con la convicción de que viajar debe sentirse cercano, claro y bien acompañado. Conectamos a familias, colegios, grupos y viajeros con experiencias nacionales e internacionales diseñadas con responsabilidad.</p><p className="mt-4 leading-8 text-slate-600">Escuchamos primero, explicamos cada detalle y mantenemos un contacto humano en cada etapa. Esa cercanía convierte una reserva en confianza y un destino en un recuerdo extraordinario.</p><div className="story-values">{values.map(([title, text]) => <article key={title}><span><HeartHandshake size={19} /></span><div><strong>{title}</strong><p>{text}</p></div></article>)}</div></div></div></section>;
 }
 
 function SocialSpotlight() {
@@ -363,34 +370,6 @@ function SocialSpotlight() {
   );
 }
 
-function ConfidencePanel() {
-  const promises = [
-    ["Itinerario visible", "Sabes qué incluye tu paquete, qué no incluye y cómo se organiza cada día."],
-    ["Asesor humano", "Un contacto directo te acompaña para resolver dudas antes de reservar."],
-    ["Reserva sin presión", "Puedes cotizar por WhatsApp y revisar disponibilidad antes de pagar."]
-  ];
-  return (
-    <section className="confidence-panel px-4 py-12 lg:px-6">
-      <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[.85fr_1.15fr] lg:items-center">
-        <div>
-          <p className="mb-2 inline-flex items-center gap-2 rounded-lg bg-emerald-50 px-3 py-1 text-sm font-bold text-[#0f7a4f]"><ShieldCheck size={16} /> Respaldo en cada etapa</p>
-          <h2 className="text-3xl font-black text-[#082447] md:text-4xl">Viaja con confianza</h2>
-          <p className="mt-3 leading-7 text-slate-600">Información clara, contacto directo y acompañamiento humano para que disfrutes la emoción de viajar con la tranquilidad de sentirte respaldado.</p>
-        </div>
-        <div className="grid gap-4 md:grid-cols-3">
-          {promises.map(([title, text]) => (
-            <div key={title} className="trust-card rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-              <CheckCircle2 className="mb-3 text-[#0f7a4f]" />
-              <strong className="text-[#082447]">{title}</strong>
-              <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function ExclusiveReservationExperience() {
   const benefits = [
     [<Sparkles key="sparkles" />, "Guía privada del destino", "Después de confirmar la reserva recibes una guía visual vinculada al viaje elegido."],
@@ -420,7 +399,9 @@ function FrequentlyAskedQuestions() {
     ["¿Cómo pago la reserva?", "Inicia tu reserva con S/ 200 por Yape. El sistema genera un código único y permite registrar el comprobante para su validación."],
     ["¿Cuándo se confirma mi reserva?", "La reserva se confirma después de validar el monto, el titular y el código único incluido en tu comprobante."],
     ["¿Tendré asistencia durante el viaje?", "Sí. Nuestro enfoque incluye orientación previa y un canal de contacto directo para acompañarte durante tu experiencia."],
-    ["¿Dónde reviso lo que incluye cada paquete?", "En el detalle de cada tour encontrarás itinerario, servicios incluidos, exclusiones, duración, precio y disponibilidad."]
+    ["¿Dónde reviso lo que incluye cada paquete?", "En el detalle de cada tour encontrarás itinerario, servicios incluidos, exclusiones, duración y precio."],
+    ["¿Los precios incluyen vuelos?", "Cada paquete indica con claridad sus inclusiones. Si el vuelo no está incluido, puedes comparar opciones desde nuestros enlaces oficiales de aerolíneas."],
+    ["¿Puedo descargar un comprobante?", "Sí. Después de completar el flujo de demostración o registrar una reserva válida podrás generar una constancia PDF con el resumen y el itinerario."]
   ];
   return (
     <section className="faq-section px-4 py-16 lg:px-6 lg:py-20">
@@ -675,6 +656,7 @@ function ReservationPage() {
     <Section title="Reserva tu viaje" subtitle={tour ? `${tour.title} · Inicia tu reserva con S/ ${reservationAmount}` : "Completa tus datos"}>
       <form onSubmit={form.handleSubmit((v) => mutation.mutate(v))} className="mx-auto grid max-w-3xl gap-4 rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
         {isDemoMode && <div className="demo-mode-banner"><Sparkles size={18} /><span><strong>Demostración interactiva</strong><small>Podrás recorrer la reserva, Yape, estados, PDF y panel sin realizar pagos ni guardar datos en una base real.</small></span></div>}
+        {tour && <div className="reservation-tour-summary"><img src={tour.imageUrl} alt={tour.title} /><div><small>Experiencia seleccionada</small><strong>{tour.title}</strong><span><MapPin size={14} /> {tour.destination} · {tour.duration}</span></div><b>S/ {reservationAmount}<small>reserva</small></b></div>}
         {["fullName", "email", "phone", "documentNumber"].map((name) => <input key={name} className="rounded-lg border px-4 py-3" placeholder={{ fullName: "Nombre completo", email: "Correo", phone: "Teléfono", documentNumber: "Documento" }[name]} {...form.register(name as never)} />)}
         {tour && <div className="reservation-departures"><strong>Selecciona tu salida</strong><DepartureCalendar tour={tour} selectedId={selectedDeparture?.id} onSelect={(departure) => { setSelectedDeparture(departure); form.setValue("travelDate", departure.startDate.slice(0, 10)); }} /></div>}
         <div className="grid gap-4 sm:grid-cols-2"><input className="rounded-lg border px-4 py-3" type="date" readOnly={Boolean(tour?.departures?.length)} {...form.register("travelDate")} /><input className="rounded-lg border px-4 py-3" type="number" min="1" max={selectedDeparture?.availableSlots ?? tour?.availableSlots ?? 20} {...form.register("peopleCount")} /></div>
@@ -1197,7 +1179,7 @@ function AdminTextArea({ label, value, onChange }: { label: string; value: strin
 }
 
 function Testimonials() {
-  const { data = demoTestimonials } = useQuery<{ name: string; location: string; comment: string; rating: number }[]>({
+  const { data = demoTestimonials } = useQuery<{ name: string; location: string; tour?: string; comment: string; rating: number }[]>({
     queryKey: ["testimonials"],
     queryFn: async () => {
       try {
@@ -1220,6 +1202,7 @@ function Testimonials() {
                 <p className="text-xl font-semibold leading-9 text-slate-700">"{item.comment}"</p>
                 <strong className="mt-5 block text-[#082447]">{item.name}</strong>
                 <span className="text-sm text-slate-500">{item.location}</span>
+                {item.tour && <span className="testimonial-tour"><MapPin size={14} /> {item.tour}</span>}
               </div>
             </div>
           ))}

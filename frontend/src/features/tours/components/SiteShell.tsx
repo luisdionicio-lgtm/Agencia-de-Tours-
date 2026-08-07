@@ -1,4 +1,4 @@
-import { ArrowRight, CalendarDays, Menu, ShieldCheck, X } from "lucide-react";
+import { ArrowRight, CalendarDays, CreditCard, LockKeyhole, Menu, ShieldCheck, X } from "lucide-react";
 import { type ReactNode, useEffect, useState } from "react";
 import { Link, NavLink, usePathname } from "../../../core/routing";
 import { buildWhatsAppUrl, socialLinks, whatsappDisplay } from "../config/contact";
@@ -137,7 +137,7 @@ function FloatingWhatsApp() {
 function PublicFooter() {
   return (
     <footer className="footer-pro border-t px-4 pb-8 pt-14 text-white">
-      <div className="mx-auto grid max-w-7xl gap-10 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="mx-auto grid max-w-7xl gap-10 sm:grid-cols-2 lg:grid-cols-6">
         <div className="sm:col-span-2">
           <img src="/john-tours-logo-cropped.png" alt="JohnToursPerú" className="h-20 w-auto rounded-xl bg-white p-2" />
           <p className="mt-5 max-w-xl leading-7 text-slate-300">Agencia de viajes y turismo para experiencias nacionales e internacionales, promociones escolares y grupos, con atención humana y reserva por Yape.</p>
@@ -151,9 +151,16 @@ function PublicFooter() {
           </nav>
         </div>
         <div>
+          <strong className="text-cyan-200">Destinos</strong>
+          <nav className="mt-4 grid gap-3 text-sm text-slate-300" aria-label="Destinos destacados">
+            <Link to="/tours/1">Machu Picchu</Link><Link to="/tours/2">Disney Orlando</Link><Link to="/tours/3">Oxapampa</Link><Link to="/tours/4">Ica y Huacachina</Link><Link to="/tours/5">Egipto</Link>
+          </nav>
+        </div>
+        <div>
           <strong className="text-cyan-200">Contacto</strong>
           <p className="mt-4 text-sm leading-7 text-slate-300">johntoursperu29@gmail.com<br />{whatsappDisplay}<br />+51 982 896 989<br />Santa Clara, Ate · Cusco</p>
           <div className="mt-4"><span className="payment-chip">Reserva Yape S/ 200</span></div>
+          <div className="footer-payment-methods"><span><img src="/yape-logo.png" alt="Yape" /> Yape</span><span><CreditCard size={17} /> Transferencia</span></div>
         </div>
         <div>
           <strong className="text-cyan-200">Información legal</strong>
@@ -164,7 +171,7 @@ function PublicFooter() {
       </div>
       <div className="mx-auto mt-10 flex max-w-7xl flex-col justify-between gap-3 border-t border-white/10 pt-6 text-xs text-slate-400 sm:flex-row">
         <span>© {new Date().getFullYear()} JohnToursPerú. Todos los derechos reservados.</span>
-        <span>Viaja seguro · Vive extraordinario</span>
+        <span className="footer-bottom-links">Viaja seguro · Vive extraordinario <Link to="/admin"><LockKeyhole size={13} /> Acceso interno</Link></span>
       </div>
     </footer>
   );

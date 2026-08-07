@@ -1,9 +1,11 @@
-import { ArrowRight, Award, CalendarDays, Hotel, MapPin, Plane, ShieldCheck, UsersRound } from "lucide-react";
+import { ArrowRight, Award, CalendarDays, Hotel, MapPin, MessageCircle, Plane, ShieldCheck, Star, UsersRound } from "lucide-react";
 import { Link } from "../../../core/routing";
 import type { Tour } from "../../../shared/types";
 import { tourMoney } from "../lib/presentation";
+import { buildWhatsAppUrl } from "../config/contact";
 
 export function TourCard({ tour }: { tour: Tour }) {
+  const tags = tour.type === "NACIONAL" ? ["Cultura", "Naturaleza", "Asistencia"] : ["Internacional", "Planificación", "Asistencia"];
   const benefits = [
     { icon: <ShieldCheck size={17} />, label: "Plan verificado" },
     { icon: <Hotel size={17} />, label: "Hotel coordinado" },
@@ -24,7 +26,9 @@ export function TourCard({ tour }: { tour: Tour }) {
           <span className="tour-recommended"><Award size={15} /> Selección JohnTours</span>
         </div>
         <h3>{tour.title}</h3>
+        <div className="tour-rating" aria-label="Valoración referencial de 4.9 sobre 5"><span><Star size={15} fill="currentColor" /> 4.9</span><small>Experiencia recomendada</small></div>
         <p className="tour-card-description">{tour.description}</p>
+        <div className="tour-tags">{tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
         <div className="tour-benefits" aria-label="Características del paquete">
           {benefits.map((benefit) => (
             <span key={benefit.label}><i>{benefit.icon}</i>{benefit.label}</span>
@@ -34,11 +38,11 @@ export function TourCard({ tour }: { tour: Tour }) {
           <div className="tour-card-price"><small>Desde</small><strong>{tourMoney(tour)}</strong><span>por persona</span></div>
           <div className="tour-card-duration"><CalendarDays size={19} /><span><small>Duración</small><strong>{tour.duration}</strong></span></div>
         </div>
-        <Link to={`/tours/${tour.id}`} className="tour-card-cta">
+        <div className="tour-card-actions"><Link to={`/tours/${tour.id}`} className="tour-card-cta">
           <span className="button-emblem button-emblem-gold"><Plane size={17} /></span>
           <span className="button-copy"><small>Información completa</small><strong>Conocer el paquete</strong></span>
           <span className="button-terminal"><ArrowRight size={17} /></span>
-        </Link>
+        </Link><a className="tour-card-whatsapp" href={buildWhatsAppUrl(`Hola JohnToursPerú, deseo información sobre el tour ${tour.title}.`)} target="_blank" rel="noreferrer" aria-label={`Consultar ${tour.title} por WhatsApp`}><MessageCircle size={20} /><span>WhatsApp</span></a></div>
       </div>
     </article>
   );
