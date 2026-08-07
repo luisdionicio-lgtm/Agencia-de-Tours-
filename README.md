@@ -10,7 +10,7 @@ Web publicitaria fullstack para captar clientes, mostrar tours nacionales e inte
 - Carrusel principal con marco azul de marca y acceso directo desde cada imagen al detalle del paquete.
 - Carrusel premium de cinco destinos con navegación, indicadores, duración, precio y acceso directo a cada experiencia.
 - Catálogo, filtros, detalle, itinerario, inclusiones y exclusiones de cada tour.
-- Tarjetas de tours con valoración referencial, etiquetas, beneficios y consulta rápida por WhatsApp.
+- Tarjetas de tours con etiquetas, beneficios e iconografía dimensional alineada con la marca.
 - Proceso visual de reserva explicado en seis pasos claros.
 - Guía de aerolíneas por destino con logotipos, objetivo de conexión, criterios de decisión y enlaces oficiales para comparar precio final, horarios, equipaje y escalas.
 - Diseño minimalista con tarjetas jerarquizadas, iconografía profesional y microinteracciones alineadas con la paleta del logo.
@@ -23,6 +23,9 @@ Web publicitaria fullstack para captar clientes, mostrar tours nacionales e inte
 - Pie de página completo con destinos, redes oficiales, medios de pago, información legal y acceso interno discreto.
 - Protección temporal de la solicitud y validación profesional de Yape con archivo, fecha, monto, código, trabajador e historial.
 - Seguridad con JWT, rate limiting, CORS, cabeceras, validación Zod y variables de entorno.
+- SEO técnico con metadatos sociales, datos estructurados, sitemap, robots y manifiesto instalable.
+- Carga optimizada con fuentes locales, fondo WebP liviano, caché de consultas y presentación inicial de marca.
+- Accesibilidad con salto directo al contenido, foco visible y compatibilidad con movimiento reducido.
 
 ## Tecnología
 

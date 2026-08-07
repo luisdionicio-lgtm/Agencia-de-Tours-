@@ -50,8 +50,9 @@ export function SiteShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="site-shell min-h-screen">
+      <a href="#main-content" className="skip-navigation">Saltar al contenido principal</a>
       <PublicHeader menuOpen={menuOpen} scrollProgress={scrollProgress} onToggleMenu={() => setMenuOpen((current) => !current)} onCloseMenu={() => setMenuOpen(false)} />
-      <main className="overflow-hidden">{children}</main>
+      <main id="main-content" className="overflow-hidden" tabIndex={-1}>{children}</main>
       <PublicFooter />
       {pathname !== "/admin" && <FloatingWhatsApp />}
     </div>

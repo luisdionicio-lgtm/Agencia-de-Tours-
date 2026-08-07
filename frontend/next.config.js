@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  outputFileTracingRoot: __dirname,
   async headers() {
     const contentSecurityPolicy = [
       "default-src 'self'",
@@ -10,8 +11,8 @@ const nextConfig = {
       "frame-ancestors 'none'",
       "object-src 'none'",
       "img-src 'self' data: blob: https:",
-      "font-src 'self' data: https://fonts.gstatic.com",
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "font-src 'self' data:",
+      "style-src 'self' 'unsafe-inline'",
       `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""}`,
       "connect-src 'self' https: wss:",
       "frame-src 'self'",
@@ -24,6 +25,7 @@ const nextConfig = {
         { key: "Content-Security-Policy", value: contentSecurityPolicy },
         { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
         { key: "X-Content-Type-Options", value: "nosniff" },
+        { key: "X-DNS-Prefetch-Control", value: "on" },
         { key: "X-Frame-Options", value: "DENY" },
         { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=(self)" },
         { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
