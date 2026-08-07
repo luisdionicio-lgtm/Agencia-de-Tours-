@@ -11,7 +11,7 @@ Web publicitaria fullstack para captar clientes, mostrar tours nacionales e inte
 - Carrusel premium de cinco destinos con navegación, indicadores, duración, precio y acceso directo a cada experiencia.
 - Catálogo, filtros, detalle, itinerario, inclusiones y exclusiones de cada tour.
 - Tarjetas de tours con valoración referencial, etiquetas, beneficios y consulta rápida por WhatsApp.
-- Secciones de confianza con ocho beneficios y proceso visual de reserva en seis pasos.
+- Proceso visual de reserva explicado en seis pasos claros.
 - Guía de aerolíneas por destino con logotipos, objetivo de conexión, criterios de decisión y enlaces oficiales para comparar precio final, horarios, equipaje y escalas.
 - Diseño minimalista con tarjetas jerarquizadas, iconografía profesional y microinteracciones alineadas con la paleta del logo.
 - Mejor época para viajar, calendario por tour y salidas programadas.

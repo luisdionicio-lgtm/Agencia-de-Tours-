@@ -15,7 +15,6 @@ import { downloadReservationReceipt } from "./lib/reservationReceipt";
 import { AirlineGuideSection } from "./sections/AirlineGuideSection";
 import { DestinationCarousel } from "./components/DestinationCarousel";
 import { HowItWorksSection } from "./sections/HowItWorksSection";
-import { TrustSection } from "./sections/TrustSection";
 
 const demoDepartures = (_tourId: number, items: [number, string, string, number, number][]): TourDeparture[] =>
   items.map(([id, startDate, endDate, capacity, availableSlots]) => ({ id, startDate, endDate, capacity, availableSlots, status: "ACTIVO" }));
@@ -262,7 +261,6 @@ function Home() {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">{featured.map((tour) => <TourCard key={tour.id} tour={tour} />)}</div>
       </Section>
       <AirlineGuideSection />
-      <TrustSection />
       <HowItWorksSection />
       <ExclusiveReservationExperience />
       <OurStory />
