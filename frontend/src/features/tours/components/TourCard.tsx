@@ -1,4 +1,4 @@
-import { ArrowRight, Award, CalendarDays, Hotel, MapPin, MessageCircle, Plane, ShieldCheck, Star, UsersRound } from "lucide-react";
+import { ArrowRight, Award, CalendarDays, Hotel, MapPin, MessageCircle, Plane, ShieldCheck, UsersRound } from "lucide-react";
 import { Link } from "../../../core/routing";
 import type { Tour } from "../../../shared/types";
 import { tourMoney } from "../lib/presentation";
@@ -26,7 +26,6 @@ export function TourCard({ tour }: { tour: Tour }) {
           <span className="tour-recommended"><Award size={15} /> Selección JohnTours</span>
         </div>
         <h3>{tour.title}</h3>
-        <div className="tour-rating" aria-label="Valoración referencial de 4.9 sobre 5"><span><Star size={15} fill="currentColor" /> 4.9</span><small>Experiencia recomendada</small></div>
         <p className="tour-card-description">{tour.description}</p>
         <div className="tour-tags">{tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
         <div className="tour-benefits" aria-label="Características del paquete">
