@@ -4,7 +4,15 @@ export const whatsapp = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "51966779705"
 export const whatsappDisplay = "+51 966 779 705";
 export const reservationAmount = 200;
 export const isStaticPresentation = !process.env.NEXT_PUBLIC_API_URL;
-export const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true" || isStaticPresentation;
+
+function demoSessionRequested() {
+  if (typeof window === "undefined") return false;
+  const requested = new URLSearchParams(window.location.search).get("demo") === "1";
+  if (requested) sessionStorage.setItem("john-demo-mode", "true");
+  return requested || sessionStorage.getItem("john-demo-mode") === "true";
+}
+
+export const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true" || isStaticPresentation || demoSessionRequested();
 
 export const demoStaffAccounts = [
   { email: "admin.demo@johntours.pe", password: "JohnToursAdmin2026!", role: "ADMIN" as const },

@@ -16,6 +16,7 @@ Web publicitaria fullstack para captar clientes, mostrar tours nacionales e inte
 - Diseño minimalista con tarjetas jerarquizadas, iconografía profesional y microinteracciones alineadas con la paleta del logo.
 - Mejor época para viajar, calendario por tour y salidas programadas.
 - Reserva pendiente con código privado, QR informativo y mensaje formal de WhatsApp.
+- Flujo demostrativo seguro para registrar un comprobante ficticio, simular su aprobación y revisar la confirmación sin subir archivos ni enviar mensajes.
 - Estados visibles desde la creación hasta la confirmación.
 - Constancia PDF demostrativa con logo, resumen económico, saldo, itinerario día por día, incluidos, exclusiones y extras opcionales; actualmente no representa una boleta tributaria ni un cobro real.
 - Guías PDF adicionales por destino, visibles únicamente después de confirmar.

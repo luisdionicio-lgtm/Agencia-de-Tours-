@@ -172,7 +172,7 @@ function PublicFooter() {
       </div>
       <div className="mx-auto mt-10 flex max-w-7xl flex-col justify-between gap-3 border-t border-white/10 pt-6 text-xs text-slate-400 sm:flex-row">
         <span>© {new Date().getFullYear()} JohnToursPerú. Todos los derechos reservados.</span>
-        <span className="footer-bottom-links">Viaja seguro · Vive extraordinario <Link to="/admin"><LockKeyhole size={13} /> Acceso interno</Link></span>
+        <span className="footer-bottom-links">Viaja seguro · Vive extraordinario <a href="/demo?demo=1">Probar demo</a><Link to="/admin"><LockKeyhole size={13} /> Acceso interno</Link></span>
       </div>
     </footer>
   );
