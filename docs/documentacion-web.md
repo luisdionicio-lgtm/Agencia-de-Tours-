@@ -18,6 +18,12 @@ Los nombres, duraciones e itinerarios actuales funcionan como demostración estr
 
 La web funciona como una vitrina publicitaria breve: presenta confianza, permite comparar tours y conduce al visitante hacia una reserva acompañada. Conserva la identidad visual del logo y el catálogo existente.
 
+## Acabado visual y movimiento
+
+La portada incorpora una iluminación ambiental que responde al puntero sin provocar renderizados de React, una firma de color bajo el nombre JohnToursPerú y un acceso directo a la sección de destinos. Los carruseles aplican un desplazamiento visual cinematográfico muy leve a las fotografías activas, mientras las tarjetas utilizan reflejos y profundidad únicamente al interactuar.
+
+El proceso de reserva presenta una ruta gráfica entre pasos en escritorio. En tablet y móvil se eliminan los conectores y el indicador inferior de la portada para evitar saturación. La consulta `prefers-reduced-motion` desactiva auroras, desplazamientos, ampliaciones y animaciones decorativas para respetar las preferencias de accesibilidad del visitante.
+
 ## Recorrido público
 
 1. El visitante conoce la propuesta, historia, canales oficiales y redes sociales.

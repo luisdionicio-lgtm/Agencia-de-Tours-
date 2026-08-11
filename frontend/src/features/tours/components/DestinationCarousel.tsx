@@ -16,7 +16,7 @@ export function DestinationCarousel({ tours }: { tours: Tour[] }) {
   if (!destinations.length) return null;
 
   return (
-    <section className="destination-showcase px-4 py-16 lg:px-6 lg:py-20" aria-labelledby="destination-showcase-title">
+    <section id="destinos" className="destination-showcase px-4 py-16 lg:px-6 lg:py-20" aria-labelledby="destination-showcase-title">
       <div className="mx-auto max-w-7xl">
         <div className="destination-showcase-heading">
           <div>

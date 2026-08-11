@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowRight, Award, CalendarDays, CheckCircle2, Clock3, Copy, Download, FileText, Filter, HeartHandshake, LayoutDashboard, LogOut, MapPin, MessageCircle, Plane, PlayCircle, Search, ShieldCheck, Sparkles, Star, UsersRound } from "lucide-react";
+import { ArrowRight, Award, CalendarDays, CheckCircle2, ChevronDown, Clock3, Copy, Download, FileText, Filter, HeartHandshake, LayoutDashboard, LogOut, MapPin, MessageCircle, Plane, PlayCircle, Search, ShieldCheck, Sparkles, Star, UsersRound } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -330,7 +330,21 @@ function Home() {
 
   return (
     <>
-      <section className="hero-bg">
+      <section
+        className="hero-bg"
+        onPointerMove={(event) => {
+          const bounds = event.currentTarget.getBoundingClientRect();
+          event.currentTarget.style.setProperty("--hero-pointer-x", `${event.clientX - bounds.left}px`);
+          event.currentTarget.style.setProperty("--hero-pointer-y", `${event.clientY - bounds.top}px`);
+        }}
+        onPointerLeave={(event) => {
+          event.currentTarget.style.removeProperty("--hero-pointer-x");
+          event.currentTarget.style.removeProperty("--hero-pointer-y");
+        }}
+      >
+        <span className="hero-pointer-glow" aria-hidden="true" />
+        <span className="hero-aurora hero-aurora-one" aria-hidden="true" />
+        <span className="hero-aurora hero-aurora-two" aria-hidden="true" />
         <div className="mx-auto grid min-h-[calc(100svh-80px)] max-w-7xl items-center gap-8 px-4 py-10 lg:min-h-[660px] lg:grid-cols-[1.05fr_.95fr] lg:gap-10 lg:px-6 lg:py-14">
           <div className="animate-rise max-w-3xl text-white">
             <p className="hero-eyebrow mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-bold text-cyan-100 ring-1 ring-white/20"><Sparkles size={17} /> Viaja seguro · Vive extraordinario</p>
@@ -359,6 +373,7 @@ function Home() {
             <SearchBox />
           </div>
         </div>
+        <a href="#destinos" className="hero-scroll-cue"><span>Descubre los destinos</span><i><ChevronDown size={17} /></i></a>
       </section>
       <DestinationCarousel tours={tours.length ? tours : demoTours} />
       <Section title="Tours destacados" subtitle="Paquetes elegidos para viajar con confianza y asistencia desde la primera cotización.">

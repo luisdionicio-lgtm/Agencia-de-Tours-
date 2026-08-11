@@ -19,6 +19,7 @@ Web publicitaria fullstack para captar clientes, mostrar tours nacionales e inte
 - Proceso visual de reserva explicado en seis pasos claros.
 - Guía de aerolíneas por destino con logotipos, objetivo de conexión, criterios de decisión y enlaces oficiales para comparar precio final, horarios, equipaje y escalas.
 - Diseño minimalista con tarjetas jerarquizadas, iconografía profesional y microinteracciones alineadas con la paleta del logo.
+- Acabado visual de marca con aurora interactiva en portada, firma luminosa, movimiento cinematográfico de imágenes, reflejos sutiles en tarjetas y una ruta gráfica para explicar la reserva.
 - Mejor época para viajar, calendario por tour y salidas programadas.
 - Reserva pendiente con código privado, QR informativo y mensaje formal de WhatsApp.
 - Flujo demostrativo seguro para registrar un comprobante ficticio, simular su aprobación y revisar la confirmación sin subir archivos ni enviar mensajes.
@@ -32,6 +33,7 @@ Web publicitaria fullstack para captar clientes, mostrar tours nacionales e inte
 - SEO técnico con metadatos sociales, datos estructurados, sitemap, robots y manifiesto instalable.
 - Carga optimizada con fuentes locales, fondo WebP liviano, caché de consultas y presentación inicial de marca.
 - Accesibilidad con salto directo al contenido, foco visible y compatibilidad con movimiento reducido.
+- Los efectos decorativos se simplifican en pantallas táctiles y se desactivan cuando el navegador solicita movimiento reducido.
 
 ## Tecnología
 
