@@ -154,7 +154,7 @@ function PublicFooter() {
         <div>
           <strong className="text-cyan-200">Destinos</strong>
           <nav className="mt-4 grid gap-3 text-sm text-slate-300" aria-label="Destinos destacados">
-            <Link to="/tours/1">Machu Picchu</Link><Link to="/tours/2">Disney Orlando</Link><Link to="/tours/3">Oxapampa</Link><Link to="/tours/4">Ica y Huacachina</Link><Link to="/tours/5">Egipto</Link>
+            <Link to="/tours?destination=Cusco">Machu Picchu</Link><Link to="/tours?destination=Guayaquil">Guayaquil y costa</Link><Link to="/tours?destination=Pasco">Oxapampa y Pozuzo</Link><Link to="/tours?destination=Ica">Ica y Huacachina</Link><Link to="/tours?destination=San%20Martín">Tarapoto</Link>
           </nav>
         </div>
         <div>

@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { Currency, PrismaClient, Role, TourType } from "@prisma/client";
+import { Currency, PrismaClient, Role, TourStatus, TourType } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -53,76 +53,81 @@ async function main() {
       title: "Machu Picchu",
       slug: "machu-picchu",
       destination: "Cusco, Peru",
-      price: 1550,
+      price: 0,
       currency: Currency.PEN,
       duration: "4 dias / 3 noches",
       type: TourType.NACIONAL,
       categoryId: 3,
-      imageUrl: image("photo-1587595431973-160d0d94add1"),
+      imageUrl: "/destinations/machu-picchu.webp",
       description: "Explora la ciudadela inca, el Valle Sagrado y la magia cultural de Cusco con guias expertos.",
-      availableSlots: 18,
+      availableSlots: 0,
       isFeatured: true
     },
     {
-      title: "Disney Orlando",
-      slug: "disney-orlando",
-      destination: "Orlando, Estados Unidos",
-      price: 1890,
+      title: "Guayaquil y costa ecuatoriana",
+      slug: "guayaquil-costa-ecuador",
+      destination: "Guayaquil, Ecuador",
+      price: 0,
       currency: Currency.USD,
-      duration: "7 dias / 6 noches",
+      duration: "5 dias / 4 noches",
       type: TourType.INTERNACIONAL,
       categoryId: 4,
-      imageUrl: image("photo-1597466599360-3b9775841aec"),
-      description: "Vive parques tematicos, compras y experiencias familiares con asistencia durante todo el viaje.",
-      availableSlots: 12,
+      imageUrl: "/destinations/ecuador-costa.webp",
+      description: "Descubre Guayaquil y la costa ecuatoriana con recorridos urbanos, paisajes frente al mar y actividades coordinadas.",
+      availableSlots: 0,
       isFeatured: true
     },
     {
-      title: "Oxapampa",
-      slug: "oxapampa",
+      title: "Oxapampa y Pozuzo",
+      slug: "oxapampa-pozuzo",
       destination: "Pasco, Peru",
-      price: 950,
+      price: 0,
       currency: Currency.PEN,
-      duration: "3 dias / 2 noches",
+      duration: "4 dias / 3 noches",
       type: TourType.NACIONAL,
       categoryId: 1,
-      imageUrl: "https://inforegion.pe/wp-content/uploads/2025/01/baf433a5-dji_20241114093018_0090_d-2.jpg",
-      description: "Naturaleza, cataratas, cafe y tradiciones austroalemanas en una escapada llena de aire puro.",
-      availableSlots: 20,
-      isFeatured: false
+      imageUrl: "/destinations/oxapampa-pozuzo.webp",
+      description: "Naturaleza, cataratas, cafe y tradicion austroalemana en una ruta por Oxapampa y Pozuzo.",
+      availableSlots: 0,
+      isFeatured: true
     },
     {
       title: "Ica y Huacachina",
       slug: "ica-y-huacachina",
       destination: "Ica, Peru",
-      price: 650,
+      price: 0,
       currency: Currency.PEN,
       duration: "2 dias / 1 noche",
       type: TourType.NACIONAL,
       categoryId: 1,
-      imageUrl: "https://www.stampbystamptravel.com/wp-content/uploads/2025/02/laguna-huacachina-ica.jpg.webp",
+      imageUrl: "/destinations/ica-huacachina.webp",
       description: "Dunas, tubulares, sandboard, bodegas pisqueras y atardeceres inolvidables en el oasis.",
-      availableSlots: 25,
+      availableSlots: 0,
       isFeatured: true
     },
     {
-      title: "Egipto",
-      slug: "egipto",
-      destination: "El Cairo, Egipto",
-      price: 2700,
-      currency: Currency.USD,
-      duration: "8 dias / 7 noches",
-      type: TourType.INTERNACIONAL,
-      categoryId: 6,
-      imageUrl: "https://www.barcelo.com/guia-turismo/wp-content/uploads/2022/05/el-cairo1.jpg",
-      description: "Piramides de Giza, El Cairo historico y crucero por el Nilo con itinerario claro, hoteles seleccionados y acompanamiento en cada etapa.",
-      availableSlots: 10,
+      title: "Tarapoto y naturaleza amazonica",
+      slug: "tarapoto-naturaleza",
+      destination: "San Martin, Peru",
+      price: 0,
+      currency: Currency.PEN,
+      duration: "4 dias / 3 noches",
+      type: TourType.NACIONAL,
+      categoryId: 1,
+      imageUrl: "/destinations/tarapoto.webp",
+      description: "Paisajes amazonicos, recorridos acuaticos y experiencias de naturaleza en una ruta coordinada desde Tarapoto.",
+      availableSlots: 0,
       isFeatured: true,
-      itinerary: ["Llegada asistida a El Cairo", "Piramides de Giza y Esfinge con guia", "Museo Egipcio y barrio historico", "Crucero por el Nilo y templos principales", "Retorno con seguimiento del asesor"],
-      includes: ["Hoteles seleccionados", "Traslados programados", "Guía especializada en español", "Asistencia JohnToursPerú por WhatsApp"],
-      excludes: ["Vuelos internacionales", "Gastos personales", "Propinas y servicios no mencionados"]
+      itinerary: ["Llegada asistida a Tarapoto", "Recorrido natural coordinado", "Experiencia acuatica segun disponibilidad", "Retorno con seguimiento del asesor"],
+      includes: ["Alojamiento seleccionado", "Traslados programados", "Coordinacion de actividades", "Asistencia JohnToursPerú"],
+      excludes: ["Vuelos hasta Tarapoto", "Gastos personales", "Servicios no mencionados"]
     }
   ];
+
+  await prisma.tour.updateMany({
+    where: { slug: { in: ["disney-orlando", "egipto", "oxapampa"] } },
+    data: { status: TourStatus.INACTIVO, isFeatured: false }
+  });
 
   for (const tour of tours) {
     await prisma.tour.upsert({
@@ -144,10 +149,10 @@ async function main() {
 
   const departureOffsets: Record<string, { days: number; capacity: number }[]> = {
     "machu-picchu": [{ days: 12, capacity: 16 }, { days: 35, capacity: 18 }, { days: 68, capacity: 20 }],
-    "disney-orlando": [{ days: 28, capacity: 14 }, { days: 61, capacity: 16 }, { days: 96, capacity: 18 }],
-    oxapampa: [{ days: 9, capacity: 15 }, { days: 30, capacity: 18 }, { days: 58, capacity: 20 }],
+    "guayaquil-costa-ecuador": [{ days: 28, capacity: 20 }, { days: 61, capacity: 20 }],
+    "oxapampa-pozuzo": [{ days: 30, capacity: 20 }, { days: 65, capacity: 20 }],
     "ica-y-huacachina": [{ days: 6, capacity: 20 }, { days: 20, capacity: 22 }, { days: 43, capacity: 24 }],
-    egipto: [{ days: 42, capacity: 12 }, { days: 77, capacity: 14 }, { days: 112, capacity: 16 }]
+    "tarapoto-naturaleza": [{ days: 35, capacity: 20 }, { days: 77, capacity: 20 }]
   };
   const today = new Date();
   today.setUTCHours(0, 0, 0, 0);

@@ -9,6 +9,8 @@ Web publicitaria fullstack para captar clientes, mostrar tours nacionales e inte
 - Código organizado por responsabilidades: estructura pública, catálogo, secciones, configuración y utilidades.
 - Carrusel principal con marco azul de marca y acceso directo desde cada imagen al detalle del paquete.
 - Carrusel premium de cinco destinos con navegación, indicadores, duración, precio y acceso directo a cada experiencia.
+- Selección curada de material propio para Cusco–Machu Picchu, Ica–Huacachina, Oxapampa–Pozuzo, Tarapoto y Guayaquil–costa ecuatoriana.
+- Fotografías WebP optimizadas a 1600 × 900, sin metadatos EXIF/GPS y con marca de archivo propio; los originales no forman parte del repositorio.
 - Catálogo, filtros, detalle, itinerario, inclusiones y exclusiones de cada tour.
 - Tarjetas de tours con etiquetas, beneficios e iconografía dimensional alineada con la marca.
 - Proceso visual de reserva explicado en seis pasos claros.
@@ -57,3 +59,5 @@ npm audit --omit=dev --prefix backend
 Documentación: [funciones y arquitectura](docs/documentacion-web.md) y [checklist de producción](docs/production-checklist.md).
 
 > La web no realiza transferencias ni envía mensajes automáticamente. El cliente registra su constancia segura y decide si avisa por WhatsApp; el personal autorizado valida el pago desde el panel.
+
+> Los paquetes y recorridos actuales son una estructura demostrativa. Mientras no existan tarifas comerciales confirmadas se muestra `Cotizar`, evitando publicar precios inventados. Antes de incorporar fotografías grupales se debe verificar la autorización de uso de imagen, especialmente cuando aparezcan menores.

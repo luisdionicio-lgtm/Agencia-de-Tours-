@@ -1,5 +1,13 @@
 # Documentación funcional y técnica — JohnToursPerú
 
+## Material audiovisual curado
+
+El catálogo público utiliza cinco imágenes derivadas del archivo audiovisual propio: Machu Picchu, Ica y Huacachina, Oxapampa y Pozuzo, Tarapoto, y Guayaquil con costa ecuatoriana. Las copias públicas se encuentran en `frontend/public/destinations/`, fueron convertidas a WebP, redimensionadas a 1600 × 900 y guardadas sin metadatos de ubicación.
+
+Los originales permanecen fuera del repositorio. La marca visible ayuda a identificar la procedencia, pero no impide capturas de pantalla; la protección principal depende de conservar los originales en almacenamiento privado y publicar únicamente derivados optimizados. Las imágenes con grupos o menores no deben incorporarse hasta confirmar la autorización correspondiente.
+
+Los nombres, duraciones e itinerarios actuales funcionan como demostración estructural. Las tarifas aparecen como `Cotizar` hasta recibir precios comerciales confirmados.
+
 ## Objetivo
 
 La web funciona como una vitrina publicitaria breve: presenta confianza, permite comparar tours y conduce al visitante hacia una reserva acompañada. Conserva la identidad visual del logo y el catálogo existente.
@@ -28,9 +36,9 @@ Estados comunicados al cliente:
 
 ## Orientación de vuelos y traslados
 
-La portada incluye una guía de decisión con los logotipos de LATAM, SKY y JetSMART para Cusco; Copa Airlines y Avianca para Orlando; e Iberia y Turkish Airlines para El Cairo. Cada destino explica el objetivo de la conexión según el ritmo del tour y propone criterios como horario de llegada, duración total, escalas, equipaje y flexibilidad. Cada opción conserva su identidad visual dentro de una tarjeta adaptada a la paleta de JohnToursPerú y enlaza al sitio oficial. La web no vende pasajes ni garantiza una tarifa.
+La portada incluye una guía de decisión con los logotipos de LATAM, SKY y JetSMART para Cusco y Tarapoto, además de LATAM y Avianca para Guayaquil. Cada destino explica el objetivo de la conexión según el ritmo del tour y propone criterios como horario de llegada, duración, escalas, equipaje y flexibilidad. Cada opción conserva su identidad visual dentro de una tarjeta adaptada a la paleta de JohnToursPerú y enlaza al sitio oficial. La web no vende pasajes ni garantiza una tarifa.
 
-Ica y Oxapampa se presentan como conexiones terrestres desde Lima y se ofrece coordinación por WhatsApp. Los enlaces y rutas deben revisarse periódicamente porque dependen de cada aerolínea.
+Ica, Oxapampa y Pozuzo se presentan como conexiones terrestres desde Lima y se ofrece coordinación por WhatsApp. Los enlaces y rutas deben revisarse periódicamente porque dependen de cada aerolínea.
 
 ## Comprobantes y contenido posterior
 
@@ -38,7 +46,7 @@ La constancia dinámica incluye logo, código, cliente, contacto, paquete, desti
 
 Los itinerarios actuales son referenciales y sirven para demostrar la presentación día por día. Se reemplazarán con horarios, proveedores, puntos de encuentro y condiciones confirmadas cuando la empresa entregue la información comercial final.
 
-Las guías por destino son documentos adicionales y conservan imagen referencial a color, logo y servicios opcionales. Existen variantes para Cusco, Orlando, Oxapampa, Ica y Egipto, más una guía general. Los extras no se presentan como incluidos en el precio principal.
+Las guías por destino son documentos adicionales y conservan imagen referencial a color, logo y servicios opcionales. Existen variantes para Cusco, Oxapampa–Pozuzo e Ica; Guayaquil y Tarapoto utilizan temporalmente la guía general hasta recibir información comercial definitiva. Los extras no se presentan como incluidos en el precio principal.
 
 El mensaje para solicitar cita contiene código, reserva, destino, viajeros, fecha, separación, modalidad y tema. En modo demostración solo se visualiza o copia.
 

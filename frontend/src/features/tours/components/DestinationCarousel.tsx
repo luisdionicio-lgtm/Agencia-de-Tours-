@@ -5,10 +5,10 @@ import { tourMoney } from "../lib/presentation";
 
 const destinationMood: Record<string, string> = {
   "machu-picchu": "Historia, cultura y paisajes que dejan huella.",
-  "disney-orlando": "Magia, diversión y recuerdos para toda la familia.",
-  oxapampa: "Naturaleza, calma y tradición en un solo viaje.",
+  "guayaquil-costa-ecuador": "Ciudad, costa y experiencias frente al mar.",
+  "oxapampa-pozuzo": "Naturaleza, calma y tradición en un solo viaje.",
   "ica-y-huacachina": "Aventura entre dunas y atardeceres inolvidables.",
-  egipto: "Una travesía extraordinaria por la historia del mundo."
+  "tarapoto-naturaleza": "Amazonía, agua y paisajes llenos de vida."
 };
 
 export function DestinationCarousel({ tours }: { tours: Tour[] }) {
@@ -43,7 +43,7 @@ export function DestinationCarousel({ tours }: { tours: Tour[] }) {
                   <strong>{destinationMood[tour.slug] ?? "Una experiencia diseñada para disfrutar cada momento."}</strong>
                   <div className="destination-carousel-meta">
                     <span><CalendarDays size={17} /> {tour.duration}</span>
-                    <span><small>Desde</small>{tourMoney(tour)}</span>
+                    <span><small>{Number(tour.price) > 0 ? "Desde" : "Tarifa"}</small>{tourMoney(tour)}</span>
                   </div>
                   <Link to={`/tours/${tour.id}`} className="destination-carousel-cta">Ver experiencia <ArrowRight size={18} /></Link>
                 </div>

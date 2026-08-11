@@ -29,25 +29,26 @@ export const airlineRoutes: AirlineRouteGuide[] = [
     ]
   },
   {
-    destination: "Disney Orlando",
-    route: "Lima → Orlando",
-    connection: "Vuelo con conexión · duración sujeta al itinerario elegido",
-    objective: "Elegir una conexión cómoda que reduzca el cansancio y permita iniciar el programa familiar con tranquilidad.",
-    decisionGuide: ["Evalúa el tiempo total", "Evita escalas demasiado cortas", "Confirma maletas y selección de asiento"],
+    destination: "Tarapoto · naturaleza amazónica",
+    route: "Lima → Tarapoto",
+    connection: "Vuelo nacional · aproximadamente 1 h 25 min en ruta directa",
+    objective: "Llegar durante el día para coordinar el traslado y comenzar la experiencia amazónica con tranquilidad.",
+    decisionGuide: ["Compara el horario de llegada", "Revisa el equipaje incluido", "Confirma cambios y flexibilidad"],
     airlines: [
-      { name: "Copa Airlines", brand: "copa", logo: "/airlines/copa-airlines.png", idealFor: "Comparar conexión internacional vía Panamá", href: "https://www.copaair.com/en/flights-from-lima-to-orlando?redirecturl=true" },
-      { name: "Avianca", brand: "avianca", logo: "/airlines/avianca.svg", idealFor: "Revisar otra combinación oficial hacia Orlando", href: "https://www.avianca.com/us/es/vuelos-desde-lima-a-orlando" }
+      { name: "LATAM", brand: "latam", logo: "/airlines/latam.svg", idealFor: "Comparar horarios y familias tarifarias", href: "https://www.latamairlines.com/pe/es/destinos/vuelos-a-tarapoto" },
+      { name: "SKY", brand: "sky", logo: "/airlines/sky-airline.svg", idealFor: "Revisar disponibilidad y tarifa ligera", href: "https://www.skyairline.com/flights/es-pe" },
+      { name: "JetSMART", brand: "jetsmart", logo: "/airlines/jetsmart.svg", idealFor: "Comparar precio base y servicios adicionales", href: "https://jetsmart.com/PE/es/" }
     ]
   },
   {
-    destination: "Egipto · El Cairo",
-    route: "Lima → El Cairo",
-    connection: "Ruta de larga distancia · una o más conexiones",
-    objective: "Equilibrar duración, descanso y equipaje para llegar en buenas condiciones al inicio del circuito cultural.",
-    decisionGuide: ["Compara horas y escalas", "Revisa requisitos de tránsito", "Prioriza equipaje y flexibilidad"],
+    destination: "Guayaquil · costa ecuatoriana",
+    route: "Lima → Guayaquil",
+    connection: "Vuelo internacional · directo o con conexión según fecha y aerolínea",
+    objective: "Elegir un horario que facilite migraciones, traslado al alojamiento y el inicio ordenado del programa.",
+    decisionGuide: ["Confirma si la ruta es directa", "Revisa requisitos migratorios", "Compara equipaje y horario final"],
     airlines: [
-      { name: "Iberia", brand: "iberia", logo: "/airlines/iberia.svg", idealFor: "Buscar la ruta oficial Lima–El Cairo", href: "https://www.iberia.com/pe/vuelos-baratos/Lima-El-Cairo/" },
-      { name: "Turkish Airlines", brand: "turkish", logo: "/airlines/turkish-airlines.svg", idealFor: "Comparar una conexión internacional vía Estambul", href: "https://www.turkishairlines.com/es-int/flights/flights-to-cairo/" }
+      { name: "LATAM", brand: "latam", logo: "/airlines/latam.svg", idealFor: "Comparar la ruta Lima–Guayaquil y sus condiciones", href: "https://www.latamairlines.com/pe/es/destinos/ecuador" },
+      { name: "Avianca", brand: "avianca", logo: "/airlines/avianca.svg", idealFor: "Revisar horarios, escalas y tarifa final", href: "https://www.avianca.com/es_us/vuelos-desde-lima-a-guayaquil" }
     ]
   }
 ];

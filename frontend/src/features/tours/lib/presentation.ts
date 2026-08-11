@@ -9,7 +9,7 @@ export const tourCurrency = (tour: Pick<Tour, "type" | "currency">) =>
   tour.currency ?? (tour.type === "NACIONAL" ? "PEN" : "USD");
 
 export const tourMoney = (tour: Pick<Tour, "price" | "type">, value: string | number = tour.price) =>
-  money(value, tourCurrency(tour));
+  Number(value) > 0 ? money(value, tourCurrency(tour)) : "Cotizar";
 
 export const paymentMoney = (payment: Payment) =>
   payment.reservation?.tour ? tourMoney(payment.reservation.tour, payment.amount) : money(payment.amount);

@@ -26,11 +26,13 @@ const demoTours: Tour[] = [
     slug: "machu-picchu",
     destination: "Cusco, Perú",
     description: "Explora la ciudadela inca, el Valle Sagrado y la riqueza cultural de Cusco con guías expertos y asistencia permanente.",
-    price: 1550,
+    price: 0,
+    currency: "PEN",
     duration: "4 días / 3 noches",
     type: "NACIONAL",
-    availableSlots: 18,
-    imageUrl: destinationImage("photo-1587595431973-160d0d94add1"),
+    availableSlots: 0,
+    imageUrl: "/destinations/machu-picchu.webp",
+    imageCredit: "Archivo propio de JohnToursPerú",
     isFeatured: true,
     status: "ACTIVO",
     itinerary: [
@@ -41,55 +43,58 @@ const demoTours: Tour[] = [
     ],
     includes: ["Alojamiento seleccionado por 3 noches", "Traslados indicados en el programa", "Guiado profesional en los recorridos señalados", "Asistencia de JohnToursPerú durante el viaje"],
     excludes: ["Vuelos o transporte hasta Cusco, salvo indicación expresa", "Alimentación no detallada en el programa", "Gastos personales y servicios opcionales"],
-    departures: demoDepartures(1, [[101, "2026-08-08", "2026-08-11", 16, 3], [102, "2026-08-29", "2026-09-01", 18, 11], [103, "2026-10-10", "2026-10-13", 20, 18]])
+    departures: demoDepartures(1, [[101, "2026-09-12", "2026-09-15", 20, 20], [102, "2026-10-10", "2026-10-13", 20, 20]])
   },
   {
     id: 2,
-    title: "Disney Orlando",
-    slug: "disney-orlando",
-    destination: "Orlando, Estados Unidos",
-    description: "Vive parques temáticos, compras y experiencias familiares con una ruta clara, segura y organizada.",
-    price: 1890,
-    duration: "7 días / 6 noches",
+    title: "Guayaquil y costa ecuatoriana",
+    slug: "guayaquil-costa-ecuador",
+    destination: "Guayaquil, Ecuador",
+    description: "Descubre Guayaquil y una experiencia costera con recorridos urbanos, paisajes frente al mar y actividades coordinadas.",
+    price: 0,
+    currency: "USD",
+    duration: "5 días / 4 noches",
     type: "INTERNACIONAL",
-    availableSlots: 12,
-    imageUrl: destinationImage("photo-1597466599360-3b9775841aec"),
+    availableSlots: 0,
+    imageUrl: "/destinations/ecuador-costa.webp",
+    imageCredit: "Fotograma de archivo propio de JohnToursPerú",
     isFeatured: true,
     status: "ACTIVO",
     itinerary: [
-      "Llegada a Orlando, recepción coordinada, traslado al hotel y orientación sobre el programa.",
-      "Visita referencial a Magic Kingdom con acompañamiento y horarios previamente coordinados.",
-      "Experiencia en EPCOT y tiempo destinado a sus principales atracciones y espectáculos.",
-      "Jornada en Disney's Hollywood Studios según entradas y disponibilidad seleccionadas.",
-      "Día de compras y recorrido por establecimientos previamente recomendados.",
-      "Día flexible para parque adicional o actividad opcional, sujeto a cotización.",
-      "Salida del hotel y traslado coordinado al aeropuerto para el viaje de retorno."
+      "Llegada a Guayaquil, recepción coordinada, traslado al alojamiento y presentación del programa.",
+      "Recorrido por los principales espacios urbanos y culturales de Guayaquil.",
+      "Traslado hacia la zona costera y actividades recreativas previamente confirmadas.",
+      "Jornada libre o experiencia adicional según la propuesta final del grupo.",
+      "Salida del alojamiento y traslado coordinado al aeropuerto para el retorno."
     ],
-    includes: ["Alojamiento seleccionado por 6 noches", "Traslados aeropuerto-hotel-aeropuerto", "Orientación para visitas y reservas", "Asistencia remota de JohnToursPerú"],
-    excludes: ["Vuelos internacionales", "Entradas no indicadas expresamente", "Alimentación, equipaje y gastos personales no especificados"],
-    departures: demoDepartures(2, [[201, "2026-08-24", "2026-08-30", 14, 4], [202, "2026-09-26", "2026-10-02", 16, 12], [203, "2026-11-07", "2026-11-13", 18, 18]])
+    includes: ["Alojamiento seleccionado por 4 noches", "Traslados indicados en el programa", "Coordinación de recorridos", "Asistencia de JohnToursPerú"],
+    excludes: ["Vuelos internacionales", "Actividades no confirmadas en la cotización", "Alimentación, equipaje y gastos personales"],
+    departures: demoDepartures(2, [[201, "2026-10-02", "2026-10-06", 20, 20], [202, "2026-11-13", "2026-11-17", 20, 20]])
   },
   {
     id: 3,
-    title: "Oxapampa",
-    slug: "oxapampa",
+    title: "Oxapampa y Pozuzo",
+    slug: "oxapampa-pozuzo",
     destination: "Pasco, Perú",
-    description: "Naturaleza, cataratas, café y tradiciones locales en una escapada de aire puro.",
-    price: 950,
-    duration: "3 días / 2 noches",
+    description: "Naturaleza, cataratas, café y tradición austroalemana en una ruta auténtica por Oxapampa y Pozuzo.",
+    price: 0,
+    currency: "PEN",
+    duration: "4 días / 3 noches",
     type: "NACIONAL",
-    availableSlots: 20,
-    imageUrl: "https://inforegion.pe/wp-content/uploads/2025/01/baf433a5-dji_20241114093018_0090_d-2.jpg",
-    isFeatured: false,
+    availableSlots: 0,
+    imageUrl: "/destinations/oxapampa-pozuzo.webp",
+    imageCredit: "Archivo propio de JohnToursPerú",
+    isFeatured: true,
     status: "ACTIVO",
     itinerary: [
-      "Salida coordinada hacia Oxapampa, recepción local, instalación y recorrido introductorio por la ciudad.",
-      "Visita referencial a cataratas, experiencia de café y puntos naturales con guía local.",
-      "Desayuno, visita cultural breve, tiempo para compras locales y retorno coordinado."
+      "Salida coordinada hacia Oxapampa, recepción local e instalación en el alojamiento.",
+      "Recorrido natural por cataratas y espacios vinculados al café, sujeto a condiciones locales.",
+      "Ruta hacia Pozuzo y visita cultural a sus principales espacios de tradición austroalemana.",
+      "Desayuno, tiempo para compras locales y retorno coordinado."
     ],
-    includes: ["Alojamiento seleccionado por 2 noches", "Movilidad turística durante los recorridos indicados", "Guía local", "Asistencia de JohnToursPerú"],
+    includes: ["Alojamiento seleccionado por 3 noches", "Movilidad turística durante los recorridos indicados", "Guía local", "Asistencia de JohnToursPerú"],
     excludes: ["Transporte no indicado en el programa", "Alimentación no especificada", "Actividades opcionales y gastos personales"],
-    departures: demoDepartures(3, [[301, "2026-08-05", "2026-08-07", 15, 2], [302, "2026-08-26", "2026-08-28", 18, 10], [303, "2026-09-23", "2026-09-25", 20, 19]])
+    departures: demoDepartures(3, [[301, "2026-09-18", "2026-09-21", 20, 20], [302, "2026-10-23", "2026-10-26", 20, 20]])
   },
   {
     id: 4,
@@ -97,11 +102,13 @@ const demoTours: Tour[] = [
     slug: "ica-y-huacachina",
     destination: "Ica, Perú",
     description: "Dunas, tubulares, sandboard, bodegas pisqueras y atardeceres inolvidables en el oasis.",
-    price: 650,
+    price: 0,
+    currency: "PEN",
     duration: "2 días / 1 noche",
     type: "NACIONAL",
-    availableSlots: 25,
-    imageUrl: "https://www.stampbystamptravel.com/wp-content/uploads/2025/02/laguna-huacachina-ica.jpg.webp",
+    availableSlots: 0,
+    imageUrl: "/destinations/ica-huacachina.webp",
+    imageCredit: "Fotograma de archivo propio de JohnToursPerú",
     isFeatured: true,
     status: "ACTIVO",
     itinerary: [
@@ -110,41 +117,39 @@ const demoTours: Tour[] = [
     ],
     includes: ["Alojamiento seleccionado por 1 noche", "Movilidad turística para las visitas indicadas", "Coordinación de actividades", "Asistencia de JohnToursPerú"],
     excludes: ["Alimentación no detallada", "Actividades adicionales no indicadas", "Gastos personales"],
-    departures: demoDepartures(4, [[401, "2026-08-02", "2026-08-03", 20, 3], [402, "2026-08-16", "2026-08-17", 22, 14], [403, "2026-09-08", "2026-09-09", 24, 22]])
+    departures: demoDepartures(4, [[401, "2026-09-05", "2026-09-06", 20, 20], [402, "2026-10-03", "2026-10-04", 20, 20]])
   },
   {
     id: 5,
-    title: "Egipto",
-    slug: "egipto",
-    destination: "El Cairo, Egipto",
-    description: "Pirámides de Giza, El Cairo histórico y crucero por el Nilo con itinerario claro, hoteles seleccionados y acompañamiento en cada etapa.",
-    price: 2700,
-    duration: "8 días / 7 noches",
-    type: "INTERNACIONAL",
-    availableSlots: 10,
-    imageUrl: "https://www.barcelo.com/guia-turismo/wp-content/uploads/2022/05/el-cairo1.jpg",
+    title: "Tarapoto y naturaleza amazónica",
+    slug: "tarapoto-naturaleza",
+    destination: "San Martín, Perú",
+    description: "Paisajes amazónicos, recorridos acuáticos y experiencias de naturaleza en una ruta coordinada desde Tarapoto.",
+    price: 0,
+    currency: "PEN",
+    duration: "4 días / 3 noches",
+    type: "NACIONAL",
+    availableSlots: 0,
+    imageUrl: "/destinations/tarapoto.webp",
+    imageCredit: "Fotograma de archivo propio de JohnToursPerú",
     isFeatured: true,
     status: "ACTIVO",
     itinerary: [
-      "Llegada a El Cairo, recepción coordinada, traslado al hotel y orientación inicial del programa.",
-      "Visita guiada a las Pirámides de Giza, la Esfinge y puntos panorámicos autorizados.",
-      "Recorrido por el Museo Egipcio y sectores históricos de El Cairo con guía especializado.",
-      "Traslado programado para iniciar la experiencia referencial de crucero por el Nilo.",
-      "Navegación y visita a templos principales según el itinerario confirmado por el operador.",
-      "Continuación de visitas culturales y tiempo de descanso a bordo o en alojamiento seleccionado.",
-      "Retorno a El Cairo, tiempo coordinado para compras o actividad opcional previamente cotizada.",
-      "Traslado al aeropuerto y acompañamiento remoto hasta finalizar el viaje."
+      "Llegada a Tarapoto, recepción coordinada, traslado al alojamiento y orientación inicial.",
+      "Recorrido natural y experiencia acuática según condiciones y disponibilidad del operador local.",
+      "Visita a espacios culturales o comunidades incluidas en la propuesta final del grupo.",
+      "Desayuno, tiempo libre y traslado coordinado para el viaje de retorno."
     ],
-    includes: ["Alojamiento seleccionado por 7 noches", "Traslados programados en destino", "Guía especializado en español durante las visitas indicadas", "Asistencia de JohnToursPerú por WhatsApp"],
-    excludes: ["Vuelos internacionales", "Visa, seguros y propinas salvo indicación expresa", "Comidas, gastos personales y servicios no mencionados"],
-    departures: demoDepartures(5, [[501, "2026-09-07", "2026-09-14", 12, 2], [502, "2026-10-12", "2026-10-19", 14, 9], [503, "2026-11-16", "2026-11-23", 16, 15]])
+    includes: ["Alojamiento seleccionado por 3 noches", "Traslados programados en destino", "Coordinación de actividades", "Asistencia de JohnToursPerú"],
+    excludes: ["Vuelos o transporte hasta Tarapoto", "Actividades no indicadas en la cotización", "Comidas y gastos personales no mencionados"],
+    departures: demoDepartures(5, [[501, "2026-09-25", "2026-09-28", 20, 20], [502, "2026-11-06", "2026-11-09", 20, 20]])
   }
 ];
 
 const demoTestimonials = [
   { name: "María Fernández", location: "Lima", tour: "Machu Picchu", comment: "La reserva fue rápida, los precios fueron claros y el viaje a Cusco estuvo muy bien organizado.", rating: 5 },
   { name: "Carlos Medina", location: "Trujillo", tour: "Ica y Huacachina", comment: "Me atendieron por WhatsApp con paciencia y todo el itinerario estuvo explicado antes de pagar.", rating: 5 },
-  { name: "Rosa Salazar", location: "Arequipa", tour: "Disney Orlando", comment: "El paquete familiar a Orlando superó nuestras expectativas. Se sintió seguro de inicio a fin.", rating: 5 }
+  { name: "Rosa Salazar", location: "Arequipa", tour: "Oxapampa y Pozuzo", comment: "La orientación fue clara y el recorrido estuvo organizado de principio a fin.", rating: 5 }
 ];
 
 const demoReservation: Reservation = {
@@ -171,11 +176,11 @@ const demoPayment: Payment = {
 };
 
 const postPaymentGuides = [
-  { match: ["machu", "cusco"], key: "cusco", label: "Cusco y Machu Picchu", imageUrl: destinationImage("photo-1587595431973-160d0d94add1"), extras: ["Traslado privado", "Noche adicional", "Almuerzo regional", "Asistencia de altura", "Sesión fotográfica", "Seguro de viaje"] },
-  { match: ["disney", "orlando"], key: "orlando", label: "Disney Orlando", imageUrl: destinationImage("photo-1597466599360-3b9775841aec"), extras: ["Traslado aeropuerto-hotel", "Equipaje adicional", "Seguro internacional", "Día de compras", "Datos móviles", "Asistencia en español"] },
-  { match: ["oxapampa"], key: "oxapampa", label: "Oxapampa", imageUrl: destinationImage("photo-1500534314209-a25ddb2bd429"), extras: ["Traslado privado", "Noche adicional", "Experiencia de café", "Alimentación", "Fotografía", "Seguro de viaje"] },
-  { match: ["ica", "huacachina"], key: "ica", label: "Ica y Huacachina", imageUrl: "https://www.stampbystamptravel.com/wp-content/uploads/2025/02/laguna-huacachina-ica.jpg.webp", extras: ["Traslado privado", "Noche adicional", "Experiencia gastronómica", "Bodega seleccionada", "Fotografía al atardecer", "Seguro de viaje"] },
-  { match: ["egipto", "cairo"], key: "egipto", label: "Egipto", imageUrl: "https://www.barcelo.com/guia-turismo/wp-content/uploads/2022/05/el-cairo1.jpg", extras: ["Traslado privado", "Equipaje adicional", "Seguro internacional", "Datos móviles", "Comidas seleccionadas", "Asistencia en español"] }
+  { match: ["machu", "cusco"], key: "cusco", label: "Cusco y Machu Picchu", imageUrl: "/destinations/machu-picchu.webp", extras: ["Traslado privado", "Noche adicional", "Almuerzo regional", "Asistencia de altura", "Sesión fotográfica", "Seguro de viaje"] },
+  { match: ["guayaquil", "ecuador"], key: "general", label: "Guayaquil y costa ecuatoriana", imageUrl: "/destinations/ecuador-costa.webp", extras: ["Traslado aeropuerto-hotel", "Noche adicional", "Actividad costera", "Equipaje adicional", "Seguro internacional", "Asistencia personalizada"] },
+  { match: ["oxapampa", "pozuzo"], key: "oxapampa", label: "Oxapampa y Pozuzo", imageUrl: "/destinations/oxapampa-pozuzo.webp", extras: ["Traslado privado", "Noche adicional", "Experiencia de café", "Alimentación", "Visita cultural", "Seguro de viaje"] },
+  { match: ["ica", "huacachina"], key: "ica", label: "Ica y Huacachina", imageUrl: "/destinations/ica-huacachina.webp", extras: ["Traslado privado", "Noche adicional", "Experiencia gastronómica", "Bodega seleccionada", "Fotografía al atardecer", "Seguro de viaje"] },
+  { match: ["tarapoto", "martín"], key: "general", label: "Tarapoto y naturaleza amazónica", imageUrl: "/destinations/tarapoto.webp", extras: ["Traslado privado", "Noche adicional", "Experiencia acuática", "Alimentación", "Actividad natural", "Seguro de viaje"] }
 ];
 
 function guideForTour(tour: Tour) {
@@ -476,10 +481,10 @@ function CatalogSignal({ icon, title, text }: { icon: React.ReactNode; title: st
 
 const seasonByDestination = [
   { terms: ["cusco", "machu"], months: "mayo a septiembre", reason: "Temporada seca, cielos más despejados y mejores condiciones para caminatas." },
-  { terms: ["orlando", "disney"], months: "enero a mayo y septiembre a noviembre", reason: "Clima más moderado y, fuera de feriados, menor afluencia." },
-  { terms: ["oxapampa"], months: "mayo a octubre", reason: "Menos lluvias para cataratas, rutas y actividades al aire libre." },
+  { terms: ["guayaquil", "ecuador"], months: "junio a noviembre", reason: "Ambiente más fresco y condiciones agradables para recorridos urbanos y costeros." },
+  { terms: ["oxapampa", "pozuzo"], months: "mayo a octubre", reason: "Menos lluvias para cataratas, rutas y actividades al aire libre." },
   { terms: ["ica", "huacachina"], months: "abril a noviembre", reason: "Días soleados y temperaturas cómodas para dunas y bodegas." },
-  { terms: ["egipto", "cairo"], months: "octubre a abril", reason: "Temperaturas más agradables para recorridos históricos." }
+  { terms: ["tarapoto", "martín"], months: "mayo a septiembre", reason: "Menor frecuencia de lluvias para recorridos naturales y actividades al aire libre." }
 ];
 const tourSeason = (tour: Tour) => {
   const value = `${tour.title} ${tour.destination}`.toLowerCase();
