@@ -6,7 +6,11 @@ El catálogo público utiliza cinco imágenes derivadas del archivo audiovisual 
 
 Los originales permanecen fuera del repositorio. La marca visible ayuda a identificar la procedencia, pero no impide capturas de pantalla; la protección principal depende de conservar los originales en almacenamiento privado y publicar únicamente derivados optimizados. Las imágenes con grupos o menores no deben incorporarse hasta confirmar la autorización correspondiente.
 
-La selección de video se limita a un microclip de Tarapoto: toma aérea estable, sin audio, de 7 segundos y menos de 2 MB. Se carga únicamente cuando el visitante reproduce el video desde el detalle del paquete (`preload="none"`). Los clips de Cusco e Ica evaluados fueron descartados porque contenían transiciones con primeros planos y no cumplían el estándar de privacidad y continuidad visual.
+La selección de video se limita a un microclip de Tarapoto: toma aérea estable, sin audio, de 7 segundos y menos de 2 MB. Se carga únicamente cuando el visitante decide reproducirlo desde la promoción o el detalle del paquete (`preload="none"`). Los clips de Cusco e Ica evaluados fueron descartados porque contenían transiciones con primeros planos y no cumplían el estándar de privacidad y continuidad visual.
+
+El bloque anteriormente destinado a testimonios de demostración fue reemplazado por un carrusel editorial de promociones. Puede mostrar fotografías o el microvideo aprobado, comentario comercial, periodo referencial y enlace al paquete. Todos los mensajes se identifican como contenido demostrativo y aclaran que precio, fecha, disponibilidad y servicios deben validarse con un asesor; no se presentan opiniones ficticias como experiencias reales.
+
+El catálogo incorpora tres propuestas europeas estructurales: Europa esencial (Madrid, París y Roma), Italia clásica (Roma, Florencia y Venecia), y España–Portugal (Madrid, Barcelona y Lisboa). Incluyen itinerario, inclusiones, exclusiones, temporada recomendada y fechas demostrativas. Sus fotografías WebP son referenciales, proceden de Unsplash y llevan una marca que las diferencia del archivo propio. Deben sustituirse por material propio o licenciado definitivo antes de una campaña comercial real.
 
 Los nombres, duraciones e itinerarios actuales funcionan como demostración estructural. Las tarifas aparecen como `Cotizar` hasta recibir precios comerciales confirmados.
 
@@ -93,12 +97,13 @@ El panel interno puede conservar fechas, alertas y capacidad para organización 
 - Validación Zod de formularios y payloads.
 - Token interno y reservas temporales guardados en `sessionStorage`.
 - Ninguna clave bancaria, código SMS o contraseña de Yape se almacena.
-- Las imágenes y testimonios definitivos requieren autorización o fuente verificable.
+- Las imágenes definitivas y cualquier testimonio futuro requieren autorización o fuente verificable.
 
 ## Arquitectura
 
 - `frontend/src/features/tours/TourApplication.tsx`: coordinación de rutas, experiencia pública, reserva, Yape, confirmación y panel.
 - `frontend/src/features/tours/components`: componentes reutilizables del catálogo.
+- `frontend/src/features/tours/components/PromotionsShowcase.tsx`: promociones multimedia referenciales y acceso al paquete relacionado.
 - `frontend/src/features/tours/sections`: apartados completos de la landing.
 - `frontend/src/features/tours/config`: contacto, redes, WhatsApp y configuración de demostración.
 - `frontend/src/features/tours/lib`: formato de precios, códigos y utilidades de presentación.

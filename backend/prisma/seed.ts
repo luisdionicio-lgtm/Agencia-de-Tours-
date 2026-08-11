@@ -121,6 +121,57 @@ async function main() {
       itinerary: ["Llegada asistida a Tarapoto", "Recorrido natural coordinado", "Experiencia acuatica segun disponibilidad", "Retorno con seguimiento del asesor"],
       includes: ["Alojamiento seleccionado", "Traslados programados", "Coordinacion de actividades", "Asistencia JohnToursPerú"],
       excludes: ["Vuelos hasta Tarapoto", "Gastos personales", "Servicios no mencionados"]
+    },
+    {
+      title: "Europa esencial: Madrid, Paris y Roma",
+      slug: "europa-esencial-madrid-paris-roma",
+      destination: "Espana, Francia e Italia",
+      price: 0,
+      currency: Currency.USD,
+      duration: "11 dias / 10 noches",
+      type: TourType.INTERNACIONAL,
+      categoryId: 3,
+      imageUrl: "/destinations/europa-esencial.webp",
+      description: "Ruta demostrativa por Madrid, Paris y Roma con patrimonio, arte y recorridos urbanos coordinados.",
+      availableSlots: 0,
+      isFeatured: false,
+      itinerary: ["Llegada y orientacion en Madrid", "Experiencias culturales en Madrid", "Conexion y recorridos en Paris", "Traslado a Roma", "Roma historica y Vaticano segun disponibilidad", "Retorno coordinado"],
+      includes: ["Alojamiento seleccionado", "Conexiones internas indicadas", "Recorridos confirmados", "Asistencia JohnToursPerú"],
+      excludes: ["Vuelos internacionales salvo indicacion expresa", "Entradas no detalladas", "Visados, seguros y gastos personales"]
+    },
+    {
+      title: "Italia clasica: Roma, Florencia y Venecia",
+      slug: "italia-clasica-roma-florencia-venecia",
+      destination: "Italia",
+      price: 0,
+      currency: Currency.USD,
+      duration: "9 dias / 8 noches",
+      type: TourType.INTERNACIONAL,
+      categoryId: 3,
+      imageUrl: "/destinations/italia-clasica.webp",
+      description: "Propuesta cultural por Roma, Florencia y Venecia con conexiones y recorridos planificados.",
+      availableSlots: 0,
+      isFeatured: false,
+      itinerary: ["Llegada y orientacion en Roma", "Roma historica y Vaticano segun disponibilidad", "Conexion a Florencia", "Recorrido cultural en Florencia", "Conexion a Venecia", "Canales y barrios historicos", "Retorno coordinado"],
+      includes: ["Alojamiento seleccionado", "Conexiones internas indicadas", "Recorridos confirmados", "Asistencia JohnToursPerú"],
+      excludes: ["Vuelos internacionales", "Entradas no detalladas", "Tasas, seguros y gastos personales"]
+    },
+    {
+      title: "Espana y Portugal: Madrid, Barcelona y Lisboa",
+      slug: "espana-portugal-madrid-barcelona-lisboa",
+      destination: "Espana y Portugal",
+      price: 0,
+      currency: Currency.USD,
+      duration: "10 dias / 9 noches",
+      type: TourType.INTERNACIONAL,
+      categoryId: 3,
+      imageUrl: "/destinations/espana-portugal.webp",
+      description: "Circuito demostrativo por ciudades ibericas con arquitectura, cultura y recorridos urbanos coordinados.",
+      availableSlots: 0,
+      isFeatured: false,
+      itinerary: ["Llegada y recorridos en Madrid", "Conexion a Barcelona", "Experiencias urbanas en Barcelona", "Conexion a Lisboa", "Barrios historicos y miradores", "Retorno coordinado"],
+      includes: ["Alojamiento seleccionado", "Conexiones internas indicadas", "Recorridos confirmados", "Asistencia JohnToursPerú"],
+      excludes: ["Vuelos internacionales", "Entradas no detalladas", "Visados, seguros y gastos personales"]
     }
   ];
 
@@ -152,7 +203,10 @@ async function main() {
     "guayaquil-costa-ecuador": [{ days: 28, capacity: 20 }, { days: 61, capacity: 20 }],
     "oxapampa-pozuzo": [{ days: 30, capacity: 20 }, { days: 65, capacity: 20 }],
     "ica-y-huacachina": [{ days: 6, capacity: 20 }, { days: 20, capacity: 22 }, { days: 43, capacity: 24 }],
-    "tarapoto-naturaleza": [{ days: 35, capacity: 20 }, { days: 77, capacity: 20 }]
+    "tarapoto-naturaleza": [{ days: 35, capacity: 20 }, { days: 77, capacity: 20 }],
+    "europa-esencial-madrid-paris-roma": [{ days: 245, capacity: 20 }, { days: 301, capacity: 20 }],
+    "italia-clasica-roma-florencia-venecia": [{ days: 266, capacity: 20 }, { days: 399, capacity: 20 }],
+    "espana-portugal-madrid-barcelona-lisboa": [{ days: 252, capacity: 20 }, { days: 420, capacity: 20 }]
   };
   const today = new Date();
   today.setUTCHours(0, 0, 0, 0);

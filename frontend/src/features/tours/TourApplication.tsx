@@ -14,6 +14,7 @@ import { destinationImage, paymentMoney, reservationCode, tourCurrency, tourMone
 import { downloadReservationReceipt } from "./lib/reservationReceipt";
 import { AirlineGuideSection } from "./sections/AirlineGuideSection";
 import { DestinationCarousel } from "./components/DestinationCarousel";
+import { PromotionsShowcase } from "./components/PromotionsShowcase";
 import { HowItWorksSection } from "./sections/HowItWorksSection";
 
 const demoDepartures = (_tourId: number, items: [number, string, string, number, number][]): TourDeparture[] =>
@@ -143,13 +144,100 @@ const demoTours: Tour[] = [
     includes: ["Alojamiento seleccionado por 3 noches", "Traslados programados en destino", "Coordinación de actividades", "Asistencia de JohnToursPerú"],
     excludes: ["Vuelos o transporte hasta Tarapoto", "Actividades no indicadas en la cotización", "Comidas y gastos personales no mencionados"],
     departures: demoDepartures(5, [[501, "2026-09-25", "2026-09-28", 20, 20], [502, "2026-11-06", "2026-11-09", 20, 20]])
+  },
+  {
+    id: 6,
+    title: "Europa esencial: Madrid, París y Roma",
+    slug: "europa-esencial-madrid-paris-roma",
+    destination: "España, Francia e Italia",
+    description: "Ruta demostrativa por tres capitales europeas con patrimonio, arte y recorridos urbanos coordinados para una primera experiencia en Europa.",
+    price: 0,
+    currency: "USD",
+    duration: "11 días / 10 noches",
+    type: "INTERNACIONAL",
+    availableSlots: 0,
+    imageUrl: "/destinations/europa-esencial.webp",
+    imageCredit: "Imagen referencial de Unsplash",
+    isFeatured: false,
+    status: "ACTIVO",
+    itinerary: [
+      "Llegada a Madrid, recepción coordinada, instalación y orientación general del circuito.",
+      "Recorrido por el centro histórico de Madrid y jornada cultural según la propuesta confirmada.",
+      "Traslado Madrid–París y asistencia para el ingreso al alojamiento.",
+      "Circuito panorámico de París con tiempo programado para sus principales espacios culturales.",
+      "Día de experiencias opcionales en París, definidas antes de la reserva final.",
+      "Traslado París–Roma y recepción coordinada.",
+      "Recorrido por la Roma histórica y sus plazas principales.",
+      "Visita cultural vinculada al Vaticano, sujeta a entradas y condiciones del proveedor.",
+      "Día libre asistido para actividades personales u opciones adicionales.",
+      "Revisión del retorno, documentación y horarios de salida.",
+      "Traslado coordinado al aeropuerto para el viaje de regreso."
+    ],
+    includes: ["Alojamiento seleccionado por 10 noches", "Traslados internos indicados en la cotización", "Recorridos descritos en el programa final", "Asistencia de JohnToursPerú"],
+    excludes: ["Vuelos internacionales salvo indicación expresa", "Entradas, alimentación o equipaje no detallados", "Visados, seguros y gastos personales"],
+    departures: demoDepartures(6, [[601, "2027-04-12", "2027-04-22", 20, 20], [602, "2027-06-07", "2027-06-17", 20, 20]])
+  },
+  {
+    id: 7,
+    title: "Italia clásica: Roma, Florencia y Venecia",
+    slug: "italia-clasica-roma-florencia-venecia",
+    destination: "Italia",
+    description: "Propuesta cultural por Roma, Florencia y Venecia con conexiones planificadas y tiempo para conocer cada ciudad con tranquilidad.",
+    price: 0,
+    currency: "USD",
+    duration: "9 días / 8 noches",
+    type: "INTERNACIONAL",
+    availableSlots: 0,
+    imageUrl: "/destinations/italia-clasica.webp",
+    imageCredit: "Imagen referencial de Unsplash",
+    isFeatured: false,
+    status: "ACTIVO",
+    itinerary: [
+      "Llegada a Roma, recepción y orientación del recorrido italiano.",
+      "Visita panorámica de la Roma histórica y sus espacios monumentales.",
+      "Jornada cultural vinculada al Vaticano y tiempo libre asistido.",
+      "Traslado a Florencia e ingreso al alojamiento.",
+      "Recorrido por el centro histórico de Florencia y espacios artísticos seleccionados.",
+      "Traslado a Venecia con acompañamiento logístico.",
+      "Recorrido por plazas, canales y barrios históricos de Venecia.",
+      "Día libre para actividades opcionales confirmadas previamente.",
+      "Traslado coordinado para el retorno."
+    ],
+    includes: ["Alojamiento seleccionado por 8 noches", "Conexiones terrestres o ferroviarias indicadas", "Recorridos coordinados", "Asistencia de JohnToursPerú"],
+    excludes: ["Vuelos internacionales", "Entradas no detalladas", "Tasas locales, alimentación, seguro y gastos personales"],
+    departures: demoDepartures(7, [[701, "2027-05-03", "2027-05-11", 20, 20], [702, "2027-09-13", "2027-09-21", 20, 20]])
+  },
+  {
+    id: 8,
+    title: "España y Portugal: Madrid, Barcelona y Lisboa",
+    slug: "espana-portugal-madrid-barcelona-lisboa",
+    destination: "España y Portugal",
+    description: "Circuito demostrativo por ciudades ibéricas que combina arquitectura, cultura, gastronomía y recorridos urbanos con asistencia coordinada.",
+    price: 0,
+    currency: "USD",
+    duration: "10 días / 9 noches",
+    type: "INTERNACIONAL",
+    availableSlots: 0,
+    imageUrl: "/destinations/espana-portugal.webp",
+    imageCredit: "Imagen referencial de Unsplash",
+    isFeatured: false,
+    status: "ACTIVO",
+    itinerary: [
+      "Llegada a Madrid, recepción coordinada e introducción al programa.",
+      "Recorrido por el centro histórico y espacios culturales de Madrid.",
+      "Día flexible para una experiencia adicional previamente confirmada.",
+      "Traslado a Barcelona e ingreso al alojamiento.",
+      "Circuito urbano por los principales espacios arquitectónicos de Barcelona.",
+      "Jornada libre asistida para actividades personales.",
+      "Traslado a Lisboa y orientación de la etapa portuguesa.",
+      "Recorrido por barrios históricos y miradores de Lisboa.",
+      "Día para una visita opcional coordinada según el programa final.",
+      "Traslado al aeropuerto y retorno."
+    ],
+    includes: ["Alojamiento seleccionado por 9 noches", "Conexiones indicadas entre ciudades", "Recorridos descritos en la propuesta", "Asistencia de JohnToursPerú"],
+    excludes: ["Vuelos internacionales", "Entradas y alimentación no especificadas", "Visados, seguro, tasas y gastos personales"],
+    departures: demoDepartures(8, [[801, "2027-04-19", "2027-04-28", 20, 20], [802, "2027-10-04", "2027-10-13", 20, 20]])
   }
-];
-
-const demoTestimonials = [
-  { name: "María Fernández", location: "Lima", tour: "Machu Picchu", comment: "La reserva fue rápida, los precios fueron claros y el viaje a Cusco estuvo muy bien organizado.", rating: 5 },
-  { name: "Carlos Medina", location: "Trujillo", tour: "Ica y Huacachina", comment: "Me atendieron por WhatsApp con paciencia y todo el itinerario estuvo explicado antes de pagar.", rating: 5 },
-  { name: "Rosa Salazar", location: "Arequipa", tour: "Oxapampa y Pozuzo", comment: "La orientación fue clara y el recorrido estuvo organizado de principio a fin.", rating: 5 }
 ];
 
 const demoReservation: Reservation = {
@@ -180,7 +268,10 @@ const postPaymentGuides = [
   { match: ["guayaquil", "ecuador"], key: "general", label: "Guayaquil y costa ecuatoriana", imageUrl: "/destinations/ecuador-costa.webp", extras: ["Traslado aeropuerto-hotel", "Noche adicional", "Actividad costera", "Equipaje adicional", "Seguro internacional", "Asistencia personalizada"] },
   { match: ["oxapampa", "pozuzo"], key: "oxapampa", label: "Oxapampa y Pozuzo", imageUrl: "/destinations/oxapampa-pozuzo.webp", extras: ["Traslado privado", "Noche adicional", "Experiencia de café", "Alimentación", "Visita cultural", "Seguro de viaje"] },
   { match: ["ica", "huacachina"], key: "ica", label: "Ica y Huacachina", imageUrl: "/destinations/ica-huacachina.webp", extras: ["Traslado privado", "Noche adicional", "Experiencia gastronómica", "Bodega seleccionada", "Fotografía al atardecer", "Seguro de viaje"] },
-  { match: ["tarapoto", "martín"], key: "general", label: "Tarapoto y naturaleza amazónica", imageUrl: "/destinations/tarapoto.webp", extras: ["Traslado privado", "Noche adicional", "Experiencia acuática", "Alimentación", "Actividad natural", "Seguro de viaje"] }
+  { match: ["tarapoto", "martín"], key: "general", label: "Tarapoto y naturaleza amazónica", imageUrl: "/destinations/tarapoto.webp", extras: ["Traslado privado", "Noche adicional", "Experiencia acuática", "Alimentación", "Actividad natural", "Seguro de viaje"] },
+  { match: ["italia", "florencia", "venecia"], key: "general", label: "Italia clásica", imageUrl: "/destinations/italia-clasica.webp", extras: ["Traslados privados", "Noche adicional", "Entradas culturales", "Experiencia gastronómica", "Seguro internacional", "Asistencia personalizada"] },
+  { match: ["españa y portugal", "barcelona", "lisboa"], key: "general", label: "España y Portugal", imageUrl: "/destinations/espana-portugal.webp", extras: ["Traslados privados", "Noche adicional", "Entradas culturales", "Equipaje", "Seguro internacional", "Asistencia personalizada"] },
+  { match: ["europa esencial", "parís"], key: "general", label: "Europa esencial", imageUrl: "/destinations/europa-esencial.webp", extras: ["Traslados privados", "Noche adicional", "Entradas culturales", "Equipaje", "Seguro internacional", "Asistencia personalizada"] }
 ];
 
 function guideForTour(tour: Tour) {
@@ -222,7 +313,9 @@ function useTours(type?: TourType | null) {
     queryKey: ["tours", type],
     queryFn: async () => {
       try {
-        return (await api.get("/tours", { params: type ? { type } : {} })).data;
+        const remoteTours = (await api.get("/tours", { params: type ? { type } : {} })).data as Tour[];
+        const remoteSlugs = new Set(remoteTours.map((tour) => tour.slug));
+        return [...remoteTours, ...fallback.filter((tour) => !remoteSlugs.has(tour.slug))];
       } catch {
         return fallback;
       }
@@ -275,7 +368,7 @@ function Home() {
       <HowItWorksSection />
       <ExclusiveReservationExperience />
       <OurStory />
-      <Testimonials />
+      <PromotionsShowcase tours={tours.length ? tours : demoTours} />
       <SocialSpotlight />
       <FrequentlyAskedQuestions />
       <section id="contacto" className="formal-cta px-4 py-20 text-white">
@@ -484,7 +577,10 @@ const seasonByDestination = [
   { terms: ["guayaquil", "ecuador"], months: "junio a noviembre", reason: "Ambiente más fresco y condiciones agradables para recorridos urbanos y costeros." },
   { terms: ["oxapampa", "pozuzo"], months: "mayo a octubre", reason: "Menos lluvias para cataratas, rutas y actividades al aire libre." },
   { terms: ["ica", "huacachina"], months: "abril a noviembre", reason: "Días soleados y temperaturas cómodas para dunas y bodegas." },
-  { terms: ["tarapoto", "martín"], months: "mayo a septiembre", reason: "Menor frecuencia de lluvias para recorridos naturales y actividades al aire libre." }
+  { terms: ["tarapoto", "martín"], months: "mayo a septiembre", reason: "Menor frecuencia de lluvias para recorridos naturales y actividades al aire libre." },
+  { terms: ["italia", "florencia", "venecia"], months: "abril a junio y septiembre a octubre", reason: "Temperaturas agradables para recorridos culturales, sujetas a condiciones y demanda de cada ciudad." },
+  { terms: ["españa y portugal", "barcelona", "lisboa"], months: "abril a junio y septiembre a octubre", reason: "Temporadas intermedias recomendables para recorrer ciudades con temperaturas más suaves." },
+  { terms: ["europa esencial", "parís"], months: "abril a junio y septiembre a octubre", reason: "Clima moderado y buenas condiciones para recorridos urbanos; la disponibilidad se confirma antes de reservar." }
 ];
 
 const featuredTourVideos: Record<string, { src: string; poster: string; title: string }> = {
@@ -1203,48 +1299,6 @@ function AdminField({ label, value, onChange, type = "text", required = false }:
 
 function AdminTextArea({ label, value, onChange }: { label: string; value: string; onChange: (value: string) => void }) {
   return <label className="grid gap-1 text-sm font-bold text-slate-700">{label}<textarea className="min-h-32 rounded-lg border px-3 py-3" value={value} onChange={(event) => onChange(event.target.value)} /></label>;
-}
-
-function Testimonials() {
-  const { data = demoTestimonials } = useQuery<{ name: string; location: string; tour?: string; comment: string; rating: number }[]>({
-    queryKey: ["testimonials"],
-    queryFn: async () => {
-      try {
-        return (await api.get("/testimonials")).data;
-      } catch {
-        return demoTestimonials;
-      }
-    },
-    placeholderData: demoTestimonials
-  });
-  return (
-    <Section title="Historias de viajeros felices" subtitle="Experiencias reales de personas que confiaron sus viajes a JohnToursPerú.">
-      <div id="testimonialCarousel" className="carousel slide testimonial-carousel rounded-lg bg-white p-4 shadow-xl" data-bs-ride="carousel">
-        <div className="carousel-inner">
-          {data.map((item, index) => (
-            <div key={item.name} className={`carousel-item ${index === 0 ? "active" : ""}`} data-bs-interval="4800">
-              <div className="testimonial-card mx-auto max-w-3xl rounded-2xl p-7 text-center md:p-10">
-                <span className="testimonial-avatar mx-auto mb-4 grid h-14 w-14 place-items-center rounded-full text-lg font-black text-white">{item.name.split(" ").map((part) => part[0]).slice(0, 2).join("")}</span>
-                <div className="mb-4 flex justify-center text-amber-400">{Array.from({ length: item.rating }).map((_, i) => <Star key={i} size={22} fill="currentColor" />)}</div>
-                <p className="text-xl font-semibold leading-9 text-slate-700">"{item.comment}"</p>
-                <strong className="mt-5 block text-[#082447]">{item.name}</strong>
-                <span className="text-sm text-slate-500">{item.location}</span>
-                {item.tour && <span className="testimonial-tour"><MapPin size={14} /> {item.tour}</span>}
-              </div>
-            </div>
-          ))}
-        </div>
-        <button className="carousel-control-prev testimonial-control" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
-          <span className="carousel-control-prev-icon" aria-hidden="true" />
-          <span className="visually-hidden">Anterior</span>
-        </button>
-        <button className="carousel-control-next testimonial-control" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
-          <span className="carousel-control-next-icon" aria-hidden="true" />
-          <span className="visually-hidden">Siguiente</span>
-        </button>
-      </div>
-    </Section>
-  );
 }
 
 function Section({ title, subtitle, children }: { title: string; subtitle: string; children?: React.ReactNode }) {

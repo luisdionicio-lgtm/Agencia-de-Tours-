@@ -80,7 +80,8 @@ npm audit --omit=dev --prefix backend
 - Publicar términos, privacidad, cancelaciones y reembolsos aprobados.
 - Crear `reservas@`, `ventas@`, `soporte@` y `administracion@`.
 - Configurar SMTP, SPF, DKIM y DMARC.
-- Reemplazar imágenes referenciales y testimonios de muestra.
+- Reemplazar las imágenes europeas referenciales por material propio o licenciado definitivo.
+- Publicar testimonios únicamente cuando exista autorización y evidencia verificable; la versión actual no muestra opiniones ficticias.
 
 ## Operación
 
