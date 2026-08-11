@@ -6,6 +6,8 @@ El catálogo público utiliza cinco imágenes derivadas del archivo audiovisual 
 
 Los originales permanecen fuera del repositorio. La marca visible ayuda a identificar la procedencia, pero no impide capturas de pantalla; la protección principal depende de conservar los originales en almacenamiento privado y publicar únicamente derivados optimizados. Las imágenes con grupos o menores no deben incorporarse hasta confirmar la autorización correspondiente.
 
+La selección de video se limita a un microclip de Tarapoto: toma aérea estable, sin audio, de 7 segundos y menos de 2 MB. Se carga únicamente cuando el visitante reproduce el video desde el detalle del paquete (`preload="none"`). Los clips de Cusco e Ica evaluados fueron descartados porque contenían transiciones con primeros planos y no cumplían el estándar de privacidad y continuidad visual.
+
 Los nombres, duraciones e itinerarios actuales funcionan como demostración estructural. Las tarifas aparecen como `Cotizar` hasta recibir precios comerciales confirmados.
 
 ## Objetivo

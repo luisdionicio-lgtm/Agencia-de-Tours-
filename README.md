@@ -11,6 +11,7 @@ Web publicitaria fullstack para captar clientes, mostrar tours nacionales e inte
 - Carrusel premium de cinco destinos con navegación, indicadores, duración, precio y acceso directo a cada experiencia.
 - Selección curada de material propio para Cusco–Machu Picchu, Ica–Huacachina, Oxapampa–Pozuzo, Tarapoto y Guayaquil–costa ecuatoriana.
 - Fotografías WebP optimizadas a 1600 × 900, sin metadatos EXIF/GPS y con marca de archivo propio; los originales no forman parte del repositorio.
+- Un único microvideo seleccionado de Tarapoto (7 segundos, sin audio y menos de 2 MB), disponible solo en el detalle del tour con carga bajo demanda. Los clips con primeros planos o transiciones de menor calidad fueron descartados.
 - Catálogo, filtros, detalle, itinerario, inclusiones y exclusiones de cada tour.
 - Tarjetas de tours con etiquetas, beneficios e iconografía dimensional alineada con la marca.
 - Proceso visual de reserva explicado en seis pasos claros.

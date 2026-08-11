@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowRight, Award, CalendarDays, CheckCircle2, Clock3, Copy, Download, FileText, Filter, HeartHandshake, LayoutDashboard, LogOut, MapPin, MessageCircle, Plane, Search, ShieldCheck, Sparkles, Star, UsersRound } from "lucide-react";
+import { ArrowRight, Award, CalendarDays, CheckCircle2, Clock3, Copy, Download, FileText, Filter, HeartHandshake, LayoutDashboard, LogOut, MapPin, MessageCircle, Plane, PlayCircle, Search, ShieldCheck, Sparkles, Star, UsersRound } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -486,6 +486,15 @@ const seasonByDestination = [
   { terms: ["ica", "huacachina"], months: "abril a noviembre", reason: "Días soleados y temperaturas cómodas para dunas y bodegas." },
   { terms: ["tarapoto", "martín"], months: "mayo a septiembre", reason: "Menor frecuencia de lluvias para recorridos naturales y actividades al aire libre." }
 ];
+
+const featuredTourVideos: Record<string, { src: string; poster: string; title: string }> = {
+  "tarapoto-naturaleza": {
+    src: "/media/tarapoto-naturaleza.mp4",
+    poster: "/destinations/tarapoto.webp",
+    title: "Navegación entre paisajes amazónicos"
+  }
+};
+
 const tourSeason = (tour: Tour) => {
   const value = `${tour.title} ${tour.destination}`.toLowerCase();
   return seasonByDestination.find((item) => item.terms.some((term) => value.includes(term))) ?? { months: "según disponibilidad", reason: "Un asesor confirmará clima, demanda y condiciones antes de reservar." };
@@ -529,16 +538,19 @@ function TourDetail() {
   const includes = tour.includes ?? ["Asistencia", "Traslados", "Guía"];
   const excludes = tour.excludes ?? ["Gastos personales"];
   const season = tourSeason(tour);
+  const featuredVideo = featuredTourVideos[tour.slug];
   return (
     <Section title={tour.title} subtitle={`${tour.destination} · ${tour.duration}`}>
       <div className="grid gap-8 lg:grid-cols-[1.2fr_.8fr]">
         <div className="space-y-4">
           <img src={tour.imageUrl} alt={tour.title} className="h-[440px] w-full rounded-lg object-cover shadow-xl" />
-          <div className="grid gap-4 sm:grid-cols-3">
-            {[tour.imageUrl, destinationImage("photo-1488646953014-85cb44e25828"), destinationImage("photo-1469854523086-cc02fe5d8800")].map((image, index) => (
-              <img key={`${image}-${index}`} src={image} alt={`${tour.title} experiencia ${index + 1}`} className="h-32 w-full rounded-lg object-cover shadow-sm" />
-            ))}
-          </div>
+          {featuredVideo && <div className="overflow-hidden rounded-lg border border-cyan-100 bg-[#061f3f] shadow-lg">
+            <div className="flex items-center gap-3 px-4 py-3 text-white"><PlayCircle className="text-cyan-300" /><span><small className="block text-[10px] font-black uppercase tracking-[.14em] text-cyan-200">Video breve · archivo propio</small><strong>{featuredVideo.title}</strong></span></div>
+            <video className="aspect-video w-full bg-black object-cover" controls playsInline preload="none" poster={featuredVideo.poster} aria-label={`Video de ${tour.title}`}>
+              <source src={featuredVideo.src} type="video/mp4" />
+              Tu navegador no puede reproducir este video.
+            </video>
+          </div>}
         </div>
         <aside className="booking-aside rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
           <p className="text-sm font-bold uppercase text-[#0f7a4f]">{tour.type}</p>
