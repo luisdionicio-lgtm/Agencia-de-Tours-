@@ -9,7 +9,7 @@ Web publicitaria fullstack para captar clientes, mostrar tours nacionales e inte
 - Código organizado por responsabilidades: estructura pública, catálogo, secciones, configuración y utilidades.
 - Carrusel principal con marco azul de marca y acceso directo desde cada imagen al detalle del paquete.
 - Carrusel premium de cinco destinos con navegación, indicadores, duración, precio y acceso directo a cada experiencia.
-- Selección curada de material propio para Cusco–Machu Picchu, Ica–Huacachina, Oxapampa–Pozuzo, Tarapoto y Guayaquil–costa ecuatoriana.
+- Selección curada de material propio para Cusco–Machu Picchu, Ica–Huacachina, Oxapampa–Pozuzo, Tarapoto y Guayaquil–costa ecuatoriana. La fuente prioritaria es `D:\FOTOS PAGINA WEB JOHNTOURS`; otras carpetas del archivo se usan únicamente cuando no existe una alternativa adecuada para el destino.
 - Fotografías WebP optimizadas a 1600 × 900, sin metadatos EXIF/GPS y con marca de archivo propio; los originales no forman parte del repositorio.
 - Un único microvideo seleccionado de Tarapoto (7 segundos, sin audio y menos de 2 MB), disponible solo en el detalle del tour con carga bajo demanda. Los clips con primeros planos o transiciones de menor calidad fueron descartados.
 - Catálogo, filtros, detalle, itinerario, inclusiones y exclusiones de cada tour.

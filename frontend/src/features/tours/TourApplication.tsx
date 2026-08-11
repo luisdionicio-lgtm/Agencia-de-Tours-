@@ -57,7 +57,7 @@ const demoTours: Tour[] = [
     type: "INTERNACIONAL",
     availableSlots: 0,
     imageUrl: "/destinations/ecuador-costa.webp",
-    imageCredit: "Fotograma de archivo propio de JohnToursPerú",
+    imageCredit: "Fotografía propia de La Perla, Guayaquil",
     isFeatured: true,
     status: "ACTIVO",
     itinerary: [

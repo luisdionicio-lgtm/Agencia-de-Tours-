@@ -2,7 +2,7 @@
 
 ## Material audiovisual curado
 
-El catálogo público utiliza cinco imágenes derivadas del archivo audiovisual propio: Machu Picchu, Ica y Huacachina, Oxapampa y Pozuzo, Tarapoto, y Guayaquil con costa ecuatoriana. Las copias públicas se encuentran en `frontend/public/destinations/`, fueron convertidas a WebP, redimensionadas a 1600 × 900 y guardadas sin metadatos de ubicación.
+El catálogo público utiliza cinco imágenes derivadas del archivo audiovisual propio: Machu Picchu, Ica y Huacachina, Oxapampa y Pozuzo, Tarapoto, y Guayaquil con costa ecuatoriana. La selección prioriza `D:\FOTOS PAGINA WEB JOHNTOURS`; de allí provienen las fotografías de Machu Picchu, Oxapampa–Pozuzo y La Perla de Guayaquil. Ica y Tarapoto conservan material de respaldo del archivo propio porque la carpeta prioritaria todavía no contiene una alternativa equivalente. Las copias públicas se encuentran en `frontend/public/destinations/`, fueron convertidas a WebP, redimensionadas a 1600 × 900 y guardadas sin metadatos de ubicación.
 
 Los originales permanecen fuera del repositorio. La marca visible ayuda a identificar la procedencia, pero no impide capturas de pantalla; la protección principal depende de conservar los originales en almacenamiento privado y publicar únicamente derivados optimizados. Las imágenes con grupos o menores no deben incorporarse hasta confirmar la autorización correspondiente.
 
