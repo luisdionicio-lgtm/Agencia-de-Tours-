@@ -8,6 +8,7 @@ Web publicitaria fullstack para captar clientes, mostrar tours nacionales e inte
 - Tipografía profesional con Montserrat para títulos y Source Sans 3 para lectura clara.
 - Código organizado por responsabilidades: estructura pública, catálogo, secciones, configuración y utilidades.
 - Carrusel principal con marco azul de marca y acceso directo desde cada imagen al detalle del paquete.
+- Selector principal con los 15 tours, flechas y pestañas horizontales por nombre para descubrir y abrir cualquier paquete desde la portada sin cambios inesperados de imagen.
 - Carrusel premium de cinco destinos con navegación, indicadores, duración, precio y acceso directo a cada experiencia.
 - Selección curada de material propio para Cusco–Machu Picchu, Valle Sagrado, Lago Titicaca–Bolivia, Ica–Huacachina, Oxapampa–Pozuzo, Tarapoto y Guayaquil–costa ecuatoriana. Se priorizaron `D:\FOTOS PAGINA WEB JOHNTOURS`, `D:\PAGINA WEB` y `D:\OTRAS FOTOS 2026 JOHNTOURS`, descartando duplicados, tomas poco claras y material privado.
 - Galería editorial visible «Destinos vividos por nuestro equipo» con siete fotografías propias optimizadas, contexto del lugar, enlace al paquete y precio demo expresamente marcado como referencial.

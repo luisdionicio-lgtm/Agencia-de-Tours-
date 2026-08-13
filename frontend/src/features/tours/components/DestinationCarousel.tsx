@@ -8,11 +8,17 @@ const destinationMood: Record<string, string> = {
   "guayaquil-costa-ecuador": "Ciudad, costa y experiencias frente al mar.",
   "oxapampa-pozuzo": "Naturaleza, calma y tradición en un solo viaje.",
   "ica-y-huacachina": "Aventura entre dunas y atardeceres inolvidables.",
-  "tarapoto-naturaleza": "Amazonía, agua y paisajes llenos de vida."
+  "tarapoto-naturaleza": "Amazonía, agua y paisajes llenos de vida.",
+  "mancora-punta-sal-tumbes": "Sol, costa norte y naturaleza marina.",
+  "cartagena-islas-caribe": "Historia, color y mar Caribe en una misma ruta.",
+  "rio-de-janeiro": "Miradores icónicos, cultura y energía brasileña.",
+  "buenos-aires-iguazu": "Ciudad, naturaleza y cataratas monumentales.",
+  "punta-cana-santo-domingo": "Playas caribeñas y patrimonio colonial.",
+  "disney-orlando": "Diversión familiar y parques inolvidables."
 };
 
 export function DestinationCarousel({ tours }: { tours: Tour[] }) {
-  const destinations = tours.slice(0, 5);
+  const destinations = tours;
   if (!destinations.length) return null;
 
   return (
@@ -22,7 +28,7 @@ export function DestinationCarousel({ tours }: { tours: Tour[] }) {
           <div>
             <span className="section-kicker"><Sparkles size={15} /> Destinos extraordinarios</span>
             <h2 id="destination-showcase-title">Encuentra el viaje que quieres recordar</h2>
-            <p>Cinco experiencias seleccionadas para viajar con una ruta clara, atención cercana y detalles bien coordinados.</p>
+            <p>{destinations.length} experiencias nacionales e internacionales para comparar, elegir y abrir directamente su paquete.</p>
           </div>
           <Link to="/tours" className="destination-all-link">Ver todos los tours <ArrowRight size={17} /></Link>
         </div>

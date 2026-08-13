@@ -425,6 +425,7 @@ function useTours(type?: TourType | null) {
 function Home() {
   const { data: tours = [] } = useTours();
   const featured = tours.filter((tour) => tour.isFeatured).slice(0, 4);
+  const heroTours = tours.length ? tours : demoTours;
 
   return (
     <>
@@ -467,7 +468,7 @@ function Home() {
           </div>
           <div className="space-y-4 lg:pl-2">
             <LogoShowcase />
-            <div className="hidden lg:block"><HeroVisualCarousel tours={featured.length ? featured : tours.slice(0, 4)} /></div>
+            <div className="hidden lg:block"><HeroVisualCarousel tours={heroTours} /></div>
             <SearchBox />
           </div>
         </div>
@@ -507,31 +508,32 @@ function MiniTrust({ icon, value, label }: { icon: React.ReactNode; value: strin
 
 function HeroVisualCarousel({ tours }: { tours: Tour[] }) {
   if (!tours.length) return null;
+
   return (
-    <div id="heroExperienceCarousel" className="carousel slide hero-mini-carousel overflow-hidden rounded-lg shadow-2xl" data-bs-ride="carousel">
-      <div className="carousel-inner">
-        {tours.map((tour, index) => (
-          <div key={tour.id} className={`carousel-item ${index === 0 ? "active" : ""}`} data-bs-interval="3600">
-            <Link to={`/tours/${tour.id}`} className="hero-carousel-link" aria-label={`Ver el paquete ${tour.title}`}>
-              <img src={tour.imageUrl} loading={index === 0 ? "eager" : "lazy"} decoding="async" className="d-block h-[250px] w-100 object-cover" alt={tour.title} />
-              <div className="hero-mini-caption">
-                <span>{tour.duration}</span>
-                <strong>{tour.title}</strong>
-                <small>{tour.destination}</small>
-                <em>Ver paquete <ArrowRight size={14} /></em>
-              </div>
-            </Link>
-          </div>
-        ))}
+    <div className="hero-tour-browser" aria-label="Selector de todos los tours">
+      <div className="hero-tour-browser-bar"><span><Sparkles size={14} /> Explora {tours.length} destinos</span><strong>Elige y abre tu paquete</strong></div>
+      <div id="heroExperienceCarousel" className="carousel slide hero-mini-carousel overflow-hidden rounded-lg shadow-2xl" data-bs-interval="false">
+        <div className="carousel-inner">
+          {tours.map((tour, index) => (
+            <div key={tour.id} className={`carousel-item ${index === 0 ? "active" : ""}`}>
+              <Link to={`/tours/${tour.id}`} className="hero-carousel-link" aria-label={`Ver el paquete ${tour.title}`}>
+                <img src={tour.imageUrl} decoding="async" className="d-block h-[250px] w-100 object-cover" alt={tour.title} />
+                <div className="hero-mini-caption">
+                  <span>{tour.duration}</span>
+                  <strong>{tour.title}</strong>
+                  <small>{tour.destination}</small>
+                  <em>Ver paquete <ArrowRight size={14} /></em>
+                </div>
+              </Link>
+            </div>
+          ))}
+        </div>
+        <button className="carousel-control-prev" type="button" data-bs-target="#heroExperienceCarousel" data-bs-slide="prev" aria-label="Tour anterior"><ChevronDown className="hero-arrow-left" /></button>
+        <button className="carousel-control-next" type="button" data-bs-target="#heroExperienceCarousel" data-bs-slide="next" aria-label="Tour siguiente"><ChevronDown className="hero-arrow-right" /></button>
+        <div className="carousel-indicators hero-tour-picker" aria-label="Elegir destino">
+          {tours.map((tour, index) => <button key={tour.id} type="button" data-bs-target="#heroExperienceCarousel" data-bs-slide-to={index} className={index === 0 ? "active" : ""} aria-current={index === 0 ? "true" : undefined} aria-label={`Mostrar ${tour.title}`}><span>{tour.type === "NACIONAL" ? "Perú" : "Internacional"}</span><strong>{tour.title}</strong></button>)}
+        </div>
       </div>
-      <button className="carousel-control-prev" type="button" data-bs-target="#heroExperienceCarousel" data-bs-slide="prev">
-        <span className="carousel-control-prev-icon" aria-hidden="true" />
-        <span className="visually-hidden">Anterior</span>
-      </button>
-      <button className="carousel-control-next" type="button" data-bs-target="#heroExperienceCarousel" data-bs-slide="next">
-        <span className="carousel-control-next-icon" aria-hidden="true" />
-        <span className="visually-hidden">Siguiente</span>
-      </button>
     </div>
   );
 }
