@@ -9,6 +9,7 @@ export type Tour = {
   destination: string;
   description?: string;
   price: string | number;
+  priceIsEstimated?: boolean;
   currency?: "PEN" | "USD";
   paymentMode?: "FULL" | "DEPOSIT";
   depositPercent?: number;

@@ -39,7 +39,7 @@ export function TourCard({ tour }: { tour: Tour }) {
           ))}
         </div>
         <div className="tour-card-summary">
-          <div className="tour-card-price"><small>{Number(tour.price) > 0 ? "Desde" : "Tarifa"}</small><strong>{tourMoney(tour)}</strong><span>{Number(tour.price) > 0 ? "por persona" : "según fecha y grupo"}</span></div>
+          <div className="tour-card-price"><small>{tour.priceIsEstimated ? "Precio demo desde" : Number(tour.price) > 0 ? "Desde" : "Tarifa"}</small><strong>{tourMoney(tour)}</strong><span>{tour.priceIsEstimated ? "referencial · confirmar" : Number(tour.price) > 0 ? "por persona" : "según fecha y grupo"}</span></div>
           <div className="tour-card-duration"><i><CalendarDays size={18} /></i><span><small>Duración</small><strong>{tour.duration}</strong></span></div>
         </div>
         <Link to={`/tours/${tour.id}`} className="tour-card-cta">

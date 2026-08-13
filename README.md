@@ -9,11 +9,12 @@ Web publicitaria fullstack para captar clientes, mostrar tours nacionales e inte
 - Código organizado por responsabilidades: estructura pública, catálogo, secciones, configuración y utilidades.
 - Carrusel principal con marco azul de marca y acceso directo desde cada imagen al detalle del paquete.
 - Carrusel premium de cinco destinos con navegación, indicadores, duración, precio y acceso directo a cada experiencia.
-- Selección curada de material propio para Cusco–Machu Picchu, Ica–Huacachina, Oxapampa–Pozuzo, Tarapoto y Guayaquil–costa ecuatoriana. La fuente prioritaria es `D:\FOTOS PAGINA WEB JOHNTOURS`; otras carpetas del archivo se usan únicamente cuando no existe una alternativa adecuada para el destino.
+- Selección curada de material propio para Cusco–Machu Picchu, Valle Sagrado, Lago Titicaca–Bolivia, Ica–Huacachina, Oxapampa–Pozuzo, Tarapoto y Guayaquil–costa ecuatoriana. Se priorizaron `D:\FOTOS PAGINA WEB JOHNTOURS`, `D:\PAGINA WEB` y `D:\OTRAS FOTOS 2026 JOHNTOURS`, descartando duplicados, tomas poco claras y material privado.
+- Galería editorial visible «Destinos vividos por nuestro equipo» con siete fotografías propias optimizadas, contexto del lugar, enlace al paquete y precio demo expresamente marcado como referencial.
 - Fotografías WebP optimizadas a 1600 × 900, sin metadatos EXIF/GPS y con marca de archivo propio; los originales no forman parte del repositorio.
 - Un único microvideo seleccionado de Tarapoto (7 segundos, sin audio y menos de 2 MB), disponible en su promoción y detalle con carga bajo demanda. Los clips con primeros planos o transiciones de menor calidad fueron descartados.
 - Carrusel editorial de promociones con fotografías, video bajo demanda, comentario, fecha referencial, aviso de demostración y acceso directo al paquete.
-- Catálogo de ocho propuestas: cinco destinos con material audiovisual propio y tres circuitos europeos demostrativos por Madrid–París–Roma, Italia y España–Portugal.
+- Catálogo de nueve propuestas: seis rutas respaldadas por material audiovisual propio —incluida Lago Titicaca y Bolivia— y tres circuitos europeos demostrativos.
 - Filtros, detalle, itinerarios completos, inclusiones, exclusiones, temporada recomendada y fechas referenciales de cada tour.
 - Tarjetas de tours con etiquetas, beneficios e iconografía dimensional alineada con la marca.
 - Proceso visual de reserva explicado en seis pasos claros.
@@ -65,4 +66,4 @@ Documentación: [funciones y arquitectura](docs/documentacion-web.md) y [checkli
 
 > La web no realiza transferencias ni envía mensajes automáticamente. El cliente registra su constancia segura y decide si avisa por WhatsApp; el personal autorizado valida el pago desde el panel.
 
-> Los paquetes y recorridos actuales son una estructura demostrativa. Mientras no existan tarifas comerciales confirmadas se muestra `Cotizar`, evitando publicar precios inventados. Antes de incorporar fotografías grupales se debe verificar la autorización de uso de imagen, especialmente cuando aparezcan menores.
+> Los paquetes, fechas y precios actuales son una estructura demostrativa. Todo importe supuesto se identifica como `Precio demo` o `referencial` y debe confirmarse antes de publicarse como oferta comercial. Las fotografías seleccionadas provienen del archivo proporcionado; antes del lanzamiento con dominio propio debe confirmarse la autorización de uso de imagen de las personas visibles.

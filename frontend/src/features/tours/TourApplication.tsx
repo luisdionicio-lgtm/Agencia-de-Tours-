@@ -15,6 +15,7 @@ import { downloadReservationReceipt } from "./lib/reservationReceipt";
 import { AirlineGuideSection } from "./sections/AirlineGuideSection";
 import { DestinationCarousel } from "./components/DestinationCarousel";
 import { PromotionsShowcase } from "./components/PromotionsShowcase";
+import { TravelArchiveShowcase } from "./components/TravelArchiveShowcase";
 import { HowItWorksSection } from "./sections/HowItWorksSection";
 
 const demoDepartures = (_tourId: number, items: [number, string, string, number, number][]): TourDeparture[] =>
@@ -27,7 +28,8 @@ const demoTours: Tour[] = [
     slug: "machu-picchu",
     destination: "Cusco, Perú",
     description: "Explora la ciudadela inca, el Valle Sagrado y la riqueza cultural de Cusco con guías expertos y asistencia permanente.",
-    price: 0,
+    price: 1550,
+    priceIsEstimated: true,
     currency: "PEN",
     duration: "4 días / 3 noches",
     type: "NACIONAL",
@@ -52,7 +54,8 @@ const demoTours: Tour[] = [
     slug: "guayaquil-costa-ecuador",
     destination: "Guayaquil, Ecuador",
     description: "Descubre Guayaquil y una experiencia costera con recorridos urbanos, paisajes frente al mar y actividades coordinadas.",
-    price: 0,
+    price: 890,
+    priceIsEstimated: true,
     currency: "USD",
     duration: "5 días / 4 noches",
     type: "INTERNACIONAL",
@@ -78,7 +81,8 @@ const demoTours: Tour[] = [
     slug: "oxapampa-pozuzo",
     destination: "Pasco, Perú",
     description: "Naturaleza, cataratas, café y tradición austroalemana en una ruta auténtica por Oxapampa y Pozuzo.",
-    price: 0,
+    price: 780,
+    priceIsEstimated: true,
     currency: "PEN",
     duration: "4 días / 3 noches",
     type: "NACIONAL",
@@ -103,7 +107,8 @@ const demoTours: Tour[] = [
     slug: "ica-y-huacachina",
     destination: "Ica, Perú",
     description: "Dunas, tubulares, sandboard, bodegas pisqueras y atardeceres inolvidables en el oasis.",
-    price: 0,
+    price: 650,
+    priceIsEstimated: true,
     currency: "PEN",
     duration: "2 días / 1 noche",
     type: "NACIONAL",
@@ -126,7 +131,8 @@ const demoTours: Tour[] = [
     slug: "tarapoto-naturaleza",
     destination: "San Martín, Perú",
     description: "Paisajes amazónicos, recorridos acuáticos y experiencias de naturaleza en una ruta coordinada desde Tarapoto.",
-    price: 0,
+    price: 1150,
+    priceIsEstimated: true,
     currency: "PEN",
     duration: "4 días / 3 noches",
     type: "NACIONAL",
@@ -151,7 +157,8 @@ const demoTours: Tour[] = [
     slug: "europa-esencial-madrid-paris-roma",
     destination: "España, Francia e Italia",
     description: "Ruta demostrativa por tres capitales europeas con patrimonio, arte y recorridos urbanos coordinados para una primera experiencia en Europa.",
-    price: 0,
+    price: 2790,
+    priceIsEstimated: true,
     currency: "USD",
     duration: "11 días / 10 noches",
     type: "INTERNACIONAL",
@@ -183,7 +190,8 @@ const demoTours: Tour[] = [
     slug: "italia-clasica-roma-florencia-venecia",
     destination: "Italia",
     description: "Propuesta cultural por Roma, Florencia y Venecia con conexiones planificadas y tiempo para conocer cada ciudad con tranquilidad.",
-    price: 0,
+    price: 2490,
+    priceIsEstimated: true,
     currency: "USD",
     duration: "9 días / 8 noches",
     type: "INTERNACIONAL",
@@ -213,7 +221,8 @@ const demoTours: Tour[] = [
     slug: "espana-portugal-madrid-barcelona-lisboa",
     destination: "España y Portugal",
     description: "Circuito demostrativo por ciudades ibéricas que combina arquitectura, cultura, gastronomía y recorridos urbanos con asistencia coordinada.",
-    price: 0,
+    price: 2390,
+    priceIsEstimated: true,
     currency: "USD",
     duration: "10 días / 9 noches",
     type: "INTERNACIONAL",
@@ -237,6 +246,33 @@ const demoTours: Tour[] = [
     includes: ["Alojamiento seleccionado por 9 noches", "Conexiones indicadas entre ciudades", "Recorridos descritos en la propuesta", "Asistencia de JohnToursPerú"],
     excludes: ["Vuelos internacionales", "Entradas y alimentación no especificadas", "Visados, seguro, tasas y gastos personales"],
     departures: demoDepartures(8, [[801, "2027-04-19", "2027-04-28", 20, 20], [802, "2027-10-04", "2027-10-13", 20, 20]])
+  },
+  {
+    id: 9,
+    title: "Lago Titicaca y ruta Bolivia",
+    slug: "lago-titicaca-ruta-bolivia",
+    destination: "Puno, Perú y Bolivia",
+    description: "Circuito demostrativo por el lago navegable más alto del mundo, comunidades del altiplano y una extensión cultural hacia Bolivia.",
+    price: 480,
+    priceIsEstimated: true,
+    currency: "USD",
+    duration: "5 días / 4 noches",
+    type: "INTERNACIONAL",
+    availableSlots: 0,
+    imageUrl: "/travel-archive/lago-titicaca.webp",
+    imageCredit: "Archivo propio de JohnToursPerú",
+    isFeatured: false,
+    status: "ACTIVO",
+    itinerary: [
+      "Llegada a Puno, recepción coordinada, instalación y orientación para la experiencia en altura.",
+      "Navegación programada por el lago Titicaca y visita cultural según el circuito confirmado.",
+      "Traslado terrestre hacia la frontera y continuación de la ruta boliviana con asistencia.",
+      "Recorrido cultural y paisajístico por los puntos incluidos en la propuesta final.",
+      "Retorno coordinado a Puno y conexión con el transporte de regreso."
+    ],
+    includes: ["Alojamiento seleccionado por 4 noches", "Traslados terrestres indicados", "Recorrido lacustre confirmado", "Asistencia de JohnToursPerú"],
+    excludes: ["Transporte hasta Puno", "Tasas migratorias o requisitos documentarios", "Alimentación y actividades no detalladas", "Gastos personales"],
+    departures: demoDepartures(9, [[901, "2026-10-15", "2026-10-19", 20, 20], [902, "2027-03-18", "2027-03-22", 20, 20]])
   }
 ];
 
@@ -376,6 +412,7 @@ function Home() {
         <a href="#destinos" className="hero-scroll-cue"><span>Descubre los destinos</span><i><ChevronDown size={17} /></i></a>
       </section>
       <DestinationCarousel tours={tours.length ? tours : demoTours} />
+      <TravelArchiveShowcase />
       <Section title="Tours destacados" subtitle="Paquetes elegidos para viajar con confianza y asistencia desde la primera cotización.">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">{featured.map((tour) => <TourCard key={tour.id} tour={tour} />)}</div>
       </Section>
@@ -666,6 +703,7 @@ function TourDetail() {
         <aside className="booking-aside rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
           <p className="text-sm font-bold uppercase text-[#0f7a4f]">{tour.type}</p>
           <p className="mt-3 text-4xl font-black text-[#082447]">{tourMoney(tour)}</p>
+          {tour.priceIsEstimated && <p className="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-xs font-bold leading-5 text-amber-800">Precio referencial de demostración. Confirma la tarifa final antes de reservar.</p>}
           <div className="mt-5 space-y-3 text-sm text-slate-600">
             <p className="flex items-center gap-2"><ShieldCheck className="text-[#0f7a4f]" size={18} /> Reserva con datos protegidos</p>
             <p className="flex items-center gap-2"><Clock3 className="text-[#0f4c81]" size={18} /> Confirmación y seguimiento</p>

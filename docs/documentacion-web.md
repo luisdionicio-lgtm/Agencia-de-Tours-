@@ -2,7 +2,7 @@
 
 ## Material audiovisual curado
 
-El catálogo público utiliza cinco imágenes derivadas del archivo audiovisual propio: Machu Picchu, Ica y Huacachina, Oxapampa y Pozuzo, Tarapoto, y Guayaquil con costa ecuatoriana. La selección prioriza `D:\FOTOS PAGINA WEB JOHNTOURS`; de allí provienen las fotografías de Machu Picchu, Oxapampa–Pozuzo y La Perla de Guayaquil. Ica y Tarapoto conservan material de respaldo del archivo propio porque la carpeta prioritaria todavía no contiene una alternativa equivalente. Las copias públicas se encuentran en `frontend/public/destinations/`, fueron convertidas a WebP, redimensionadas a 1600 × 900 y guardadas sin metadatos de ubicación.
+El catálogo y la galería pública utilizan material derivado del archivo audiovisual propio para Machu Picchu, Valle Sagrado, Lago Titicaca–Bolivia, Ica y Huacachina, Oxapampa–Pozuzo, Tarapoto y Guayaquil. La revisión incluyó `D:\FOTOS PAGINA WEB JOHNTOURS`, `D:\PAGINA WEB` y `D:\OTRAS FOTOS 2026 JOHNTOURS`; se descartaron archivos duplicados, tomas poco claras y material privado o sin valor turístico directo. Las copias públicas se encuentran en `frontend/public/destinations/` y `frontend/public/travel-archive/`, fueron convertidas a WebP, redimensionadas y guardadas sin metadatos de ubicación.
 
 Los originales permanecen fuera del repositorio. La marca visible ayuda a identificar la procedencia, pero no impide capturas de pantalla; la protección principal depende de conservar los originales en almacenamiento privado y publicar únicamente derivados optimizados. Las imágenes con grupos o menores no deben incorporarse hasta confirmar la autorización correspondiente.
 
@@ -12,7 +12,7 @@ El bloque anteriormente destinado a testimonios de demostración fue reemplazado
 
 El catálogo incorpora tres propuestas europeas estructurales: Europa esencial (Madrid, París y Roma), Italia clásica (Roma, Florencia y Venecia), y España–Portugal (Madrid, Barcelona y Lisboa). Incluyen itinerario, inclusiones, exclusiones, temporada recomendada y fechas demostrativas. Sus fotografías WebP son referenciales, proceden de Unsplash y llevan una marca que las diferencia del archivo propio. Deben sustituirse por material propio o licenciado definitivo antes de una campaña comercial real.
 
-Los nombres, duraciones e itinerarios actuales funcionan como demostración estructural. Las tarifas aparecen como `Cotizar` hasta recibir precios comerciales confirmados.
+Los nombres, duraciones, itinerarios y tarifas actuales funcionan como demostración estructural. Cuando existe un importe supuesto, la interfaz lo identifica como `Precio demo` y `referencial`; debe sustituirse o confirmarse antes de una campaña comercial real.
 
 ## Objetivo
 
@@ -110,6 +110,7 @@ El panel interno puede conservar fechas, alertas y capacidad para organización 
 - `frontend/src/features/tours/TourApplication.tsx`: coordinación de rutas, experiencia pública, reserva, Yape, confirmación y panel.
 - `frontend/src/features/tours/components`: componentes reutilizables del catálogo.
 - `frontend/src/features/tours/components/PromotionsShowcase.tsx`: promociones multimedia referenciales y acceso al paquete relacionado.
+- `frontend/src/features/tours/components/TravelArchiveShowcase.tsx`: galería editorial con fotografías propias optimizadas, destino reconocido, precio demo y acceso al paquete relacionado.
 - `frontend/src/features/tours/sections`: apartados completos de la landing.
 - `frontend/src/features/tours/config`: contacto, redes, WhatsApp y configuración de demostración.
 - `frontend/src/features/tours/lib`: formato de precios, códigos y utilidades de presentación.
