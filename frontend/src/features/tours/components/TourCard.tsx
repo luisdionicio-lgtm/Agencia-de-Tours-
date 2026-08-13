@@ -24,6 +24,7 @@ export function TourCard({ tour }: { tour: Tour }) {
         <div className="tour-card-media-shade" />
         <span className="tour-type-badge"><i><Plane size={13} /></i> {tour.type === "NACIONAL" ? "Tour nacional" : "Tour internacional"}</span>
         <span className="tour-verified-badge"><i><ShieldCheck size={14} /></i> Selección confiable</span>
+        {tour.imageCredit && <small className="tour-image-credit">{tour.imageCredit}</small>}
       </div>
       <div className="tour-card-body">
         <div className="tour-card-heading">

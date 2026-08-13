@@ -18,7 +18,8 @@ Web publicitaria fullstack para captar clientes, mostrar tours nacionales e inte
 - Ficha pública de Machu Picchu con únicamente las cinco etapas principales; el itinerario operativo completo, inclusiones y exclusiones se desbloquean en la confirmación de reserva y permanecen en la constancia PDF.
 - Biblioteca publicitaria de 15 modalidades consolidadas después de revisar 121 documentos del disco D: Cusco, Andes del sur, Tarapoto, norte del Perú, Ecuador, Colombia, Brasil, Argentina, Caribe, Disney y Europa. Se eliminaron duplicados y versiones repetidas.
 - Variantes por destino visibles como resúmenes comerciales —tres programas de Cusco, dos de Tarapoto y dos de Europa—, con selector de itinerario día por día únicamente en la demostración posterior a la reserva.
-- Catálogo de nueve propuestas: seis rutas respaldadas por material audiovisual propio —incluida Lago Titicaca y Bolivia— y tres circuitos europeos demostrativos.
+- Catálogo de 15 propuestas reservables: nueve rutas iniciales y seis nuevos paquetes demostrativos para Máncora–Tumbes, Cartagena, Río de Janeiro, Buenos Aires–Iguazú, Punta Cana y Disney–Orlando.
+- Fotografías referenciales optimizadas y almacenadas localmente, con autor y licencia de Wikimedia Commons visibles en las fichas nuevas; no se reutilizaron imágenes europeas de procedencia incierta.
 - Filtros, detalle, itinerarios completos, inclusiones, exclusiones, temporada recomendada y fechas referenciales de cada tour.
 - Tarjetas de tours con etiquetas, beneficios e iconografía dimensional alineada con la marca.
 - Proceso visual de reserva explicado en seis pasos claros.

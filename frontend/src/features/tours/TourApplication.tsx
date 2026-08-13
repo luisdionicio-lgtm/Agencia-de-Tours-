@@ -275,6 +275,66 @@ const demoTours: Tour[] = [
     includes: ["Alojamiento seleccionado por 4 noches", "Traslados terrestres indicados", "Recorrido lacustre confirmado", "Asistencia de JohnToursPerú"],
     excludes: ["Transporte hasta Puno", "Tasas migratorias o requisitos documentarios", "Alimentación y actividades no detalladas", "Gastos personales"],
     departures: demoDepartures(9, [[901, "2026-10-15", "2026-10-19", 20, 20], [902, "2027-03-18", "2027-03-22", 20, 20]])
+  },
+  {
+    id: 10, title: "Máncora, Punta Sal y Tumbes", slug: "mancora-punta-sal-tumbes", destination: "Piura y Tumbes, Perú",
+    description: "Costa norte, atardeceres frente al mar, experiencia marina en Ñuro y recorrido por los manglares de Tumbes.",
+    price: 1390, priceIsEstimated: true, currency: "PEN", duration: "5 días / 4 noches", type: "NACIONAL", availableSlots: 0,
+    imageUrl: "/destinations/mancora-tumbes.webp", imageCredit: "Imagen referencial: AlCortés · CC BY 2.0 · Wikimedia Commons", isFeatured: true, status: "ACTIVO",
+    itinerary: itineraryCatalog.find((item) => item.id === "norte-peru")?.days,
+    includes: ["Alojamiento seleccionado por 4 noches", "Traslados en destino indicados", "Recorridos confirmados", "Asistencia de JohnToursPerú"],
+    excludes: ["Vuelos o transporte hasta Piura/Tumbes", "Actividades marinas no confirmadas", "Alimentación y gastos personales"],
+    departures: demoDepartures(10, [[1001, "2026-10-22", "2026-10-26", 20, 20], [1002, "2027-02-18", "2027-02-22", 20, 20]])
+  },
+  {
+    id: 11, title: "Cartagena e islas del Caribe", slug: "cartagena-islas-caribe", destination: "Cartagena, Colombia",
+    description: "Historia caribeña, ciudad amurallada y jornadas de playa entre Islas del Rosario y Barú.",
+    price: 1490, priceIsEstimated: true, currency: "USD", duration: "5 días / 4 noches", type: "INTERNACIONAL", availableSlots: 0,
+    imageUrl: "/destinations/cartagena-colombia.webp", imageCredit: "Imagen referencial: Laslovarga · CC BY-SA 4.0 · Wikimedia Commons", isFeatured: true, status: "ACTIVO",
+    itinerary: itineraryCatalog.find((item) => item.id === "cartagena")?.days,
+    includes: ["Alojamiento seleccionado por 4 noches", "Traslados indicados en el programa", "Excursiones confirmadas", "Asistencia de JohnToursPerú"],
+    excludes: ["Vuelos internacionales salvo indicación", "Impuestos o entradas no detallados", "Alimentación y gastos personales"],
+    departures: demoDepartures(11, [[1101, "2026-11-05", "2026-11-09", 20, 20], [1102, "2027-03-11", "2027-03-15", 20, 20]])
+  },
+  {
+    id: 12, title: "Río de Janeiro esencial", slug: "rio-de-janeiro", destination: "Río de Janeiro, Brasil",
+    description: "Panorámicas de Río, Pan de Azúcar, patrimonio de Petrópolis y tiempo libre acompañado.",
+    price: 1690, priceIsEstimated: true, currency: "USD", duration: "6 días / 5 noches", type: "INTERNACIONAL", availableSlots: 0,
+    imageUrl: "/destinations/rio-janeiro.webp", imageCredit: "Imagen referencial: Arne Müseler · CC BY-SA 3.0 · Wikimedia Commons", isFeatured: true, status: "ACTIVO",
+    itinerary: itineraryCatalog.find((item) => item.id === "rio")?.days,
+    includes: ["Alojamiento seleccionado por 5 noches", "Traslados indicados", "Recorridos panorámicos confirmados", "Asistencia de JohnToursPerú"],
+    excludes: ["Vuelos internacionales salvo indicación", "Entradas o excursiones opcionales", "Alimentación y gastos personales"],
+    departures: demoDepartures(12, [[1201, "2027-02-08", "2027-02-13", 20, 20], [1202, "2027-05-17", "2027-05-22", 20, 20]])
+  },
+  {
+    id: 13, title: "Buenos Aires e Iguazú", slug: "buenos-aires-iguazu", destination: "Argentina y Brasil",
+    description: "Buenos Aires, Tigre y las Cataratas de Iguazú vistas desde ambos lados de la frontera.",
+    price: 2190, priceIsEstimated: true, currency: "USD", duration: "8 días / 7 noches", type: "INTERNACIONAL", availableSlots: 0,
+    imageUrl: "/destinations/iguazu-argentina.webp", imageCredit: "Imagen referencial: Horacio Cambeiro · CC BY 4.0 · Wikimedia Commons", isFeatured: true, status: "ACTIVO",
+    itinerary: itineraryCatalog.find((item) => item.id === "iguazu")?.days,
+    includes: ["Alojamiento seleccionado por 7 noches", "Traslados indicados", "Visitas confirmadas en Buenos Aires e Iguazú", "Asistencia de JohnToursPerú"],
+    excludes: ["Vuelos salvo indicación expresa", "Requisitos migratorios y seguros", "Alimentación, opcionales y gastos personales"],
+    departures: demoDepartures(13, [[1301, "2027-04-05", "2027-04-12", 20, 20], [1302, "2027-08-09", "2027-08-16", 20, 20]])
+  },
+  {
+    id: 14, title: "Punta Cana y Santo Domingo", slug: "punta-cana-santo-domingo", destination: "República Dominicana",
+    description: "Playas del Caribe, Isla Saona, Isla Catalina y la historia colonial de Santo Domingo.",
+    price: 1890, priceIsEstimated: true, currency: "USD", duration: "5 días / 4 noches", type: "INTERNACIONAL", availableSlots: 0,
+    imageUrl: "/destinations/punta-cana.webp", imageCredit: "Imagen referencial: NoonIcarus · CC BY-SA 3.0 · Wikimedia Commons", isFeatured: true, status: "ACTIVO",
+    itinerary: itineraryCatalog.find((item) => item.id === "punta-cana")?.days,
+    includes: ["Alojamiento seleccionado por 4 noches", "Traslados indicados", "Excursiones confirmadas", "Asistencia de JohnToursPerú"],
+    excludes: ["Vuelos internacionales salvo indicación", "Actividades opcionales", "Tasas, alimentación y gastos personales"],
+    departures: demoDepartures(14, [[1401, "2027-01-21", "2027-01-25", 20, 20], [1402, "2027-06-10", "2027-06-14", 20, 20]])
+  },
+  {
+    id: 15, title: "Disney y Orlando", slug: "disney-orlando", destination: "Orlando y Miami, Estados Unidos",
+    description: "Programa familiar demostrativo con Miami, Magic Kingdom, Epcot y Universal Studios.",
+    price: 2890, priceIsEstimated: true, currency: "USD", duration: "8 días / 7 noches", type: "INTERNACIONAL", availableSlots: 0,
+    imageUrl: "/destinations/orlando-parques.webp", imageCredit: "Imagen referencial: Jedi94 · CC BY-SA 4.0 · Wikimedia Commons", isFeatured: true, status: "ACTIVO",
+    itinerary: itineraryCatalog.find((item) => item.id === "disney")?.days,
+    includes: ["Alojamiento seleccionado por 7 noches", "Traslados indicados", "Planificación de parques según entradas", "Asistencia de JohnToursPerú"],
+    excludes: ["Vuelos, visa y seguro salvo indicación", "Entradas a parques no confirmadas", "Alimentación, equipaje y gastos personales"],
+    departures: demoDepartures(15, [[1501, "2027-03-15", "2027-03-22", 20, 20], [1502, "2027-07-12", "2027-07-19", 20, 20]])
   }
 ];
 
@@ -663,7 +723,13 @@ const seasonByDestination = [
   { terms: ["tarapoto", "martín"], months: "mayo a septiembre", reason: "Menor frecuencia de lluvias para recorridos naturales y actividades al aire libre." },
   { terms: ["italia", "florencia", "venecia"], months: "abril a junio y septiembre a octubre", reason: "Temperaturas agradables para recorridos culturales, sujetas a condiciones y demanda de cada ciudad." },
   { terms: ["españa y portugal", "barcelona", "lisboa"], months: "abril a junio y septiembre a octubre", reason: "Temporadas intermedias recomendables para recorrer ciudades con temperaturas más suaves." },
-  { terms: ["europa esencial", "parís"], months: "abril a junio y septiembre a octubre", reason: "Clima moderado y buenas condiciones para recorridos urbanos; la disponibilidad se confirma antes de reservar." }
+  { terms: ["europa esencial", "parís"], months: "abril a junio y septiembre a octubre", reason: "Clima moderado y buenas condiciones para recorridos urbanos; la disponibilidad se confirma antes de reservar." },
+  { terms: ["mancora", "punta sal", "tumbes"], months: "mayo a diciembre", reason: "Temporada generalmente favorable para disfrutar la costa norte; el estado del mar se confirma antes de cada actividad." },
+  { terms: ["cartagena", "colombia"], months: "diciembre a abril", reason: "Periodo habitualmente más seco para recorridos urbanos y experiencias insulares." },
+  { terms: ["río de janeiro", "brasil"], months: "abril a junio y agosto a octubre", reason: "Temperaturas agradables para ciudad, miradores y recorridos al aire libre." },
+  { terms: ["iguazú", "argentina"], months: "marzo a mayo y agosto a octubre", reason: "Clima más moderado para recorrer las pasarelas; el caudal y accesos dependen de las condiciones locales." },
+  { terms: ["punta cana", "dominicana"], months: "diciembre a abril", reason: "Meses habitualmente más secos para playa y navegación, sujetos al clima del Caribe." },
+  { terms: ["orlando", "disney", "estados unidos"], months: "enero a mayo y septiembre a noviembre", reason: "Temperaturas más cómodas; entradas, aforo y eventos se verifican con cada parque." }
 ];
 
 const featuredTourVideos: Record<string, { src: string; poster: string; title: string }> = {
@@ -729,7 +795,7 @@ function TourDetail() {
     <Section title={tour.title} subtitle={`${tour.destination} · ${tour.duration}`}>
       <div className="grid gap-8 lg:grid-cols-[1.2fr_.8fr]">
         <div className="space-y-4">
-          <img src={tour.imageUrl} alt={tour.title} className="h-[440px] w-full rounded-lg object-cover shadow-xl" />
+          <div className="tour-detail-image"><img src={tour.imageUrl} alt={tour.title} className="h-[440px] w-full rounded-lg object-cover shadow-xl" />{tour.imageCredit && <small>{tour.imageCredit}</small>}</div>
           {featuredVideo && <div className="overflow-hidden rounded-lg border border-cyan-100 bg-[#061f3f] shadow-lg">
             <div className="flex items-center gap-3 px-4 py-3 text-white"><PlayCircle className="text-cyan-300" /><span><small className="block text-[10px] font-black uppercase tracking-[.14em] text-cyan-200">Video breve · archivo propio</small><strong>{featuredVideo.title}</strong></span></div>
             <video className="aspect-video w-full bg-black object-cover" controls playsInline preload="none" poster={featuredVideo.poster} aria-label={`Video de ${tour.title}`}>
