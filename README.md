@@ -16,6 +16,8 @@ Web publicitaria fullstack para captar clientes, mostrar tours nacionales e inte
 - Carrusel editorial de promociones con fotografías, video bajo demanda, comentario, fecha referencial, aviso de demostración y acceso directo al paquete.
 - Reel promocional propio de Machu Picchu seleccionado del archivo `D:\REELS VIAJES DE PROMOCIÓN`, recortado a 18 segundos, silenciado y optimizado a aproximadamente 2.2 MB para carga bajo demanda.
 - Ficha pública de Machu Picchu con únicamente las cinco etapas principales; el itinerario operativo completo, inclusiones y exclusiones se desbloquean en la confirmación de reserva y permanecen en la constancia PDF.
+- Biblioteca publicitaria de 15 modalidades consolidadas después de revisar 121 documentos del disco D: Cusco, Andes del sur, Tarapoto, norte del Perú, Ecuador, Colombia, Brasil, Argentina, Caribe, Disney y Europa. Se eliminaron duplicados y versiones repetidas.
+- Variantes por destino visibles como resúmenes comerciales —tres programas de Cusco, dos de Tarapoto y dos de Europa—, con selector de itinerario día por día únicamente en la demostración posterior a la reserva.
 - Catálogo de nueve propuestas: seis rutas respaldadas por material audiovisual propio —incluida Lago Titicaca y Bolivia— y tres circuitos europeos demostrativos.
 - Filtros, detalle, itinerarios completos, inclusiones, exclusiones, temporada recomendada y fechas referenciales de cada tour.
 - Tarjetas de tours con etiquetas, beneficios e iconografía dimensional alineada con la marca.
@@ -69,3 +71,5 @@ Documentación: [funciones y arquitectura](docs/documentacion-web.md) y [checkli
 > La web no realiza transferencias ni envía mensajes automáticamente. El cliente registra su constancia segura y decide si avisa por WhatsApp; el personal autorizado valida el pago desde el panel.
 
 > Los paquetes, fechas y precios actuales son una estructura demostrativa. Todo importe supuesto se identifica como `Precio demo` o `referencial` y debe confirmarse antes de publicarse como oferta comercial. Las fotografías seleccionadas provienen del archivo proporcionado; antes del lanzamiento con dominio propio debe confirmarse la autorización de uso de imagen de las personas visibles.
+
+> Los itinerarios se consolidaron desde archivos PDF y Word proporcionados. Antes de comercializarlos deben validarse vigencia, proveedor, vuelos, hoteles, accesos, orden de actividades, documentación migratoria y precio final.

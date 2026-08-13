@@ -10,6 +10,7 @@ import type { BusinessSettings, Payment, Reservation, Tour, TourStatus, TourType
 import { SiteShell } from "./components/SiteShell";
 import { TourCard } from "./components/TourCard";
 import { buildWhatsAppUrl, demoStaffAccounts, isDemoMode, reservationAmount, socialLinks, whatsappMessages } from "./config/contact";
+import { itineraryCatalog, itineraryVariantsFor, type ItineraryVariant } from "./config/itineraryCatalog";
 import { destinationImage, paymentMoney, reservationCode, tourCurrency, tourMoney, type TourDeparture } from "./lib/presentation";
 import { downloadReservationReceipt } from "./lib/reservationReceipt";
 import { AirlineGuideSection } from "./sections/AirlineGuideSection";
@@ -611,8 +612,37 @@ function Tours() {
         <CatalogSignal icon={<MessageCircle />} title="Asesor humano" text="Soporte por WhatsApp para cotizar y confirmar." />
       </div>
       {isLoading ? <p>Cargando tours...</p> : <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{filtered.map((tour) => <TourCard key={tour.id} tour={tour} />)}</div>}
+      <ItineraryLibrary />
     </Section>
   );
+}
+
+function ItineraryLibrary() {
+  return <section className="itinerary-library" aria-labelledby="itinerary-library-title">
+    <div className="itinerary-library-heading">
+      <div><span className="section-kicker"><FileText size={15} /> Programas revisados</span><h2 id="itinerary-library-title">Más formas de vivir cada destino</h2><p>Revisamos el archivo operativo y agrupamos las propuestas útiles, sin repetir versiones del mismo documento. Aquí mostramos solo la ruta principal; el detalle se habilita al reservar.</p></div>
+      <span className="itinerary-library-count"><strong>{itineraryCatalog.length}</strong><small>modalidades consolidadas</small></span>
+    </div>
+    <div className="itinerary-library-track">
+      {itineraryCatalog.map((variant) => <article className="itinerary-program-card" key={variant.id}>
+        <div className="itinerary-program-meta"><span><MapPin size={14} />{variant.region}</span><span><CalendarDays size={14} />{variant.duration}</span></div>
+        <h3>{variant.title}</h3>
+        <ul>{variant.publicHighlights.slice(0, 4).map((highlight) => <li key={highlight}><CheckCircle2 size={14} />{highlight}</li>)}</ul>
+        {variant.packageSlug
+          ? <Link to={`/tours/${demoTours.find((tour) => tour.slug === variant.packageSlug)?.id ?? 1}`}><span>Ver paquete relacionado</span><ArrowRight size={16} /></Link>
+          : <a href={buildWhatsAppUrl(`Hola JohnToursPerú, deseo información sobre el programa ${variant.title} (${variant.duration}).`)} target="_blank" rel="noreferrer"><span>Consultar este programa</span><ArrowRight size={16} /></a>}
+      </article>)}
+    </div>
+    <p className="itinerary-library-disclaimer"><ShieldCheck size={16} /> Programas referenciales organizados a partir del archivo proporcionado. Precios, vuelos, accesos, vigencia y orden de actividades se confirman antes de contratar.</p>
+  </section>;
+}
+
+function PublicItineraryOptions({ variants }: { variants: ItineraryVariant[] }) {
+  if (!variants.length) return null;
+  return <section className="public-itinerary-options">
+    <div><span className="section-kicker"><Sparkles size={14} /> Alternativas del destino</span><h3>Elige la duración que mejor se adapte a ti</h3><p>Estas son las modalidades principales encontradas para este destino. Los horarios y datos operativos permanecen privados hasta confirmar la reserva.</p></div>
+    <div className="public-itinerary-options-grid">{variants.map((variant) => <article key={variant.id}><span>{variant.duration}</span><h4>{variant.title}</h4><ul>{variant.publicHighlights.map((highlight) => <li key={highlight}><CheckCircle2 size={14} />{highlight}</li>)}</ul></article>)}</div>
+  </section>;
 }
 
 function CatalogSignal({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) {
@@ -694,6 +724,7 @@ function TourDetail() {
     : itinerary.slice(0, 4).map((item) => item.replace(/^Día\s+\d+:\s*/i, "").split(/[.;]/)[0]);
   const season = tourSeason(tour);
   const featuredVideo = featuredTourVideos[tour.slug];
+  const itineraryOptions = itineraryVariantsFor(tour.slug);
   return (
     <Section title={tour.title} subtitle={`${tour.destination} · ${tour.duration}`}>
       <div className="grid gap-8 lg:grid-cols-[1.2fr_.8fr]">
@@ -733,6 +764,7 @@ function TourDetail() {
         <Info title="Ruta principal" items={publicRoute} ordered />
         <Info title="Servicios principales" items={["Alojamiento y traslados según la propuesta", "Guiado en los recorridos confirmados", "Asistencia de JohnToursPerú durante el viaje"]} />
       </div>
+      <PublicItineraryOptions variants={itineraryOptions} />
       <p className="public-itinerary-note"><ShieldCheck size={17} /> Por seguridad y claridad comercial, el itinerario detallado —horarios, traslados, paradas y condiciones— se habilita después de confirmar la reserva.</p>
     </Section>
   );
@@ -1032,8 +1064,11 @@ function ConfirmationPage() {
 }
 
 function PostReservationItinerary({ tour, isDemo }: { tour: Tour; isDemo: boolean }) {
-  const itinerary = tour.itinerary?.length ? tour.itinerary : ["El asesor completará el programa final según la fecha confirmada."];
-  return <section className="unlocked-itinerary"><div className="unlocked-itinerary-heading"><span><FileText /></span><div><small>{isDemo ? "Vista demo del contenido reservado" : "Contenido privado de tu reserva"}</small><h4>Itinerario detallado desbloqueado</h4><p>Programa completo basado en los itinerarios operativos de JohnToursPerú. Los horarios finales se reconfirman con el asesor.</p></div></div><ol>{itinerary.map((item, index) => <li key={`${index}-${item}`}><b>{index + 1}</b><span>{item}</span></li>)}</ol><div className="unlocked-service-grid"><article><strong>Incluye</strong>{(tour.includes ?? []).map((item) => <span key={item}><CheckCircle2 size={15} />{item}</span>)}</article><article><strong>No incluye</strong>{(tour.excludes ?? []).map((item) => <span key={item}><ShieldCheck size={15} />{item}</span>)}</article></div></section>;
+  const variants = itineraryVariantsFor(tour.slug);
+  const [selectedId, setSelectedId] = useState(variants[0]?.id ?? "");
+  const selected = variants.find((variant) => variant.id === selectedId) ?? variants[0];
+  const itinerary = selected?.days ?? (tour.itinerary?.length ? tour.itinerary : ["El asesor completará el programa final según la fecha confirmada."]);
+  return <section className="unlocked-itinerary"><div className="unlocked-itinerary-heading"><span><FileText /></span><div><small>{isDemo ? "Vista demo del contenido reservado" : "Contenido privado de tu reserva"}</small><h4>Itinerarios detallados desbloqueados</h4><p>Programas consolidados desde los documentos operativos de JohnToursPerú. Los horarios, servicios y orden final se reconfirman con el asesor.</p></div></div>{variants.length > 1 && <div className="itinerary-variant-picker" role="tablist" aria-label="Modalidades de itinerario">{variants.map((variant) => <button key={variant.id} type="button" role="tab" aria-selected={selected?.id === variant.id} onClick={() => setSelectedId(variant.id)}><span>{variant.duration}</span><strong>{variant.title}</strong></button>)}</div>} {selected && <div className="selected-itinerary-title"><MapPin size={17} /><span><small>{selected.region} · {selected.sourceGroup}</small><strong>{selected.title}</strong></span></div>}<ol>{itinerary.map((item, index) => <li key={`${index}-${item}`}><b>{index + 1}</b><span>{item}</span></li>)}</ol><div className="unlocked-service-grid"><article><strong>Incluye</strong>{(tour.includes ?? []).map((item) => <span key={item}><CheckCircle2 size={15} />{item}</span>)}</article><article><strong>No incluye</strong>{(tour.excludes ?? []).map((item) => <span key={item}><ShieldCheck size={15} />{item}</span>)}</article></div></section>;
 }
 
 function AdminPage() {
