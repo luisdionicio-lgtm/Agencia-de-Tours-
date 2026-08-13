@@ -14,6 +14,8 @@ Web publicitaria fullstack para captar clientes, mostrar tours nacionales e inte
 - Fotografías WebP optimizadas a 1600 × 900, sin metadatos EXIF/GPS y con marca de archivo propio; los originales no forman parte del repositorio.
 - Un único microvideo seleccionado de Tarapoto (7 segundos, sin audio y menos de 2 MB), disponible en su promoción y detalle con carga bajo demanda. Los clips con primeros planos o transiciones de menor calidad fueron descartados.
 - Carrusel editorial de promociones con fotografías, video bajo demanda, comentario, fecha referencial, aviso de demostración y acceso directo al paquete.
+- Reel promocional propio de Machu Picchu seleccionado del archivo `D:\REELS VIAJES DE PROMOCIÓN`, recortado a 18 segundos, silenciado y optimizado a aproximadamente 2.2 MB para carga bajo demanda.
+- Ficha pública de Machu Picchu con únicamente las cinco etapas principales; el itinerario operativo completo, inclusiones y exclusiones se desbloquean en la confirmación de reserva y permanecen en la constancia PDF.
 - Catálogo de nueve propuestas: seis rutas respaldadas por material audiovisual propio —incluida Lago Titicaca y Bolivia— y tres circuitos europeos demostrativos.
 - Filtros, detalle, itinerarios completos, inclusiones, exclusiones, temporada recomendada y fechas referenciales de cada tour.
 - Tarjetas de tours con etiquetas, beneficios e iconografía dimensional alineada con la marca.

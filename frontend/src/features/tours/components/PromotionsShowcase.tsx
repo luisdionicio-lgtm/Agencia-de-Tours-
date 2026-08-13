@@ -19,7 +19,8 @@ const promotions: Promotion[] = [
     destination: "Cusco, Perú",
     period: "Periodo demo · 15 ago. — 30 sep. 2026",
     message: "Solicita una propuesta para familias, parejas o grupos con itinerario coordinado y acompañamiento antes del viaje.",
-    image: "/destinations/machu-picchu.webp"
+    image: "/media/machu-picchu-reel-poster.webp",
+    video: "/media/machu-picchu-reel.mp4"
   },
   {
     tourId: 5,

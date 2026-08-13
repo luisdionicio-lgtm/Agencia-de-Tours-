@@ -31,7 +31,7 @@ const demoTours: Tour[] = [
     price: 1550,
     priceIsEstimated: true,
     currency: "PEN",
-    duration: "4 días / 3 noches",
+    duration: "5 días / 4 noches",
     type: "NACIONAL",
     availableSlots: 0,
     imageUrl: "/destinations/machu-picchu.webp",
@@ -39,14 +39,15 @@ const demoTours: Tour[] = [
     isFeatured: true,
     status: "ACTIVO",
     itinerary: [
-      "Recepción en Cusco, traslado al alojamiento, orientación inicial y tiempo de aclimatación.",
-      "Recorrido guiado por el Valle Sagrado, paradas culturales y retorno coordinado al alojamiento.",
-      "Traslado hacia Machu Picchu, ingreso programado, visita guiada y retorno asistido a Cusco.",
-      "Desayuno, tiempo libre según horario y traslado coordinado para el viaje de retorno."
+      "Día 1: llegada a Cusco, recepción, traslado al hotel, aclimatación y circuito por Sacsayhuamán, Cristo Blanco, Qenqo, Tambomachay y Puca Pucara.",
+      "Día 2: Valle Sagrado de los Incas con visita a Pisac, almuerzo en Urubamba, complejo arqueológico de Ollantaytambo y parada en Chinchero antes de volver a Cusco.",
+      "Día 3: salida temprana hacia Ollantaytambo, viaje en tren a Aguas Calientes, traslado en bus e ingreso guiado a Machu Picchu según el circuito y horario confirmados; retorno asistido a Cusco.",
+      "Día 4: recorrido por Maras, terrazas agrícolas de Moray y Salineras; actividades opcionales se confirman en la propuesta final.",
+      "Día 5: desayuno, tiempo libre según el horario del vuelo y traslado coordinado al aeropuerto para el retorno."
     ],
-    includes: ["Alojamiento seleccionado por 3 noches", "Traslados indicados en el programa", "Guiado profesional en los recorridos señalados", "Asistencia de JohnToursPerú durante el viaje"],
+    includes: ["Alojamiento seleccionado por 4 noches", "Traslados indicados en el programa", "Guiado profesional en los recorridos señalados", "Asistencia de JohnToursPerú durante el viaje"],
     excludes: ["Vuelos o transporte hasta Cusco, salvo indicación expresa", "Alimentación no detallada en el programa", "Gastos personales y servicios opcionales"],
-    departures: demoDepartures(1, [[101, "2026-09-12", "2026-09-15", 20, 20], [102, "2026-10-10", "2026-10-13", 20, 20]])
+    departures: demoDepartures(1, [[101, "2026-09-12", "2026-09-16", 20, 20], [102, "2026-10-10", "2026-10-14", 20, 20]])
   },
   {
     id: 2,
@@ -636,6 +637,11 @@ const seasonByDestination = [
 ];
 
 const featuredTourVideos: Record<string, { src: string; poster: string; title: string }> = {
+  "machu-picchu": {
+    src: "/media/machu-picchu-reel.mp4",
+    poster: "/media/machu-picchu-reel-poster.webp",
+    title: "Machu Picchu: una experiencia de nuestro archivo"
+  },
   "tarapoto-naturaleza": {
     src: "/media/tarapoto-naturaleza.mp4",
     poster: "/destinations/tarapoto.webp",
@@ -683,8 +689,9 @@ function TourDetail() {
   });
   if (isLoading || !tour) return <Section title="Cargando tour" subtitle="Preparando detalles..." />;
   const itinerary = tour.itinerary ?? ["Recepción y orientación", "Experiencia principal", "Actividades libres", "Retorno"];
-  const includes = tour.includes ?? ["Asistencia", "Traslados", "Guía"];
-  const excludes = tour.excludes ?? ["Gastos personales"];
+  const publicRoute = tour.slug === "machu-picchu"
+    ? ["Cusco y complejos arqueológicos", "Valle Sagrado de los Incas", "Machu Picchu con ingreso programado", "Maras, Moray y Salineras", "Retorno coordinado"]
+    : itinerary.slice(0, 4).map((item) => item.replace(/^Día\s+\d+:\s*/i, "").split(/[.;]/)[0]);
   const season = tourSeason(tour);
   const featuredVideo = featuredTourVideos[tour.slug];
   return (
@@ -723,9 +730,10 @@ function TourDetail() {
       </section>
       <div className="mt-10 grid gap-6 lg:grid-cols-3">
         <Info title="Descripción" items={[tour.description ?? "Experiencia seleccionada por JohnToursPerú."]} />
-        <Info title="Itinerario" items={itinerary} ordered />
-        <Info title="Incluye / No incluye" items={[...includes.map((i) => `Incluye: ${i}`), ...excludes.map((i) => `No incluye: ${i}`)]} />
+        <Info title="Ruta principal" items={publicRoute} ordered />
+        <Info title="Servicios principales" items={["Alojamiento y traslados según la propuesta", "Guiado en los recorridos confirmados", "Asistencia de JohnToursPerú durante el viaje"]} />
       </div>
+      <p className="public-itinerary-note"><ShieldCheck size={17} /> Por seguridad y claridad comercial, el itinerario detallado —horarios, traslados, paradas y condiciones— se habilita después de confirmar la reserva.</p>
     </Section>
   );
 }
@@ -1020,7 +1028,12 @@ function ConfirmationPage() {
   const isDemo = searchParams.get("demo") === "1";
   const { data: reservation } = useQuery<Reservation>({ queryKey: ["reservation", id], queryFn: async () => { const saved = sessionStorage.getItem(`john-reservation-${id}`); if (!saved) throw new Error("Reserva no encontrada en esta sesión"); return JSON.parse(saved) as Reservation; } });
   const guide = reservation ? guideForTour(reservation.tour) : null;
-  return <Section title={isDemo ? "Demostración: reserva confirmada" : "Reserva confirmada"} subtitle={`${isDemo ? "Simulación de presentación · " : ""}Código de reserva #${id}`}>{reservation && guide && <div className="mx-auto max-w-5xl rounded-2xl border bg-white p-6 text-center shadow-sm sm:p-8">{isDemo && <div className="mb-6 rounded-xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold text-[#087db8]">Modo demostración: no se realizó ningún cobro ni se registró una operación bancaria. La constancia descargable no es una boleta tributaria.</div>}<CheckCircle2 className="mx-auto text-[#09a889]" size={64} /><h3 className="mt-4 text-2xl font-black text-[#073b83]">{reservation.tour.title}</h3><p className="mt-2 text-slate-600">{isDemo ? `Esta vista simula la aprobación de la separación para ${reservation.customer.fullName}.` : `Gracias, ${reservation.customer.fullName}. La separación de S/ 200 ha sido validada y tu solicitud de reserva quedó registrada.`}</p><div className="post-payment-guide mx-auto mt-7 overflow-hidden rounded-2xl border border-slate-200 bg-[#f3f9fd] text-left"><img src={guide.imageUrl} alt={`Imagen referencial de ${guide.label}`} className="h-60 w-full object-cover md:h-auto" /><div className="p-5"><span className="text-xs font-black uppercase tracking-widest text-[#087db8]">{isDemo ? "Vista previa del contenido posterior al pago" : "Contenido desbloqueado después del pago"}</span><h4 className="mt-2 text-xl font-black text-[#073b83]">Extras disponibles para {guide.label}</h4><p className="mt-2 text-sm leading-6 text-slate-600">Estas opciones no aparecen en el catálogo principal. Se muestran ahora porque tu reserva confirma el interés en adquirir el paquete.</p><div className="mt-4 grid gap-2 sm:grid-cols-2">{guide.extras.map((extra) => <span key={extra} className="flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-bold text-[#34536b]"><CheckCircle2 size={16} className="text-[#09a889]" />{extra}</span>)}</div><a href={guide.key === "general" ? "/servicios-adicionales-john-tours.pdf" : `/guia-extras-${guide.key}-john-tours.pdf`} download className="download-guide mt-5"><FileText /><span><strong>Descargar guía PDF de {guide.label}</strong><small>Incluye logo, imagen referencial y detalles de cada extra</small></span><Download /></a></div></div><AppointmentPlanner reservation={reservation} isDemo={isDemo} /><div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row"><Link className="rounded-lg bg-[#073b83] px-5 py-3 font-bold text-white" to="/">Volver al inicio</Link><Link className="rounded-lg bg-[#09a889] px-5 py-3 font-bold text-white" to="/tours">Ver otros paquetes</Link></div></div>}</Section>;
+  return <Section title={isDemo ? "Demostración: reserva confirmada" : "Reserva confirmada"} subtitle={`${isDemo ? "Simulación de presentación · " : ""}Código de reserva #${id}`}>{reservation && guide && <div className="mx-auto max-w-5xl rounded-2xl border bg-white p-6 text-center shadow-sm sm:p-8">{isDemo && <div className="mb-6 rounded-xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold text-[#087db8]">Modo demostración: no se realizó ningún cobro ni se registró una operación bancaria. La constancia descargable no es una boleta tributaria.</div>}<CheckCircle2 className="mx-auto text-[#09a889]" size={64} /><h3 className="mt-4 text-2xl font-black text-[#073b83]">{reservation.tour.title}</h3><p className="mt-2 text-slate-600">{isDemo ? `Esta vista simula la aprobación de la separación para ${reservation.customer.fullName}.` : `Gracias, ${reservation.customer.fullName}. La separación de S/ 200 ha sido validada y tu solicitud de reserva quedó registrada.`}</p><PostReservationItinerary tour={reservation.tour} isDemo={isDemo} /><div className="post-payment-guide mx-auto mt-7 overflow-hidden rounded-2xl border border-slate-200 bg-[#f3f9fd] text-left"><img src={guide.imageUrl} alt={`Imagen referencial de ${guide.label}`} className="h-60 w-full object-cover md:h-auto" /><div className="p-5"><span className="text-xs font-black uppercase tracking-widest text-[#087db8]">{isDemo ? "Vista previa del contenido posterior al pago" : "Contenido desbloqueado después del pago"}</span><h4 className="mt-2 text-xl font-black text-[#073b83]">Extras disponibles para {guide.label}</h4><p className="mt-2 text-sm leading-6 text-slate-600">Estas opciones no aparecen en el catálogo principal. Se muestran ahora porque tu reserva confirma el interés en adquirir el paquete.</p><div className="mt-4 grid gap-2 sm:grid-cols-2">{guide.extras.map((extra) => <span key={extra} className="flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-bold text-[#34536b]"><CheckCircle2 size={16} className="text-[#09a889]" />{extra}</span>)}</div><a href={guide.key === "general" ? "/servicios-adicionales-john-tours.pdf" : `/guia-extras-${guide.key}-john-tours.pdf`} download className="download-guide mt-5"><FileText /><span><strong>Descargar guía PDF de {guide.label}</strong><small>Incluye logo, imagen referencial y detalles de cada extra</small></span><Download /></a></div></div><AppointmentPlanner reservation={reservation} isDemo={isDemo} /><div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row"><Link className="rounded-lg bg-[#073b83] px-5 py-3 font-bold text-white" to="/">Volver al inicio</Link><Link className="rounded-lg bg-[#09a889] px-5 py-3 font-bold text-white" to="/tours">Ver otros paquetes</Link></div></div>}</Section>;
+}
+
+function PostReservationItinerary({ tour, isDemo }: { tour: Tour; isDemo: boolean }) {
+  const itinerary = tour.itinerary?.length ? tour.itinerary : ["El asesor completará el programa final según la fecha confirmada."];
+  return <section className="unlocked-itinerary"><div className="unlocked-itinerary-heading"><span><FileText /></span><div><small>{isDemo ? "Vista demo del contenido reservado" : "Contenido privado de tu reserva"}</small><h4>Itinerario detallado desbloqueado</h4><p>Programa completo basado en los itinerarios operativos de JohnToursPerú. Los horarios finales se reconfirman con el asesor.</p></div></div><ol>{itinerary.map((item, index) => <li key={`${index}-${item}`}><b>{index + 1}</b><span>{item}</span></li>)}</ol><div className="unlocked-service-grid"><article><strong>Incluye</strong>{(tour.includes ?? []).map((item) => <span key={item}><CheckCircle2 size={15} />{item}</span>)}</article><article><strong>No incluye</strong>{(tour.excludes ?? []).map((item) => <span key={item}><ShieldCheck size={15} />{item}</span>)}</article></div></section>;
 }
 
 function AdminPage() {
