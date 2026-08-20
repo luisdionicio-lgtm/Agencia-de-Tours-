@@ -6,14 +6,12 @@ export type TourMediaItem = {
 };
 
 export type TourMediaCollection = {
-  eyebrow: string;
   introduction: string;
   items: TourMediaItem[];
 };
 
 export const tourMediaBySlug: Record<string, TourMediaCollection> = {
   "machu-picchu": {
-    eyebrow: "Circuito Cusco, Puno y Arequipa",
     introduction: "Una sola propuesta conecta Cusco y Machu Picchu con el lago Titicaca en Puno y la etapa final en Arequipa.",
     items: [
       { image: "/tour-galleries/machu-picchu/cusco-centro.webp", title: "Centro histórico de Cusco", stage: "Inicio de la experiencia", alt: "Viajeros de JohnToursPerú en la Plaza de Armas de Cusco" },
@@ -23,7 +21,6 @@ export const tourMediaBySlug: Record<string, TourMediaCollection> = {
     ]
   },
   "lago-titicaca-ruta-bolivia": {
-    eyebrow: "Ruta altiplánica en el archivo JohnToursPerú",
     introduction: "La propuesta combina paisajes del Titicaca y una conexión terrestre coordinada hacia Bolivia, sujeta a la documentación y condiciones vigentes.",
     items: [
       { image: "/tour-galleries/bolivia/lago-titicaca.webp", title: "Lago Titicaca", stage: "Paisaje y cultura", alt: "Viajeros de JohnToursPerú junto al Lago Titicaca" },
@@ -31,7 +28,6 @@ export const tourMediaBySlug: Record<string, TourMediaCollection> = {
     ]
   },
   "guayaquil-costa-ecuador": {
-    eyebrow: "Guayaquil en el archivo JohnToursPerú",
     introduction: "Una mirada a los espacios urbanos considerados en la experiencia: Malecón, Las Peñas y el entorno de La Perla.",
     items: [
       { image: "/tour-galleries/guayaquil/malecon.webp", title: "Malecón de Guayaquil", stage: "Recorrido urbano", alt: "Grupo de viajeros en el Malecón de Guayaquil" },
@@ -40,7 +36,6 @@ export const tourMediaBySlug: Record<string, TourMediaCollection> = {
     ]
   },
   "ica-y-huacachina": {
-    eyebrow: "Ica en el archivo JohnToursPerú",
     introduction: "La experiencia se concentra en las dunas de Huacachina, el paseo en tubular y las actividades que se confirman con el asesor.",
     items: [
       { image: "/tour-galleries/ica/dunas.webp", title: "Dunas de Huacachina", stage: "Atardecer en el desierto", alt: "Grupo de viajeros en las dunas de Huacachina" },
@@ -48,7 +43,6 @@ export const tourMediaBySlug: Record<string, TourMediaCollection> = {
     ]
   },
   "oxapampa-pozuzo": {
-    eyebrow: "Pozuzo en el archivo JohnToursPerú",
     introduction: "El paquete reúne identidad local, paisajes de selva alta y experiencias culturales que se ajustan a la fecha elegida.",
     items: [
       { image: "/tour-galleries/pozuzo/portico.webp", title: "Pórtico de Pozuzo", stage: "Bienvenida al destino", alt: "Visitantes en el pórtico tradicional de Pozuzo" },

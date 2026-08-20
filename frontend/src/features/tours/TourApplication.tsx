@@ -38,7 +38,6 @@ const demoTours: Tour[] = [
     type: "NACIONAL",
     availableSlots: 0,
     imageUrl: "/destinations/machu-picchu.webp",
-    imageCredit: "Archivo propio de JohnToursPerú",
     isFeatured: true,
     status: "ACTIVO",
     itinerary: [
@@ -67,7 +66,6 @@ const demoTours: Tour[] = [
     type: "INTERNACIONAL",
     availableSlots: 0,
     imageUrl: "/destinations/ecuador-costa.webp",
-    imageCredit: "Fotografía propia de La Perla, Guayaquil",
     isFeatured: true,
     status: "ACTIVO",
     itinerary: [
@@ -92,7 +90,6 @@ const demoTours: Tour[] = [
     type: "NACIONAL",
     availableSlots: 0,
     imageUrl: "/destinations/oxapampa-pozuzo.webp",
-    imageCredit: "Archivo propio de JohnToursPerú",
     isFeatured: true,
     status: "ACTIVO",
     itinerary: [
@@ -118,7 +115,6 @@ const demoTours: Tour[] = [
     type: "NACIONAL",
     availableSlots: 0,
     imageUrl: "/destinations/ica-huacachina.webp",
-    imageCredit: "Fotograma de archivo propio de JohnToursPerú",
     isFeatured: true,
     status: "ACTIVO",
     itinerary: [
@@ -142,7 +138,6 @@ const demoTours: Tour[] = [
     type: "NACIONAL",
     availableSlots: 0,
     imageUrl: "/destinations/tarapoto.webp",
-    imageCredit: "Fotograma de archivo propio de JohnToursPerú",
     isFeatured: true,
     status: "ACTIVO",
     itinerary: [
@@ -253,7 +248,6 @@ const demoTours: Tour[] = [
     type: "INTERNACIONAL",
     availableSlots: 0,
     imageUrl: "/travel-archive/lago-titicaca.webp",
-    imageCredit: "Archivo propio de JohnToursPerú",
     isFeatured: false,
     status: "ACTIVO",
     itinerary: [
@@ -331,7 +325,7 @@ const demoTours: Tour[] = [
     id: 16, title: "Cusco, Ica y Lima 2027", slug: "cusco-ica-lima-2027", destination: "Cusco, Ica y Lima, Perú",
     description: "Ruta privada por la historia inca, Machu Picchu, la Montaña de Siete Colores, Lima histórica, Paracas y Huacachina.",
     price: 1428, priceIsEstimated: true, currency: "USD", duration: "9 días / 8 noches", type: "NACIONAL", availableSlots: 0,
-    imageUrl: "/destinations/ica-huacachina.webp", imageCredit: "Fotograma de archivo propio de JohnToursPerú", isFeatured: false, status: "ACTIVO",
+    imageUrl: "/destinations/ica-huacachina.webp", isFeatured: false, status: "ACTIVO",
     itinerary: itineraryCatalog.find((item) => item.id === "cusco-ica-lima")?.days,
     includes: ["Vuelos Lima–Cusco–Lima según cotización", "Alojamiento y desayunos señalados", "Traslados, accesos y excursiones indicadas", "Asistencia de JohnToursPerú"],
     excludes: ["Vuelos internacionales", "Actividades opcionales", "Servicios no detallados y gastos personales"],

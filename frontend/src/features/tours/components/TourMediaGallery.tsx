@@ -1,4 +1,4 @@
-import { Camera, MapPinned, ShieldCheck } from "lucide-react";
+import { Camera, MapPinned } from "lucide-react";
 import { tourMediaBySlug } from "../config/tourMedia";
 
 export function TourMediaGallery({ tourSlug }: { tourSlug: string }) {
@@ -9,11 +9,10 @@ export function TourMediaGallery({ tourSlug }: { tourSlug: string }) {
     <section className="tour-media-gallery" aria-labelledby={`tour-media-${tourSlug}`}>
       <div className="tour-media-heading">
         <div>
-          <span><Camera size={15} /> Fotografías propias</span>
+          <span><Camera size={15} /> Galería del destino</span>
           <h3 id={`tour-media-${tourSlug}`}>Así se vive esta ruta</h3>
           <p>{gallery.introduction}</p>
         </div>
-        <div className="tour-media-origin"><ShieldCheck size={18} /><span><strong>Archivo seleccionado</strong><small>{gallery.eyebrow}</small></span></div>
       </div>
       <div className={`tour-media-grid tour-media-grid-${gallery.items.length}`}>
         {gallery.items.map((item) => (
@@ -26,7 +25,7 @@ export function TourMediaGallery({ tourSlug }: { tourSlug: string }) {
           </figure>
         ))}
       </div>
-      <p className="tour-media-disclaimer">Selección visual del archivo propio. La secuencia definitiva, horarios, accesos y servicios se confirman al reservar.</p>
+      <p className="tour-media-disclaimer">La secuencia definitiva, horarios, accesos y servicios se confirman al reservar.</p>
     </section>
   );
 }
