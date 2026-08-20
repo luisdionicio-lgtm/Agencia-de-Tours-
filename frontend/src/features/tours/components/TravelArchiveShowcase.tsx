@@ -17,7 +17,7 @@ export function TravelArchiveShowcase() {
       <div className="travel-archive-shell">
         <div className="travel-archive-heading">
           <div>
-            <span><Camera size={16} /> Archivo visual JohnToursPerú</span>
+            <span><Camera size={16} /> Selección de destinos</span>
             <h2 id="travel-archive-title">Destinos vividos por nuestro equipo</h2>
             <p>Una selección curada de fotografías propias, elegidas por claridad y valor turístico para mostrar experiencias reales.</p>
           </div>
@@ -31,7 +31,7 @@ export function TravelArchiveShowcase() {
               <span className="travel-archive-shade" />
               <span className="travel-archive-location"><MapPin size={14} /> {item.country}</span>
               <span className="travel-archive-copy">
-                <small>Archivo de experiencias</small>
+                <small>Destino recomendado</small>
                 <strong>{item.place}</strong>
                 <em>{item.note}</em>
                 <b><span>Precio demo desde {item.price}</span><ArrowRight size={17} /></b>

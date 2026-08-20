@@ -1,4 +1,4 @@
-import { ArrowRight, Award, CalendarDays, Hotel, MapPin, Plane, ShieldCheck, UsersRound, type LucideIcon } from "lucide-react";
+import { ArrowRight, Award, CalendarDays, Hotel, Languages, MapPin, Plane, ShieldCheck, type LucideIcon } from "lucide-react";
 import { Link } from "../../../core/routing";
 import type { Tour } from "../../../shared/types";
 import { tourMoney } from "../lib/presentation";
@@ -11,7 +11,7 @@ const TOUR_TAGS = {
 const TOUR_BENEFITS: ReadonlyArray<{ icon: LucideIcon; label: string; tone: string }> = [
   { icon: ShieldCheck, label: "Plan verificado", tone: "secure" },
   { icon: Hotel, label: "Hotel coordinado", tone: "stay" },
-  { icon: UsersRound, label: "Asesor humano", tone: "guide" }
+  { icon: Languages, label: "Guías profesionales", tone: "guide" }
 ];
 
 export function TourCard({ tour }: { tour: Tour }) {
@@ -24,7 +24,6 @@ export function TourCard({ tour }: { tour: Tour }) {
         <div className="tour-card-media-shade" />
         <span className="tour-type-badge"><i><Plane size={13} /></i> {tour.type === "NACIONAL" ? "Tour nacional" : "Tour internacional"}</span>
         <span className="tour-verified-badge"><i><ShieldCheck size={14} /></i> Selección confiable</span>
-        {tour.imageCredit && <small className="tour-image-credit">{tour.imageCredit}</small>}
       </div>
       <div className="tour-card-body">
         <div className="tour-card-heading">

@@ -15,6 +15,7 @@ import { destinationImage, paymentMoney, reservationCode, tourCurrency, tourMone
 import { downloadReservationReceipt } from "./lib/reservationReceipt";
 import { AirlineGuideSection } from "./sections/AirlineGuideSection";
 import { DestinationCarousel } from "./components/DestinationCarousel";
+import { ExperienceProofSection } from "./components/ExperienceProofSection";
 import { PromotionsShowcase } from "./components/PromotionsShowcase";
 import { TravelArchiveShowcase } from "./components/TravelArchiveShowcase";
 import { HowItWorksSection } from "./sections/HowItWorksSection";
@@ -476,6 +477,7 @@ function Home() {
       </section>
       <DestinationCarousel tours={tours.length ? tours : demoTours} />
       <TravelArchiveShowcase />
+      <ExperienceProofSection />
       <Section title="Tours destacados" subtitle="Paquetes elegidos para viajar con confianza y asistencia desde la primera cotización.">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">{featured.map((tour) => <TourCard key={tour.id} tour={tour} />)}</div>
       </Section>
@@ -653,27 +655,52 @@ function SearchBox() {
   );
 }
 
+const normalizeCatalogSearch = (value: string) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+
 function Tours() {
   const [params, setParams] = useSearchParams();
+  const navigate = useNavigate();
   const initialType = params.get("type") as TourType | null;
-  const { data: tours = [], isLoading } = useTours(initialType);
+  const { data: tours = [], isLoading } = useTours();
   const [destination, setDestination] = useState(params.get("destination") ?? "");
   const [maxPrice, setMaxPrice] = useState(3000);
-  const filtered = useMemo(() => tours.filter((tour) => tour.destination.toLowerCase().includes(destination.toLowerCase()) && Number(tour.price) <= maxPrice), [tours, destination, maxPrice]);
+  const normalizedDestination = normalizeCatalogSearch(destination);
+  const bestMatch = useMemo(() => {
+    if (!normalizedDestination) return undefined;
+    return [...tours]
+      .map((tour) => {
+        const fields = [tour.title, tour.destination, tour.slug].map(normalizeCatalogSearch);
+        const score = fields.some((field) => field === normalizedDestination) ? 0 : fields.some((field) => field.startsWith(normalizedDestination)) ? 1 : fields.some((field) => field.includes(normalizedDestination)) ? 2 : 99;
+        return { tour, score };
+      })
+      .filter(({ score }) => score < 99)
+      .sort((left, right) => left.score - right.score || left.tour.title.localeCompare(right.tour.title))[0]?.tour;
+  }, [normalizedDestination, tours]);
+  const filtered = useMemo(() => tours.filter((tour) => {
+    const searchable = normalizeCatalogSearch(`${tour.title} ${tour.destination} ${tour.slug}`);
+    const matchesSearch = !normalizedDestination || searchable.includes(normalizedDestination);
+    const matchesType = normalizedDestination ? true : !initialType || tour.type === initialType;
+    return matchesSearch && matchesType && Number(tour.price) <= maxPrice;
+  }), [tours, normalizedDestination, initialType, maxPrice]);
+
+  const openBestMatch = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (bestMatch) navigate(`/tours/${bestMatch.id}`);
+  };
+
   return (
     <Section title="Catálogo de tours" subtitle="Filtra paquetes nacionales e internacionales por destino, precio y estilo.">
       <div className="catalog-filters mb-6 grid gap-3 rounded-lg border border-slate-200 bg-white p-4 shadow-sm lg:grid-cols-4">
         <select className="rounded-lg border px-4 py-3" aria-label="Tipo de tour" value={initialType ?? ""} onChange={(e) => setParams(e.target.value ? { type: e.target.value } : {})}><option value="">Todos los tours</option><option value="NACIONAL">Nacionales</option><option value="INTERNACIONAL">Internacionales</option></select>
-        <input className="rounded-lg border px-4 py-3" aria-label="Buscar por destino" placeholder="Buscar destino" value={destination} onChange={(e) => setDestination(e.target.value)} />
+        <form className="catalog-search-control" onSubmit={openBestMatch}>
+          <label><Search size={18} /><input list="catalog-tour-options" aria-label="Buscar paquete o destino" placeholder="Buscar paquete o destino" value={destination} onChange={(e) => setDestination(e.target.value)} /></label>
+          <button type="submit" disabled={!bestMatch} aria-label={bestMatch ? `Abrir el paquete ${bestMatch.title}` : "Escribe un destino disponible"}><span>{bestMatch ? "Abrir" : "Buscar"}</span><ArrowRight size={17} /></button>
+          <datalist id="catalog-tour-options">{tours.map((tour) => <option key={tour.id} value={tour.title}>{tour.destination}</option>)}</datalist>
+        </form>
         <label className="catalog-budget"><span className="catalog-budget-icon"><Filter size={17} /></span><span><small>Presupuesto máximo</small><strong>Hasta {maxPrice.toLocaleString("es-PE")} · S/ o USD</strong></span><input aria-label="Presupuesto máximo por persona" type="range" min="100" max="3000" step="50" value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} /></label>
         <a href={buildWhatsAppUrl(whatsappMessages.general)} className="catalog-advisor"><span className="button-brand-stage"><img src="/whatsapp-logo.svg" alt="" /></span><span className="button-copy"><small>Ayuda personalizada</small><strong>Solicitar orientación</strong></span><ArrowRight className="button-arrow" size={17} /></a>
       </div>
-      <div className="mb-6 grid gap-4 md:grid-cols-3">
-        <CatalogSignal icon={<ShieldCheck />} title="Operador confiable" text="Itinerarios revisados y comunicación directa." />
-        <CatalogSignal icon={<ShieldCheck />} title="Reserva protegida" text="Separa con S/ 200, código único y validación del comprobante." />
-        <CatalogSignal icon={<MessageCircle />} title="Asesor humano" text="Soporte por WhatsApp para cotizar y confirmar." />
-      </div>
-      {isLoading ? <p>Cargando tours...</p> : <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{filtered.map((tour) => <TourCard key={tour.id} tour={tour} />)}</div>}
+      {isLoading ? <p>Cargando tours...</p> : filtered.length ? <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{filtered.map((tour) => <TourCard key={tour.id} tour={tour} />)}</div> : <div className="catalog-empty"><Search /><strong>No encontramos ese paquete</strong><span>Prueba con el nombre del destino o solicita orientación por WhatsApp.</span></div>}
       <ItineraryLibrary />
     </Section>
   );
@@ -707,16 +734,6 @@ function PublicItineraryOptions({ variants }: { variants: ItineraryVariant[] }) 
   </section>;
 }
 
-function CatalogSignal({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) {
-  return (
-    <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-      <span className="mb-3 grid h-10 w-10 place-items-center rounded-lg bg-[#082447] text-amber-300">{icon}</span>
-      <strong className="text-[#082447]">{title}</strong>
-      <p className="mt-1 text-sm leading-6 text-slate-600">{text}</p>
-    </div>
-  );
-}
-
 const seasonByDestination = [
   { terms: ["cusco", "machu"], months: "mayo a septiembre", reason: "Temporada seca, cielos más despejados y mejores condiciones para caminatas." },
   { terms: ["guayaquil", "ecuador"], months: "junio a noviembre", reason: "Ambiente más fresco y condiciones agradables para recorridos urbanos y costeros." },
@@ -738,7 +755,7 @@ const featuredTourVideos: Record<string, { src: string; poster: string; title: s
   "machu-picchu": {
     src: "/media/machu-picchu-reel.mp4",
     poster: "/media/machu-picchu-reel-poster.webp",
-    title: "Machu Picchu: una experiencia de nuestro archivo"
+    title: "Machu Picchu, una experiencia inolvidable"
   },
   "tarapoto-naturaleza": {
     src: "/media/tarapoto-naturaleza.mp4",
@@ -793,13 +810,15 @@ function TourDetail() {
   const season = tourSeason(tour);
   const featuredVideo = featuredTourVideos[tour.slug];
   const itineraryOptions = itineraryVariantsFor(tour.slug);
+  const externalImageCredit = tour.imageCredit && !/(archivo propio|fotograf[ií]a propia|fotograma de archivo propio)/i.test(tour.imageCredit) ? tour.imageCredit : undefined;
   return (
     <Section title={tour.title} subtitle={`${tour.destination} · ${tour.duration}`}>
       <div className="grid gap-8 lg:grid-cols-[1.2fr_.8fr]">
         <div className="space-y-4">
-          <div className="tour-detail-image"><img src={tour.imageUrl} alt={tour.title} className="h-[440px] w-full rounded-lg object-cover shadow-xl" />{tour.imageCredit && <small>{tour.imageCredit}</small>}</div>
+          <div className="tour-detail-image"><img src={tour.imageUrl} alt={tour.title} className="h-[440px] w-full rounded-lg object-cover shadow-xl" /></div>
+          {externalImageCredit && <p className="tour-image-attribution">Crédito de la imagen: {externalImageCredit}</p>}
           {featuredVideo && <div className="overflow-hidden rounded-lg border border-cyan-100 bg-[#061f3f] shadow-lg">
-            <div className="flex items-center gap-3 px-4 py-3 text-white"><PlayCircle className="text-cyan-300" /><span><small className="block text-[10px] font-black uppercase tracking-[.14em] text-cyan-200">Video breve · archivo propio</small><strong>{featuredVideo.title}</strong></span></div>
+            <div className="flex items-center gap-3 px-4 py-3 text-white"><PlayCircle className="text-cyan-300" /><span><small className="block text-[10px] font-black uppercase tracking-[.14em] text-cyan-200">Video de la experiencia</small><strong>{featuredVideo.title}</strong></span></div>
             <video className="aspect-video w-full bg-black object-cover" controls playsInline preload="none" poster={featuredVideo.poster} aria-label={`Video de ${tour.title}`}>
               <source src={featuredVideo.src} type="video/mp4" />
               Tu navegador no puede reproducir este video.

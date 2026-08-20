@@ -6,6 +6,8 @@ La funcionalidad se divide por responsabilidad para que cada mejora pueda realiz
 - `components/SiteShell.tsx`: cabecera pública, navegación adaptable, pie de página y orientación flotante por WhatsApp.
 - `components/PromotionsShowcase.tsx`: carrusel multimedia de promociones referenciales enlazadas a cada paquete.
 - `components/TravelArchiveShowcase.tsx`: galería editorial de fotografías propias, destinos reconocidos y precios demo enlazados al catálogo.
+- `components/ExperienceProofSection.tsx`: muestra compacta de grupos acompañados con fotografías WebP propias y acceso directo al paquete relacionado.
+- `components/TourCard.tsx`: presentación reutilizable del paquete, sus beneficios y el enlace a la ficha completa.
 - `components/`: piezas reutilizables del catálogo y la estructura general del sitio.
 - `sections/`: apartados completos de la landing, como la orientación de aerolíneas.
 - `config/`: datos de contacto, WhatsApp, redes, configuración de demostración y guía estructurada de aerolíneas por destino.
@@ -16,3 +18,5 @@ La funcionalidad se divide por responsabilidad para que cada mejora pueda realiz
 Las reglas de negocio y llamadas HTTP permanecen separadas en el backend y en `infrastructure/api`.
 
 La web no publica documentos originales ni datos internos. El catálogo presenta únicamente rutas resumidas y la confirmación demo habilita el detalle de las variantes vinculadas al destino reservado.
+
+El buscador del catálogo compara nombre, destino y slug sin depender de tildes. Cuando reconoce una coincidencia habilita el botón que abre directamente la ficha del paquete; si no existe, muestra un estado vacío sin realizar redirecciones incorrectas.

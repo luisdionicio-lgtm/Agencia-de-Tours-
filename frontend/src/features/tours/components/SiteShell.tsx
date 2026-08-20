@@ -32,7 +32,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
     };
     const revealObserver = new IntersectionObserver(
       (entries) => entries.forEach((entry) => entry.isIntersecting && entry.target.classList.add("is-visible")),
-      { rootMargin: "0px 0px -8%", threshold: 0.08 }
+      { rootMargin: "0px 0px -6%", threshold: 0.01 }
     );
 
     document.querySelectorAll("main section, main article").forEach((element) => {
@@ -46,7 +46,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
       window.removeEventListener("scroll", updateProgress);
       revealObserver.disconnect();
     };
-  }, []);
+  }, [pathname]);
 
   return (
     <div className="site-shell min-h-screen">

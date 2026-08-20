@@ -10,18 +10,19 @@ Web publicitaria fullstack para captar clientes, mostrar tours nacionales e inte
 - Carrusel principal con marco azul de marca y acceso directo desde cada imagen al detalle del paquete.
 - Selector principal con los 15 tours, flechas y pestañas horizontales por nombre para descubrir y abrir cualquier paquete desde la portada sin cambios inesperados de imagen.
 - Carrusel premium de cinco destinos con navegación, indicadores, duración, precio y acceso directo a cada experiencia.
-- Selección curada de material propio para Cusco–Machu Picchu, Valle Sagrado, Lago Titicaca–Bolivia, Ica–Huacachina, Oxapampa–Pozuzo, Tarapoto y Guayaquil–costa ecuatoriana. Se priorizaron `D:\FOTOS PAGINA WEB JOHNTOURS`, `D:\PAGINA WEB` y `D:\OTRAS FOTOS 2026 JOHNTOURS`, descartando duplicados, tomas poco claras y material privado.
+- Selección curada de material propio para Cusco–Machu Picchu, Valle Sagrado, Lago Titicaca–Bolivia, Ica–Huacachina, Oxapampa–Pozuzo, Tarapoto y Guayaquil–costa ecuatoriana. Se priorizaron `E:\FOTOS PAGINA WEB JOHNTOURS`, `E:\PAGINA WEB` y `E:\OTRAS FOTOS 2026 JOHNTOURS`, descartando duplicados, tomas poco claras y material privado.
 - Galería editorial visible «Destinos vividos por nuestro equipo» con siete fotografías propias optimizadas, contexto del lugar, enlace al paquete y precio demo expresamente marcado como referencial.
-- Fotografías WebP optimizadas a 1600 × 900, sin metadatos EXIF/GPS y con marca de archivo propio; los originales no forman parte del repositorio.
+- Apartado compacto «Viajes reales, acompañamiento que se nota» con grupos atendidos en Machu Picchu, las islas de los Uros y Guayaquil; cada fotografía abre el paquete relacionado.
+- Fotografías WebP optimizadas, sin metadatos EXIF/GPS, sin marcas de agua añadidas y sin publicar los archivos originales de alta resolución.
 - Un único microvideo seleccionado de Tarapoto (7 segundos, sin audio y menos de 2 MB), disponible en su promoción y detalle con carga bajo demanda. Los clips con primeros planos o transiciones de menor calidad fueron descartados.
 - Carrusel editorial de promociones con fotografías, video bajo demanda, comentario, fecha referencial, aviso de demostración y acceso directo al paquete.
-- Reel promocional propio de Machu Picchu seleccionado del archivo `D:\REELS VIAJES DE PROMOCIÓN`, recortado a 18 segundos, silenciado y optimizado a aproximadamente 2.2 MB para carga bajo demanda.
+- Reel promocional propio de Machu Picchu seleccionado del archivo `E:\REELS VIAJES DE PROMOCIÓN`, recortado a 18 segundos, silenciado y optimizado a aproximadamente 2.2 MB para carga bajo demanda.
 - Ficha pública de Machu Picchu con únicamente las cinco etapas principales; el itinerario operativo completo, inclusiones y exclusiones se desbloquean en la confirmación de reserva y permanecen en la constancia PDF.
-- Biblioteca publicitaria de 15 modalidades consolidadas después de revisar 121 documentos del disco D: Cusco, Andes del sur, Tarapoto, norte del Perú, Ecuador, Colombia, Brasil, Argentina, Caribe, Disney y Europa. Se eliminaron duplicados y versiones repetidas.
+- Biblioteca publicitaria de 15 modalidades consolidadas después de revisar 121 documentos del disco E: Cusco, Andes del sur, Tarapoto, norte del Perú, Ecuador, Colombia, Brasil, Argentina, Caribe, Disney y Europa. Se eliminaron duplicados y versiones repetidas.
 - Variantes por destino visibles como resúmenes comerciales —tres programas de Cusco, dos de Tarapoto y dos de Europa—, con selector de itinerario día por día únicamente en la demostración posterior a la reserva.
 - Catálogo de 15 propuestas reservables: nueve rutas iniciales y seis nuevos paquetes demostrativos para Máncora–Tumbes, Cartagena, Río de Janeiro, Buenos Aires–Iguazú, Punta Cana y Disney–Orlando.
-- Fotografías referenciales optimizadas y almacenadas localmente, con autor y licencia de Wikimedia Commons visibles en las fichas nuevas; no se reutilizaron imágenes europeas de procedencia incierta.
-- Filtros, detalle, itinerarios completos, inclusiones, exclusiones, temporada recomendada y fechas referenciales de cada tour.
+- Fotografías referenciales optimizadas y almacenadas localmente; los créditos externos se conservan debajo de la imagen cuando corresponden, nunca superpuestos como marca de agua. No se reutilizaron imágenes europeas de procedencia incierta.
+- Filtros, búsqueda por nombre o destino con acceso directo al paquete, detalle, itinerarios completos, inclusiones, exclusiones, temporada recomendada y fechas referenciales de cada tour.
 - Tarjetas de tours con etiquetas, beneficios e iconografía dimensional alineada con la marca.
 - Proceso visual de reserva explicado en seis pasos claros.
 - Guía de aerolíneas por destino con logotipos, objetivo de conexión, criterios de decisión y enlaces oficiales para comparar precio final, horarios, equipaje y escalas.
