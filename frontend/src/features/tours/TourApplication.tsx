@@ -545,9 +545,7 @@ function HeroVisualCarousel({ tours }: { tours: Tour[] }) {
 function LogoShowcase() {
   return (
     <div className="logo-stage" aria-label="JohnToursPerú">
-      <div className="logo-orbit" aria-hidden="true" />
       <img src="/john-tours-logo-cropped.png" alt="Logo oficial de JohnToursPerú" />
-      <span>Agencia de Viajes y Turismo</span>
     </div>
   );
 }

@@ -79,7 +79,6 @@ function PublicHeader({ menuOpen, scrollProgress, onToggleMenu, onCloseMenu }: {
           <span className="header-brand-stage">
             <span className="header-brand-glow" aria-hidden="true" />
             <img src="/john-tours-logo-cropped.png" alt="JohnToursPerú" className="header-logo" />
-            <span className="header-brand-carousel" aria-hidden="true"><i>Viajes</i><i>Tours</i><i>Experiencias</i></span>
           </span>
         </Link>
 
