@@ -41,10 +41,10 @@ const promotions: Promotion[] = [
   },
   {
     tourId: 6,
-    title: "Europa esencial",
-    destination: "Madrid · París · Roma",
+    title: "Sueños de Europa",
+    destination: "España · Francia · Suiza · Italia",
     period: "Temporada referencial · abr. — jun. 2027",
-    message: "Una ruta demostrativa por tres capitales europeas para empezar a planificar con tiempo vuelos, alojamiento y experiencias culturales.",
+    message: "Un circuito de cuatro países para planificar con tiempo vuelos, alojamiento, traslados y experiencias culturales.",
     image: "/destinations/europa-esencial.webp"
   }
 ];

@@ -2,13 +2,13 @@ import { ArrowRight, Camera, MapPin, ShieldCheck } from "lucide-react";
 import { Link } from "../../../core/routing";
 
 const ARCHIVE_EXPERIENCES = [
-  { tourId: 1, image: "/travel-archive/machu-picchu-equipo.webp", place: "Machu Picchu", country: "Circuito Cusco, Puno y Arequipa", price: "S/ 2,850", note: "Ciudadela inca dentro del circuito integrado" },
-  { tourId: 1, image: "/travel-archive/valle-sagrado-equipo.webp", place: "Valle Sagrado", country: "Circuito Cusco, Puno y Arequipa", price: "S/ 2,850", note: "Paisajes andinos antes de continuar hacia Puno" },
+  { tourId: 1, image: "/travel-archive/machu-picchu-equipo.webp", place: "Machu Picchu", country: "Circuito Cusco, Puno y Arequipa", price: "S/ 2,480", note: "Ciudadela inca dentro del circuito integrado" },
+  { tourId: 1, image: "/travel-archive/valle-sagrado-equipo.webp", place: "Valle Sagrado", country: "Circuito Cusco, Puno y Arequipa", price: "S/ 2,480", note: "Paisajes andinos antes de continuar hacia Puno" },
   { tourId: 9, image: "/travel-archive/lago-titicaca.webp", place: "Lago Titicaca", country: "Puno y Bolivia", price: "USD 480", note: "Ruta binacional de cultura y naturaleza" },
-  { tourId: 2, image: "/travel-archive/guayaquil-la-perla.webp", place: "La Perla", country: "Guayaquil, Ecuador", price: "USD 890", note: "Ciudad, malecón y costa ecuatoriana" },
+  { tourId: 2, image: "/travel-archive/guayaquil-la-perla.webp", place: "La Perla", country: "Guayaquil, Ecuador", price: "USD 198", note: "Ciudad, malecón y costa ecuatoriana" },
   { tourId: 3, image: "/travel-archive/pozuzo-colonia.webp", place: "Pozuzo", country: "Pasco, Perú", price: "S/ 780", note: "Historia austroalemana y naturaleza" },
   { tourId: 4, image: "/travel-archive/ica-tubulares.webp", place: "Huacachina", country: "Ica, Perú", price: "S/ 650", note: "Dunas, tubulares y atardecer en el oasis" },
-  { tourId: 5, image: "/travel-archive/tarapoto-mirador.webp", place: "Tarapoto", country: "San Martín, Perú", price: "S/ 1,150", note: "Miradores y naturaleza amazónica" }
+  { tourId: 5, image: "/travel-archive/tarapoto-mirador.webp", place: "Tarapoto", country: "San Martín, Perú", price: "S/ 1,890", note: "Miradores y naturaleza amazónica" }
 ] as const;
 
 export function TravelArchiveShowcase() {

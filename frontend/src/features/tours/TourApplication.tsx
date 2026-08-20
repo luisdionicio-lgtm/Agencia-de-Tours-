@@ -31,10 +31,10 @@ const demoTours: Tour[] = [
     slug: "machu-picchu",
     destination: "Sur del Perú",
     description: "Circuito integrado por Cusco, Machu Picchu, el lago Titicaca en Puno y el patrimonio histórico de Arequipa, con traslados y asistencia coordinados.",
-    price: 2850,
+    price: 2480,
     priceIsEstimated: true,
     currency: "PEN",
-    duration: "8 días / 7 noches",
+    duration: "7 días / 6 noches",
     type: "NACIONAL",
     availableSlots: 0,
     imageUrl: "/destinations/machu-picchu.webp",
@@ -42,18 +42,17 @@ const demoTours: Tour[] = [
     isFeatured: true,
     status: "ACTIVO",
     itinerary: [
-      "Día 1: llegada a Cusco, recepción, traslado, aclimatación y orientación del circuito por el sur del Perú.",
-      "Día 2: Valle Sagrado de los Incas con Pisac, Urubamba y Ollantaytambo según el programa confirmado.",
+      "Día 1: llegada a Cusco, aclimatación y circuito arqueológico de Sacsayhuamán.",
+      "Día 2: Valle Sagrado con Pisac, Urubamba, Ollantaytambo y Chinchero.",
       "Día 3: viaje en tren, bus e ingreso programado a Machu Picchu con guiado y retorno asistido.",
-      "Día 4: ruta terrestre de Cusco hacia Puno con paradas culturales sujetas al itinerario final.",
-      "Día 5: navegación por el lago Titicaca y experiencia cultural confirmada en Puno.",
-      "Día 6: traslado coordinado desde Puno hacia Arequipa.",
-      "Día 7: recorrido por el centro histórico y los espacios incluidos de Arequipa.",
-      "Día 8: desayuno, tiempo libre y traslado de salida según el transporte contratado."
+      "Día 4: Valle Sur y salida nocturna hacia Puno.",
+      "Día 5: navegación por el lago Titicaca, islas de los Uros y circuito cultural en Chucuito.",
+      "Día 6: Chullpas de Sillustani y traslado nocturno hacia Arequipa.",
+      "Día 7: Yanahuara, centro histórico de Arequipa y retorno coordinado."
     ],
-    includes: ["Alojamiento seleccionado por 7 noches", "Traslados interprovinciales indicados", "Guiado en los recorridos confirmados", "Asistencia de JohnToursPerú durante las tres ciudades"],
-    excludes: ["Transporte de llegada a Cusco y salida desde Arequipa, salvo indicación expresa", "Alimentación, accesos o actividades no detalladas", "Gastos personales y servicios opcionales"],
-    departures: demoDepartures(1, [[101, "2026-09-12", "2026-09-19", 20, 20], [102, "2026-10-10", "2026-10-17", 20, 20]])
+    includes: ["Vuelos nacionales indicados en la propuesta", "Alojamiento seleccionado", "Alimentación y accesos señalados en el programa", "Traslados, guiado y asistencia de JohnToursPerú"],
+    excludes: ["Servicios no detallados en la cotización final", "Actividades opcionales", "Gastos personales"],
+    departures: demoDepartures(1, [[101, "2026-09-12", "2026-09-18", 20, 20], [102, "2026-10-10", "2026-10-16", 20, 20]])
   },
   {
     id: 2,
@@ -61,10 +60,10 @@ const demoTours: Tour[] = [
     slug: "guayaquil-costa-ecuador",
     destination: "Guayaquil, Ecuador",
     description: "Descubre Guayaquil y una experiencia costera con recorridos urbanos, paisajes frente al mar y actividades coordinadas.",
-    price: 890,
+    price: 198,
     priceIsEstimated: true,
     currency: "USD",
-    duration: "5 días / 4 noches",
+    duration: "3 días / 2 noches",
     type: "INTERNACIONAL",
     availableSlots: 0,
     imageUrl: "/destinations/ecuador-costa.webp",
@@ -72,15 +71,13 @@ const demoTours: Tour[] = [
     isFeatured: true,
     status: "ACTIVO",
     itinerary: [
-      "Llegada a Guayaquil, recepción coordinada, traslado al alojamiento y presentación del programa.",
-      "Recorrido por los principales espacios urbanos y culturales de Guayaquil.",
-      "Traslado hacia la zona costera y actividades recreativas previamente confirmadas.",
-      "Jornada libre o experiencia adicional según la propuesta final del grupo.",
-      "Salida del alojamiento y traslado coordinado al aeropuerto para el retorno."
+      "Traslado desde la frontera, llegada a Guayaquil, cena e instalación en el alojamiento.",
+      "Full day por Cerro Santa Ana, Las Peñas, teleférico, río Guayas, Parque de las Iguanas y Malecón 2000.",
+      "Desayuno y retorno coordinado por la frontera Ecuador–Perú."
     ],
-    includes: ["Alojamiento seleccionado por 4 noches", "Traslados indicados en el programa", "Coordinación de recorridos", "Asistencia de JohnToursPerú"],
-    excludes: ["Vuelos internacionales", "Actividades no confirmadas en la cotización", "Alimentación, equipaje y gastos personales"],
-    departures: demoDepartures(2, [[201, "2026-10-02", "2026-10-06", 20, 20], [202, "2026-11-13", "2026-11-17", 20, 20]])
+    includes: ["Alojamiento seleccionado por 2 noches", "Traslado fronterizo indicado", "Recorrido urbano confirmado", "Asistencia de JohnToursPerú"],
+    excludes: ["Transporte hasta la frontera", "Actividades no confirmadas", "Alimentación y gastos personales no detallados"],
+    departures: demoDepartures(2, [[201, "2026-10-02", "2026-10-04", 20, 20], [202, "2026-11-13", "2026-11-15", 20, 20]])
   },
   {
     id: 3,
@@ -138,10 +135,10 @@ const demoTours: Tour[] = [
     slug: "tarapoto-naturaleza",
     destination: "San Martín, Perú",
     description: "Paisajes amazónicos, recorridos acuáticos y experiencias de naturaleza en una ruta coordinada desde Tarapoto.",
-    price: 1150,
+    price: 1890,
     priceIsEstimated: true,
     currency: "PEN",
-    duration: "4 días / 3 noches",
+    duration: "5 días / 4 noches",
     type: "NACIONAL",
     availableSlots: 0,
     imageUrl: "/destinations/tarapoto.webp",
@@ -149,47 +146,36 @@ const demoTours: Tour[] = [
     isFeatured: true,
     status: "ACTIVO",
     itinerary: [
-      "Llegada a Tarapoto, recepción coordinada, traslado al alojamiento y orientación inicial.",
-      "Recorrido natural y experiencia acuática según condiciones y disponibilidad del operador local.",
-      "Visita a espacios culturales o comunidades incluidas en la propuesta final del grupo.",
-      "Desayuno, tiempo libre y traslado coordinado para el viaje de retorno."
+      "Llegada a Tarapoto, recepción, traslado y recorrido cultural por Lamas.",
+      "Full day en la Laguna Azul del Sauce.",
+      "Ruta por Rioja y Moyobamba con experiencias naturales confirmadas.",
+      "Catarata de Ahuashiyacu y retorno a Tarapoto.",
+      "Huacamaillo o Pishurayacu según el clima, y traslado coordinado de salida."
     ],
-    includes: ["Alojamiento seleccionado por 3 noches", "Traslados programados en destino", "Coordinación de actividades", "Asistencia de JohnToursPerú"],
-    excludes: ["Vuelos o transporte hasta Tarapoto", "Actividades no indicadas en la cotización", "Comidas y gastos personales no mencionados"],
-    departures: demoDepartures(5, [[501, "2026-09-25", "2026-09-28", 20, 20], [502, "2026-11-06", "2026-11-09", 20, 20]])
+    includes: ["Vuelo Lima–Tarapoto–Lima según cotización", "Alojamiento seleccionado por 4 noches", "Alimentación y recorridos indicados", "Asistencia de JohnToursPerú"],
+    excludes: ["Actividades no indicadas en la cotización", "Servicios opcionales", "Gastos personales"],
+    departures: demoDepartures(5, [[501, "2026-09-25", "2026-09-29", 20, 20], [502, "2026-11-06", "2026-11-10", 20, 20]])
   },
   {
     id: 6,
-    title: "Europa esencial: Madrid, París y Roma",
+    title: "Sueños de Europa: cuatro países",
     slug: "europa-esencial-madrid-paris-roma",
-    destination: "España, Francia e Italia",
-    description: "Ruta demostrativa por tres capitales europeas con patrimonio, arte y recorridos urbanos coordinados para una primera experiencia en Europa.",
-    price: 2790,
+    destination: "España, Francia, Suiza e Italia",
+    description: "Circuito europeo por Madrid, París, Zúrich, Venecia, Florencia, Roma, Costa Azul y Barcelona.",
+    price: 4780,
     priceIsEstimated: true,
     currency: "USD",
-    duration: "11 días / 10 noches",
+    duration: "17 días / 15 noches",
     type: "INTERNACIONAL",
     availableSlots: 0,
     imageUrl: "/destinations/europa-esencial.webp",
     imageCredit: "Imagen referencial de Unsplash",
     isFeatured: false,
     status: "ACTIVO",
-    itinerary: [
-      "Llegada a Madrid, recepción coordinada, instalación y orientación general del circuito.",
-      "Recorrido por el centro histórico de Madrid y jornada cultural según la propuesta confirmada.",
-      "Traslado Madrid–París y asistencia para el ingreso al alojamiento.",
-      "Circuito panorámico de París con tiempo programado para sus principales espacios culturales.",
-      "Día de experiencias opcionales en París, definidas antes de la reserva final.",
-      "Traslado París–Roma y recepción coordinada.",
-      "Recorrido por la Roma histórica y sus plazas principales.",
-      "Visita cultural vinculada al Vaticano, sujeta a entradas y condiciones del proveedor.",
-      "Día libre asistido para actividades personales u opciones adicionales.",
-      "Revisión del retorno, documentación y horarios de salida.",
-      "Traslado coordinado al aeropuerto para el viaje de regreso."
-    ],
-    includes: ["Alojamiento seleccionado por 10 noches", "Traslados internos indicados en la cotización", "Recorridos descritos en el programa final", "Asistencia de JohnToursPerú"],
+    itinerary: itineraryCatalog.find((item) => item.id === "suenos-europa")?.days,
+    includes: ["Vuelo Lima–Madrid–Lima según cotización", "Alojamiento y desayunos señalados", "Circuito y traslados descritos en el programa", "Tarjeta de asistencia y acompañamiento de JohnToursPerú"],
     excludes: ["Vuelos internacionales salvo indicación expresa", "Entradas, alimentación o equipaje no detallados", "Visados, seguros y gastos personales"],
-    departures: demoDepartures(6, [[601, "2027-04-12", "2027-04-22", 20, 20], [602, "2027-06-07", "2027-06-17", 20, 20]])
+    departures: demoDepartures(6, [[601, "2027-04-12", "2027-04-28", 20, 20], [602, "2027-06-07", "2027-06-23", 20, 20]])
   },
   {
     id: 7,
@@ -284,7 +270,7 @@ const demoTours: Tour[] = [
   {
     id: 10, title: "Máncora, Punta Sal y Tumbes", slug: "mancora-punta-sal-tumbes", destination: "Piura y Tumbes, Perú",
     description: "Costa norte, atardeceres frente al mar, experiencia marina en Ñuro y recorrido por los manglares de Tumbes.",
-    price: 1390, priceIsEstimated: true, currency: "PEN", duration: "5 días / 4 noches", type: "NACIONAL", availableSlots: 0,
+    price: 1700, priceIsEstimated: true, currency: "PEN", duration: "5 días / 4 noches", type: "NACIONAL", availableSlots: 0,
     imageUrl: "/destinations/mancora-tumbes.webp", imageCredit: "Imagen referencial: AlCortés · CC BY 2.0 · Wikimedia Commons", isFeatured: true, status: "ACTIVO",
     itinerary: itineraryCatalog.find((item) => item.id === "norte-peru")?.days,
     includes: ["Alojamiento seleccionado por 4 noches", "Traslados en destino indicados", "Recorridos confirmados", "Asistencia de JohnToursPerú"],
@@ -294,7 +280,7 @@ const demoTours: Tour[] = [
   {
     id: 11, title: "Cartagena e islas del Caribe", slug: "cartagena-islas-caribe", destination: "Cartagena, Colombia",
     description: "Historia caribeña, ciudad amurallada y jornadas de playa entre Islas del Rosario y Barú.",
-    price: 1490, priceIsEstimated: true, currency: "USD", duration: "5 días / 4 noches", type: "INTERNACIONAL", availableSlots: 0,
+    price: 1400, priceIsEstimated: true, currency: "USD", duration: "5 días / 4 noches", type: "INTERNACIONAL", availableSlots: 0,
     imageUrl: "/destinations/cartagena-colombia.webp", imageCredit: "Imagen referencial: Laslovarga · CC BY-SA 4.0 · Wikimedia Commons", isFeatured: true, status: "ACTIVO",
     itinerary: itineraryCatalog.find((item) => item.id === "cartagena")?.days,
     includes: ["Alojamiento seleccionado por 4 noches", "Traslados indicados en el programa", "Excursiones confirmadas", "Asistencia de JohnToursPerú"],
@@ -314,32 +300,52 @@ const demoTours: Tour[] = [
   {
     id: 13, title: "Buenos Aires e Iguazú", slug: "buenos-aires-iguazu", destination: "Argentina y Brasil",
     description: "Buenos Aires, Tigre y las Cataratas de Iguazú vistas desde ambos lados de la frontera.",
-    price: 2190, priceIsEstimated: true, currency: "USD", duration: "8 días / 7 noches", type: "INTERNACIONAL", availableSlots: 0,
+    price: 1600, priceIsEstimated: true, currency: "USD", duration: "10 días / 9 noches", type: "INTERNACIONAL", availableSlots: 0,
     imageUrl: "/destinations/iguazu-argentina.webp", imageCredit: "Imagen referencial: Horacio Cambeiro · CC BY 4.0 · Wikimedia Commons", isFeatured: true, status: "ACTIVO",
     itinerary: itineraryCatalog.find((item) => item.id === "iguazu")?.days,
-    includes: ["Alojamiento seleccionado por 7 noches", "Traslados indicados", "Visitas confirmadas en Buenos Aires e Iguazú", "Asistencia de JohnToursPerú"],
+    includes: ["Vuelos y equipaje señalados en la cotización", "Alojamiento seleccionado por 9 noches", "Visitas confirmadas en Buenos Aires e Iguazú", "Asistencia de JohnToursPerú"],
     excludes: ["Vuelos salvo indicación expresa", "Requisitos migratorios y seguros", "Alimentación, opcionales y gastos personales"],
-    departures: demoDepartures(13, [[1301, "2027-04-05", "2027-04-12", 20, 20], [1302, "2027-08-09", "2027-08-16", 20, 20]])
+    departures: demoDepartures(13, [[1301, "2027-04-05", "2027-04-14", 20, 20], [1302, "2027-08-09", "2027-08-18", 20, 20]])
   },
   {
     id: 14, title: "Punta Cana y Santo Domingo", slug: "punta-cana-santo-domingo", destination: "República Dominicana",
     description: "Playas del Caribe, Isla Saona, Isla Catalina y la historia colonial de Santo Domingo.",
-    price: 1890, priceIsEstimated: true, currency: "USD", duration: "5 días / 4 noches", type: "INTERNACIONAL", availableSlots: 0,
+    price: 1570, priceIsEstimated: true, currency: "USD", duration: "6 días / 5 noches", type: "INTERNACIONAL", availableSlots: 0,
     imageUrl: "/destinations/punta-cana.webp", imageCredit: "Imagen referencial: NoonIcarus · CC BY-SA 3.0 · Wikimedia Commons", isFeatured: true, status: "ACTIVO",
     itinerary: itineraryCatalog.find((item) => item.id === "punta-cana")?.days,
-    includes: ["Alojamiento seleccionado por 4 noches", "Traslados indicados", "Excursiones confirmadas", "Asistencia de JohnToursPerú"],
+    includes: ["Vuelos y equipaje según cotización", "Alojamiento seleccionado por 5 noches", "Alimentación y excursiones confirmadas", "Asistencia de JohnToursPerú"],
     excludes: ["Vuelos internacionales salvo indicación", "Actividades opcionales", "Tasas, alimentación y gastos personales"],
-    departures: demoDepartures(14, [[1401, "2027-01-21", "2027-01-25", 20, 20], [1402, "2027-06-10", "2027-06-14", 20, 20]])
+    departures: demoDepartures(14, [[1401, "2027-01-21", "2027-01-26", 20, 20], [1402, "2027-06-10", "2027-06-15", 20, 20]])
   },
   {
     id: 15, title: "Disney y Orlando", slug: "disney-orlando", destination: "Orlando y Miami, Estados Unidos",
     description: "Programa familiar demostrativo con Miami, Magic Kingdom, Epcot y Universal Studios.",
-    price: 2890, priceIsEstimated: true, currency: "USD", duration: "8 días / 7 noches", type: "INTERNACIONAL", availableSlots: 0,
+    price: 3730, priceIsEstimated: true, currency: "USD", duration: "7 días / 6 noches", type: "INTERNACIONAL", availableSlots: 0,
     imageUrl: "/destinations/orlando-parques.webp", imageCredit: "Imagen referencial: Jedi94 · CC BY-SA 4.0 · Wikimedia Commons", isFeatured: true, status: "ACTIVO",
     itinerary: itineraryCatalog.find((item) => item.id === "disney")?.days,
-    includes: ["Alojamiento seleccionado por 7 noches", "Traslados indicados", "Planificación de parques según entradas", "Asistencia de JohnToursPerú"],
+    includes: ["Vuelos y equipaje según cotización", "Alojamiento seleccionado por 6 noches", "Entradas a parques confirmadas", "Traslados y asistencia de JohnToursPerú"],
     excludes: ["Vuelos, visa y seguro salvo indicación", "Entradas a parques no confirmadas", "Alimentación, equipaje y gastos personales"],
-    departures: demoDepartures(15, [[1501, "2027-03-15", "2027-03-22", 20, 20], [1502, "2027-07-12", "2027-07-19", 20, 20]])
+    departures: demoDepartures(15, [[1501, "2027-03-15", "2027-03-21", 20, 20], [1502, "2027-07-12", "2027-07-18", 20, 20]])
+  },
+  {
+    id: 16, title: "Cusco, Ica y Lima 2027", slug: "cusco-ica-lima-2027", destination: "Cusco, Ica y Lima, Perú",
+    description: "Ruta privada por la historia inca, Machu Picchu, la Montaña de Siete Colores, Lima histórica, Paracas y Huacachina.",
+    price: 1428, priceIsEstimated: true, currency: "USD", duration: "9 días / 8 noches", type: "NACIONAL", availableSlots: 0,
+    imageUrl: "/destinations/ica-huacachina.webp", imageCredit: "Fotograma de archivo propio de JohnToursPerú", isFeatured: false, status: "ACTIVO",
+    itinerary: itineraryCatalog.find((item) => item.id === "cusco-ica-lima")?.days,
+    includes: ["Vuelos Lima–Cusco–Lima según cotización", "Alojamiento y desayunos señalados", "Traslados, accesos y excursiones indicadas", "Asistencia de JohnToursPerú"],
+    excludes: ["Vuelos internacionales", "Actividades opcionales", "Servicios no detallados y gastos personales"],
+    departures: demoDepartures(16, [[1601, "2027-05-03", "2027-05-11", 20, 20], [1602, "2027-09-06", "2027-09-14", 20, 20]])
+  },
+  {
+    id: 17, title: "Punta Sal y norte cultural", slug: "punta-sal-norte-cultural", destination: "Tumbes, Piura y Chiclayo, Perú",
+    description: "Playa y descanso en Punta Sal, manglares de Puerto Pizarro, Máncora, Ñuro y el patrimonio cultural de Chiclayo.",
+    price: 2890, priceIsEstimated: true, currency: "PEN", duration: "6 días / 5 noches", type: "NACIONAL", availableSlots: 0,
+    imageUrl: "/destinations/punta-sal-resort.webp", imageCredit: "Imagen referencial: DIOHER_PAVAL · CC BY 3.0 · Wikimedia Commons", isFeatured: false, status: "ACTIVO",
+    itinerary: itineraryCatalog.find((item) => item.id === "punta-sal-cultural")?.days,
+    includes: ["Vuelos nacionales indicados", "Alojamiento confirmado en Punta Sal y norte", "Alimentación, traslados y recorridos señalados", "Asistencia de JohnToursPerú"],
+    excludes: ["Servicios del resort no incluidos en la tarifa final", "Actividades marinas opcionales", "Gastos personales"],
+    departures: demoDepartures(17, [[1701, "2026-10-15", "2026-10-20", 20, 20], [1702, "2027-02-11", "2027-02-16", 20, 20]])
   }
 ];
 
@@ -374,7 +380,7 @@ const postPaymentGuides = [
   { match: ["tarapoto", "martín"], key: "general", label: "Tarapoto y naturaleza amazónica", imageUrl: "/destinations/tarapoto.webp", extras: ["Traslado privado", "Noche adicional", "Experiencia acuática", "Alimentación", "Actividad natural", "Seguro de viaje"] },
   { match: ["italia", "florencia", "venecia"], key: "general", label: "Italia clásica", imageUrl: "/destinations/italia-clasica.webp", extras: ["Traslados privados", "Noche adicional", "Entradas culturales", "Experiencia gastronómica", "Seguro internacional", "Asistencia personalizada"] },
   { match: ["españa y portugal", "barcelona", "lisboa"], key: "general", label: "España y Portugal", imageUrl: "/destinations/espana-portugal.webp", extras: ["Traslados privados", "Noche adicional", "Entradas culturales", "Equipaje", "Seguro internacional", "Asistencia personalizada"] },
-  { match: ["europa esencial", "parís"], key: "general", label: "Europa esencial", imageUrl: "/destinations/europa-esencial.webp", extras: ["Traslados privados", "Noche adicional", "Entradas culturales", "Equipaje", "Seguro internacional", "Asistencia personalizada"] }
+  { match: ["sueños de europa", "europa", "parís"], key: "general", label: "Sueños de Europa", imageUrl: "/destinations/europa-esencial.webp", extras: ["Traslados privados", "Noche adicional", "Entradas culturales", "Equipaje", "Seguro internacional", "Asistencia personalizada"] }
 ];
 
 function guideForTour(tour: Tour) {
@@ -667,7 +673,7 @@ function Tours() {
   const initialType = params.get("type") as TourType | null;
   const { data: tours = [], isLoading } = useTours();
   const [destination, setDestination] = useState(params.get("destination") ?? "");
-  const [maxPrice, setMaxPrice] = useState(3000);
+  const [maxPrice, setMaxPrice] = useState(5000);
   const normalizedDestination = normalizeCatalogSearch(destination);
   const eligibleTours = useMemo(() => tours.filter((tour) => !initialType || tour.type === initialType), [tours, initialType]);
   const bestMatch = useMemo(() => {
@@ -701,7 +707,7 @@ function Tours() {
           <label><Search size={18} /><select aria-label="Elegir paquete o destino" value={bestMatch?.title ?? ""} onChange={(e) => setDestination(e.target.value)}><option value="">{initialType === "NACIONAL" ? "Elige un paquete nacional" : initialType === "INTERNACIONAL" ? "Elige un paquete internacional" : "Elige un paquete o destino"}</option>{eligibleTours.map((tour) => <option key={tour.id} value={tour.title}>{tour.title} · {tour.destination}</option>)}</select></label>
           <button type="submit" disabled={!bestMatch} aria-label={bestMatch ? `Abrir el paquete ${bestMatch.title}` : "Selecciona un paquete disponible"}><span>{bestMatch ? "Abrir" : "Ver"}</span><ArrowRight size={17} /></button>
         </form>
-        <label className="catalog-budget"><span className="catalog-budget-icon"><Filter size={17} /></span><span><small>Presupuesto máximo</small><strong>Hasta {maxPrice.toLocaleString("es-PE")} · S/ o USD</strong></span><input aria-label="Presupuesto máximo por persona" type="range" min="100" max="3000" step="50" value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} /></label>
+        <label className="catalog-budget"><span className="catalog-budget-icon"><Filter size={17} /></span><span><small>Presupuesto máximo</small><strong>Hasta {maxPrice.toLocaleString("es-PE")} · S/ o USD</strong></span><input aria-label="Presupuesto máximo por persona" type="range" min="100" max="5000" step="50" value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} /></label>
         <a href={buildWhatsAppUrl(whatsappMessages.general)} className="catalog-advisor"><span className="button-brand-stage"><img src="/whatsapp-logo.svg" alt="" /></span><span className="button-copy"><small>Ayuda personalizada</small><strong>Solicitar orientación</strong></span><ArrowRight className="button-arrow" size={17} /></a>
       </div>
       {isLoading ? <p>Cargando tours...</p> : filtered.length ? <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{filtered.map((tour) => <TourCard key={tour.id} tour={tour} />)}</div> : <div className="catalog-empty"><Search /><strong>No encontramos ese paquete</strong><span>Prueba con el nombre del destino o solicita orientación por WhatsApp.</span></div>}
