@@ -17,11 +17,11 @@ export type AirlineRouteGuide = {
 
 export const airlineRoutes: AirlineRouteGuide[] = [
   {
-    destination: "Cusco · Machu Picchu",
-    route: "Lima → Cusco",
-    connection: "Vuelo directo · aproximadamente 1 h 20 min a 1 h 30 min",
-    objective: "Llegar a Cusco con tiempo suficiente para el traslado, la orientación inicial y una aclimatación tranquila.",
-    decisionGuide: ["Prioriza el horario de llegada", "Compara el equipaje incluido", "Deja margen antes del primer recorrido"],
+    destination: "Cusco · Puno · Arequipa",
+    route: "Lima → Cusco · circuito terrestre · Arequipa → Lima",
+    connection: "Entrada por Cusco y retorno desde Arequipa, sujetos a la propuesta final",
+    objective: "Coordinar un itinerario multidestino que evite retrocesos y permita una aclimatación tranquila antes de continuar hacia Puno y Arequipa.",
+    decisionGuide: ["Compara un viaje multidestino", "Revisa el equipaje incluido", "Confirma el retorno desde Arequipa"],
     airlines: [
       { name: "LATAM", brand: "latam", logo: "/airlines/latam.svg", idealFor: "Mayor variedad de horarios y familias tarifarias", href: "https://www.latamairlines.com/pe/es/destinos/vuelos-desde-lima-a-cusco" },
       { name: "SKY", brand: "sky", logo: "/airlines/sky-airline.svg", idealFor: "Comparar una tarifa ligera en vuelo directo", href: "https://www.skyairline.com/flights/es-pe/vuelos-desde-lima-a-cusco" },

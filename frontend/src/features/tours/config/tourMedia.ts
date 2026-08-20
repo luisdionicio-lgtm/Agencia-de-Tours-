@@ -13,11 +13,12 @@ export type TourMediaCollection = {
 
 export const tourMediaBySlug: Record<string, TourMediaCollection> = {
   "machu-picchu": {
-    eyebrow: "Cusco en el archivo JohnToursPerú",
-    introduction: "Tres momentos que representan la ruta pública del paquete: llegada a Cusco, visita a Machu Picchu y recorrido por el Valle Sagrado.",
+    eyebrow: "Circuito Cusco, Puno y Arequipa",
+    introduction: "Una sola propuesta conecta Cusco y Machu Picchu con el lago Titicaca en Puno y la etapa final en Arequipa.",
     items: [
       { image: "/tour-galleries/machu-picchu/cusco-centro.webp", title: "Centro histórico de Cusco", stage: "Inicio de la experiencia", alt: "Viajeros de JohnToursPerú en la Plaza de Armas de Cusco" },
       { image: "/tour-galleries/machu-picchu/machu-picchu.webp", title: "Machu Picchu", stage: "Visita principal", alt: "Grupo de viajeros frente a Machu Picchu" },
+      { image: "/tour-galleries/bolivia/lago-titicaca.webp", title: "Lago Titicaca, Puno", stage: "Ruta altiplánica", alt: "Viajeros de JohnToursPerú junto al Lago Titicaca en Puno" },
       { image: "/tour-galleries/machu-picchu/valle-sagrado.webp", title: "Valle Sagrado", stage: "Circuito cultural", alt: "Equipo de JohnToursPerú durante un recorrido por el Valle Sagrado" }
     ]
   },

@@ -4,7 +4,7 @@ import type { Tour } from "../../../shared/types";
 import { tourMoney } from "../lib/presentation";
 
 const destinationMood: Record<string, string> = {
-  "machu-picchu": "Historia, cultura y paisajes que dejan huella.",
+  "machu-picchu": "Cusco, Puno y Arequipa conectados en un solo circuito.",
   "guayaquil-costa-ecuador": "Ciudad, costa y experiencias frente al mar.",
   "oxapampa-pozuzo": "Naturaleza, calma y tradición en un solo viaje.",
   "ica-y-huacachina": "Aventura entre dunas y atardeceres inolvidables.",

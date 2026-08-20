@@ -50,16 +50,19 @@ async function main() {
 
   const tours = [
     {
-      title: "Machu Picchu",
+      title: "Cusco, Puno y Arequipa",
       slug: "machu-picchu",
-      destination: "Cusco, Peru",
+      destination: "Sur del Peru",
       price: 0,
       currency: Currency.PEN,
-      duration: "4 dias / 3 noches",
+      duration: "8 dias / 7 noches",
       type: TourType.NACIONAL,
       categoryId: 3,
       imageUrl: "/destinations/machu-picchu.webp",
-      description: "Explora la ciudadela inca, el Valle Sagrado y la magia cultural de Cusco con guias expertos.",
+      description: "Circuito integrado por Cusco, Machu Picchu, el lago Titicaca en Puno y el patrimonio historico de Arequipa.",
+      itinerary: ["Llegada a Cusco y aclimatacion.", "Valle Sagrado de los Incas.", "Machu Picchu con ingreso programado.", "Ruta terrestre hacia Puno.", "Navegacion por el lago Titicaca.", "Traslado hacia Arequipa.", "Recorrido historico de Arequipa.", "Retorno segun el transporte contratado."],
+      includes: ["Alojamiento por 7 noches", "Traslados interprovinciales indicados", "Guiado en los recorridos confirmados", "Asistencia JohnToursPeru"],
+      excludes: ["Transporte de llegada a Cusco y salida desde Arequipa", "Alimentacion y accesos no detallados", "Gastos personales"],
       availableSlots: 0,
       isFeatured: true
     },

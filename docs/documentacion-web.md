@@ -12,7 +12,7 @@ La selección de video se limita a un microclip de Tarapoto: toma aérea estable
 
 El bloque anteriormente destinado a testimonios de demostración fue reemplazado por un carrusel editorial de promociones. Puede mostrar fotografías o el microvideo aprobado, comentario comercial, periodo referencial y enlace al paquete. Todos los mensajes se identifican como contenido demostrativo y aclaran que precio, fecha, disponibilidad y servicios deben validarse con un asesor; no se presentan opiniones ficticias como experiencias reales.
 
-Machu Picchu incorpora un reel propio seleccionado de `REEL CUSCO - SANTIAGO APOSTOL.mp4`. La copia web conserva la marca del archivo, no incluye audio y fue reducida a 18 segundos y resolución 960 × 540 para evitar publicar el original de 445 MB. En la ficha pública se presentan solo las etapas esenciales del circuito; el detalle diario, horarios referenciales, traslados, inclusiones y exclusiones se muestran dentro de la confirmación posterior a la reserva y en la constancia PDF. La fuente operativa principal fue el programa «Tours ejecutivo Cusco Imperial 5 días / 4 noches» del archivo local.
+Machu Picchu incorpora un reel propio seleccionado de `REEL CUSCO - SANTIAGO APOSTOL.mp4`. La copia web conserva la marca del archivo, no incluye audio y fue reducida a 18 segundos y resolución 960 × 540 para evitar publicar el original de 445 MB. Este material forma parte del paquete nacional integrado «Cusco, Puno y Arequipa», no de una propuesta aislada de Cusco. La modalidad pública utiliza una estructura de 8 días / 7 noches consolidada desde los programas combinados del archivo local; el detalle diario, horarios, traslados, inclusiones y exclusiones se habilita después de la reserva y en la constancia PDF.
 
 Las imágenes externas solo pueden proceder de bancos con licencia explícita o repositorios abiertos, como Unsplash o Wikimedia Commons, con su crédito correspondiente. No se deben descargar ni copiar fotografías de agencias, blogs o resultados de Google sin verificar licencia. Para Machu Picchu se mantiene como imagen principal el archivo propio de JohnToursPerú.
 
@@ -54,7 +54,7 @@ Estados comunicados al cliente:
 
 ## Orientación de vuelos y traslados
 
-La portada incluye una guía de decisión con los logotipos de LATAM, SKY y JetSMART para Cusco y Tarapoto, además de LATAM y Avianca para Guayaquil. Cada destino explica el objetivo de la conexión según el ritmo del tour y propone criterios como horario de llegada, duración, escalas, equipaje y flexibilidad. Cada opción conserva su identidad visual dentro de una tarjeta adaptada a la paleta de JohnToursPerú y enlaza al sitio oficial. La web no vende pasajes ni garantiza una tarifa.
+La portada incluye una guía de decisión con los logotipos de LATAM, SKY y JetSMART para el circuito Cusco–Puno–Arequipa y para Tarapoto, además de LATAM y Avianca para Guayaquil. El circuito del sur propone entrar por Cusco, continuar por tierra hacia Puno y finalizar en Arequipa para evitar retrocesos; los vuelos, horarios y puntos de entrada o salida se confirman en la propuesta final. Cada opción conserva su identidad visual dentro de una tarjeta adaptada a la paleta de JohnToursPerú y enlaza al sitio oficial. La web no vende pasajes ni garantiza una tarifa.
 
 Ica, Oxapampa y Pozuzo se presentan como conexiones terrestres desde Lima y se ofrece coordinación por WhatsApp. Los enlaces y rutas deben revisarse periódicamente porque dependen de cada aerolínea.
 

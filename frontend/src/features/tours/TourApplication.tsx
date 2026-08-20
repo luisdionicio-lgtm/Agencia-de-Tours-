@@ -27,14 +27,14 @@ const demoDepartures = (_tourId: number, items: [number, string, string, number,
 const demoTours: Tour[] = [
   {
     id: 1,
-    title: "Machu Picchu",
+    title: "Cusco, Puno y Arequipa",
     slug: "machu-picchu",
-    destination: "Cusco, Perú",
-    description: "Explora la ciudadela inca, el Valle Sagrado y la riqueza cultural de Cusco con guías expertos y asistencia permanente.",
-    price: 1550,
+    destination: "Sur del Perú",
+    description: "Circuito integrado por Cusco, Machu Picchu, el lago Titicaca en Puno y el patrimonio histórico de Arequipa, con traslados y asistencia coordinados.",
+    price: 2850,
     priceIsEstimated: true,
     currency: "PEN",
-    duration: "5 días / 4 noches",
+    duration: "8 días / 7 noches",
     type: "NACIONAL",
     availableSlots: 0,
     imageUrl: "/destinations/machu-picchu.webp",
@@ -42,15 +42,18 @@ const demoTours: Tour[] = [
     isFeatured: true,
     status: "ACTIVO",
     itinerary: [
-      "Día 1: llegada a Cusco, recepción, traslado al hotel, aclimatación y circuito por Sacsayhuamán, Cristo Blanco, Qenqo, Tambomachay y Puca Pucara.",
-      "Día 2: Valle Sagrado de los Incas con visita a Pisac, almuerzo en Urubamba, complejo arqueológico de Ollantaytambo y parada en Chinchero antes de volver a Cusco.",
-      "Día 3: salida temprana hacia Ollantaytambo, viaje en tren a Aguas Calientes, traslado en bus e ingreso guiado a Machu Picchu según el circuito y horario confirmados; retorno asistido a Cusco.",
-      "Día 4: recorrido por Maras, terrazas agrícolas de Moray y Salineras; actividades opcionales se confirman en la propuesta final.",
-      "Día 5: desayuno, tiempo libre según el horario del vuelo y traslado coordinado al aeropuerto para el retorno."
+      "Día 1: llegada a Cusco, recepción, traslado, aclimatación y orientación del circuito por el sur del Perú.",
+      "Día 2: Valle Sagrado de los Incas con Pisac, Urubamba y Ollantaytambo según el programa confirmado.",
+      "Día 3: viaje en tren, bus e ingreso programado a Machu Picchu con guiado y retorno asistido.",
+      "Día 4: ruta terrestre de Cusco hacia Puno con paradas culturales sujetas al itinerario final.",
+      "Día 5: navegación por el lago Titicaca y experiencia cultural confirmada en Puno.",
+      "Día 6: traslado coordinado desde Puno hacia Arequipa.",
+      "Día 7: recorrido por el centro histórico y los espacios incluidos de Arequipa.",
+      "Día 8: desayuno, tiempo libre y traslado de salida según el transporte contratado."
     ],
-    includes: ["Alojamiento seleccionado por 4 noches", "Traslados indicados en el programa", "Guiado profesional en los recorridos señalados", "Asistencia de JohnToursPerú durante el viaje"],
-    excludes: ["Vuelos o transporte hasta Cusco, salvo indicación expresa", "Alimentación no detallada en el programa", "Gastos personales y servicios opcionales"],
-    departures: demoDepartures(1, [[101, "2026-09-12", "2026-09-16", 20, 20], [102, "2026-10-10", "2026-10-14", 20, 20]])
+    includes: ["Alojamiento seleccionado por 7 noches", "Traslados interprovinciales indicados", "Guiado en los recorridos confirmados", "Asistencia de JohnToursPerú durante las tres ciudades"],
+    excludes: ["Transporte de llegada a Cusco y salida desde Arequipa, salvo indicación expresa", "Alimentación, accesos o actividades no detalladas", "Gastos personales y servicios opcionales"],
+    departures: demoDepartures(1, [[101, "2026-09-12", "2026-09-19", 20, 20], [102, "2026-10-10", "2026-10-17", 20, 20]])
   },
   {
     id: 2,
@@ -364,7 +367,7 @@ const demoPayment: Payment = {
 };
 
 const postPaymentGuides = [
-  { match: ["machu", "cusco"], key: "cusco", label: "Cusco y Machu Picchu", imageUrl: "/destinations/machu-picchu.webp", extras: ["Traslado privado", "Noche adicional", "Almuerzo regional", "Asistencia de altura", "Sesión fotográfica", "Seguro de viaje"] },
+  { match: ["machu", "cusco", "puno", "arequipa"], key: "cusco", label: "Cusco, Puno y Arequipa", imageUrl: "/destinations/machu-picchu.webp", extras: ["Traslado privado", "Noche adicional", "Almuerzo regional", "Asistencia de altura", "Sesión fotográfica", "Seguro de viaje"] },
   { match: ["guayaquil", "ecuador"], key: "general", label: "Guayaquil y costa ecuatoriana", imageUrl: "/destinations/ecuador-costa.webp", extras: ["Traslado aeropuerto-hotel", "Noche adicional", "Actividad costera", "Equipaje adicional", "Seguro internacional", "Asistencia personalizada"] },
   { match: ["oxapampa", "pozuzo"], key: "oxapampa", label: "Oxapampa y Pozuzo", imageUrl: "/destinations/oxapampa-pozuzo.webp", extras: ["Traslado privado", "Noche adicional", "Experiencia de café", "Alimentación", "Visita cultural", "Seguro de viaje"] },
   { match: ["ica", "huacachina"], key: "ica", label: "Ica y Huacachina", imageUrl: "/destinations/ica-huacachina.webp", extras: ["Traslado privado", "Noche adicional", "Experiencia gastronómica", "Bodega seleccionada", "Fotografía al atardecer", "Seguro de viaje"] },
@@ -404,7 +407,7 @@ function RoutesView() {
 
 function DemoPage() {
   const steps = ["Crear una reserva ficticia", "Probar el registro Yape", "Simular la aprobación", "Revisar la confirmación y el PDF"];
-  return <Section title="Demostración interactiva" subtitle="Conoce cómo funcionará la experiencia completa sin realizar pagos ni enviar información."><div className="demo-landing"><span className="demo-landing-icon"><Sparkles /></span><small>Entorno seguro de presentación</small><h3>Prueba la reserva de principio a fin</h3><p>Todos los datos son ficticios y permanecen únicamente en esta pestaña. No se carga ningún comprobante real, no se procesa dinero y no se envían mensajes automáticamente.</p><div className="demo-landing-steps">{steps.map((step, index) => <span key={step}><b>{index + 1}</b>{step}</span>)}</div><Link to="/reservar/1" className="demo-landing-cta"><span><small>Experiencia de muestra</small><strong>Iniciar demo de Machu Picchu</strong></span><ArrowRight /></Link></div></Section>;
+  return <Section title="Demostración interactiva" subtitle="Conoce cómo funcionará la experiencia completa sin realizar pagos ni enviar información."><div className="demo-landing"><span className="demo-landing-icon"><Sparkles /></span><small>Entorno seguro de presentación</small><h3>Prueba la reserva de principio a fin</h3><p>Todos los datos son ficticios y permanecen únicamente en esta pestaña. No se carga ningún comprobante real, no se procesa dinero y no se envían mensajes automáticamente.</p><div className="demo-landing-steps">{steps.map((step, index) => <span key={step}><b>{index + 1}</b>{step}</span>)}</div><Link to="/reservar/1" className="demo-landing-cta"><span><small>Experiencia de muestra</small><strong>Iniciar demo de Cusco, Puno y Arequipa</strong></span><ArrowRight /></Link></div></Section>;
 }
 
 function useTours(type?: TourType | null) {
@@ -806,7 +809,7 @@ function TourDetail() {
   if (isLoading || !tour) return <Section title="Cargando tour" subtitle="Preparando detalles..." />;
   const itinerary = tour.itinerary ?? ["Recepción y orientación", "Experiencia principal", "Actividades libres", "Retorno"];
   const publicRoute = tour.slug === "machu-picchu"
-    ? ["Cusco y complejos arqueológicos", "Valle Sagrado de los Incas", "Machu Picchu con ingreso programado", "Maras, Moray y Salineras", "Retorno coordinado"]
+    ? ["Cusco y Valle Sagrado", "Machu Picchu con ingreso programado", "Ruta altiplánica hacia Puno", "Lago Titicaca y experiencia cultural", "Arequipa histórica", "Retorno coordinado"]
     : itinerary.slice(0, 4).map((item) => item.replace(/^Día\s+\d+:\s*/i, "").split(/[.;]/)[0]);
   const season = tourSeason(tour);
   const featuredVideo = featuredTourVideos[tour.slug];

@@ -15,10 +15,10 @@ type Promotion = {
 const promotions: Promotion[] = [
   {
     tourId: 1,
-    title: "Cusco y Machu Picchu",
-    destination: "Cusco, Perú",
+    title: "Cusco, Puno y Arequipa",
+    destination: "Circuito por el sur del Perú",
     period: "Periodo demo · 15 ago. — 30 sep. 2026",
-    message: "Solicita una propuesta para familias, parejas o grupos con itinerario coordinado y acompañamiento antes del viaje.",
+    message: "Un solo circuito conecta Cusco y Machu Picchu, el lago Titicaca en Puno y la etapa histórica de Arequipa.",
     image: "/media/machu-picchu-reel-poster.webp",
     video: "/media/machu-picchu-reel.mp4"
   },

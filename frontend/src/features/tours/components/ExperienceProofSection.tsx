@@ -5,9 +5,9 @@ const EXPERIENCES = [
   {
     tourId: 1,
     image: "/experience-proof/machu-grupo.webp",
-    destination: "Machu Picchu",
-    route: "Cusco, Perú",
-    message: "Viajes grupales con coordinación antes, durante y después del recorrido."
+    destination: "Cusco, Puno y Arequipa",
+    route: "Circuito del sur del Perú",
+    message: "Tres ciudades reunidas en un solo paquete con coordinación antes, durante y después del recorrido."
   },
   {
     tourId: 9,
