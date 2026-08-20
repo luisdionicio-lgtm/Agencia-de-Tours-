@@ -2,7 +2,9 @@
 
 ## Material audiovisual curado
 
-El catálogo y la galería pública utilizan material derivado del archivo audiovisual propio para Machu Picchu, Valle Sagrado, Lago Titicaca–Bolivia, Ica y Huacachina, Oxapampa–Pozuzo, Tarapoto y Guayaquil. La revisión incluyó `D:\FOTOS PAGINA WEB JOHNTOURS`, `D:\PAGINA WEB` y `D:\OTRAS FOTOS 2026 JOHNTOURS`; se descartaron archivos duplicados, tomas poco claras y material privado o sin valor turístico directo. Las copias públicas se encuentran en `frontend/public/destinations/` y `frontend/public/travel-archive/`, fueron convertidas a WebP, redimensionadas y guardadas sin metadatos de ubicación.
+El catálogo y la galería pública utilizan material derivado del archivo audiovisual propio para Machu Picchu, Valle Sagrado, Lago Titicaca–Bolivia, Ica y Huacachina, Oxapampa–Pozuzo, Tarapoto y Guayaquil. La revisión final cubrió las siete carpetas temáticas proporcionadas: Aeropuerto, Bolivia, Cusco, Equipo John, Guayaquil, Ica y Pozuzo. Se evaluaron 80 fotografías, se descartaron duplicados, tomas poco claras y material sin valor turístico directo, y se publicaron 15 derivados seleccionados. Las copias públicas se encuentran en `frontend/public/operations/` y `frontend/public/tour-galleries/`, además de las colecciones editoriales ya existentes; fueron convertidas a WebP, redimensionadas y guardadas sin metadatos de ubicación.
+
+Las imágenes de Bolivia, Cusco, Guayaquil, Ica y Pozuzo aparecen únicamente en la ficha del paquete que corresponde a su ruta. Sus títulos describen etapas públicas —por ejemplo, centro histórico, visita principal, recorrido urbano o actividad cultural— sin mostrar horarios, proveedores ni indicaciones operativas privadas. Las carpetas Aeropuerto y Equipo John se presentan como evidencia de recepción y acompañamiento dentro del bloque de experiencias reales de la portada, no como destinos comercializables.
 
 Los originales permanecen fuera del repositorio. La marca visible ayuda a identificar la procedencia, pero no impide capturas de pantalla; la protección principal depende de conservar los originales en almacenamiento privado y publicar únicamente derivados optimizados. Las imágenes con grupos o menores no deben incorporarse hasta confirmar la autorización correspondiente.
 
@@ -115,8 +117,9 @@ El panel interno puede conservar fechas, alertas y capacidad para organización 
 - `frontend/src/features/tours/components`: componentes reutilizables del catálogo.
 - `frontend/src/features/tours/components/PromotionsShowcase.tsx`: promociones multimedia referenciales y acceso al paquete relacionado.
 - `frontend/src/features/tours/components/TravelArchiveShowcase.tsx`: galería editorial con fotografías propias optimizadas, destino reconocido, precio demo y acceso al paquete relacionado.
+- `frontend/src/features/tours/components/TourMediaGallery.tsx`: galerías por paquete relacionadas con la ruta pública.
 - `frontend/src/features/tours/sections`: apartados completos de la landing.
-- `frontend/src/features/tours/config`: contacto, redes, WhatsApp y configuración de demostración.
+- `frontend/src/features/tours/config`: contacto, redes, WhatsApp, itinerarios, material visual por destino y configuración de demostración.
 - `frontend/src/features/tours/lib`: formato de precios, códigos y utilidades de presentación.
 - `frontend/src/index.css`: sistema visual adaptable.
 - `frontend/src/infrastructure/api/client.ts`: cliente HTTP y sesión interna.

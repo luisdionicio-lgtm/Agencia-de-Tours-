@@ -10,10 +10,12 @@ Web publicitaria fullstack para captar clientes, mostrar tours nacionales e inte
 - Carrusel principal con marco azul de marca y acceso directo desde cada imagen al detalle del paquete.
 - Selector principal con los 15 tours, flechas y pestañas horizontales por nombre para descubrir y abrir cualquier paquete desde la portada sin cambios inesperados de imagen.
 - Carrusel premium de cinco destinos con navegación, indicadores, duración, precio y acceso directo a cada experiencia.
-- Selección curada de material propio para Cusco–Machu Picchu, Valle Sagrado, Lago Titicaca–Bolivia, Ica–Huacachina, Oxapampa–Pozuzo, Tarapoto y Guayaquil–costa ecuatoriana. Se priorizaron `E:\FOTOS PAGINA WEB JOHNTOURS`, `E:\PAGINA WEB` y `E:\OTRAS FOTOS 2026 JOHNTOURS`, descartando duplicados, tomas poco claras y material privado.
+- Selección curada de material propio para Cusco–Machu Picchu, Valle Sagrado, Lago Titicaca–Bolivia, Ica–Huacachina, Oxapampa–Pozuzo, Tarapoto y Guayaquil–costa ecuatoriana. Se revisaron las carpetas operativas proporcionadas y se descartaron duplicados, tomas poco claras, material privado y archivos sin valor turístico directo.
 - Galería editorial visible «Destinos vividos por nuestro equipo» con siete fotografías propias optimizadas, contexto del lugar, enlace al paquete y precio demo expresamente marcado como referencial.
 - Apartado compacto «Viajes reales, acompañamiento que se nota» con grupos atendidos en Machu Picchu, las islas de los Uros y Guayaquil; cada fotografía abre el paquete relacionado.
-- Fotografías WebP optimizadas, sin metadatos EXIF/GPS, sin marcas de agua añadidas y sin publicar los archivos originales de alta resolución.
+- Evidencia operativa integrada en el mismo apartado con recepción en aeropuerto y equipo de acompañamiento, sin crear una sección extensa adicional en la portada.
+- Galerías específicas dentro de los paquetes de Machu Picchu, Lago Titicaca–Bolivia, Guayaquil, Ica–Huacachina y Oxapampa–Pozuzo; cada fotografía se vincula con una etapa pública del itinerario y no revela horarios ni datos operativos privados.
+- Quince nuevas fotografías WebP optimizadas procedentes de las siete carpetas temáticas —Aeropuerto, Bolivia, Cusco, Equipo John, Guayaquil, Ica y Pozuzo—, sin metadatos EXIF/GPS, sin marcas de agua añadidas y sin publicar los originales de alta resolución.
 - Un único microvideo seleccionado de Tarapoto (7 segundos, sin audio y menos de 2 MB), disponible en su promoción y detalle con carga bajo demanda. Los clips con primeros planos o transiciones de menor calidad fueron descartados.
 - Carrusel editorial de promociones con fotografías, video bajo demanda, comentario, fecha referencial, aviso de demostración y acceso directo al paquete.
 - Reel promocional propio de Machu Picchu seleccionado del archivo `E:\REELS VIAJES DE PROMOCIÓN`, recortado a 18 segundos, silenciado y optimizado a aproximadamente 2.2 MB para carga bajo demanda.

@@ -18,6 +18,7 @@ import { DestinationCarousel } from "./components/DestinationCarousel";
 import { ExperienceProofSection } from "./components/ExperienceProofSection";
 import { PromotionsShowcase } from "./components/PromotionsShowcase";
 import { TravelArchiveShowcase } from "./components/TravelArchiveShowcase";
+import { TourMediaGallery } from "./components/TourMediaGallery";
 import { HowItWorksSection } from "./sections/HowItWorksSection";
 
 const demoDepartures = (_tourId: number, items: [number, string, string, number, number][]): TourDeparture[] =>
@@ -851,6 +852,7 @@ function TourDetail() {
         <Info title="Ruta principal" items={publicRoute} ordered />
         <Info title="Servicios principales" items={["Alojamiento y traslados según la propuesta", "Guiado en los recorridos confirmados", "Asistencia de JohnToursPerú durante el viaje"]} />
       </div>
+      <TourMediaGallery tourSlug={tour.slug} />
       <PublicItineraryOptions variants={itineraryOptions} />
       <p className="public-itinerary-note"><ShieldCheck size={17} /> Por seguridad y claridad comercial, el itinerario detallado —horarios, traslados, paradas y condiciones— se habilita después de confirmar la reserva.</p>
     </Section>
