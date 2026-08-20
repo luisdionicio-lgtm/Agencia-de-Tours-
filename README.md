@@ -22,7 +22,7 @@ Web publicitaria fullstack para captar clientes, mostrar tours nacionales e inte
 - Variantes por destino visibles como resúmenes comerciales —tres programas de Cusco, dos de Tarapoto y dos de Europa—, con selector de itinerario día por día únicamente en la demostración posterior a la reserva.
 - Catálogo de 15 propuestas reservables: nueve rutas iniciales y seis nuevos paquetes demostrativos para Máncora–Tumbes, Cartagena, Río de Janeiro, Buenos Aires–Iguazú, Punta Cana y Disney–Orlando.
 - Fotografías referenciales optimizadas y almacenadas localmente; los créditos externos se conservan debajo de la imagen cuando corresponden, nunca superpuestos como marca de agua. No se reutilizaron imágenes europeas de procedencia incierta.
-- Filtros, búsqueda por nombre o destino con acceso directo al paquete, detalle, itinerarios completos, inclusiones, exclusiones, temporada recomendada y fechas referenciales de cada tour.
+- Filtros por tipo, selector de paquetes que muestra únicamente opciones nacionales o internacionales según la categoría elegida, acceso directo a la ficha, itinerarios completos, inclusiones, exclusiones, temporada recomendada y fechas referenciales de cada tour.
 - Tarjetas de tours con etiquetas, beneficios e iconografía dimensional alineada con la marca.
 - Proceso visual de reserva explicado en seis pasos claros.
 - Guía de aerolíneas por destino con logotipos, objetivo de conexión, criterios de decisión y enlaces oficiales para comparar precio final, horarios, equipaje y escalas.

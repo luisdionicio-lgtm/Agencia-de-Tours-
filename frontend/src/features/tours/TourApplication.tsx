@@ -665,9 +665,10 @@ function Tours() {
   const [destination, setDestination] = useState(params.get("destination") ?? "");
   const [maxPrice, setMaxPrice] = useState(3000);
   const normalizedDestination = normalizeCatalogSearch(destination);
+  const eligibleTours = useMemo(() => tours.filter((tour) => !initialType || tour.type === initialType), [tours, initialType]);
   const bestMatch = useMemo(() => {
     if (!normalizedDestination) return undefined;
-    return [...tours]
+    return [...eligibleTours]
       .map((tour) => {
         const fields = [tour.title, tour.destination, tour.slug].map(normalizeCatalogSearch);
         const score = fields.some((field) => field === normalizedDestination) ? 0 : fields.some((field) => field.startsWith(normalizedDestination)) ? 1 : fields.some((field) => field.includes(normalizedDestination)) ? 2 : 99;
@@ -675,11 +676,11 @@ function Tours() {
       })
       .filter(({ score }) => score < 99)
       .sort((left, right) => left.score - right.score || left.tour.title.localeCompare(right.tour.title))[0]?.tour;
-  }, [normalizedDestination, tours]);
+  }, [normalizedDestination, eligibleTours]);
   const filtered = useMemo(() => tours.filter((tour) => {
     const searchable = normalizeCatalogSearch(`${tour.title} ${tour.destination} ${tour.slug}`);
     const matchesSearch = !normalizedDestination || searchable.includes(normalizedDestination);
-    const matchesType = normalizedDestination ? true : !initialType || tour.type === initialType;
+    const matchesType = !initialType || tour.type === initialType;
     return matchesSearch && matchesType && Number(tour.price) <= maxPrice;
   }), [tours, normalizedDestination, initialType, maxPrice]);
 
@@ -690,12 +691,11 @@ function Tours() {
 
   return (
     <Section title="Catálogo de tours" subtitle="Filtra paquetes nacionales e internacionales por destino, precio y estilo.">
-      <div className="catalog-filters mb-6 grid gap-3 rounded-lg border border-slate-200 bg-white p-4 shadow-sm lg:grid-cols-4">
-        <select className="rounded-lg border px-4 py-3" aria-label="Tipo de tour" value={initialType ?? ""} onChange={(e) => setParams(e.target.value ? { type: e.target.value } : {})}><option value="">Todos los tours</option><option value="NACIONAL">Nacionales</option><option value="INTERNACIONAL">Internacionales</option></select>
+      <div className="catalog-filters mb-6 grid gap-3 rounded-lg border border-slate-200 bg-white p-4 shadow-sm lg:grid-cols-[.9fr_1.35fr_1fr_1fr]">
+        <select className="rounded-lg border px-4 py-3" aria-label="Tipo de tour" value={initialType ?? ""} onChange={(e) => { setDestination(""); setParams(e.target.value ? { type: e.target.value } : {}); }}><option value="">Todos los tours</option><option value="NACIONAL">Nacionales</option><option value="INTERNACIONAL">Internacionales</option></select>
         <form className="catalog-search-control" onSubmit={openBestMatch}>
-          <label><Search size={18} /><input list="catalog-tour-options" aria-label="Buscar paquete o destino" placeholder="Buscar paquete o destino" value={destination} onChange={(e) => setDestination(e.target.value)} /></label>
-          <button type="submit" disabled={!bestMatch} aria-label={bestMatch ? `Abrir el paquete ${bestMatch.title}` : "Escribe un destino disponible"}><span>{bestMatch ? "Abrir" : "Buscar"}</span><ArrowRight size={17} /></button>
-          <datalist id="catalog-tour-options">{tours.map((tour) => <option key={tour.id} value={tour.title}>{tour.destination}</option>)}</datalist>
+          <label><Search size={18} /><select aria-label="Elegir paquete o destino" value={bestMatch?.title ?? ""} onChange={(e) => setDestination(e.target.value)}><option value="">{initialType === "NACIONAL" ? "Elige un paquete nacional" : initialType === "INTERNACIONAL" ? "Elige un paquete internacional" : "Elige un paquete o destino"}</option>{eligibleTours.map((tour) => <option key={tour.id} value={tour.title}>{tour.title} · {tour.destination}</option>)}</select></label>
+          <button type="submit" disabled={!bestMatch} aria-label={bestMatch ? `Abrir el paquete ${bestMatch.title}` : "Selecciona un paquete disponible"}><span>{bestMatch ? "Abrir" : "Ver"}</span><ArrowRight size={17} /></button>
         </form>
         <label className="catalog-budget"><span className="catalog-budget-icon"><Filter size={17} /></span><span><small>Presupuesto máximo</small><strong>Hasta {maxPrice.toLocaleString("es-PE")} · S/ o USD</strong></span><input aria-label="Presupuesto máximo por persona" type="range" min="100" max="3000" step="50" value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} /></label>
         <a href={buildWhatsAppUrl(whatsappMessages.general)} className="catalog-advisor"><span className="button-brand-stage"><img src="/whatsapp-logo.svg" alt="" /></span><span className="button-copy"><small>Ayuda personalizada</small><strong>Solicitar orientación</strong></span><ArrowRight className="button-arrow" size={17} /></a>

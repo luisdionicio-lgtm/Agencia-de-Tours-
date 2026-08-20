@@ -19,4 +19,4 @@ Las reglas de negocio y llamadas HTTP permanecen separadas en el backend y en `i
 
 La web no publica documentos originales ni datos internos. El catálogo presenta únicamente rutas resumidas y la confirmación demo habilita el detalle de las variantes vinculadas al destino reservado.
 
-El buscador del catálogo compara nombre, destino y slug sin depender de tildes. Cuando reconoce una coincidencia habilita el botón que abre directamente la ficha del paquete; si no existe, muestra un estado vacío sin realizar redirecciones incorrectas.
+El selector del catálogo depende del tipo de tour: muestra solo paquetes nacionales, internacionales o todos, según la categoría activa. Al elegir una opción habilita el botón que abre directamente la ficha correspondiente.
