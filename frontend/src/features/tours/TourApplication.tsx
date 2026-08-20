@@ -455,30 +455,28 @@ function Home() {
         <span className="hero-pointer-glow" aria-hidden="true" />
         <span className="hero-aurora hero-aurora-one" aria-hidden="true" />
         <span className="hero-aurora hero-aurora-two" aria-hidden="true" />
-        <div className="mx-auto grid min-h-[calc(100svh-80px)] max-w-7xl items-center gap-8 px-4 py-10 lg:min-h-[660px] lg:grid-cols-[1.05fr_.95fr] lg:gap-10 lg:px-6 lg:py-14">
-          <div className="animate-rise max-w-3xl text-white">
+        <div className="hero-layout mx-auto grid max-w-7xl gap-8 px-4 lg:grid-cols-[1.04fr_.96fr] lg:gap-10 lg:px-6">
+          <div className="hero-copy animate-rise max-w-3xl text-white">
             <p className="hero-eyebrow mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-bold text-cyan-100 ring-1 ring-white/20"><Sparkles size={17} /> Viaja seguro · Vive extraordinario</p>
-            <h1 className="hero-title text-4xl font-black leading-[1.04] sm:text-5xl md:text-7xl">Descubre experiencias inolvidables con <span>JohnToursPerú</span></h1>
-            <p className="mt-6 max-w-2xl text-base leading-8 text-slate-100 md:text-xl">Tours nacionales e internacionales diseñados para viajar seguro y vivir momentos extraordinarios.</p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <h1 className="hero-title text-4xl font-black leading-[1.04] sm:text-5xl lg:text-6xl">Descubre experiencias inolvidables con <span>JohnToursPerú</span></h1>
+            <p className="hero-intro mt-5 max-w-2xl text-base leading-7 text-slate-100 lg:text-lg">Tours nacionales e internacionales con orientación clara, reserva segura y acompañamiento real.</p>
+            <div className="hero-actions mt-6 flex flex-col gap-3 sm:flex-row">
               <Link to="/tours" className="btn-gold primary-action"><span className="button-emblem"><Plane size={18} /></span><span className="button-copy"><small>Descubre destinos</small><strong>Explorar tours</strong></span><ArrowRight className="button-arrow" size={18} /></Link>
               <a href={buildWhatsAppUrl(whatsappMessages.general)} className="whatsapp-cta primary-action"><span className="button-brand-stage"><img src="/whatsapp-logo.svg" alt="" /></span><span className="button-copy"><small>Atención personalizada</small><strong>Reservar por WhatsApp</strong></span><ArrowRight className="button-arrow" size={18} /></a>
             </div>
-            <div className="mt-6 flex flex-wrap gap-2 text-xs font-bold text-slate-100">
-              <span className="trust-pill rounded-full bg-white/10 px-3 py-2 ring-1 ring-white/20">Reservas online</span>
+            <div className="hero-trust-pills mt-5 flex flex-wrap gap-2 text-xs font-bold text-slate-100">
               <span className="trust-pill rounded-full bg-white/10 px-3 py-2 ring-1 ring-white/20">Pago por Yape</span>
               <span className="trust-pill rounded-full bg-white/10 px-3 py-2 ring-1 ring-white/20">Atención personalizada</span>
               <span className="trust-pill rounded-full bg-white/10 px-3 py-2 ring-1 ring-white/20">Comprobante PDF</span>
-              <span className="trust-pill rounded-full bg-white/10 px-3 py-2 ring-1 ring-white/20">Itinerarios incluidos</span>
             </div>
-            <div className="mt-8 grid max-w-2xl grid-cols-3 gap-2 sm:gap-3">
+            <div className="hero-trust-grid mt-6 grid max-w-2xl grid-cols-3 gap-2 sm:gap-3">
               <MiniTrust icon={<ShieldCheck />} value="Reserva segura" label="Yape, código único y comprobante" />
               <MiniTrust icon={<Clock3 />} value="Respuesta clara" label="Atención por WhatsApp" />
               <MiniTrust icon={<HeartHandshake />} value="Viaje acompañado" label="Antes, durante y después" />
             </div>
           </div>
-          <div className="space-y-4 lg:pl-2">
-            <LogoShowcase />
+          <div className="hero-visual-stack space-y-3 lg:pl-2">
+            <div className="hero-logo-wrap"><LogoShowcase /></div>
             <div className="hidden lg:block"><HeroVisualCarousel tours={heroTours} /></div>
             <SearchBox />
           </div>
@@ -529,7 +527,7 @@ function HeroVisualCarousel({ tours }: { tours: Tour[] }) {
           {tours.map((tour, index) => (
             <div key={tour.id} className={`carousel-item ${index === 0 ? "active" : ""}`}>
               <Link to={`/tours/${tour.id}`} className="hero-carousel-link" aria-label={`Ver el paquete ${tour.title}`}>
-                <img src={tour.imageUrl} decoding="async" className="d-block h-[250px] w-100 object-cover" alt={tour.title} />
+                <img src={tour.imageUrl} decoding="async" className="d-block h-[220px] w-100 object-cover" alt={tour.title} />
                 <div className="hero-mini-caption">
                   <span>{tour.duration}</span>
                   <strong>{tour.title}</strong>
@@ -648,19 +646,20 @@ function SearchBox() {
   const [destination, setDestination] = useState("");
   const [type, setType] = useState("");
   return (
-    <div className="glass search-panel rounded-2xl p-5 shadow-2xl lg:p-6">
-      <p className="mb-2 text-xs font-black uppercase tracking-widest text-[#0f7a4f]">Cotización rápida</p>
-      <h2 className="text-xl font-black text-[#082447] lg:text-2xl">Diseña tu próxima experiencia</h2>
-      <p className="mt-1 text-sm leading-6 text-slate-600">Filtra por destino, fecha y tipo de viaje. Luego un asesor puede ayudarte por WhatsApp.</p>
-      <div className="mt-5 grid gap-3 lg:grid-cols-2">
-        <input className="rounded-lg border border-slate-200 px-4 py-3" placeholder="Destino" value={destination} onChange={(e) => setDestination(e.target.value)} />
-        <input className="rounded-lg border border-slate-200 px-4 py-3" type="date" />
-        <select className="rounded-lg border border-slate-200 px-4 py-3" value={type} onChange={(e) => setType(e.target.value)}>
+    <div className="glass search-panel rounded-2xl p-5 shadow-2xl">
+      <p className="mb-2 text-xs font-black uppercase tracking-widest text-[#0f7a4f]">Buscador de paquetes</p>
+      <h2 className="text-xl font-black text-[#082447] lg:text-2xl">Encuentra tu próximo destino</h2>
+      <p className="mt-1 text-sm leading-6 text-slate-600">Elige el tipo de viaje o escribe un lugar para abrir el catálogo adecuado.</p>
+      <form className="hero-search-form mt-4 grid gap-3 lg:grid-cols-2" onSubmit={(event) => {
+        event.preventDefault();
+        navigate(`/tours?${new URLSearchParams({ ...(type && { type }), ...(destination && { destination }) }).toString()}`);
+      }}>
+        <input aria-label="Destino que deseas visitar" className="rounded-lg border border-slate-200 px-4 py-3" placeholder="¿A dónde quieres viajar?" value={destination} onChange={(e) => setDestination(e.target.value)} />
+        <select aria-label="Tipo de viaje" className="rounded-lg border border-slate-200 px-4 py-3" value={type} onChange={(e) => setType(e.target.value)}>
           <option value="">Tipo de viaje</option><option value="NACIONAL">Nacional</option><option value="INTERNACIONAL">Internacional</option>
         </select>
-        <input className="rounded-lg border border-slate-200 px-4 py-3" type="number" min="1" placeholder="Personas" />
-        <button className="search-submit lg:col-span-2" onClick={() => navigate(`/tours?${new URLSearchParams({ ...(type && { type }), ...(destination && { destination }) }).toString()}`)}><span className="button-emblem"><Search size={18} /></span><span className="button-copy"><small>Aplicar preferencias</small><strong>Buscar experiencia</strong></span><span className="button-terminal"><ArrowRight size={17} /></span></button>
-      </div>
+        <button type="submit" className="search-submit lg:col-span-2"><span className="button-emblem"><Search size={18} /></span><span className="button-copy"><small>Explorar opciones</small><strong>Buscar experiencia</strong></span><span className="button-terminal"><ArrowRight size={17} /></span></button>
+      </form>
     </div>
   );
 }
@@ -710,6 +709,7 @@ function Tours() {
         <label className="catalog-budget"><span className="catalog-budget-icon"><Filter size={17} /></span><span><small>Presupuesto máximo</small><strong>Hasta {maxPrice.toLocaleString("es-PE")} · S/ o USD</strong></span><input aria-label="Presupuesto máximo por persona" type="range" min="100" max="5000" step="50" value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} /></label>
         <a href={buildWhatsAppUrl(whatsappMessages.general)} className="catalog-advisor"><span className="button-brand-stage"><img src="/whatsapp-logo.svg" alt="" /></span><span className="button-copy"><small>Ayuda personalizada</small><strong>Solicitar orientación</strong></span><ArrowRight className="button-arrow" size={17} /></a>
       </div>
+      {!isLoading && filtered.length > 0 && <div className="catalog-results-meta"><span><strong>{filtered.length}</strong> {filtered.length === 1 ? "experiencia encontrada" : "experiencias encontradas"}</span><small>Precios referenciales sujetos a confirmación</small></div>}
       {isLoading ? <p>Cargando tours...</p> : filtered.length ? <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{filtered.map((tour) => <TourCard key={tour.id} tour={tour} />)}</div> : <div className="catalog-empty"><Search /><strong>No encontramos ese paquete</strong><span>Prueba con el nombre del destino o solicita orientación por WhatsApp.</span></div>}
       <ItineraryLibrary />
     </Section>

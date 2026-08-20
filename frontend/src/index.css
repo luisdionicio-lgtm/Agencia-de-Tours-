@@ -1639,6 +1639,74 @@ textarea {
   text-wrap: balance;
 }
 
+.hero-layout {
+  min-height: calc(100svh - 121px);
+  align-items: center;
+  padding-top: 2rem;
+  padding-bottom: 3.25rem;
+}
+
+.hero-copy {
+  align-self: center;
+}
+
+.hero-visual-stack {
+  align-self: center;
+}
+
+.hero-logo-wrap .logo-stage {
+  width: min(100%, 30rem);
+  height: 118px;
+  padding: .5rem 1rem .45rem;
+  border-radius: 1.15rem;
+}
+
+.hero-logo-wrap .logo-stage img {
+  width: min(82%, 21rem);
+  max-height: 76px;
+}
+
+.hero-logo-wrap .logo-stage > span {
+  padding: .3rem .75rem;
+  font-size: .58rem;
+}
+
+.hero-visual-stack .search-panel {
+  padding: 1rem;
+  transform: none;
+}
+
+.hero-search-form input,
+.hero-search-form select {
+  width: 100%;
+}
+
+.catalog-results-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: -.1rem 0 1rem;
+  color: #52647c;
+  font-size: .78rem;
+}
+
+.catalog-results-meta span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: .35rem;
+}
+
+.catalog-results-meta strong {
+  color: #073b83;
+  font-size: 1.05rem;
+  font-weight: 900;
+}
+
+.catalog-results-meta small {
+  color: #64748b;
+}
+
 .hero-title span {
   color: #ffd56a;
   text-shadow: 0 8px 34px rgba(247, 183, 49, 0.3);
@@ -1802,6 +1870,41 @@ a:focus-visible {
 
   .hero-bg { background-position: 38% center; }
 
+  .hero-layout {
+    min-height: auto;
+    padding-top: 2.25rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2.55rem, 12vw, 3.5rem);
+    line-height: 1.01;
+  }
+
+  .hero-intro {
+    max-width: 34rem;
+  }
+
+  .hero-trust-grid {
+    gap: .45rem;
+  }
+
+  .mini-trust-card {
+    padding: .65rem;
+  }
+
+  .mini-trust-card > span:last-child {
+    display: none;
+  }
+
+  .hero-logo-wrap {
+    display: none;
+  }
+
+  .hero-visual-stack .search-panel {
+    margin-top: -.25rem;
+  }
+
   .hero-bg::before { opacity: .45; }
   .tour-card-media { height:13rem; }
   .airline-guide-heading { align-items:flex-start; flex-direction:column; }
@@ -1869,6 +1972,7 @@ a:focus-visible {
   .floating-whatsapp-message { position:absolute;right:0;bottom:4.6rem;min-width:12.8rem; }
   .floating-whatsapp-wrap.is-expanded .floating-whatsapp { padding-right:.65rem; }
   .floating-whatsapp-label { display:none; }
+  .catalog-results-meta { align-items:flex-start;flex-direction:column;gap:.15rem; }
   .demo-landing-steps { grid-template-columns:1fr; }
 }
 

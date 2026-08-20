@@ -31,6 +31,10 @@ Web publicitaria fullstack para captar clientes, mostrar tours nacionales e inte
 - Guía de aerolíneas por destino con logotipos, objetivo de conexión, criterios de decisión y enlaces oficiales para comparar precio final, horarios, equipaje y escalas.
 - Diseño minimalista con tarjetas jerarquizadas, iconografía profesional y microinteracciones alineadas con la paleta del logo.
 - Acabado visual de marca con aurora interactiva en portada, firma luminosa, movimiento cinematográfico de imágenes, reflejos sutiles en tarjetas y una ruta gráfica para explicar la reserva.
+- Portada publicitaria compacta y reorganizada: propuesta de valor, acciones principales y carrusel quedan visibles con mayor rapidez, mientras el logotipo conserva su presencia sin desplazar el contenido esencial.
+- Buscador principal simplificado a destino y tipo de viaje; se retiraron campos sin efecto real para no crear expectativas falsas y se mantuvo la redirección al catálogo filtrado.
+- Catálogo con resumen de resultados, aviso de precios referenciales y selector accesible que abre directamente el paquete elegido.
+- Asistente flotante de WhatsApp compacto por defecto y expandible al interactuar, para mantener la orientación disponible sin cubrir fotografías, formularios ni acciones importantes.
 - Mejor época para viajar, calendario por tour y salidas programadas.
 - Reserva pendiente con código privado, QR informativo y mensaje formal de WhatsApp.
 - Flujo demostrativo seguro para registrar un comprobante ficticio, simular su aprobación y revisar la confirmación sin subir archivos ni enviar mensajes.

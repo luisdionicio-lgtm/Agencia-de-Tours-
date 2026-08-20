@@ -111,21 +111,19 @@ function PublicHeader({ menuOpen, scrollProgress, onToggleMenu, onCloseMenu }: {
 
 function FloatingWhatsApp() {
   const [messageIndex, setMessageIndex] = useState(0);
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     const messageTimer = window.setInterval(() => setMessageIndex((current) => (current + 1) % advisorMessages.length), 3800);
-    const collapseTimer = window.setTimeout(() => setExpanded(false), 12000);
     return () => {
       window.clearInterval(messageTimer);
-      window.clearTimeout(collapseTimer);
     };
   }, []);
 
   return (
     <div className={`floating-whatsapp-wrap ${expanded ? "is-expanded" : ""}`} onMouseEnter={() => setExpanded(true)} onMouseLeave={() => setExpanded(false)}>
       <div className="floating-whatsapp-message" role="status"><span className="advisor-status" /> <strong>Asesoría disponible</strong><small>{advisorMessages[messageIndex]}</small></div>
-      <a href={buildWhatsAppUrl(budgetOrientationMessage)} className="floating-whatsapp" target="_blank" rel="noreferrer" aria-label="Recibir orientación de JohnToursPerú según mi presupuesto por WhatsApp">
+      <a href={buildWhatsAppUrl(budgetOrientationMessage)} className="floating-whatsapp" target="_blank" rel="noreferrer" aria-label="Recibir orientación de JohnToursPerú según mi presupuesto por WhatsApp" onFocus={() => setExpanded(true)} onBlur={() => setExpanded(false)}>
         <span className="floating-whatsapp-rings" aria-hidden="true" />
         <img src="/whatsapp-logo.svg" alt="" />
         <span className="floating-whatsapp-label"><strong>Según tu presupuesto</strong><small>Orientación por WhatsApp</small></span>
