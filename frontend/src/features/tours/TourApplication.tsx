@@ -702,7 +702,7 @@ function Tours() {
         <a href={buildWhatsAppUrl(whatsappMessages.general)} className="catalog-advisor"><span className="button-brand-stage"><img src="/whatsapp-logo.svg" alt="" /></span><span className="button-copy"><small>Ayuda personalizada</small><strong>Solicitar orientación</strong></span><ArrowRight className="button-arrow" size={17} /></a>
       </div>
       {!isLoading && filtered.length > 0 && <div className="catalog-results-meta"><span><strong>{filtered.length}</strong> {filtered.length === 1 ? "experiencia encontrada" : "experiencias encontradas"}</span><small>Precios referenciales sujetos a confirmación</small></div>}
-      {isLoading ? <p>Cargando tours...</p> : filtered.length ? <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{filtered.map((tour) => <TourCard key={tour.id} tour={tour} />)}</div> : <div className="catalog-empty"><Search /><strong>No encontramos ese paquete</strong><span>Prueba con el nombre del destino o solicita orientación por WhatsApp.</span></div>}
+      {isLoading ? <p>Cargando tours...</p> : filtered.length ? <div className="catalog-tour-grid grid gap-6 md:grid-cols-2 lg:grid-cols-3">{filtered.map((tour) => <TourCard key={tour.id} tour={tour} />)}</div> : <div className="catalog-empty"><Search /><strong>No encontramos ese paquete</strong><span>Prueba con el nombre del destino o solicita orientación por WhatsApp.</span></div>}
       <ItineraryLibrary />
     </Section>
   );

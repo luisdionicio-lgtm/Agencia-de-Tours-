@@ -658,16 +658,24 @@ textarea {
 
 .tour-card-media {
   position: relative;
-  height: 14rem;
+  width: 100%;
+  aspect-ratio: 16 / 9;
   overflow: hidden;
   background: #dce8ef;
 }
 
 .tour-card-media img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center center;
   transition: transform 420ms ease;
+}
+
+.catalog-tour-grid {
+  align-items: stretch;
+  justify-content: center;
 }
 
 .tour-card:hover .tour-card-media img {
@@ -1879,7 +1887,7 @@ a:focus-visible {
   }
 
   .hero-bg::before { opacity: .45; }
-  .tour-card-media { height:13rem; }
+  .tour-card-media { aspect-ratio:16 / 9; }
   .airline-guide-heading { align-items:flex-start; flex-direction:column; }
   .airline-route-grid { grid-template-columns:1fr; }
   .airline-route-card { min-height:auto; }
