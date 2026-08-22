@@ -89,7 +89,7 @@ const demoTours: Tour[] = [
     duration: "4 días / 3 noches",
     type: "NACIONAL",
     availableSlots: 0,
-    imageUrl: "/destinations/oxapampa-pozuzo.webp",
+    imageUrl: "/tour-galleries/pozuzo/comunidad-local.webp",
     isFeatured: true,
     status: "ACTIVO",
     itinerary: [
@@ -369,7 +369,7 @@ const demoPayment: Payment = {
 const postPaymentGuides = [
   { match: ["machu", "cusco", "puno", "arequipa"], key: "cusco", label: "Cusco, Puno y Arequipa", imageUrl: "/destinations/machu-picchu.webp", extras: ["Traslado privado", "Noche adicional", "Almuerzo regional", "Asistencia de altura", "Sesión fotográfica", "Seguro de viaje"] },
   { match: ["guayaquil", "ecuador"], key: "general", label: "Guayaquil y costa ecuatoriana", imageUrl: "/destinations/ecuador-costa.webp", extras: ["Traslado aeropuerto-hotel", "Noche adicional", "Actividad costera", "Equipaje adicional", "Seguro internacional", "Asistencia personalizada"] },
-  { match: ["oxapampa", "pozuzo"], key: "oxapampa", label: "Oxapampa y Pozuzo", imageUrl: "/destinations/oxapampa-pozuzo.webp", extras: ["Traslado privado", "Noche adicional", "Experiencia de café", "Alimentación", "Visita cultural", "Seguro de viaje"] },
+  { match: ["oxapampa", "pozuzo"], key: "oxapampa", label: "Oxapampa y Pozuzo", imageUrl: "/tour-galleries/pozuzo/comunidad-local.webp", extras: ["Traslado privado", "Noche adicional", "Experiencia de café", "Alimentación", "Visita cultural", "Seguro de viaje"] },
   { match: ["ica", "huacachina"], key: "ica", label: "Ica y Huacachina", imageUrl: "/destinations/ica-huacachina.webp", extras: ["Traslado privado", "Noche adicional", "Experiencia gastronómica", "Bodega seleccionada", "Fotografía al atardecer", "Seguro de viaje"] },
   { match: ["tarapoto", "martín"], key: "general", label: "Tarapoto y naturaleza amazónica", imageUrl: "/destinations/tarapoto.webp", extras: ["Traslado privado", "Noche adicional", "Experiencia acuática", "Alimentación", "Actividad natural", "Seguro de viaje"] },
   { match: ["italia", "florencia", "venecia"], key: "general", label: "Italia clásica", imageUrl: "/destinations/italia-clasica.webp", extras: ["Traslados privados", "Noche adicional", "Entradas culturales", "Experiencia gastronómica", "Seguro internacional", "Asistencia personalizada"] },

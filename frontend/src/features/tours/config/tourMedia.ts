@@ -45,9 +45,9 @@ export const tourMediaBySlug: Record<string, TourMediaCollection> = {
   "oxapampa-pozuzo": {
     introduction: "El paquete reúne identidad local, paisajes de selva alta y experiencias culturales que se ajustan a la fecha elegida.",
     items: [
-      { image: "/tour-galleries/pozuzo/portico.webp", title: "Pórtico de Pozuzo", stage: "Bienvenida al destino", alt: "Visitantes en el pórtico tradicional de Pozuzo" },
-      { image: "/tour-galleries/pozuzo/catarata.webp", title: "Naturaleza de Pozuzo", stage: "Recorrido de selva alta", alt: "Grupo de viajeros junto a una catarata en Pozuzo" },
-      { image: "/tour-galleries/pozuzo/comunidad-local.webp", title: "Encuentro cultural", stage: "Experiencia local", alt: "Viajeros durante una actividad cultural de la ruta a Pozuzo" }
+      { image: "/tour-galleries/pozuzo/portico.webp", title: "Pórtico de Pozuzo", stage: "Bienvenida al destino", alt: "Equipo de JohnToursPerú en el pórtico tradicional de Pozuzo" },
+      { image: "/tour-galleries/pozuzo/comunidad-local.webp", title: "Experiencia cultural en Pozuzo", stage: "Encuentro con la comunidad", alt: "Grupo de viajeros de JohnToursPerú durante una experiencia cultural en Pozuzo" },
+      { image: "/tour-galleries/pozuzo/catarata.webp", title: "Catarata de Pozuzo", stage: "Naturaleza de selva alta", alt: "Grupo de viajeros junto a una catarata durante el tour de Pozuzo" }
     ]
   }
 };
