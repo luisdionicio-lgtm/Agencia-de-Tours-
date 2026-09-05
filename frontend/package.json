@@ -3,6 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
+    "test:content": "node scripts/check-tour-content.cjs",
+    "media:previews": "node scripts/generate-tour-previews.cjs",
     "dev": "next dev",
     "build": "next build",
     "lint": "oxlint src app",

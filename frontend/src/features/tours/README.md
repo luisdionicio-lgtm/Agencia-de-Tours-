@@ -5,7 +5,10 @@ La funcionalidad se divide por responsabilidad para que cada mejora pueda realiz
 - `TourApplication.tsx`: coordinación de páginas públicas, reservas, pagos y panel interno.
 - `components/SiteShell.tsx`: cabecera pública, navegación adaptable, pie de página y orientación flotante por WhatsApp.
 - `components/PromotionsShowcase.tsx`: carrusel multimedia de promociones referenciales enlazadas a cada paquete.
-- `components/TravelArchiveShowcase.tsx`: galería editorial de fotografías propias, destinos reconocidos y precios demo enlazados al catálogo.
+- `components/TravelMoments.tsx`: selección fotográfica de portada, filtrada por región y enlazada al catálogo; reutiliza sus precios e identificadores.
+- `components/TourMediaGallery.tsx`: fotografías completas con visor accesible y navegación por teclado.
+- `components/ItineraryOptions.tsx`: comparación interactiva de modalidades y consulta contextual por WhatsApp.
+- `components/TourSocialVideo.tsx`: videos sociales verificados, cargados únicamente con activación del visitante.
 - `components/ExperienceProofSection.tsx`: muestra compacta de grupos acompañados con fotografías WebP propias y acceso directo al paquete relacionado.
 - `components/TourMediaGallery.tsx`: galería contextual dentro de la ficha del paquete; relaciona fotografías propias con las etapas públicas de la ruta.
 - `components/TourCard.tsx`: presentación reutilizable del paquete, sus beneficios y el enlace a la ficha completa.

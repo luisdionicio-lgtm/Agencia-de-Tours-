@@ -1,0 +1,24 @@
+.gallery { scroll-margin-top: 150px; margin-top: 3rem; padding: clamp(1rem, 3vw, 2rem); border: 1px solid #d8e7ed; border-radius: 24px; background: linear-gradient(145deg, #fff, #f0faf9); }
+.heading { display: flex; align-items: end; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; }
+.heading span { display: flex; align-items: center; gap: .5rem; color: #087e6b; font-size: .75rem; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; }
+.heading h3 { margin: .6rem 0; color: #082447; font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; }
+.heading p { max-width: 65ch; color: #52657a; line-height: 1.7; margin: 0; }
+.heading > small { color: #52657a; flex-shrink: 0; font-size: .75rem; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 1.2rem; }
+.card { margin: 0; overflow: hidden; background: #fff; border: 1px solid #dae7ee; border-radius: 16px; box-shadow: 0 8px 22px #09274808; }
+.photo { position: relative; display: block; width: 100%; aspect-ratio: 4/3; padding: 0; border: 0; cursor: zoom-in; background: #e7eff1; }
+.photo img { width: 100%; height: 100%; object-fit: contain; }
+.expand { position: absolute; bottom: .65rem; right: .65rem; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; color: #fff; background: #082447de; }
+.photo:focus-visible, .viewer button:focus-visible { outline: 3px solid #f5b928; outline-offset: -3px; }
+.card figcaption { display: grid; gap: .4rem; padding: 1rem; }
+.card small { display: flex; align-items: center; gap: .4rem; color: #087e6b; font-size: .7rem; }
+.card strong { color: #082447; font-size: .95rem; }
+.disclaimer { margin: 1.25rem 0 0; color: #52657a; font-size: .75rem; line-height: 1.6; }
+.viewer { position: fixed; inset: 0; width: min(1100px, 96vw); max-width: 96vw; height: auto; max-height: 96dvh; margin: auto; padding: 0; border: 1px solid #496176; border-radius: 16px; background: #071c30; color: #fff; overflow: auto; }
+.viewer::backdrop { background: #031120e8; }
+.viewerContent { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; }
+.toolbar, .navigation { display: flex; justify-content: space-between; align-items: center; gap: .75rem; padding: .65rem 1rem; font-size: .85rem; }
+.viewer button { display: grid; place-items: center; width: 44px; height: 44px; flex-shrink: 0; border: 1px solid #647989; border-radius: 50%; background: #17364d; color: #fff; cursor: pointer; }
+.fullPhoto { width: 100%; height: min(72dvh, 800px); object-fit: contain; }
+.navigation span { text-align: center; }
+@media (max-width: 650px) { .heading { align-items: start; flex-direction: column; } .gallery { margin-top: 2rem; } .toolbar { font-size: .8rem; } }

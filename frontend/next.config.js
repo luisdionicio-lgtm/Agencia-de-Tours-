@@ -15,7 +15,7 @@ const nextConfig = {
       "style-src 'self' 'unsafe-inline'",
       `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""}`,
       "connect-src 'self' https: wss:",
-      "frame-src 'self'",
+      "frame-src 'self' https://www.tiktok.com",
       process.env.NODE_ENV === "production" ? "upgrade-insecure-requests" : ""
     ].filter(Boolean).join("; ");
 

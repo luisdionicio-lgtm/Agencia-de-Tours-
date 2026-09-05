@@ -10,15 +10,20 @@ import type { BusinessSettings, Payment, Reservation, Tour, TourStatus, TourType
 import { SiteShell } from "./components/SiteShell";
 import { TourCard } from "./components/TourCard";
 import { buildWhatsAppUrl, demoStaffAccounts, isDemoMode, reservationAmount, socialLinks, whatsappMessages } from "./config/contact";
-import { itineraryCatalog, itineraryVariantsFor, type ItineraryVariant } from "./config/itineraryCatalog";
+import { itineraryCatalog, itineraryVariantsFor } from "./config/itineraryCatalog";
 import { destinationImage, paymentMoney, reservationCode, tourCurrency, tourMoney, type TourDeparture } from "./lib/presentation";
 import { downloadReservationReceipt } from "./lib/reservationReceipt";
 import { AirlineGuideSection } from "./sections/AirlineGuideSection";
 import { DestinationCarousel } from "./components/DestinationCarousel";
 import { ExperienceProofSection } from "./components/ExperienceProofSection";
 import { PromotionsShowcase } from "./components/PromotionsShowcase";
-import { TravelArchiveShowcase } from "./components/TravelArchiveShowcase";
+import { TravelMoments } from "./components/TravelMoments";
 import { TourMediaGallery } from "./components/TourMediaGallery";
+import { TourSocialVideo } from "./components/TourSocialVideo";
+import { matchesDestination } from "./utils/destinationMatch";
+import { ItineraryOptions } from "./components/ItineraryOptions";
+import { TourDetailNav } from "./components/TourDetailNav";
+import { tourMediaBySlug } from "./config/tourMedia";
 import { HowItWorksSection } from "./sections/HowItWorksSection";
 
 const demoDepartures = (_tourId: number, items: [number, string, string, number, number][]): TourDeparture[] =>
@@ -478,7 +483,7 @@ function Home() {
         <a href="#destinos" className="hero-scroll-cue"><span>Descubre los destinos</span><i><ChevronDown size={17} /></i></a>
       </section>
       <DestinationCarousel tours={tours.length ? tours : demoTours} />
-      <TravelArchiveShowcase />
+      <TravelMoments tours={tours.length ? tours : demoTours} />
       <ExperienceProofSection />
       <Section title="Tours destacados" subtitle="Paquetes elegidos para viajar con confianza y asistencia desde la primera cotización.">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">{featured.map((tour) => <TourCard key={tour.id} tour={tour} />)}</div>
@@ -728,14 +733,6 @@ function ItineraryLibrary() {
   </section>;
 }
 
-function PublicItineraryOptions({ variants }: { variants: ItineraryVariant[] }) {
-  if (!variants.length) return null;
-  return <section className="public-itinerary-options">
-    <div><span className="section-kicker"><Sparkles size={14} /> Alternativas del destino</span><h3>Elige la duración que mejor se adapte a ti</h3><p>Estas son las modalidades principales encontradas para este destino. Los horarios y datos operativos permanecen privados hasta confirmar la reserva.</p></div>
-    <div className="public-itinerary-options-grid">{variants.map((variant) => <article key={variant.id}><span>{variant.duration}</span><h4>{variant.title}</h4><ul>{variant.publicHighlights.map((highlight) => <li key={highlight}><CheckCircle2 size={14} />{highlight}</li>)}</ul></article>)}</div>
-  </section>;
-}
-
 const seasonByDestination = [
   { terms: ["cusco", "machu"], months: "mayo a septiembre", reason: "Temporada seca, cielos más despejados y mejores condiciones para caminatas." },
   { terms: ["guayaquil", "ecuador"], months: "junio a noviembre", reason: "Ambiente más fresco y condiciones agradables para recorridos urbanos y costeros." },
@@ -768,7 +765,7 @@ const featuredTourVideos: Record<string, { src: string; poster: string; title: s
 
 const tourSeason = (tour: Tour) => {
   const value = `${tour.title} ${tour.destination}`.toLowerCase();
-  return seasonByDestination.find((item) => item.terms.some((term) => value.includes(term))) ?? { months: "según disponibilidad", reason: "Un asesor confirmará clima, demanda y condiciones antes de reservar." };
+  return seasonByDestination.find((item) => item.terms.some((term) => matchesDestination(value, term))) ?? { months: "según disponibilidad", reason: "Un asesor confirmará clima, demanda y condiciones antes de reservar." };
 };
 const departureDate = (value: string) => new Date(`${value.slice(0, 10)}T12:00:00`);
 const departureUrgency = (departure: TourDeparture) => {
@@ -815,11 +812,12 @@ function TourDetail() {
   const externalImageCredit = tour.imageCredit && !/(archivo propio|fotograf[ií]a propia|fotograma de archivo propio)/i.test(tour.imageCredit) ? tour.imageCredit : undefined;
   return (
     <Section title={tour.title} subtitle={`${tour.destination} · ${tour.duration}`}>
-      <div className="grid gap-8 lg:grid-cols-[1.2fr_.8fr]">
+      <TourDetailNav photos={Boolean(tourMediaBySlug[tour.slug])} video={Boolean(featuredVideo)} itineraries={itineraryOptions.length > 0} />
+      <div id="tour-overview" style={{ scrollMarginTop: 150 }} className="grid gap-8 lg:grid-cols-[1.2fr_.8fr]">
         <div className="space-y-4">
           <div className="tour-detail-image"><img src={tour.imageUrl} alt={tour.title} className="h-[440px] w-full rounded-lg object-cover shadow-xl" /></div>
           {externalImageCredit && <p className="tour-image-attribution">Crédito de la imagen: {externalImageCredit}</p>}
-          {featuredVideo && <div className="overflow-hidden rounded-lg border border-cyan-100 bg-[#061f3f] shadow-lg">
+          {featuredVideo && <div id="tour-video" style={{ scrollMarginTop: 150 }} className="overflow-hidden rounded-lg border border-cyan-100 bg-[#061f3f] shadow-lg">
             <div className="flex items-center gap-3 px-4 py-3 text-white"><PlayCircle className="text-cyan-300" /><span><small className="block text-[10px] font-black uppercase tracking-[.14em] text-cyan-200">Video de la experiencia</small><strong>{featuredVideo.title}</strong></span></div>
             <video className="aspect-video w-full bg-black object-cover" controls playsInline preload="none" poster={featuredVideo.poster} aria-label={`Video de ${tour.title}`}>
               <source src={featuredVideo.src} type="video/mp4" />
@@ -827,7 +825,7 @@ function TourDetail() {
             </video>
           </div>}
         </div>
-        <aside className="booking-aside rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+        <aside className="booking-aside self-start rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
           <p className="text-sm font-bold uppercase text-[#0f7a4f]">{tour.type}</p>
           <p className="mt-3 text-4xl font-black text-[#082447]">{tourMoney(tour)}</p>
           {tour.priceIsEstimated && <p className="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-xs font-bold leading-5 text-amber-800">Precio referencial de demostración. Confirma la tarifa final antes de reservar.</p>}
@@ -854,7 +852,8 @@ function TourDetail() {
         <Info title="Servicios principales" items={["Alojamiento y traslados según la propuesta", "Guiado en los recorridos confirmados", "Asistencia de JohnToursPerú durante el viaje"]} />
       </div>
       <TourMediaGallery tourSlug={tour.slug} />
-      <PublicItineraryOptions variants={itineraryOptions} />
+      <TourSocialVideo key={tour.slug} tourSlug={tour.slug} />
+      <ItineraryOptions key={tour.slug} variants={itineraryOptions} />
       <p className="public-itinerary-note"><ShieldCheck size={17} /> Por seguridad y claridad comercial, el itinerario detallado —horarios, traslados, paradas y condiciones— se habilita después de confirmar la reserva.</p>
     </Section>
   );

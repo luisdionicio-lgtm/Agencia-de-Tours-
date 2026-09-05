@@ -5,11 +5,41 @@ export type ItineraryVariant = {
   title: string;
   duration: string;
   sourceGroup: string;
+  referenceOnly?: boolean;
   publicHighlights: string[];
   days: string[];
 };
 
 export const itineraryCatalog: ItineraryVariant[] = [
+  {
+    id: "bienvenidos-europa",
+    packageSlug: "europa-esencial-madrid-paris-roma",
+    region: "Europa",
+    title: "Europa con Lucerna y Verona",
+    duration: "17 días / 15 noches",
+    sourceGroup: "Programa Europa Fantástica · ruta referencial de archivo, fechas por reconfirmar",
+    referenceOnly: true,
+    publicHighlights: ["Madrid y Barcelona", "Burdeos, Blois y París", "Lucerna y Zúrich", "Verona, Venecia y Roma", "Florencia, Pisa y Costa Azul"],
+    days: [
+      "Salida internacional hacia Madrid; vuelo sujeto a confirmación.",
+      "Llegada a Madrid, recepción y traslado al alojamiento confirmado.",
+      "Recorrido panorámico por Madrid y tarde libre; Toledo es una visita opcional.",
+      "Traslado de Madrid a Burdeos, pasando por las proximidades de Burgos.",
+      "Burdeos–Blois–París, con tiempo libre en Blois; crucero por el Sena opcional.",
+      "Visita panorámica de París; Montmartre y Barrio Latino como actividades opcionales.",
+      "Día en París; excursión a Versalles opcional, no incluida por defecto.",
+      "París–Lucerna–Zúrich, con tiempo libre junto al paisaje lacustre de Lucerna.",
+      "Zúrich–Verona–Venecia, con tiempo libre en Verona.",
+      "Recorrido por Venecia y continuación a Roma; paseo en góndola opcional.",
+      "Visita panorámica de Roma; Museos Vaticanos y Roma Barroca sujetos a contratación adicional y disponibilidad.",
+      "Día libre en Roma; excursión a Nápoles y Capri opcional.",
+      "Roma–Florencia y recorrido a pie por el centro histórico.",
+      "Florencia–Pisa–Costa Azul; visita nocturna a Mónaco opcional.",
+      "Costa Azul–Barcelona y recorrido panorámico.",
+      "Barcelona–Zaragoza–Madrid, con parada en el entorno de la Basílica del Pilar.",
+      "Traslado al aeropuerto y vuelo de retorno según los servicios contratados."
+    ]
+  },
   { id: "cusco-express", region: "Cusco", title: "Cusco esencial", duration: "3 días / 2 noches", sourceGroup: "Tours Cusco privados", publicHighlights: ["Valle Sagrado", "Machu Picchu", "City tour de Cusco"], days: ["Llegada a Cusco, recepción, aclimatación y orientación del viaje.", "Valle Sagrado: Pisac, Urubamba y Ollantaytambo según horario confirmado.", "Machu Picchu con tren, bus, ingreso programado y retorno asistido; el city tour se ajusta al vuelo."] },
   { id: "cusco-imperial", region: "Cusco", title: "Cusco Imperial", duration: "5 días / 4 noches", sourceGroup: "Tours Cusco", publicHighlights: ["Sacsayhuamán", "Valle Sagrado", "Machu Picchu", "Maras, Moray y Salineras"], days: ["Llegada, traslado, aclimatación y recorrido por Sacsayhuamán, Cristo Blanco, Qenqo, Tambomachay y Puca Pucara.", "Valle Sagrado con Pisac, almuerzo en Urubamba, Ollantaytambo y Chinchero.", "Salida a Ollantaytambo, tren a Aguas Calientes, bus e ingreso guiado a Machu Picchu; retorno asistido.", "Maras, terrazas de Moray y Salineras; actividades adicionales sujetas a la propuesta.", "Desayuno, tiempo libre y traslado coordinado al aeropuerto."] },
   { id: "cusco-aventura", region: "Cusco", title: "Cusco aventura y naturaleza", duration: "7 días / 6 noches", sourceGroup: "Tours Cusco", publicHighlights: ["Machu Picchu", "Montaña de Siete Colores", "Laguna Humantay", "Valle Sur"], days: ["Llegada a Cusco, recepción y circuito arqueológico cercano.", "Valle Sagrado de los Incas.", "Traslado a Aguas Calientes y preparación del ingreso.", "Visita guiada a Machu Picchu.", "Excursión a la Montaña de Siete Colores, sujeta a condición física y clima.", "Excursión a Laguna Humantay, sujeta a condición física y clima.", "Valle Sur y retorno coordinado."] },
