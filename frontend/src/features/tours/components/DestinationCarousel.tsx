@@ -45,7 +45,7 @@ export function DestinationCarousel({ tours }: { tours: Tour[] }) {
                 <div className="destination-carousel-content">
                   <span className="destination-type">{tour.type === "NACIONAL" ? "Tour nacional" : "Tour internacional"}</span>
                   <p><MapPin size={16} /> {tour.destination}</p>
-                  <h3>{tour.title}</h3>
+                  <h3 className={tour.title.length > 32 ? "destination-title-long" : undefined}>{tour.title}</h3>
                   <strong>{destinationMood[tour.slug] ?? "Una experiencia diseñada para disfrutar cada momento."}</strong>
                   <div className="destination-carousel-meta">
                     <span><CalendarDays size={17} /> {tour.duration}</span>
