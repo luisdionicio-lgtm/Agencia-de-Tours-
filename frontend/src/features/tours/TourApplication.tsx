@@ -809,14 +809,12 @@ function TourDetail() {
   const season = tourSeason(tour);
   const featuredVideo = featuredTourVideos[tour.slug];
   const itineraryOptions = itineraryVariantsFor(tour.slug);
-  const externalImageCredit = tour.imageCredit && !/(archivo propio|fotograf[ií]a propia|fotograma de archivo propio)/i.test(tour.imageCredit) ? tour.imageCredit : undefined;
   return (
     <Section title={tour.title} subtitle={`${tour.destination} · ${tour.duration}`}>
       <TourDetailNav photos={Boolean(tourMediaBySlug[tour.slug])} video={Boolean(featuredVideo)} itineraries={itineraryOptions.length > 0} />
       <div id="tour-overview" style={{ scrollMarginTop: 150 }} className="grid gap-8 lg:grid-cols-[1.2fr_.8fr]">
         <div className="space-y-4">
           <div className="tour-detail-image"><img src={tour.imageUrl} alt={tour.title} className="h-[440px] w-full rounded-lg object-cover shadow-xl" /></div>
-          {externalImageCredit && <p className="tour-image-attribution">Crédito de la imagen: {externalImageCredit}</p>}
           {featuredVideo && <div id="tour-video" style={{ scrollMarginTop: 150 }} className="overflow-hidden rounded-lg border border-cyan-100 bg-[#061f3f] shadow-lg">
             <div className="flex items-center gap-3 px-4 py-3 text-white"><PlayCircle className="text-cyan-300" /><span><small className="block text-[10px] font-black uppercase tracking-[.14em] text-cyan-200">Video de la experiencia</small><strong>{featuredVideo.title}</strong></span></div>
             <video className="aspect-video w-full bg-black object-cover" controls playsInline preload="none" poster={featuredVideo.poster} aria-label={`Video de ${tour.title}`}>
