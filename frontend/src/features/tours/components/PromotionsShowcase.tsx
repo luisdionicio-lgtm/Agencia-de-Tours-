@@ -1,4 +1,4 @@
-import { ArrowRight, CalendarDays, Camera, ChevronLeft, ChevronRight, CirclePlay, Info, MapPin, Sparkles } from "lucide-react";
+import { ArrowRight, Camera, ChevronLeft, ChevronRight, CirclePlay, Info, MapPin, Sparkles } from "lucide-react";
 import { Link } from "../../../core/routing";
 import type { Tour } from "../../../shared/types";
 
@@ -6,7 +6,6 @@ type Promotion = {
   tourId: number;
   title: string;
   destination: string;
-  period: string;
   message: string;
   image: string;
   video?: string;
@@ -17,7 +16,6 @@ const promotions: Promotion[] = [
     tourId: 1,
     title: "Cusco, Puno y Arequipa",
     destination: "Circuito por el sur del Perú",
-    period: "Periodo demo · 15 ago. — 30 sep. 2026",
     message: "Un solo circuito conecta Cusco y Machu Picchu, el lago Titicaca en Puno y la etapa histórica de Arequipa.",
     image: "/media/machu-picchu-reel-poster.webp",
     video: "/media/machu-picchu-reel.mp4"
@@ -26,7 +24,6 @@ const promotions: Promotion[] = [
     tourId: 5,
     title: "Tarapoto: naturaleza en movimiento",
     destination: "San Martín, Perú",
-    period: "Periodo demo · 01 sep. — 15 nov. 2026",
     message: "Conoce una muestra del recorrido y consulta una salida adaptada a tus fechas. Actividades sujetas a confirmación del operador.",
     image: "/destinations/tarapoto.webp",
     video: "/media/tarapoto-naturaleza.mp4"
@@ -35,7 +32,6 @@ const promotions: Promotion[] = [
     tourId: 2,
     title: "Guayaquil y costa ecuatoriana",
     destination: "Guayaquil, Ecuador",
-    period: "Periodo demo · 02 oct. — 30 nov. 2026",
     message: "Combina recorridos urbanos y una experiencia costera en una propuesta internacional preparada según el tamaño del grupo.",
     image: "/destinations/ecuador-costa.webp"
   },
@@ -43,7 +39,6 @@ const promotions: Promotion[] = [
     tourId: 6,
     title: "Sueños de Europa",
     destination: "España · Francia · Suiza · Italia",
-    period: "Temporada referencial · abr. — jun. 2027",
     message: "Un circuito de cuatro países para planificar con tiempo vuelos, alojamiento, traslados y experiencias culturales.",
     image: "/destinations/europa-esencial.webp"
   }
@@ -57,7 +52,7 @@ export function PromotionsShowcase({ tours }: { tours: Tour[] }) {
           <div>
             <span className="section-kicker"><Sparkles size={15} /> Inspiración y promociones</span>
             <h2 id="promotion-title">Ideas para tu próximo viaje</h2>
-            <p>Fotos, videos breves y periodos promocionales de demostración para ayudarte a elegir. La tarifa y disponibilidad siempre se confirman con un asesor.</p>
+            <p>Fotos y videos breves para ayudarte a elegir. La tarifa y disponibilidad siempre se confirman con un asesor.</p>
           </div>
           <span className="promotion-demo-note"><Info size={17} /> Contenido referencial</span>
         </div>
@@ -86,7 +81,6 @@ export function PromotionsShowcase({ tours }: { tours: Tour[] }) {
                       <p className="promotion-location"><MapPin size={16} /> {promotion.destination}</p>
                       <h3>{tour?.title ?? promotion.title}</h3>
                       <p className="promotion-message">{promotion.message}</p>
-                      <span className="promotion-period"><CalendarDays size={18} /><span><small>Fecha promocional referencial</small><strong>{promotion.period}</strong></span></span>
                       <Link to={`/tours/${promotion.tourId}`} className="promotion-cta"><span><small>Revisar itinerario</small><strong>Conocer esta propuesta</strong></span><ArrowRight size={18} /></Link>
                       <small className="promotion-disclaimer">No constituye una oferta final. Precio, fecha, servicios y condiciones se validan antes de reservar.</small>
                     </div>
