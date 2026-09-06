@@ -69,7 +69,8 @@ export const reservationService = {
     });
 
     void mailService.sendReservationCreated(reservation).catch((error) => console.error("No se pudo enviar el correo de reserva", error));
-    return reservation;
+    const { documentNumber: _documentNumber, ...publicCustomer } = reservation.customer;
+    return { ...reservation, customer: publicCustomer };
   },
   async list() {
     await releaseExpiredReservationHolds();

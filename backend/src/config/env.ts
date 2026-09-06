@@ -3,6 +3,15 @@ import { z } from "zod";
 
 dotenv.config();
 
+export function parseBooleanEnvironmentValue(value: unknown) {
+  if (typeof value !== "string") return value;
+  if (value.trim().toLowerCase() === "true") return true;
+  if (value.trim().toLowerCase() === "false") return false;
+  return value;
+}
+
+const booleanFromEnvironment = z.preprocess(parseBooleanEnvironmentValue, z.boolean());
+
 const envSchema = z.object({
   DATABASE_URL: z.string().min(1),
   PORT: z.coerce.number().default(4000),
@@ -10,10 +19,12 @@ const envSchema = z.object({
   FRONTEND_URL: z.string().url().default("http://localhost:3000"),
   JWT_SECRET: z.string().min(16).default("cambia_este_secreto_en_produccion"),
   JWT_EXPIRES_IN: z.string().default("8h"),
+  JWT_ISSUER: z.string().min(3).default("johntours-api"),
+  JWT_AUDIENCE: z.string().min(3).default("johntours-staff"),
   BCRYPT_SALT_ROUNDS: z.coerce.number().int().min(8).max(14).default(10),
   YAPE_RESERVATION_AMOUNT: z.coerce.number().positive().default(200),
   RESERVATION_HOLD_MINUTES: z.coerce.number().int().min(5).max(1440).default(30),
-  ENABLE_DEMO_STAFF: z.coerce.boolean().default(false),
+  ENABLE_DEMO_STAFF: booleanFromEnvironment.default(false),
   WORKER_EMAIL: z.string().email().optional(),
   WORKER_PASSWORD: z.string().min(12).optional(),
   SMTP_HOST: z.string().default(""),
@@ -60,14 +71,17 @@ export function validateProductionConfig() {
     errors.push("WORKER_EMAIL y WORKER_PASSWORD son obligatorios al habilitar personal demo.");
   }
 
-  if (env.JWT_SECRET === "cambia_este_secreto_en_produccion" || env.JWT_SECRET === "change_this_secret") {
-    errors.push("JWT_SECRET debe ser un secreto real en produccion.");
+  if (env.JWT_SECRET.length < 32 || env.JWT_SECRET === "cambia_este_secreto_en_produccion" || env.JWT_SECRET === "change_this_secret") {
+    errors.push("JWT_SECRET debe ser un secreto aleatorio de al menos 32 caracteres en produccion.");
   }
   if (env.ADMIN_PASSWORD === "Admin12345" || env.ADMIN_PASSWORD.length < 16) {
     errors.push("ADMIN_PASSWORD debe tener al menos 16 caracteres y no puede usar la clave demostrativa.");
   }
   if (env.ADMIN_EMAIL === "admin@johntours.com") {
     errors.push("ADMIN_EMAIL debe ser una cuenta administrativa corporativa real.");
+  }
+  if (!env.FRONTEND_URL.startsWith("https://")) {
+    errors.push("FRONTEND_URL debe usar HTTPS en produccion.");
   }
 
   if (!getIntegrationStatus().smtp.configured) {

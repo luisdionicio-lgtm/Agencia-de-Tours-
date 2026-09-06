@@ -16,6 +16,15 @@ function formatAmount(value: unknown) {
   return new Intl.NumberFormat("es-PE", { currency: "PEN", style: "currency" }).format(Number(value));
 }
 
+export function escapeHtml(value: unknown) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
 async function sendMail(to: string, subject: string, html: string) {
   if (!isSmtpConfigured()) {
     const message = "SMTP no configurado. Define SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS y MAIL_FROM para enviar correos.";
@@ -42,9 +51,9 @@ export const mailService = {
       reservation.customer.email,
       `Reserva recibida #${reservation.id} - JohnToursPerú`,
       `
-        <h2>Hola ${reservation.customer.fullName}</h2>
-        <p>Recibimos tu reserva para <strong>${reservation.tour.title}</strong> (${reservation.tour.destination}).</p>
-        <p><strong>Personas:</strong> ${reservation.peopleCount}</p>
+        <h2>Hola ${escapeHtml(reservation.customer.fullName)}</h2>
+        <p>Recibimos tu reserva para <strong>${escapeHtml(reservation.tour.title)}</strong> (${escapeHtml(reservation.tour.destination)}).</p>
+        <p><strong>Personas:</strong> ${escapeHtml(reservation.peopleCount)}</p>
         <p><strong>Total:</strong> ${formatAmount(reservation.totalAmount)}</p>
         <p>Tu reserva está pendiente de pago. Gracias por confiar en JohnToursPerú.</p>
       `
@@ -56,9 +65,9 @@ export const mailService = {
       `Pago confirmado #${reservation.id} - JohnToursPerú`,
       `
         <h2>Pago confirmado</h2>
-        <p>Hola ${reservation.customer.fullName}, tu pago para <strong>${reservation.tour.title}</strong> fue confirmado.</p>
-        <p><strong>Destino:</strong> ${reservation.tour.destination}</p>
-        <p><strong>Personas:</strong> ${reservation.peopleCount}</p>
+        <p>Hola ${escapeHtml(reservation.customer.fullName)}, tu pago para <strong>${escapeHtml(reservation.tour.title)}</strong> fue confirmado.</p>
+        <p><strong>Destino:</strong> ${escapeHtml(reservation.tour.destination)}</p>
+        <p><strong>Personas:</strong> ${escapeHtml(reservation.peopleCount)}</p>
         <p><strong>Total:</strong> ${formatAmount(reservation.totalAmount)}</p>
         <p>Un asesor de JohnToursPerú se comunicará contigo para coordinar los detalles finales.</p>
       `

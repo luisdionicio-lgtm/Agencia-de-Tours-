@@ -27,6 +27,8 @@ DATABASE_URL=mysql://usuario:clave@host:3306/john_tours
 FRONTEND_URL=https://dominio-oficial.pe
 JWT_SECRET=secreto_unico_largo_y_aleatorio
 JWT_EXPIRES_IN=8h
+JWT_ISSUER=johntours-api
+JWT_AUDIENCE=johntours-staff
 BCRYPT_SALT_ROUNDS=12
 YAPE_RESERVATION_AMOUNT=200
 ENABLE_DEMO_STAFF=false
@@ -72,6 +74,8 @@ npm audit --omit=dev --prefix backend
 - Descargar comprobante PDF y revisar logo, datos, itinerario y extras.
 - Confirmar que WhatsApp solo abre el mensaje y nunca lo envía automáticamente.
 - Verificar permisos de `ADMIN` y `WORKER`.
+- Supervisar `/api/health/ready`: debe responder `200` con la base disponible y `503` cuando no pueda aceptar tráfico.
+- Confirmar que un token vencido, alterado o emitido para otra audiencia responde `401` y nunca expone detalles internos.
 
 ## Datos empresariales
 

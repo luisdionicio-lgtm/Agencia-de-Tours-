@@ -44,5 +44,9 @@
     "prisma": "^6.19.0",
     "tsx": "^4.23.0",
     "typescript": "^7.0.2"
+  },
+  "overrides": {
+    "deepmerge-ts": "8.0.2",
+    "qs": "6.16.0"
   }
 }

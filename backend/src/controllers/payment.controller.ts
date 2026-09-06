@@ -20,7 +20,10 @@ export const paymentController = {
     const proof = await paymentService.proof(Number(req.params.id));
     res.setHeader("Content-Type", proof.mimeType);
     res.setHeader("Content-Length", String(proof.sizeBytes));
-    res.setHeader("Content-Disposition", `inline; filename="${proof.fileName.replace(/[^a-zA-Z0-9._-]/g, "_")}"`);
+    const disposition = proof.mimeType === "application/pdf" ? "attachment" : "inline";
+    res.setHeader("Content-Disposition", `${disposition}; filename="${proof.fileName.replace(/[^a-zA-Z0-9._-]/g, "_")}"`);
+    res.setHeader("Content-Security-Policy", "default-src 'none'; sandbox");
+    res.setHeader("Cross-Origin-Resource-Policy", "same-origin");
     res.setHeader("X-Content-Type-Options", "nosniff");
     res.send(proof.data);
   }

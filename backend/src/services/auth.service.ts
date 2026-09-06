@@ -14,6 +14,9 @@ export const authService = {
     if (!isValid) throw new AppError(401, "Credenciales invalidas");
 
     const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, env.JWT_SECRET, {
+      algorithm: "HS256",
+      audience: env.JWT_AUDIENCE,
+      issuer: env.JWT_ISSUER,
       expiresIn: env.JWT_EXPIRES_IN
     } as jwt.SignOptions);
 

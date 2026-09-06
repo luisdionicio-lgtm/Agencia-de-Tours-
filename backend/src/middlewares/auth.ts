@@ -14,12 +14,26 @@ declare global {
 }
 
 function authenticate(req: Request) {
-  const token = req.headers.authorization?.replace("Bearer ", "");
+  const authorization = req.headers.authorization;
+  const token = authorization?.startsWith("Bearer ") ? authorization.slice(7).trim() : undefined;
   if (!token) throw new AppError(401, "Token requerido");
 
-  const payload = jwt.verify(token, env.JWT_SECRET) as AuthUser;
-  req.user = payload;
-  return payload;
+  try {
+    const payload = jwt.verify(token, env.JWT_SECRET, {
+      algorithms: ["HS256"],
+      audience: env.JWT_AUDIENCE,
+      issuer: env.JWT_ISSUER
+    });
+    if (typeof payload === "string" || typeof payload.id !== "number" || typeof payload.email !== "string" || !["ADMIN", "WORKER", "CLIENT"].includes(payload.role)) {
+      throw new AppError(401, "Token invalido o vencido");
+    }
+    const user = { id: payload.id, email: payload.email, role: payload.role as AuthUser["role"] };
+    req.user = user;
+    return user;
+  } catch (error) {
+    if (error instanceof AppError) throw error;
+    throw new AppError(401, "Token invalido o vencido");
+  }
 }
 
 export function requireStaff(req: Request, _res: Response, next: NextFunction) {
