@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Montserrat, Source_Sans_3 } from "next/font/google";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../src/index.css";
+import "../src/travel-design.css";
 
 const siteUrl = new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://agencia-de-tours-three.vercel.app");
 const headingFont = Montserrat({ subsets: ["latin"], variable: "--font-heading", display: "swap", weight: ["600", "700", "800", "900"] });

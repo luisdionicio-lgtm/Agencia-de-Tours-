@@ -31,11 +31,16 @@ export function SiteShell({ children }: { children: ReactNode }) {
       setScrollProgress(available > 0 ? Math.min((window.scrollY / available) * 100, 100) : 0);
     };
     const revealObserver = new IntersectionObserver(
-      (entries) => entries.forEach((entry) => entry.isIntersecting && entry.target.classList.add("is-visible")),
+      (entries) => entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          revealObserver.unobserve(entry.target);
+        }
+      }),
       { rootMargin: "0px 0px -6%", threshold: 0.01 }
     );
 
-    document.querySelectorAll("main section, main article").forEach((element) => {
+    document.querySelectorAll("main section:not(.hero-bg)").forEach((element) => {
       element.classList.add("reveal-on-scroll");
       revealObserver.observe(element);
     });

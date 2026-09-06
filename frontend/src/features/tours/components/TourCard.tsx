@@ -2,6 +2,7 @@ import { ArrowRight, Award, CalendarDays, Hotel, Languages, MapPin, Plane, Shiel
 import { Link } from "../../../core/routing";
 import type { Tour } from "../../../shared/types";
 import { tourMoney } from "../lib/presentation";
+import { SpotlightCard } from "./TravelMotion";
 
 const TOUR_TAGS = {
   NACIONAL: ["Cultura", "Naturaleza", "Asistencia"],
@@ -18,7 +19,7 @@ export function TourCard({ tour }: { tour: Tour }) {
   const tags = TOUR_TAGS[tour.type];
 
   return (
-    <article className="tour-card group">
+    <SpotlightCard className="tour-card group">
       <div className="tour-card-media">
         <img src={tour.imageUrl} alt={tour.title} loading="lazy" decoding="async" />
         <div className="tour-card-media-shade" />
@@ -48,6 +49,6 @@ export function TourCard({ tour }: { tour: Tour }) {
           <span className="button-terminal"><ArrowRight size={17} /></span>
         </Link>
       </div>
-    </article>
+    </SpotlightCard>
   );
 }

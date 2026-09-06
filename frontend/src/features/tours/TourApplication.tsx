@@ -9,6 +9,7 @@ import { Link, Route, Routes, useNavigate, useParams, useSearchParams } from "..
 import type { BusinessSettings, Payment, Reservation, Tour, TourStatus, TourType } from "../../shared/types";
 import { SiteShell } from "./components/SiteShell";
 import { TourCard } from "./components/TourCard";
+import { BlurText } from "./components/TravelMotion";
 import { buildWhatsAppUrl, demoStaffAccounts, isDemoMode, reservationAmount, socialLinks, whatsappMessages } from "./config/contact";
 import { itineraryCatalog, itineraryVariantsFor } from "./config/itineraryCatalog";
 import { destinationImage, paymentMoney, reservationCode, tourCurrency, tourMoney, type TourDeparture } from "./lib/presentation";
@@ -457,7 +458,7 @@ function Home() {
         <div className="hero-layout mx-auto grid max-w-7xl gap-8 px-4 lg:grid-cols-[1.04fr_.96fr] lg:gap-10 lg:px-6">
           <div className="hero-copy animate-rise max-w-3xl text-white">
             <p className="hero-eyebrow mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-bold text-cyan-100 ring-1 ring-white/20"><Sparkles size={17} /> Viaja seguro · Vive extraordinario</p>
-            <h1 className="hero-title text-4xl font-black leading-[1.04] sm:text-5xl lg:text-6xl">Descubre experiencias inolvidables con <span>JohnToursPerú</span></h1>
+            <h1 className="hero-title text-4xl font-black leading-[1.04] sm:text-5xl lg:text-6xl"><BlurText text="Hay viajes que" /><br /><BlurText text="se quedan contigo." className="hero-title-accent" /></h1>
             <p className="hero-intro mt-5 max-w-2xl text-base leading-7 text-slate-100 lg:text-lg">Tours nacionales e internacionales con orientación clara, reserva segura y acompañamiento real.</p>
             <div className="hero-actions mt-6 flex flex-col gap-3 sm:flex-row">
               <Link to="/tours" className="btn-gold primary-action"><span className="button-emblem"><Plane size={18} /></span><span className="button-copy"><small>Descubre destinos</small><strong>Explorar tours</strong></span><ArrowRight className="button-arrow" size={18} /></Link>
@@ -475,11 +476,10 @@ function Home() {
             </div>
           </div>
           <div className="hero-visual-stack space-y-3 lg:pl-2">
-            <div className="hero-logo-wrap"><LogoShowcase /></div>
-            <div className="hidden lg:block"><HeroVisualCarousel tours={heroTours} /></div>
-            <SearchBox />
+            <HeroVisualCarousel tours={heroTours} />
           </div>
         </div>
+        <div className="hero-search-dock mx-auto max-w-7xl px-4 lg:px-6"><SearchBox /></div>
         <a href="#destinos" className="hero-scroll-cue"><span>Descubre los destinos</span><i><ChevronDown size={17} /></i></a>
       </section>
       <DestinationCarousel tours={tours.length ? tours : demoTours} />
@@ -543,14 +543,6 @@ function HeroVisualCarousel({ tours }: { tours: Tour[] }) {
           {tours.map((tour, index) => <button key={tour.id} type="button" data-bs-target="#heroExperienceCarousel" data-bs-slide-to={index} className={index === 0 ? "active" : ""} aria-current={index === 0 ? "true" : undefined} aria-label={`Mostrar ${tour.title}`}><span>{tour.type === "NACIONAL" ? "Perú" : "Internacional"}</span><strong>{tour.title}</strong></button>)}
         </div>
       </div>
-    </div>
-  );
-}
-
-function LogoShowcase() {
-  return (
-    <div className="logo-stage" aria-label="JohnToursPerú">
-      <img src="/john-tours-logo-cropped.png" alt="Logo oficial de JohnToursPerú" />
     </div>
   );
 }
