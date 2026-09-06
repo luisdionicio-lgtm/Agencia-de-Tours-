@@ -39,7 +39,7 @@ body { background: #f2faff; }
 .mini-trust-icon { background: transparent; border: 0; box-shadow: none; color: #f5c247; justify-content: start; }
 .mini-trust-card > span:last-child { font-size: .8rem; color: #b9dceb; }
 .hero-visual-stack { min-width: 0; }
-.hero-tour-browser { border: 1px solid #ffffff25; border-radius: 1.5rem; background: #ffffff08; padding: .65rem; box-shadow: 0 28px 65px #031a2b45; transform: rotate(1deg); }
+.hero-tour-browser { border: 1px solid #ffffff25; border-radius: 1.5rem; background: #ffffff08; padding: .65rem; box-shadow: 0 28px 65px #031a2b45; transform: none; }
 .hero-tour-browser-bar { background: transparent; padding: .5rem .5rem .9rem; }
 .hero-tour-browser-bar strong { font-size: .75rem; color: #d9effb; }
 .hero-tour-browser-bar { font-size: .75rem; letter-spacing: .04em; }
