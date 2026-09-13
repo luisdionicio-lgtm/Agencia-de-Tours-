@@ -10,7 +10,7 @@ import type { BusinessSettings, Payment, Reservation, Tour, TourStatus, TourType
 import { SiteShell } from "./components/SiteShell";
 import { TourCard } from "./components/TourCard";
 import { BlurText } from "./components/TravelMotion";
-import { buildWhatsAppUrl, demoStaffAccounts, isDemoMode, reservationAmount, socialLinks, whatsappMessages } from "./config/contact";
+import { buildWhatsAppUrl, demoStaffAccounts, isDemoMode, isStaticPresentation, useSampleCatalog, reservationAmount, socialLinks, whatsappMessages } from "./config/contact";
 import { itineraryCatalog, itineraryVariantsFor } from "./config/itineraryCatalog";
 import { destinationImage, paymentMoney, reservationCode, tourCurrency, tourMoney, type TourDeparture } from "./lib/presentation";
 import { downloadReservationReceipt } from "./lib/reservationReceipt";
@@ -412,6 +412,7 @@ function RoutesView() {
 }
 
 function DemoPage() {
+  if (!isDemoMode) return <Section title="Planifica tu próxima experiencia" subtitle="Consulta nuestros paquetes y recibe asesoría personalizada."><Link to="/tours" className="font-bold text-[#073b83]">Explorar tours</Link></Section>;
   const steps = ["Crear una reserva ficticia", "Probar el registro Yape", "Simular la aprobación", "Revisar la confirmación y el PDF"];
   return <Section title="Demostración interactiva" subtitle="Conoce cómo funcionará la experiencia completa sin realizar pagos ni enviar información."><div className="demo-landing"><span className="demo-landing-icon"><Sparkles /></span><small>Entorno seguro de presentación</small><h3>Prueba la reserva de principio a fin</h3><p>Todos los datos son ficticios y permanecen únicamente en esta pestaña. No se carga ningún comprobante real, no se procesa dinero y no se envían mensajes automáticamente.</p><div className="demo-landing-steps">{steps.map((step, index) => <span key={step}><b>{index + 1}</b>{step}</span>)}</div><Link to="/reservar/1" className="demo-landing-cta"><span><small>Experiencia de muestra</small><strong>Iniciar demo de Cusco, Puno y Arequipa</strong></span><ArrowRight /></Link></div></Section>;
 }
@@ -421,22 +422,33 @@ function useTours(type?: TourType | null) {
   return useQuery<Tour[]>({
     queryKey: ["tours", type],
     queryFn: async () => {
-      try {
-        const remoteTours = (await api.get("/tours", { params: type ? { type } : {} })).data as Tour[];
-        const remoteSlugs = new Set(remoteTours.map((tour) => tour.slug));
-        return [...remoteTours, ...fallback.filter((tour) => !remoteSlugs.has(tour.slug))];
-      } catch {
-        return fallback;
-      }
+      if (useSampleCatalog) return fallback;
+      return (await api.get("/tours", { params: type ? { type } : {} })).data;
     },
-    placeholderData: fallback
+    placeholderData: useSampleCatalog ? fallback : undefined
   });
 }
 
+function DataNotice({ title = "No pudimos cargar la información", retry }: { title?: string; retry?: () => unknown }) {
+  return <div className="data-notice" role="status"><ShieldCheck size={28} /><strong>{title}</strong><p>Consulta con un asesor para confirmar tu viaje o vuelve a intentarlo.</p><div>{retry && <button type="button" onClick={() => void retry()}>Volver a intentar</button>}<a href={buildWhatsAppUrl(whatsappMessages.general)} target="_blank" rel="noreferrer">Consultar por WhatsApp <ArrowRight size={16} /></a></div></div>;
+}
+
+function useTour(id: string) {
+  return useQuery<Tour>({ queryKey: ["tour", id], queryFn: async () => {
+    if (!useSampleCatalog) return (await api.get(`/tours/${encodeURIComponent(id)}`)).data;
+    const tour = demoTours.find((item) => item.id === Number(id) || item.slug === id);
+    if (!tour) throw new Error("Tour no disponible");
+    return tour;
+  } });
+}
+
+const todayInPeru = () => new Intl.DateTimeFormat("en-CA", { timeZone: "America/Lima", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+const availableDepartures = (tour: Tour) => (tour.departures ?? []).filter((departure) => departure.status === "ACTIVO" && departure.availableSlots > 0 && departure.startDate.slice(0, 10) >= todayInPeru());
+
 function Home() {
-  const { data: tours = [] } = useTours();
+  const { data: tours = [], isPending, isError, refetch } = useTours();
   const featured = tours.filter((tour) => tour.isFeatured).slice(0, 4);
-  const heroTours = tours.length ? tours : demoTours;
+  const heroTours = tours;
 
   return (
     <>
@@ -476,14 +488,14 @@ function Home() {
             </div>
           </div>
           <div className="hero-visual-stack space-y-3 lg:pl-2">
-            <HeroVisualCarousel tours={heroTours} />
+            {isPending ? <DataNotice title="Preparando destinos disponibles" /> : isError ? <DataNotice retry={refetch} /> : heroTours.length ? <HeroVisualCarousel tours={heroTours} /> : <DataNotice title="Estamos preparando nuevas experiencias" />}
           </div>
         </div>
         <div className="hero-search-dock mx-auto max-w-7xl px-4 lg:px-6"><SearchBox /></div>
         <a href="#destinos" className="hero-scroll-cue"><span>Descubre los destinos</span><i><ChevronDown size={17} /></i></a>
       </section>
-      <DestinationCarousel tours={tours.length ? tours : demoTours} />
-      <TravelMoments tours={tours.length ? tours : demoTours} />
+      <DestinationCarousel tours={tours} />
+      <TravelMoments tours={tours} />
       <ExperienceProofSection />
       <Section title="Tours destacados" subtitle="Paquetes elegidos para viajar con confianza y asistencia desde la primera cotización.">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">{featured.map((tour) => <TourCard key={tour.id} tour={tour} />)}</div>
@@ -492,7 +504,7 @@ function Home() {
       <HowItWorksSection />
       <ExclusiveReservationExperience />
       <OurStory />
-      <PromotionsShowcase tours={tours.length ? tours : demoTours} />
+      <PromotionsShowcase tours={tours} />
       <SocialSpotlight />
       <FrequentlyAskedQuestions />
       <section id="contacto" className="formal-cta px-4 py-20 text-white">
@@ -659,9 +671,10 @@ function Tours() {
   const [params, setParams] = useSearchParams();
   const navigate = useNavigate();
   const initialType = params.get("type") as TourType | null;
-  const { data: tours = [], isLoading } = useTours();
+  const { data: tours = [], isLoading, isError, refetch } = useTours();
   const [destination, setDestination] = useState(params.get("destination") ?? "");
-  const [maxPrice, setMaxPrice] = useState(5000);
+  const [maxPrice, setMaxPrice] = useState<number | null>(null);
+  useEffect(() => { setDestination(params.get("destination") ?? ""); }, [params]);
   const normalizedDestination = normalizeCatalogSearch(destination);
   const eligibleTours = useMemo(() => tours.filter((tour) => !initialType || tour.type === initialType), [tours, initialType]);
   const bestMatch = useMemo(() => {
@@ -679,7 +692,7 @@ function Tours() {
     const searchable = normalizeCatalogSearch(`${tour.title} ${tour.destination} ${tour.slug}`);
     const matchesSearch = !normalizedDestination || searchable.includes(normalizedDestination);
     const matchesType = !initialType || tour.type === initialType;
-    return matchesSearch && matchesType && Number(tour.price) <= maxPrice;
+    return matchesSearch && matchesType && (maxPrice === null || Number(tour.price) <= maxPrice);
   }), [tours, normalizedDestination, initialType, maxPrice]);
 
   const openBestMatch = (event: React.FormEvent) => {
@@ -695,11 +708,12 @@ function Tours() {
           <label><Search size={18} /><select aria-label="Elegir paquete o destino" value={bestMatch?.title ?? ""} onChange={(e) => setDestination(e.target.value)}><option value="">{initialType === "NACIONAL" ? "Elige un paquete nacional" : initialType === "INTERNACIONAL" ? "Elige un paquete internacional" : "Elige un paquete o destino"}</option>{eligibleTours.map((tour) => <option key={tour.id} value={tour.title}>{tour.title} · {tour.destination}</option>)}</select></label>
           <button type="submit" disabled={!bestMatch} aria-label={bestMatch ? `Abrir el paquete ${bestMatch.title}` : "Selecciona un paquete disponible"}><span>{bestMatch ? "Abrir" : "Ver"}</span><ArrowRight size={17} /></button>
         </form>
-        <label className="catalog-budget"><span className="catalog-budget-icon"><Filter size={17} /></span><span><small>Presupuesto máximo</small><strong>Hasta {maxPrice.toLocaleString("es-PE")} · S/ o USD</strong></span><input aria-label="Presupuesto máximo por persona" type="range" min="100" max="5000" step="50" value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} /></label>
+        <label className="catalog-budget"><span className="catalog-budget-icon"><Filter size={17} /></span><span><small>Presupuesto máximo</small><strong>{maxPrice === null ? "Sin límite" : `Hasta ${maxPrice.toLocaleString("es-PE")} · S/ o USD`}</strong></span><input aria-label="Presupuesto máximo por persona" type="range" min="100" max="5000" step="50" value={maxPrice ?? 5000} onChange={(e) => setMaxPrice(Number(e.target.value))} /></label>
         <a href={buildWhatsAppUrl(whatsappMessages.general)} className="catalog-advisor"><span className="button-brand-stage"><img src="/whatsapp-logo.svg" alt="" /></span><span className="button-copy"><small>Ayuda personalizada</small><strong>Solicitar orientación</strong></span><ArrowRight className="button-arrow" size={17} /></a>
       </div>
-      {!isLoading && filtered.length > 0 && <div className="catalog-results-meta"><span><strong>{filtered.length}</strong> {filtered.length === 1 ? "experiencia encontrada" : "experiencias encontradas"}</span><small>Precios referenciales sujetos a confirmación</small></div>}
-      {isLoading ? <p>Cargando tours...</p> : filtered.length ? <div className="catalog-tour-grid grid gap-6 md:grid-cols-2 lg:grid-cols-3">{filtered.map((tour) => <TourCard key={tour.id} tour={tour} />)}</div> : <div className="catalog-empty"><Search /><strong>No encontramos ese paquete</strong><span>Prueba con el nombre del destino o solicita orientación por WhatsApp.</span></div>}
+      {(destination || initialType || maxPrice !== null) && <button type="button" className="mb-4 rounded-lg border border-[#c9e5f3] bg-white px-4 py-2 font-bold text-[#075a9e]" onClick={() => { setDestination(""); setMaxPrice(null); setParams({}); }}>Limpiar filtros y ver todos</button>}
+      {!isLoading && filtered.length > 0 && <div className="catalog-results-meta" role="status"><span><strong>{filtered.length}</strong> {filtered.length === 1 ? "experiencia encontrada" : "experiencias encontradas"}</span><small>Precios sujetos a confirmación</small></div>}
+      {isError ? <DataNotice retry={refetch} /> : isLoading ? <p role="status">Cargando tours...</p> : filtered.length ? <div className="catalog-tour-grid grid gap-6 md:grid-cols-2 lg:grid-cols-3">{filtered.map((tour) => <TourCard key={tour.id} tour={tour} />)}</div> : <div className="catalog-empty"><Search /><strong>No encontramos ese paquete</strong><span>Prueba con el nombre del destino o solicita orientación por WhatsApp.</span></div>}
       <ItineraryLibrary />
     </Section>
   );
@@ -717,7 +731,7 @@ function ItineraryLibrary() {
         <h3>{variant.title}</h3>
         <ul>{variant.publicHighlights.slice(0, 4).map((highlight) => <li key={highlight}><CheckCircle2 size={14} />{highlight}</li>)}</ul>
         {variant.packageSlug
-          ? <Link to={`/tours/${demoTours.find((tour) => tour.slug === variant.packageSlug)?.id ?? 1}`}><span>Ver paquete relacionado</span><ArrowRight size={16} /></Link>
+          ? <Link to={`/tours?destination=${encodeURIComponent(variant.packageSlug)}`}><span>Ver paquete relacionado</span><ArrowRight size={16} /></Link>
           : <a href={buildWhatsAppUrl(`Hola JohnToursPerú, deseo información sobre el programa ${variant.title} (${variant.duration}).`)} target="_blank" rel="noreferrer"><span>Consultar este programa</span><ArrowRight size={16} /></a>}
       </article>)}
     </div>
@@ -767,7 +781,7 @@ const departureUrgency = (departure: TourDeparture) => {
 };
 
 function DepartureCalendar({ tour, selectedId, onSelect }: { tour: Tour; selectedId?: number; onSelect?: (departure: TourDeparture) => void }) {
-  const departures = (tour.departures ?? []).filter((departure) => departure.status === "ACTIVO" && departure.availableSlots > 0);
+  const departures = availableDepartures(tour);
   if (!departures.length) return <div className="departure-empty"><CalendarDays /><span><strong>Fechas por confirmar</strong><small>Solicita la próxima salida programada a un asesor.</small></span></div>;
   return <div className="departure-calendar">{departures.map((departure) => {
     const urgency = departureUrgency(departure);
@@ -782,25 +796,16 @@ function DepartureCalendar({ tour, selectedId, onSelect }: { tour: Tour; selecte
 
 function TourDetail() {
   const { id = "" } = useParams();
-  const { data: tour, isLoading } = useQuery<Tour>({
-    queryKey: ["tour", id],
-    queryFn: async () => {
-      try {
-        return (await api.get(`/tours/${id}`)).data;
-      } catch {
-        return demoTours.find((item) => item.id === Number(id)) ?? demoTours[0];
-      }
-    },
-    placeholderData: demoTours.find((item) => item.id === Number(id)) ?? demoTours[0]
-  });
-  if (isLoading || !tour) return <Section title="Cargando tour" subtitle="Preparando detalles..." />;
+  const { data: tour, isPending, isError, refetch } = useTour(id);
+  if (isError) return <Section title="Tour no disponible" subtitle="Consulta las experiencias disponibles en nuestro catálogo."><DataNotice retry={refetch} /></Section>;
+  if (isPending || !tour) return <Section title="Cargando tour" subtitle="Preparando detalles..." />;
   const itinerary = tour.itinerary ?? ["Recepción y orientación", "Experiencia principal", "Actividades libres", "Retorno"];
-  const publicRoute = tour.slug === "machu-picchu"
+  const publicRoute = useSampleCatalog && tour.slug === "machu-picchu"
     ? ["Cusco y Valle Sagrado", "Machu Picchu con ingreso programado", "Ruta altiplánica hacia Puno", "Lago Titicaca y experiencia cultural", "Arequipa histórica", "Retorno coordinado"]
     : itinerary.slice(0, 4).map((item) => item.replace(/^Día\s+\d+:\s*/i, "").split(/[.;]/)[0]);
   const season = tourSeason(tour);
   const featuredVideo = featuredTourVideos[tour.slug];
-  const itineraryOptions = itineraryVariantsFor(tour.slug);
+  const itineraryOptions = useSampleCatalog ? itineraryVariantsFor(tour.slug) : [];
   return (
     <Section title={tour.title} subtitle={`${tour.destination} · ${tour.duration}`}>
       <TourDetailNav photos={Boolean(tourMediaBySlug[tour.slug])} video={Boolean(featuredVideo)} itineraries={itineraryOptions.length > 0} />
@@ -850,7 +855,7 @@ function TourDetail() {
 }
 
 const reservationSchema = z.object({
-  fullName: z.string().min(3), email: z.string().email(), phone: z.string().min(6), documentNumber: z.string().min(6), travelDate: z.string().min(1), peopleCount: z.coerce.number().min(1)
+  fullName: z.string().trim().min(3).max(120), email: z.string().trim().email().max(254), phone: z.string().trim().min(6).max(30), documentNumber: z.string().trim().min(6).max(30), travelDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).refine((value) => value >= todayInPeru(), "Selecciona una fecha vigente"), peopleCount: z.coerce.number().int().min(1).max(20)
 });
 type ReservationForm = z.input<typeof reservationSchema>;
 
@@ -903,55 +908,47 @@ function ReservationPage() {
   const navigate = useNavigate();
   const [reservationError, setReservationError] = useState("");
   const [selectedDeparture, setSelectedDeparture] = useState<TourDeparture>();
-  const { data: tour } = useQuery<Tour>({
-    queryKey: ["tour", id],
-    queryFn: async () => {
-      try {
-        return (await api.get(`/tours/${id}`)).data;
-      } catch {
-        return demoTours.find((item) => item.id === Number(id)) ?? demoTours[0];
-      }
-    },
-    placeholderData: demoTours.find((item) => item.id === Number(id)) ?? demoTours[0]
-  });
+  const { data: tour, isPending: tourPending, isError: tourError, refetch } = useTour(id);
   const form = useForm<ReservationForm>({ resolver: zodResolver(reservationSchema), defaultValues: { peopleCount: 1 } });
   useEffect(() => {
-    const first = tour?.departures?.find((departure) => departure.status === "ACTIVO" && departure.availableSlots > 0);
+    const first = tour ? availableDepartures(tour)[0] : undefined;
     if (first && !selectedDeparture) {
       setSelectedDeparture(first);
       form.setValue("travelDate", first.startDate.slice(0, 10));
     }
   }, [tour, selectedDeparture, form]);
   const mutation = useMutation({
-    mutationFn: async (values: ReservationForm) => (await api.post("/reservations", { ...reservationSchema.parse(values), tourId: Number(id), departureId: selectedDeparture?.id })).data,
+    mutationFn: async (values: ReservationForm): Promise<Reservation> => {
+      setReservationError("");
+      const payload = reservationSchema.parse(values);
+      if (!tour) throw new Error("Tour no disponible");
+      if (tour.departures?.length && !selectedDeparture) throw new Error("Consulta las próximas salidas con un asesor.");
+      if (payload.peopleCount > (selectedDeparture?.availableSlots ?? tour.availableSlots)) throw new Error("No hay cupos suficientes.");
+      if (isDemoMode) return { id: Date.now(), isDemo: true, travelDate: payload.travelDate, peopleCount: payload.peopleCount, totalAmount: Number(tour.price) * payload.peopleCount, status: "PENDIENTE", slotsHeld: true, holdExpiresAt: new Date(Date.now() + 30 * 60_000).toISOString(), departure: selectedDeparture, customer: { fullName: payload.fullName, email: payload.email, phone: payload.phone }, tour };
+      return (await api.post("/reservations", { ...payload, tourId: tour.id, departureId: selectedDeparture?.id })).data;
+    },
     onSuccess: (reservation: Reservation) => {
       sessionStorage.setItem(`john-reservation-${reservation.id}`, JSON.stringify(reservation));
       navigate(`/pago/${reservation.id}`);
     },
-    onError: () => {
-      if (!tour) return;
-      if (!isDemoMode) {
-        setReservationError("No pudimos conectar con el sistema de reservas. Intenta nuevamente o solicita ayuda por WhatsApp.");
-        return;
-      }
-      const values = form.getValues();
-      const localId = Date.now();
-      const localReservation: Reservation = { id: localId, isDemo: true, travelDate: values.travelDate, peopleCount: Number(values.peopleCount), totalAmount: reservationAmount, status: "PENDIENTE", slotsHeld: true, holdExpiresAt: new Date(Date.now() + 30 * 60_000).toISOString(), departure: selectedDeparture, customer: { fullName: values.fullName, email: values.email, phone: values.phone }, tour };
-      sessionStorage.setItem(`john-reservation-${localId}`, JSON.stringify(localReservation));
-      navigate(`/pago/${localId}`);
-    }
+    onError: () => setReservationError("No se pudo crear la reserva. Verifica la fecha y los cupos, o contacta a un asesor antes de realizar un pago.")
   });
+  if (tourError) return <Section title="Reserva no disponible" subtitle="No pudimos verificar este paquete."><DataNotice retry={refetch} /></Section>;
+  if (tourPending || !tour) return <Section title="Preparando tu viaje" subtitle="Consultando disponibilidad..." />;
+  if (isStaticPresentation && !isDemoMode) return <Section title="Cotiza tu viaje" subtitle={tour.title + " · Confirmamos fechas, tarifa y disponibilidad contigo."}><DataNotice title="Solicita tu propuesta personalizada" /></Section>;
+
   return (
     <Section title="Reserva tu viaje" subtitle={tour ? `${tour.title} · Inicia tu reserva con S/ ${reservationAmount}` : "Completa tus datos"}>
       <form onSubmit={form.handleSubmit((v) => mutation.mutate(v))} className="mx-auto grid max-w-3xl gap-4 rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
         {isDemoMode && <div className="demo-mode-banner"><Sparkles size={18} /><span><strong>Demostración interactiva</strong><small>Podrás recorrer la reserva, Yape, estados, PDF y panel sin realizar pagos ni guardar datos en una base real.</small></span></div>}
         {tour && <div className="reservation-tour-summary"><img src={tour.imageUrl} alt={tour.title} /><div><small>Experiencia seleccionada</small><strong>{tour.title}</strong><span><MapPin size={14} /> {tour.destination} · {tour.duration}</span></div><b>S/ {reservationAmount}<small>reserva</small></b></div>}
-        {["fullName", "email", "phone", "documentNumber"].map((name) => <input key={name} className="rounded-lg border px-4 py-3" placeholder={{ fullName: "Nombre completo", email: "Correo", phone: "Teléfono", documentNumber: "Documento" }[name]} {...form.register(name as never)} />)}
+        {(["fullName", "email", "phone", "documentNumber"] as const).map((name) => <label key={name} className="grid gap-2 text-sm font-bold text-[#052b5c]">{{ fullName: "Nombre completo", email: "Correo electrónico", phone: "Teléfono de contacto", documentNumber: "Documento de identidad" }[name]}<input className="rounded-lg border px-4 py-3 font-normal" aria-invalid={Boolean(form.formState.errors[name])} autoComplete={{ fullName: "name", email: "email", phone: "tel", documentNumber: "off" }[name]} type={name === "email" ? "email" : name === "phone" ? "tel" : "text"} maxLength={name === "fullName" ? 120 : name === "email" ? 254 : 30} {...form.register(name)} /></label>)}
         {tour && <div className="reservation-departures"><strong>Selecciona tu salida</strong><DepartureCalendar tour={tour} selectedId={selectedDeparture?.id} onSelect={(departure) => { setSelectedDeparture(departure); form.setValue("travelDate", departure.startDate.slice(0, 10)); }} /></div>}
-        <div className="grid gap-4 sm:grid-cols-2"><input className="rounded-lg border px-4 py-3" type="date" readOnly={Boolean(tour?.departures?.length)} {...form.register("travelDate")} /><input className="rounded-lg border px-4 py-3" type="number" min="1" max={selectedDeparture?.availableSlots ?? tour?.availableSlots ?? 20} {...form.register("peopleCount")} /></div>
+        <div className="grid gap-4 sm:grid-cols-2"><input className="rounded-lg border px-4 py-3" aria-label="Fecha de viaje" min={todayInPeru()} type="date" readOnly={Boolean(tour?.departures?.length)} {...form.register("travelDate")} /><input className="rounded-lg border px-4 py-3" aria-label="Número de viajeros" type="number" min="1" max={Math.min(20, selectedDeparture?.availableSlots ?? tour?.availableSlots ?? 20)} {...form.register("peopleCount")} /></div>
         <div className="hold-notice"><Clock3 /><span><strong>Solicitud protegida durante 30 minutos</strong><small>JohnToursPerú mantendrá activa tu solicitud mientras recibe y valida el comprobante Yape.</small></span></div>
+        {Object.keys(form.formState.errors).length > 0 && <p role="alert" className="text-sm font-bold text-red-700">Revisa nombre, correo, teléfono, documento, fecha vigente y entre 1 y 20 viajeros.</p>}
         {reservationError && <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700">{reservationError}</p>}
-        <button className="reservation-submit" disabled={mutation.isPending}><span className="button-emblem"><ShieldCheck size={18} /></span><span className="button-copy"><small>Solicitud protegida</small><strong>{mutation.isPending ? "Creando reserva..." : "Continuar con la reserva"}</strong></span><span className="button-terminal"><ArrowRight size={17} /></span></button>
+        <button className="reservation-submit" disabled={mutation.isPending || Boolean(tour.departures?.length && !selectedDeparture)}><span className="button-emblem"><ShieldCheck size={18} /></span><span className="button-copy"><small>Solicitud protegida</small><strong>{mutation.isPending ? "Creando reserva..." : "Continuar con la reserva"}</strong></span><span className="button-terminal"><ArrowRight size={17} /></span></button>
       </form>
     </Section>
   );
@@ -976,6 +973,25 @@ function ReservationProgress({ currentStep }: { currentStep: number }) {
   );
 }
 
+function useReservation(id: string) {
+  return useQuery<Reservation>({
+    queryKey: ["reservation", id],
+    queryFn: async () => {
+      const saved = sessionStorage.getItem(`john-reservation-${id}`);
+      if (!saved) throw new Error("Reserva no disponible en esta sesión");
+      const local = JSON.parse(saved) as Reservation;
+      if (local.isDemo && isDemoMode) return local;
+      if (!local.publicToken || local.isDemo) throw new Error("Acceso a la reserva no disponible");
+      const current = (await api.post(`/reservations/${id}/status`, { reservationToken: local.publicToken })).data as Reservation;
+      return { ...current, publicToken: local.publicToken };
+    },
+    staleTime: 0,
+    refetchInterval: (query) => query.state.data?.status === "PENDIENTE" && !query.state.data.isDemo ? 15_000 : false,
+    refetchOnWindowFocus: true,
+    retry: 1
+  });
+}
+
 function YapeReservationPage() {
   const { id = "" } = useParams();
   const navigate = useNavigate();
@@ -989,19 +1005,16 @@ function YapeReservationPage() {
     const now = new Date(Date.now() - new Date().getTimezoneOffset() * 60_000);
     return now.toISOString().slice(0, 16);
   });
-  const { data: reservation } = useQuery<Reservation>({
-    queryKey: ["reservation", id],
-    queryFn: async () => {
-      try { return (await api.get(`/reservations/${id}`)).data; }
-      catch {
-        const saved = sessionStorage.getItem(`john-reservation-${id}`);
-        if (!saved) throw new Error("Reserva no encontrada");
-        return JSON.parse(saved) as Reservation;
-      }
-    }
-  });
+  const { data: reservation, isError, refetch } = useReservation(id);
   const paymentCode = useMemo(() => reservationCode(id), [id]);
-  if (!reservation) return <Section title="Preparando tu reserva" subtitle="Estamos generando tu código seguro de pago." />;
+  useEffect(() => {
+    if (reservation?.paymentSubmitted) setProofRegistered(true);
+    if (reservation?.status === "PAGADA") navigate(`/confirmacion/${id}`);
+  }, [reservation, id, navigate]);
+  if (isError) return <Section title="No pudimos verificar tu reserva" subtitle="Abre la reserva desde la pestaña en la que la creaste o contacta a un asesor."><DataNotice retry={refetch} /></Section>;
+  if (!reservation) return <Section title="Preparando tu reserva" subtitle="Consultando el estado de tu solicitud." />;
+  if (reservation.status === "CANCELADA" || reservation.status === "RECHAZADA") return <Section title="Solicitud cerrada" subtitle="Esta reserva ya no admite pagos."><DataNotice title="Consulta disponibilidad antes de volver a reservar" /></Section>;
+  const amount = reservation.reservationAmount ?? reservationAmount;
   const message = [
     "COMPROBANTE DE SEPARACIÓN - JOHNTOURSPERÚ",
     "",
@@ -1012,7 +1025,7 @@ function YapeReservationPage() {
     `Destino: ${reservation.tour.destination}`,
     `Fecha de viaje: ${reservation.travelDate}`,
     `Viajeros: ${reservation.peopleCount}`,
-    `Monto enviado: S/ ${reservationAmount}.00`,
+    `Monto enviado: S/ ${amount}.00`,
     "",
     "Adjuntaré la captura o constancia de Yape en este chat. Agradezco confirmar la recepción, la validación del pago y los siguientes pasos del paquete."
   ].join("\n");
@@ -1022,7 +1035,7 @@ function YapeReservationPage() {
   };
   const registerProof = async () => {
     setProofError("");
-    if (isDemoMode && !proofFile) {
+    if (isDemoMode && reservation.isDemo) {
       setReferenceCode("75709508");
       setProofFile(new File(["Comprobante ficticio para demostración"], "comprobante-yape-demo.png", { type: "image/png" }));
       setProofRegistered(true);
@@ -1030,6 +1043,7 @@ function YapeReservationPage() {
     }
     if (!proofFile) return setProofError("Adjunta una imagen o PDF del comprobante.");
     if (!["image/jpeg", "image/png", "image/webp", "application/pdf"].includes(proofFile.type) || proofFile.size > 5 * 1024 * 1024) return setProofError("Usa JPG, PNG, WebP o PDF de hasta 5 MB.");
+    if (!paidAt || !Number.isFinite(new Date(paidAt).getTime()) || new Date(paidAt).getTime() > Date.now()) return setProofError("Indica una fecha de pago válida, anterior a la hora actual.");
     if (referenceCode.trim().length < 6) return setProofError("Ingresa el código de operación mostrado por Yape.");
     setProofPending(true);
     try {
@@ -1038,7 +1052,7 @@ function YapeReservationPage() {
         data.append("reservationId", String(reservation.id));
         data.append("reservationToken", reservation.publicToken);
         data.append("referenceCode", referenceCode.trim());
-        data.append("amount", String(reservationAmount));
+        data.append("amount", String(amount));
         data.append("paidAt", new Date(paidAt).toISOString());
         data.append("proof", proofFile);
         await api.post("/payments/yape", data);
@@ -1046,6 +1060,7 @@ function YapeReservationPage() {
         throw new Error("Reserva sin token");
       }
       setProofRegistered(true);
+      void refetch();
     } catch {
       setProofError(isDemoMode ? "" : "No se pudo registrar el comprobante. Verifica que la reserva siga vigente.");
       if (isDemoMode) setProofRegistered(true);
@@ -1053,7 +1068,7 @@ function YapeReservationPage() {
       setProofPending(false);
     }
   };
-  return <Section title="Inicia tu reserva con Yape" subtitle="Paga S/ 200 y registra tu constancia para mantener activa la solicitud mientras un trabajador la valida."><div className="mx-auto max-w-6xl"><ReservationProgress currentStep={proofRegistered ? 3 : 1} /><div className="grid gap-6 lg:grid-cols-[.9fr_1.1fr]"><article className="yape-card"><div className="yape-brand"><img src="/yape-logo.png" alt="Yape" /><span>Reserva con Yape</span></div><span className="yape-label">Solicitud reservada temporalmente</span><h3>{reservation.tour.title}</h3><p>{reservation.customer.fullName} · {reservation.peopleCount} viajero(s)</p><div className="reservation-price"><small>Monto de separación</small><strong>S/ {reservationAmount}.00</strong></div><div className="payment-code"><div><small>Código único de reserva</small><strong>{paymentCode}</strong></div><button onClick={() => { navigator.clipboard.writeText(paymentCode); setCopied(true); }} aria-label="Copiar código"><Copy size={18} /> {copied ? "Copiado" : "Copiar"}</button></div><div className="secure-note"><ShieldCheck /> <span>La solicitud se mantiene activa por 30 minutos. La confirmación final requiere validar monto, fecha, código y archivo.</span></div>{isDemoMode && proofRegistered && <button type="button" onClick={simulatePayment} className="demo-payment"><Sparkles /><span><strong>Demostración para presentación</strong><small>Simular la aprobación del trabajador</small></span><ArrowRight /></button>}</article><article className="qr-card proof-upload-card"><div className="yape-qr-heading"><img src="/yape-logo.png" alt="Yape" /><span><strong>Registra tu comprobante</strong><small>Proceso seguro y verificable</small></span></div><div className="proof-fields"><label>Código de operación<input value={referenceCode} onChange={(event) => setReferenceCode(event.target.value)} placeholder="Ej. 75709508" /></label><label>Fecha y hora del pago<input type="datetime-local" max={paidAt} value={paidAt} onChange={(event) => setPaidAt(event.target.value)} /></label><label className="proof-file"><FileText /><span><strong>{proofFile?.name ?? "Adjuntar captura o PDF"}</strong><small>JPG, PNG, WebP o PDF · máximo 5 MB</small></span><input type="file" accept=".jpg,.jpeg,.png,.webp,.pdf,image/jpeg,image/png,image/webp,application/pdf" onChange={(event) => setProofFile(event.target.files?.[0])} /></label></div>{proofError && <p className="proof-error">{proofError}</p>}<button type="button" onClick={registerProof} className="proof-submit" disabled={proofPending || proofRegistered}><ShieldCheck /> {isDemoMode && !proofRegistered && !proofPending ? "Probar registro demo" : proofPending ? "Registrando..." : proofRegistered ? "Comprobante registrado" : "Registrar para validación"}</button>{proofRegistered && !isDemoMode && <a href={buildWhatsAppUrl(message)} target="_blank" rel="noreferrer" className="whatsapp-cta"><MessageCircle /> Avisar a un asesor por WhatsApp</a>}{isDemoMode && <p className="demo-message-note"><Sparkles size={16} /> Prueba segura: se usa un comprobante ficticio, no se sube información ni se envían mensajes.</p>}<small>El archivo se valida por contenido y tamaño. Solo el personal autorizado puede visualizarlo.</small></article></div></div></Section>;
+  return <Section title="Inicia tu reserva con Yape" subtitle="Paga S/ 200 y registra tu constancia para mantener activa la solicitud mientras un trabajador la valida."><div className="mx-auto max-w-6xl"><ReservationProgress currentStep={proofRegistered ? 3 : 1} /><div className="grid gap-6 lg:grid-cols-[.9fr_1.1fr]"><article className="yape-card"><div className="yape-brand"><img src="/yape-logo.png" alt="Yape" /><span>Reserva con Yape</span></div><span className="yape-label">Solicitud reservada temporalmente</span><h3>{reservation.tour.title}</h3><p>{reservation.customer.fullName} · {reservation.peopleCount} viajero(s)</p><div className="reservation-price"><small>Monto de separación</small><strong>S/ {amount}.00</strong></div><div className="payment-code"><div><small>Código único de reserva</small><strong>{paymentCode}</strong></div><button onClick={() => { navigator.clipboard.writeText(paymentCode); setCopied(true); }} aria-label="Copiar código"><Copy size={18} /> {copied ? "Copiado" : "Copiar"}</button></div><div className="secure-note"><ShieldCheck /> <span>La solicitud se mantiene activa por 30 minutos. La confirmación final requiere validar monto, fecha, código y archivo.</span></div>{isDemoMode && proofRegistered && <button type="button" onClick={simulatePayment} className="demo-payment"><Sparkles /><span><strong>Demostración para presentación</strong><small>Simular la aprobación del trabajador</small></span><ArrowRight /></button>}</article><article className="qr-card proof-upload-card"><div className="yape-qr-heading"><img src="/yape-logo.png" alt="Yape" /><span><strong>Registra tu comprobante</strong><small>Proceso seguro y verificable</small></span></div><div className="proof-fields"><label>Código de operación<input value={referenceCode} onChange={(event) => setReferenceCode(event.target.value)} placeholder="Ej. 75709508" /></label><label>Fecha y hora del pago<input type="datetime-local" max={new Date(Date.now() - new Date().getTimezoneOffset() * 60_000).toISOString().slice(0, 16)} value={paidAt} onChange={(event) => setPaidAt(event.target.value)} /></label><label className="proof-file"><FileText /><span><strong>{proofFile?.name ?? "Adjuntar captura o PDF"}</strong><small>JPG, PNG, WebP o PDF · máximo 5 MB</small></span><input type="file" accept=".jpg,.jpeg,.png,.webp,.pdf,image/jpeg,image/png,image/webp,application/pdf" onChange={(event) => setProofFile(event.target.files?.[0])} /></label></div>{proofError && <p className="proof-error">{proofError}</p>}<button type="button" onClick={registerProof} className="proof-submit" disabled={proofPending || proofRegistered}><ShieldCheck /> {isDemoMode && !proofRegistered && !proofPending ? "Probar registro demo" : proofPending ? "Registrando..." : proofRegistered ? "Comprobante registrado" : "Registrar para validación"}</button>{proofRegistered && !isDemoMode && <a href={buildWhatsAppUrl(message)} target="_blank" rel="noreferrer" className="whatsapp-cta"><MessageCircle /> Avisar a un asesor por WhatsApp</a>}{isDemoMode && <p className="demo-message-note"><Sparkles size={16} /> Prueba segura: se usa un comprobante ficticio, no se sube información ni se envían mensajes.</p>}<small>El archivo se valida por contenido y tamaño. Solo el personal autorizado puede visualizarlo.</small></article></div></div></Section>;
 }
 
 function appointmentSeparationCode(reservationId: string) {
@@ -1135,15 +1150,17 @@ function AppointmentPlanner({ reservation, isDemo }: { reservation: Reservation;
 
 function ConfirmationPage() {
   const { id = "" } = useParams();
-  const [searchParams] = useSearchParams();
-  const isDemo = searchParams.get("demo") === "1";
-  const { data: reservation } = useQuery<Reservation>({ queryKey: ["reservation", id], queryFn: async () => { const saved = sessionStorage.getItem(`john-reservation-${id}`); if (!saved) throw new Error("Reserva no encontrada en esta sesión"); return JSON.parse(saved) as Reservation; } });
+  const { data: reservation, isError, refetch } = useReservation(id);
+  const isDemo = Boolean(isDemoMode && reservation?.isDemo);
   const guide = reservation ? guideForTour(reservation.tour) : null;
-  return <Section title={isDemo ? "Demostración: reserva confirmada" : "Reserva confirmada"} subtitle={`${isDemo ? "Simulación de presentación · " : ""}Código de reserva #${id}`}>{reservation && guide && <div className="mx-auto max-w-5xl rounded-2xl border bg-white p-6 text-center shadow-sm sm:p-8">{isDemo && <div className="mb-6 rounded-xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold text-[#087db8]">Modo demostración: no se realizó ningún cobro ni se registró una operación bancaria. La constancia descargable no es una boleta tributaria.</div>}<CheckCircle2 className="mx-auto text-[#09a889]" size={64} /><h3 className="mt-4 text-2xl font-black text-[#073b83]">{reservation.tour.title}</h3><p className="mt-2 text-slate-600">{isDemo ? `Esta vista simula la aprobación de la separación para ${reservation.customer.fullName}.` : `Gracias, ${reservation.customer.fullName}. La separación de S/ 200 ha sido validada y tu solicitud de reserva quedó registrada.`}</p><PostReservationItinerary tour={reservation.tour} isDemo={isDemo} /><div className="post-payment-guide mx-auto mt-7 overflow-hidden rounded-2xl border border-slate-200 bg-[#f3f9fd] text-left"><img src={guide.imageUrl} alt={`Imagen referencial de ${guide.label}`} className="h-60 w-full object-cover md:h-auto" /><div className="p-5"><span className="text-xs font-black uppercase tracking-widest text-[#087db8]">{isDemo ? "Vista previa del contenido posterior al pago" : "Contenido desbloqueado después del pago"}</span><h4 className="mt-2 text-xl font-black text-[#073b83]">Extras disponibles para {guide.label}</h4><p className="mt-2 text-sm leading-6 text-slate-600">Estas opciones no aparecen en el catálogo principal. Se muestran ahora porque tu reserva confirma el interés en adquirir el paquete.</p><div className="mt-4 grid gap-2 sm:grid-cols-2">{guide.extras.map((extra) => <span key={extra} className="flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-bold text-[#34536b]"><CheckCircle2 size={16} className="text-[#09a889]" />{extra}</span>)}</div><a href={guide.key === "general" ? "/servicios-adicionales-john-tours.pdf" : `/guia-extras-${guide.key}-john-tours.pdf`} download className="download-guide mt-5"><FileText /><span><strong>Descargar guía PDF de {guide.label}</strong><small>Incluye logo, imagen referencial y detalles de cada extra</small></span><Download /></a></div></div><AppointmentPlanner reservation={reservation} isDemo={isDemo} /><div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row"><Link className="rounded-lg bg-[#073b83] px-5 py-3 font-bold text-white" to="/">Volver al inicio</Link><Link className="rounded-lg bg-[#09a889] px-5 py-3 font-bold text-white" to="/tours">Ver otros paquetes</Link></div></div>}</Section>;
+  if (isError) return <Section title="No pudimos verificar tu reserva" subtitle="Consulta con el equipo antes de realizar otro pago."><DataNotice retry={refetch} /></Section>;
+  if (!reservation) return <Section title="Verificando reserva" subtitle="Consultando su estado actual..." />;
+  if (reservation.status !== "PAGADA") return <Section title={reservation.status === "PENDIENTE" ? "Validación pendiente" : "Solicitud cerrada"} subtitle="La confirmación se mostrará cuando el asesor valide el pago."><DataNotice title="Consulta el estado de tu solicitud" retry={refetch} /><Link to={`/pago/${id}`} className="inline-block mt-4 font-bold text-[#073b83]">Volver a mi reserva</Link></Section>;
+  return <Section title={isDemo ? "Demostración: reserva confirmada" : "Reserva confirmada"} subtitle={`${isDemo ? "Simulación de presentación · " : ""}Código de reserva #${id}`}>{reservation && guide && <div className="mx-auto max-w-5xl rounded-2xl border bg-white p-6 text-center shadow-sm sm:p-8">{isDemo && <div className="mb-6 rounded-xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-bold text-[#087db8]">Modo demostración: no se realizó ningún cobro ni se registró una operación bancaria. La constancia descargable no es una boleta tributaria.</div>}<CheckCircle2 className="mx-auto text-[#09a889]" size={64} /><h3 className="mt-4 text-2xl font-black text-[#073b83]">{reservation.tour.title}</h3><p className="mt-2 text-slate-600">{isDemo ? `Esta vista simula la aprobación de la separación para ${reservation.customer.fullName}.` : `Gracias, ${reservation.customer.fullName}. La separación de S/ ${reservation.reservationAmount ?? reservationAmount} ha sido validada y tu solicitud de reserva quedó registrada.`}</p><PostReservationItinerary tour={reservation.tour} isDemo={isDemo} /><div className="post-payment-guide mx-auto mt-7 overflow-hidden rounded-2xl border border-slate-200 bg-[#f3f9fd] text-left"><img src={guide.imageUrl} alt={`Imagen referencial de ${guide.label}`} className="h-60 w-full object-cover md:h-auto" /><div className="p-5"><span className="text-xs font-black uppercase tracking-widest text-[#087db8]">{isDemo ? "Vista previa del contenido posterior al pago" : "Contenido desbloqueado después del pago"}</span><h4 className="mt-2 text-xl font-black text-[#073b83]">Extras disponibles para {guide.label}</h4><p className="mt-2 text-sm leading-6 text-slate-600">Estas opciones no aparecen en el catálogo principal. Se muestran ahora porque tu reserva confirma el interés en adquirir el paquete.</p><div className="mt-4 grid gap-2 sm:grid-cols-2">{guide.extras.map((extra) => <span key={extra} className="flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-bold text-[#34536b]"><CheckCircle2 size={16} className="text-[#09a889]" />{extra}</span>)}</div><a href={guide.key === "general" ? "/servicios-adicionales-john-tours.pdf" : `/guia-extras-${guide.key}-john-tours.pdf`} download className="download-guide mt-5"><FileText /><span><strong>Descargar guía PDF de {guide.label}</strong><small>Incluye logo, imagen referencial y detalles de cada extra</small></span><Download /></a></div></div><AppointmentPlanner reservation={reservation} isDemo={isDemo} /><div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row"><Link className="rounded-lg bg-[#073b83] px-5 py-3 font-bold text-white" to="/">Volver al inicio</Link><Link className="rounded-lg bg-[#09a889] px-5 py-3 font-bold text-white" to="/tours">Ver otros paquetes</Link></div></div>}</Section>;
 }
 
 function PostReservationItinerary({ tour, isDemo }: { tour: Tour; isDemo: boolean }) {
-  const variants = itineraryVariantsFor(tour.slug);
+  const variants = isDemo ? itineraryVariantsFor(tour.slug) : [];
   const [selectedId, setSelectedId] = useState(variants[0]?.id ?? "");
   const selected = variants.find((variant) => variant.id === selectedId) ?? variants[0];
   const itinerary = selected?.days ?? (tour.itinerary?.length ? tour.itinerary : ["El asesor completará el programa final según la fecha confirmada."]);
@@ -1151,11 +1168,19 @@ function PostReservationItinerary({ tour, isDemo }: { tour: Tour; isDemo: boolea
 }
 
 function AdminPage() {
-  const [token, setToken] = useState(sessionStorage.getItem("adminToken"));
+  const [token, setToken] = useState(() => {
+    const saved = sessionStorage.getItem("adminToken");
+    return !isDemoMode && saved?.startsWith("demo-") ? null : saved;
+  });
   const [staffRole, setStaffRole] = useState<"ADMIN" | "WORKER">((sessionStorage.getItem("staffRole") as "ADMIN" | "WORKER") || "ADMIN");
   const [tourForm, setTourForm] = useState<AdminTourForm>(emptyAdminTourForm);
   const form = useForm<{ email: string; password: string }>({ defaultValues: { email: "", password: "" } });
   const queryClient = useQueryClient();
+  useEffect(() => {
+    const expire = () => { setToken(null); queryClient.clear(); };
+    window.addEventListener("john-session-expired", expire);
+    return () => window.removeEventListener("john-session-expired", expire);
+  }, [queryClient]);
   const login = useMutation({
     mutationFn: async (values: { email: string; password: string }) => {
       try {
@@ -1180,8 +1205,9 @@ function AdminPage() {
     queryKey: ["adminTours", token],
     queryFn: async () => {
       try {
-        return (await api.get("/tours")).data;
-      } catch {
+        return (await api.get("/admin/tours")).data;
+      } catch (error) {
+        if (!isDemoMode || !token?.startsWith("demo-")) throw error;
         return demoTours;
       }
     }
@@ -1192,8 +1218,9 @@ function AdminPage() {
     queryFn: async () => {
       try {
         return (await api.get("/reservations")).data;
-      } catch {
-        return token?.startsWith("demo-") ? [demoReservation] : [];
+      } catch (error) {
+        if (!isDemoMode || !token?.startsWith("demo-")) throw error;
+        return [demoReservation];
       }
     }
   });
@@ -1203,8 +1230,9 @@ function AdminPage() {
     queryFn: async () => {
       try {
         return (await api.get("/payments")).data;
-      } catch {
-        return token?.startsWith("demo-") ? [demoPayment] : [];
+      } catch (error) {
+        if (!isDemoMode || !token?.startsWith("demo-")) throw error;
+        return [demoPayment];
       }
     }
   });
@@ -1252,7 +1280,8 @@ function AdminPage() {
       };
       try {
         return tourForm.id ? (await api.put(`/tours/${tourForm.id}`, payload)).data : (await api.post("/tours", payload)).data;
-      } catch {
+      } catch (error) {
+        if (!isDemoMode || !token?.startsWith("demo-")) throw error;
         return {
           ...payload,
           id: tourForm.id ?? Date.now(),
@@ -1261,14 +1290,16 @@ function AdminPage() {
       }
     },
     onSuccess: (savedTour: Tour) => {
-      queryClient.setQueryData<Tour[]>(["adminTours", token], (current = demoTours) => {
+      queryClient.setQueryData<Tour[]>(["adminTours", token], (current = []) => {
         const exists = current.some((tour) => tour.id === savedTour.id);
         return exists ? current.map((tour) => tour.id === savedTour.id ? savedTour : tour) : [savedTour, ...current];
       });
-      queryClient.setQueryData<Tour[]>(["tours", undefined], (current = demoTours) => {
+      queryClient.setQueryData<Tour[]>(["tours", undefined], (current = []) => {
         const exists = current.some((tour) => tour.id === savedTour.id);
         return exists ? current.map((tour) => tour.id === savedTour.id ? savedTour : tour) : [savedTour, ...current];
       });
+      void queryClient.invalidateQueries({ queryKey: ["tours"] });
+      void queryClient.invalidateQueries({ queryKey: ["tour"] });
       resetTourForm();
     }
   });
@@ -1276,28 +1307,32 @@ function AdminPage() {
     mutationFn: async (id: number) => {
       try {
         await api.delete(`/tours/${id}`);
-      } catch {
-        // Demo mode on Vercel: update local query cache when the API is unavailable.
+      } catch (error) {
+        if (!isDemoMode || !token?.startsWith("demo-")) throw error;
       }
       return id;
     },
     onSuccess: (id) => {
-      queryClient.setQueryData<Tour[]>(["adminTours", token], (current = demoTours) => current.filter((tour) => tour.id !== id));
-      queryClient.setQueryData<Tour[]>(["tours", undefined], (current = demoTours) => current.filter((tour) => tour.id !== id));
+      void queryClient.invalidateQueries({ queryKey: ["tours"] });
+      void queryClient.invalidateQueries({ queryKey: ["tour"] });
+      queryClient.setQueryData<Tour[]>(["adminTours", token], (current = []) => current.filter((tour) => tour.id !== id));
+      queryClient.setQueryData<Tour[]>(["tours", undefined], (current = []) => current.filter((tour) => tour.id !== id));
     }
   });
   if (!token) return <Section title="Acceso interno" subtitle="Inicio de sesión exclusivo para administradores y trabajadores de JohnToursPerú."><div className="internal-login-layout"><aside><span><ShieldCheck /></span><small>Panel protegido</small><h3>Operación organizada y con permisos</h3><p>Los administradores gestionan tours y configuración. Los trabajadores revisan reservas y validan comprobantes Yape.</p><ul><li>Sesión privada y temporal</li><li>Permisos separados por rol</li><li>Acciones de pago registradas</li></ul></aside><form onSubmit={form.handleSubmit((v) => login.mutate(v))}><div className="internal-login-heading"><strong>Iniciar sesión</strong><small>Usa la cuenta asignada por JohnToursPerú</small></div>{isDemoMode && <div className="demo-mode-banner"><Sparkles size={18} /><span><strong>Panel de demostración</strong><small>Las cuentas de prueba solo controlan datos ficticios de esta presentación.</small></span></div>}<label>Correo corporativo<input placeholder="nombre@johntours.pe" autoComplete="username" {...form.register("email")} /></label><label>Contraseña<input type="password" placeholder="••••••••••••" autoComplete="current-password" {...form.register("password")} /></label>{login.isError && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm font-bold text-red-700">Credenciales inválidas o servicio no disponible.</p>}<button disabled={login.isPending}>{login.isPending ? "Verificando acceso..." : "Ingresar al panel"}</button><Link to="/" className="internal-login-back">Volver a la web pública</Link></form></div></Section>;
-  if (staffRole === "WORKER") return <Section title="Panel de operaciones" subtitle="Validación de reservas, salidas y comprobantes Yape."><button onClick={() => { sessionStorage.removeItem("adminToken"); sessionStorage.removeItem("staffRole"); setToken(null); }} className="mb-5 inline-flex items-center gap-2 rounded-lg border bg-white px-4 py-2 font-bold"><LogOut size={18} /> Salir</button><div className="mb-6 grid gap-4 md:grid-cols-3"><AdminMetric label="Reservas" value={String(reservations.data?.length ?? 0)} /><AdminMetric label="Pagos" value={String(payments.data?.length ?? 0)} /><AdminMetric label="Rol" value="Asesor" /></div><DepartureOperations tours={tours.data ?? []} token={token} canCreate={false} /><div className="grid gap-6 lg:grid-cols-2"><ReservationsQueue reservations={reservations.data ?? []} token={token} /><PaymentsQueue payments={payments.data ?? []} token={token} /></div></Section>;
+  if (staffRole === "WORKER") return <Section title="Panel de operaciones" subtitle="Validación de reservas, salidas y comprobantes Yape."><button onClick={() => { sessionStorage.removeItem("adminToken"); sessionStorage.removeItem("staffRole"); setToken(null); }} className="mb-5 inline-flex items-center gap-2 rounded-lg border bg-white px-4 py-2 font-bold"><LogOut size={18} /> Salir</button><div className="mb-6 grid gap-4 md:grid-cols-3"><AdminMetric label="Reservas" value={String(reservations.data?.length ?? 0)} /><AdminMetric label="Pagos" value={String(payments.data?.length ?? 0)} /><AdminMetric label="Rol" value="Asesor" /></div>{(tours.isError || reservations.isError || payments.isError) && <DataNotice title="No pudimos actualizar los datos del panel" retry={() => queryClient.invalidateQueries()} />}<DepartureOperations tours={tours.data ?? []} token={token} canCreate={false} /><div className="grid gap-6 lg:grid-cols-2"><ReservationsQueue reservations={reservations.data ?? []} token={token} /><PaymentsQueue payments={payments.data ?? []} token={token} /></div></Section>;
   return (
     <Section title="Panel administrativo" subtitle="Gestion de reservas, pagos y operaciones.">
       <button onClick={() => { sessionStorage.removeItem("adminToken"); sessionStorage.removeItem("staffRole"); setToken(null); }} className="mb-5 inline-flex items-center gap-2 rounded-lg border bg-white px-4 py-2 font-bold"><LogOut size={18} /> Salir</button>
       <div className="mb-6 grid gap-4 md:grid-cols-4">
-        <AdminMetric label="Tours activos" value={String(tours.data?.length ?? 0)} />
+        <AdminMetric label="Tours configurados" value={String(tours.data?.length ?? 0)} />
         <AdminMetric label="Reservas" value={String(reservations.data?.length ?? 0)} />
         <AdminMetric label="Pagos" value={String(payments.data?.length ?? 0)} />
         <AdminMetric label="Modo reserva" value="Yape + validación" />
       </div>
       <DepartureOperations tours={tours.data ?? []} token={token} canCreate />
+      {(tours.isError || reservations.isError || payments.isError) && <DataNotice title="No pudimos actualizar los datos del panel" retry={() => queryClient.invalidateQueries()} />}
+      {(saveTour.isError || deleteTour.isError) && <p role="alert" className="data-notice">No se guardó el cambio. Revisa los campos y tu conexión antes de volver a intentarlo.</p>}
       <BusinessSettingsPanel />
       <div className="mb-6 grid gap-6 xl:grid-cols-[.95fr_1.05fr]">
         <form onSubmit={(event) => { event.preventDefault(); saveTour.mutate(); }} className="rounded-lg border bg-white p-6 shadow-sm">
@@ -1456,6 +1491,8 @@ function BusinessSettingsPanel() {
   const query = useQuery<BusinessSettings>({ queryKey: ["businessSettings"], queryFn: async () => (await api.get("/settings")).data });
   useEffect(() => { if (query.data) setSettings(query.data); }, [query.data]);
   const save = useMutation({ mutationFn: async () => (await api.put("/settings", settings)).data, onSuccess: setSettings });
+  if (query.isError) return <DataNotice title="No pudimos cargar la configuración empresarial" retry={query.refetch} />;
+  if (query.isPending) return <p role="status">Cargando configuración empresarial...</p>;
   const field = (key: keyof BusinessSettings, label: string, type = "input") => (
     <label className="grid gap-1 text-sm font-bold text-slate-700">{label}{type === "textarea"
       ? <textarea className="min-h-28 rounded-lg border px-3 py-3" value={String(settings[key] ?? "")} onChange={(event) => setSettings({ ...settings, [key]: event.target.value })} />

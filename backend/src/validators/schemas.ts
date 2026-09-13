@@ -6,9 +6,12 @@ export const loginSchema = z.object({
 });
 
 export const idParamSchema = z.object({ id: z.coerce.number().int().positive() });
+export const reservationAccessSchema = z.object({ reservationToken: z.string().uuid() });
 
 const boundedText = (minimum: number, maximum: number) => z.string().trim().min(minimum).max(maximum);
 const optionalBoundedText = (maximum: number) => z.string().trim().max(maximum).optional().nullable();
+const optionalEmail = z.preprocess((value) => value === "" ? null : value, z.string().trim().email().max(254).nullable().optional());
+const optionalWebUrl = z.preprocess((value) => value === "" ? null : value, z.string().url().max(2048).refine((value) => /^https?:\/\//i.test(value), "Usa una URL http o https").nullable().optional());
 
 export const tourSchema = z.object({
   categoryId: z.coerce.number().optional().nullable(),
@@ -42,11 +45,11 @@ export const departureSchema = z.object({
 export const businessSettingsSchema = z.object({
   legalName: z.string().max(180).optional().nullable(), tradeName: z.string().min(2).max(120),
   taxId: z.string().max(30).optional().nullable(), address: z.string().max(255).optional().nullable(),
-  supportEmail: z.string().email().optional().nullable(), whatsappNumber: z.string().max(30).optional().nullable(),
-  domain: z.string().url().optional().nullable(), cancellationPolicy: z.string().optional().nullable(),
+  supportEmail: optionalEmail, whatsappNumber: z.string().max(30).optional().nullable(),
+  domain: optionalWebUrl, cancellationPolicy: z.string().optional().nullable(),
   refundPolicy: z.string().optional().nullable(), terms: z.string().optional().nullable(),
   privacyPolicy: z.string().optional().nullable(), cookiePolicy: z.string().optional().nullable(),
-  complaintsBookUrl: z.string().url().optional().nullable(), policiesPublished: z.boolean().default(false)
+  complaintsBookUrl: optionalWebUrl, policiesPublished: z.boolean().default(false)
 }).superRefine((data, context) => {
   if (!data.policiesPublished) return;
   const required = ["legalName", "taxId", "address", "supportEmail", "cancellationPolicy", "refundPolicy", "terms", "privacyPolicy", "cookiePolicy"] as const;

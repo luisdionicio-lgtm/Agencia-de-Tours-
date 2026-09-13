@@ -37,6 +37,8 @@ export type Reservation = {
   id: number;
   publicToken?: string;
   isDemo?: boolean;
+  paymentSubmitted?: boolean;
+  reservationAmount?: number;
   travelDate: string;
   peopleCount: number;
   totalAmount: string | number;
@@ -50,6 +52,7 @@ export type Reservation = {
 
 export type Payment = {
   id: number;
+  currency?: "PEN" | "USD";
   status: "PENDIENTE" | "EXITOSO" | "RECHAZADO" | "DEVUELTO";
   paymentMethod: "CARD" | "YAPE";
   amount: string | number;

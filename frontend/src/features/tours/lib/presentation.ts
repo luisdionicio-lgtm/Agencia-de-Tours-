@@ -12,7 +12,7 @@ export const tourMoney = (tour: Pick<Tour, "price" | "type">, value: string | nu
   Number(value) > 0 ? money(value, tourCurrency(tour)) : "Cotizar";
 
 export const paymentMoney = (payment: Payment) =>
-  payment.reservation?.tour ? tourMoney(payment.reservation.tour, payment.amount) : money(payment.amount);
+  money(payment.amount, payment.currency ?? (payment.paymentMethod === "YAPE" ? "PEN" : payment.reservation?.tour ? tourCurrency(payment.reservation.tour) : "PEN"));
 
 export const destinationImage = (id: string) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1400&q=85`;

@@ -38,7 +38,10 @@ export async function createReservationReceipt(reservation: Reservation, options
   const code = reservationCode(reservation.id);
   const isDemo = Boolean(reservation.isDemo);
   const total = Number(reservation.totalAmount || 0);
-  const balance = Math.max(total - reservationAmount, 0);
+  const amount = reservation.reservationAmount ?? reservationAmount;
+  const currency = reservation.tour.currency ?? (reservation.tour.type === "NACIONAL" ? "PEN" : "USD");
+  const symbol = currency === "PEN" ? "S/" : "USD";
+  const balance = currency === "PEN" ? Math.max(total - (reservation.status === "PAGADA" ? amount : 0), 0) : null;
   let y = 0;
 
   const drawHeader = () => {
@@ -148,9 +151,9 @@ export async function createReservationReceipt(reservation: Reservation, options
   y += 20;
 
   sectionTitle("Resumen económico");
-  field("Valor referencial", `S/ ${money(total)}`, 18, 52);
-  field("Separación", `S/ ${money(reservationAmount)}`, 74, 52);
-  field("Saldo estimado", `S/ ${money(balance)}`, 132, 56);
+  field("Valor del paquete", `${symbol} ${money(total)}`, 18, 52);
+  field("Separación en soles", `S/ ${money(amount)}`, 74, 52);
+  field("Saldo estimado", balance === null ? "Conversión por confirmar" : `S/ ${money(balance)}`, 132, 56);
   y += 18;
   field("Método", "Yape", 18, 52);
   field("Estado", isDemo ? "Simulación sin cobro" : reservation.status === "PAGADA" ? "Pago validado" : "Validación pendiente", 74, 114);

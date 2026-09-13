@@ -41,7 +41,8 @@ function matchRoute(pattern: string, pathname: string) {
     const pathPart = pathParts[index];
 
     if (patternPart.startsWith(":")) {
-      params[patternPart.slice(1)] = decodeURIComponent(pathPart);
+      try { params[patternPart.slice(1)] = decodeURIComponent(pathPart); }
+      catch { return null; }
       continue;
     }
 
@@ -150,8 +151,8 @@ export function Routes({ children }: { children: React.ReactNode }) {
     if (!isValidElement<RouteProps>(child)) continue;
     const params = matchRoute(child.props.path, pathname);
     if (!params) continue;
-    return <ParamsContext.Provider value={params}>{child.props.element}</ParamsContext.Provider>;
+    return <ParamsContext.Provider key={pathname} value={params}>{child.props.element}</ParamsContext.Provider>;
   }
 
-  return null;
+  return <section className="section-pro px-4 py-16"><div className="mx-auto max-w-3xl data-notice"><strong>No encontramos esta página</strong><p>Explora los paquetes disponibles o vuelve al inicio para continuar tu viaje.</p><div><Link to="/tours">Ver tours</Link><Link to="/">Volver al inicio</Link></div></div></section>;
 }

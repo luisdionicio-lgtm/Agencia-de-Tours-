@@ -13,6 +13,11 @@ test("no permite publicar políticas incompletas", () => {
   assert.equal(businessSettingsSchema.safeParse({ tradeName: "JohnToursPerú", policiesPublished: false }).success, true);
 });
 
+test("guarda borradores con campos opcionales vacíos y rechaza enlaces ejecutables", () => {
+  assert.equal(businessSettingsSchema.safeParse({ tradeName: "JohnToursPerú", supportEmail: "", domain: "", complaintsBookUrl: "" }).success, true);
+  assert.equal(businessSettingsSchema.safeParse({ tradeName: "JohnToursPerú", complaintsBookUrl: "javascript:alert(1)" }).success, false);
+});
+
 test("solo publica testimonios verificados", () => {
   const base = { name: "Cliente real", comment: "Una experiencia verificable y documentada.", rating: 5 };
   assert.equal(testimonialSchema.safeParse({ ...base, verified: false, published: true }).success, false);

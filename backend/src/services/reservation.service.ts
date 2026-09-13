@@ -40,19 +40,41 @@ export async function releaseExpiredReservationHolds() {
 }
 
 export const reservationService = {
+  async publicStatus(id: number, publicToken: string) {
+    // Authenticate the reservation before running expiry maintenance or reading PII.
+    const access = await prisma.reservation.findFirst({ where: { id, publicToken }, select: { id: true } });
+    if (!access) throw new AppError(404, "Reserva no encontrada");
+    await releaseExpiredReservationHolds();
+    const reservation = await prisma.reservation.findFirst({
+      where: { id, publicToken },
+      select: {
+        id: true, travelDate: true, peopleCount: true, totalAmount: true, status: true,
+        holdExpiresAt: true, slotsHeld: true,
+        customer: { select: { fullName: true, email: true, phone: true } },
+        tour: true, departure: true,
+        payments: { select: { status: true }, orderBy: { createdAt: "desc" } }
+      }
+    });
+    if (!reservation) throw new AppError(404, "Reserva no encontrada");
+    const { payments, ...summary } = reservation;
+    return { ...summary, paymentSubmitted: payments.some((payment) => payment.status === PaymentStatus.PENDIENTE || payment.status === PaymentStatus.EXITOSO), reservationAmount: env.YAPE_RESERVATION_AMOUNT };
+  },
   async create(input: z.infer<typeof reservationSchema>) {
     await releaseExpiredReservationHolds();
     const tour = await prisma.tour.findUnique({ where: { id: input.tourId } });
     if (!tour || tour.status !== TourStatus.ACTIVO) throw new AppError(404, "Tour no disponible");
     const departure = input.departureId ? await prisma.tourDeparture.findFirst({ where: { id: input.departureId, tourId: tour.id, status: TourStatus.ACTIVO } }) : null;
     if (input.departureId && !departure) throw new AppError(404, "Salida no disponible");
+    const today = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Lima", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+    if ((departure?.startDate ?? input.travelDate).toISOString().slice(0, 10) < today) throw new AppError(422, "Selecciona una fecha de viaje vigente");
+    if (!departure && await prisma.tourDeparture.count({ where: { tourId: tour.id } })) throw new AppError(422, "Selecciona una salida programada disponible");
     const totalAmount = Number(tour.price) * input.peopleCount;
     const holdExpiresAt = new Date(Date.now() + env.RESERVATION_HOLD_MINUTES * 60_000);
 
     const reservation = await prisma.$transaction(async (tx) => {
       const slots = departure
-        ? await tx.tourDeparture.updateMany({ where: { id: departure.id, availableSlots: { gte: input.peopleCount } }, data: { availableSlots: { decrement: input.peopleCount } } })
-        : await tx.tour.updateMany({ where: { id: tour.id, availableSlots: { gte: input.peopleCount } }, data: { availableSlots: { decrement: input.peopleCount } } });
+        ? await tx.tourDeparture.updateMany({ where: { id: departure.id, status: TourStatus.ACTIVO, availableSlots: { gte: input.peopleCount } }, data: { availableSlots: { decrement: input.peopleCount } } })
+        : await tx.tour.updateMany({ where: { id: tour.id, status: TourStatus.ACTIVO, availableSlots: { gte: input.peopleCount } }, data: { availableSlots: { decrement: input.peopleCount } } });
       if (slots.count !== 1) throw new AppError(409, "No hay cupos suficientes");
 
       const customer = await tx.customer.create({

@@ -27,6 +27,7 @@ export function TravelMoments({ tours }: { tours: Tour[] }) {
   });
   const filtered = available.filter((item) => filter === "Todos" || item.region === filter);
   const visible = expanded ? filtered : filtered.slice(0, 6);
+  if (!available.length) return null;
   return <section className={styles.section} aria-labelledby="travel-moments-title">
     <div className={styles.shell}>
       <div className={styles.heading}>

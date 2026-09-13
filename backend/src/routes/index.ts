@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { reservationAccessSchema } from "../validators/schemas";
 import { authController } from "../controllers/auth.controller";
 import { contactController } from "../controllers/contact.controller";
 import { paymentController } from "../controllers/payment.controller";
@@ -36,6 +37,9 @@ routes.post(
 );
 
 routes.get("/tours", asyncHandler(tourController.list));
+routes.get("/admin/tours", requireStaff, asyncHandler(async (_req, res) => {
+  res.json(await prisma.tour.findMany({ include: { departures: { orderBy: { startDate: "asc" } } }, orderBy: { createdAt: "desc" } }));
+}));
 routes.get("/tours/:id", asyncHandler(tourController.get));
 routes.post("/tours", requireAdmin, validate(tourSchema), asyncHandler(tourController.create));
 routes.put("/tours/:id", requireAdmin, validate(idParamSchema, "params"), validate(tourSchema), asyncHandler(tourController.update));
@@ -43,6 +47,7 @@ routes.delete("/tours/:id", requireAdmin, validate(idParamSchema, "params"), asy
 
 routes.post("/reservations", createRateLimiter({ windowMs: 15 * 60_000, max: 10 }), validate(reservationSchema), asyncHandler(reservationController.create));
 routes.get("/reservations", requireStaff, asyncHandler(reservationController.list));
+routes.post("/reservations/:id/status", createRateLimiter({ windowMs: 60_000, max: 30 }), validate(idParamSchema, "params"), validate(reservationAccessSchema), asyncHandler(reservationController.status));
 routes.get("/reservations/:id", requireStaff, validate(idParamSchema, "params"), asyncHandler(reservationController.get));
 routes.patch("/reservations/:id/cancel", requireStaff, validate(idParamSchema, "params"), asyncHandler(reservationController.cancel));
 

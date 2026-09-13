@@ -2,6 +2,10 @@ import type { Request, Response } from "express";
 import { reservationService } from "../services/reservation.service";
 
 export const reservationController = {
+  async status(req: Request, res: Response) {
+    res.setHeader("Cache-Control", "no-store");
+    res.json(await reservationService.publicStatus(Number(req.params.id), req.body.reservationToken));
+  },
   async create(req: Request, res: Response) {
     res.status(201).json(await reservationService.create(req.body));
   },

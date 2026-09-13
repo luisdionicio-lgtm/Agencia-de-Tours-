@@ -1,18 +1,14 @@
 import type { Reservation, Tour } from "../../../shared/types";
 
-export const whatsapp = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "51966779705";
-export const whatsappDisplay = "+51 966 779 705";
+export const whatsapp = (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "51966779705").replace(/\D/g, "");
+export const whatsappDisplay = whatsapp.startsWith("51") && whatsapp.length === 11
+  ? `+51 ${whatsapp.slice(2, 5)} ${whatsapp.slice(5, 8)} ${whatsapp.slice(8)}` : `+${whatsapp}`;
 export const reservationAmount = 200;
 export const isStaticPresentation = !process.env.NEXT_PUBLIC_API_URL;
 
-function demoSessionRequested() {
-  if (typeof window === "undefined") return false;
-  const requested = new URLSearchParams(window.location.search).get("demo") === "1";
-  if (requested) sessionStorage.setItem("john-demo-mode", "true");
-  return requested || sessionStorage.getItem("john-demo-mode") === "true";
-}
-
-export const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true" || isStaticPresentation || demoSessionRequested();
+// A URL or an old session must never switch a live installation into demo mode.
+export const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+export const useSampleCatalog = isDemoMode || isStaticPresentation;
 
 export const demoStaffAccounts = [
   { email: "admin.demo@johntours.pe", password: "JohnToursAdmin2026!", role: "ADMIN" as const },

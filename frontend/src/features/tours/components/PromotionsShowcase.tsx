@@ -3,7 +3,7 @@ import { Link } from "../../../core/routing";
 import type { Tour } from "../../../shared/types";
 
 type Promotion = {
-  tourId: number;
+  slug: string;
   title: string;
   destination: string;
   message: string;
@@ -13,7 +13,7 @@ type Promotion = {
 
 const promotions: Promotion[] = [
   {
-    tourId: 1,
+    slug: "machu-picchu",
     title: "Cusco, Puno y Arequipa",
     destination: "Circuito por el sur del Perú",
     message: "Un solo circuito conecta Cusco y Machu Picchu, el lago Titicaca en Puno y la etapa histórica de Arequipa.",
@@ -21,7 +21,7 @@ const promotions: Promotion[] = [
     video: "/media/machu-picchu-reel.mp4"
   },
   {
-    tourId: 5,
+    slug: "tarapoto-naturaleza",
     title: "Tarapoto: naturaleza en movimiento",
     destination: "San Martín, Perú",
     message: "Conoce una muestra del recorrido y consulta una salida adaptada a tus fechas. Actividades sujetas a confirmación del operador.",
@@ -29,14 +29,14 @@ const promotions: Promotion[] = [
     video: "/media/tarapoto-naturaleza.mp4"
   },
   {
-    tourId: 2,
+    slug: "guayaquil-costa-ecuador",
     title: "Guayaquil y costa ecuatoriana",
     destination: "Guayaquil, Ecuador",
     message: "Combina recorridos urbanos y una experiencia costera en una propuesta internacional preparada según el tamaño del grupo.",
     image: "/destinations/ecuador-costa.webp"
   },
   {
-    tourId: 6,
+    slug: "europa-esencial-madrid-paris-roma",
     title: "Sueños de Europa",
     destination: "España · Francia · Suiza · Italia",
     message: "Un circuito de cuatro países para planificar con tiempo vuelos, alojamiento, traslados y experiencias culturales.",
@@ -45,6 +45,8 @@ const promotions: Promotion[] = [
 ];
 
 export function PromotionsShowcase({ tours }: { tours: Tour[] }) {
+  const availablePromotions = promotions.filter((promotion) => tours.some((tour) => tour.slug === promotion.slug));
+  if (!availablePromotions.length) return null;
   return (
     <section className="promotion-section px-4 py-16 lg:px-6 lg:py-20" aria-labelledby="promotion-title">
       <div className="mx-auto max-w-7xl">
@@ -59,11 +61,11 @@ export function PromotionsShowcase({ tours }: { tours: Tour[] }) {
 
         <div id="promotionCarousel" className="carousel slide promotion-carousel" data-bs-ride="carousel" data-bs-interval="7000">
           <div className="carousel-indicators">
-            {promotions.map((promotion, index) => <button key={promotion.title} type="button" data-bs-target="#promotionCarousel" data-bs-slide-to={index} className={index === 0 ? "active" : ""} aria-current={index === 0 ? "true" : undefined} aria-label={`Mostrar promoción de ${promotion.title}`} />)}
+            {availablePromotions.map((promotion, index) => <button key={promotion.title} type="button" data-bs-target="#promotionCarousel" data-bs-slide-to={index} className={index === 0 ? "active" : ""} aria-current={index === 0 ? "true" : undefined} aria-label={`Mostrar promoción de ${promotion.title}`} />)}
           </div>
           <div className="carousel-inner">
-            {promotions.map((promotion, index) => {
-              const tour = tours.find((item) => item.id === promotion.tourId);
+            {availablePromotions.map((promotion, index) => {
+              const tour = tours.find((item) => item.slug === promotion.slug)!;
               return (
                 <article key={promotion.title} className={`carousel-item ${index === 0 ? "active" : ""}`}>
                   <div className="promotion-layout">
@@ -81,7 +83,7 @@ export function PromotionsShowcase({ tours }: { tours: Tour[] }) {
                       <p className="promotion-location"><MapPin size={16} /> {promotion.destination}</p>
                       <h3>{tour?.title ?? promotion.title}</h3>
                       <p className="promotion-message">{promotion.message}</p>
-                      <Link to={`/tours/${promotion.tourId}`} className="promotion-cta"><span><small>Revisar itinerario</small><strong>Conocer esta propuesta</strong></span><ArrowRight size={18} /></Link>
+                      <Link to={`/tours/${tour.id}`} className="promotion-cta"><span><small>Revisar itinerario</small><strong>Conocer esta propuesta</strong></span><ArrowRight size={18} /></Link>
                       <small className="promotion-disclaimer">No constituye una oferta final. Precio, fecha, servicios y condiciones se validan antes de reservar.</small>
                     </div>
                   </div>

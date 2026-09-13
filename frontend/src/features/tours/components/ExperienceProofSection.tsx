@@ -3,21 +3,21 @@ import { Link } from "../../../core/routing";
 
 const EXPERIENCES = [
   {
-    tourId: 1,
+    slug: "machu-picchu",
     image: "/experience-proof/machu-grupo.webp",
     destination: "Cusco, Puno y Arequipa",
     route: "Circuito del sur del Perú",
     message: "Tres ciudades reunidas en un solo paquete con coordinación antes, durante y después del recorrido."
   },
   {
-    tourId: 9,
+    slug: "lago-titicaca-ruta-bolivia",
     image: "/experience-proof/uros-grupo.webp",
     destination: "Islas de los Uros",
     route: "Puno, Perú",
     message: "Experiencias culturales con orientación en destino y una ruta organizada."
   },
   {
-    tourId: 2,
+    slug: "guayaquil-costa-ecuador",
     image: "/experience-proof/guayaquil-grupo.webp",
     destination: "Guayaquil",
     route: "Ecuador",
@@ -57,7 +57,7 @@ export function ExperienceProofSection() {
 
         <div className="experience-proof-grid">
           {EXPERIENCES.map((experience) => (
-            <Link key={experience.destination} to={`/tours/${experience.tourId}`} className="experience-proof-card">
+            <Link key={experience.destination} to={`/tours?destination=${encodeURIComponent(experience.slug)}`} className="experience-proof-card">
               <img src={experience.image} alt={`Grupo de viajeros en ${experience.destination}`} loading="lazy" decoding="async" />
               <span className="experience-proof-overlay" />
               <span className="experience-proof-copy">

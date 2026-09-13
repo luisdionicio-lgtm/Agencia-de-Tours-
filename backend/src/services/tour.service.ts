@@ -20,7 +20,7 @@ export const tourService = {
     const tour = Number.isNaN(Number(idOrSlug))
       ? await tourRepository.findBySlug(idOrSlug)
       : await tourRepository.findById(Number(idOrSlug));
-    if (!tour) throw new AppError(404, "Tour no encontrado");
+    if (!tour || tour.status !== "ACTIVO") throw new AppError(404, "Tour no encontrado");
     return tour;
   },
   create(data: z.infer<typeof tourSchema>) {
