@@ -2,7 +2,9 @@
 
 /* oxlint-disable react/only-export-components */
 
-import React, { createContext, isValidElement, useContext, useEffect, useMemo, useState } from "react";
+import React, { createContext, isValidElement, useContext, useMemo } from "react";
+
+import { useRouter as useNextRouter, usePathname as useNextPathname, useSearchParams as useNextSearchParams } from "next/navigation";
 
 type Navigate = (to: string) => void;
 type RouterState = {
@@ -18,11 +20,6 @@ type RouteProps = {
 
 const RouterContext = createContext<RouterState | null>(null);
 const ParamsContext = createContext<Record<string, string>>({});
-
-function currentLocation() {
-  if (typeof window === "undefined") return { pathname: "/", search: "" };
-  return { pathname: window.location.pathname || "/", search: window.location.search || "" };
-}
 
 function normalizePath(path: string) {
   return path.length > 1 ? path.replace(/\/$/, "") : path;
@@ -53,27 +50,11 @@ function matchRoute(pattern: string, pathname: string) {
 }
 
 export function RouterProvider({ children }: { children: React.ReactNode }) {
-  const [location, setLocation] = useState(currentLocation);
-
-  useEffect(() => {
-    const sync = () => setLocation(currentLocation());
-    window.addEventListener("popstate", sync);
-    return () => window.removeEventListener("popstate", sync);
-  }, []);
-
-  const navigate = (to: string) => {
-    const url = new URL(to, window.location.origin);
-    window.history.pushState({}, "", `${url.pathname}${url.search}${url.hash}`);
-    setLocation({ pathname: url.pathname, search: url.search });
-
-    if (url.hash) {
-      window.requestAnimationFrame(() => document.querySelector(url.hash)?.scrollIntoView({ behavior: "smooth" }));
-    } else {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-  };
-
-  const value = useMemo(() => ({ ...location, navigate }), [location]);
+  const router = useNextRouter();
+  const pathname = useNextPathname();
+  const params = useNextSearchParams();
+  const search = params.toString() ? '?' + params.toString() : '';
+  const value = useMemo(() => ({ pathname, search, navigate: (to: string) => router.push(to) }), [pathname, search, router]);
 
   return <RouterContext.Provider value={value}>{children}</RouterContext.Provider>;
 }

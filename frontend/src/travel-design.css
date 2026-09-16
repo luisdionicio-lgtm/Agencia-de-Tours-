@@ -157,3 +157,19 @@ body { background: #f2faff; }
 .tour-services-preview strong { display: block; font-size: .76rem; color: #073b83; margin-bottom: 4px; }
 .tour-services-preview p span { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; color: #526176; font-size: .82rem; line-height: 1.55; }
 .how-step-card > .service-icon { width: 48px; height: 48px; margin-bottom: 18px; background: #fff6db; color: #073b83; border: 1px solid #f5df9c; }
+
+.quote-layout { display:grid; grid-template-columns:minmax(0, .85fr) minmax(0, 1.15fr); gap:32px; max-width:1080px; margin:auto; }
+.quote-summary,.quote-form { border:1px solid #dfe7ef; border-radius:20px; background:white; overflow:hidden; }
+.quote-summary > img { width:100%; aspect-ratio:16/10; object-fit:cover; }
+.quote-summary > div,.quote-form { padding:28px; }
+.quote-summary small { color:#526176; }
+.quote-summary h3,.quote-form h3 { color:#073b83; font-size:1.35rem; margin:10px 0 16px; }
+.quote-summary strong { font-size:1.6rem; color:#073b83; }
+.quote-summary p,.quote-form p { color:#526176; line-height:1.65; }
+.quote-form label { display:grid; gap:10px; margin:22px 0; font-weight:600; color:#073b83; }
+.quote-form label span { display:flex; gap:10px; align-items:center; }
+.quote-form input { width:100%; min-width:0; border:1px solid #b9c8d9; border-radius:10px; padding:12px; background:white; color:#082447; }
+.quote-form input:focus-visible { outline:3px solid #f5ca50; outline-offset:3px; }
+.quote-form .btn-gold { width:100%; justify-content:center; gap:12px; min-height:52px; }
+.quote-form .quote-note { font-size:.85rem; margin:18px 0 0; }
+@media (max-width:700px) { .quote-layout { grid-template-columns:1fr; gap:20px; } .quote-summary > div,.quote-form { padding:22px; } }

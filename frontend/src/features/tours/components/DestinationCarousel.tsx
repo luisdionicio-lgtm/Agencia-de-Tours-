@@ -49,7 +49,7 @@ export function DestinationCarousel({ tours }: { tours: Tour[] }) {
                   <strong>{destinationMood[tour.slug] ?? "Una experiencia diseñada para disfrutar cada momento."}</strong>
                   <div className="destination-carousel-meta">
                     <span><CalendarDays size={17} /> {tour.duration}</span>
-                    <span><small>{Number(tour.price) > 0 ? "Desde" : "Tarifa"}</small>{tourMoney(tour)}</span>
+                    <span><small>{tour.priceIsEstimated ? "Tarifa referencial" : Number(tour.price) > 0 ? "Desde" : "Tarifa"}</small>{tourMoney(tour)}</span>
                   </div>
                   <Link to={`/tours/${tour.id}`} className="destination-carousel-cta">Ver experiencia <ArrowRight size={18} /></Link>
                 </div>

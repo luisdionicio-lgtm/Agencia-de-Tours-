@@ -74,7 +74,7 @@ export function ExperienceProofSection() {
           <div className="operations-proof-intro">
             <span>Antes del primer recorrido</span>
             <h3>La experiencia también se construye en la coordinación</h3>
-            <p>Aeropuerto y equipo de atención forman parte del archivo visual porque representan momentos reales del servicio, no destinos adicionales.</p>
+            <p>Coordinamos el punto de encuentro y los traslados para que sepas a dónde ir y con quién comunicarte desde tu llegada.</p>
           </div>
           <div className="operations-proof-grid">
             {OPERATIONAL_SUPPORT.map(({ Icon, ...item }) => (
