@@ -173,3 +173,4 @@ body { background: #f2faff; }
 .quote-form .btn-gold { width:100%; justify-content:center; gap:12px; min-height:52px; }
 .quote-form .quote-note { font-size:.85rem; margin:18px 0 0; }
 @media (max-width:700px) { .quote-layout { grid-template-columns:1fr; gap:20px; } .quote-summary > div,.quote-form { padding:22px; } }
+.quote-form .btn-gold { display:flex; align-items:center; flex-wrap:nowrap; font-weight:700; padding:14px 18px; } .quote-form .btn-gold svg { flex-shrink:0; }
