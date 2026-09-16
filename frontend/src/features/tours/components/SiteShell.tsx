@@ -1,7 +1,8 @@
-import { ArrowRight, CalendarDays, CreditCard, LockKeyhole, Menu, ShieldCheck, X } from "lucide-react";
+import { ArrowRight, CalendarDays, CreditCard, Menu, ShieldCheck, X } from "lucide-react";
 import { type ReactNode, useEffect, useState } from "react";
 import { Link, NavLink, usePathname } from "../../../core/routing";
 import { buildWhatsAppUrl, isDemoMode, socialLinks, whatsappDisplay } from "../config/contact";
+import { siteConfig } from "../../../config/site";
 
 const navigationLinks = [
   ["Inicio", "/"],
@@ -74,7 +75,7 @@ function PublicHeader({ menuOpen, scrollProgress, onToggleMenu, onCloseMenu }: {
           <span className="inline-flex items-center gap-5 text-slate-200">
             <span>WhatsApp {whatsappDisplay}</span>
             <span>Reserva desde S/ 200 con Yape</span>
-            <span>Santa Clara, Ate · Cusco</span>
+            <span>{siteConfig.officeLabel}</span>
           </span>
         </div>
       </div>
@@ -161,7 +162,7 @@ function PublicFooter() {
         </div>
         <div>
           <strong className="text-cyan-200">Contacto</strong>
-          <p className="mt-4 text-sm leading-7 text-slate-300">johntoursperu29@gmail.com<br />{whatsappDisplay}<br />+51 982 896 989<br />Santa Clara, Ate · Cusco</p>
+          <p className="mt-4 text-sm leading-7 text-slate-300">{siteConfig.email}<br />{whatsappDisplay}{siteConfig.secondaryPhone && <><br />{siteConfig.secondaryPhone}</>}<br />{siteConfig.officeLabel}</p>
           <div className="mt-4"><span className="payment-chip">Reserva Yape S/ 200</span></div>
           <div className="footer-payment-methods"><span><img src="/yape-logo.png" alt="Yape" /> Yape</span><span><CreditCard size={17} /> Transferencia</span></div>
         </div>
@@ -174,7 +175,7 @@ function PublicFooter() {
       </div>
       <div className="mx-auto mt-10 flex max-w-7xl flex-col justify-between gap-3 border-t border-white/10 pt-6 text-xs text-slate-400 sm:flex-row">
         <span>© {new Date().getFullYear()} JohnToursPerú. Todos los derechos reservados.</span>
-        <span className="footer-bottom-links">Viaja seguro · Vive extraordinario {isDemoMode && <a href="/demo">Probar demo</a>}<Link to="/admin"><LockKeyhole size={13} /> Acceso interno</Link></span>
+        <span className="footer-bottom-links">Viaja seguro · Vive extraordinario {isDemoMode && <a href="/demo">Probar demo</a>}</span>
       </div>
     </footer>
   );

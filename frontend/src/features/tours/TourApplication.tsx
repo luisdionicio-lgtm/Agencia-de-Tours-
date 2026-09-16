@@ -823,7 +823,7 @@ function TourDetail() {
         <aside className="booking-aside self-start rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
           <p className="text-sm font-bold uppercase text-[#0f7a4f]">{tour.type}</p>
           <p className="mt-3 text-4xl font-black text-[#082447]">{tourMoney(tour)}</p>
-          {tour.priceIsEstimated && <p className="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-xs font-bold leading-5 text-amber-800">Precio referencial de demostración. Confirma la tarifa final antes de reservar.</p>}
+          {tour.priceIsEstimated && <p className="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-xs font-bold leading-5 text-amber-800">Tarifa referencial sujeta a fecha, disponibilidad y servicios elegidos. Recibirás la propuesta final antes de reservar.</p>}
           <div className="mt-5 space-y-3 text-sm text-slate-600">
             <p className="flex items-center gap-2"><ShieldCheck className="text-[#0f7a4f]" size={18} /> Reserva con datos protegidos</p>
             <p className="flex items-center gap-2"><Clock3 className="text-[#0f4c81]" size={18} /> Confirmación y seguimiento</p>

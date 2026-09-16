@@ -1,8 +1,10 @@
 import type { MetadataRoute } from "next";
+import { siteConfig } from "../src/config/site";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://agencia-de-tours-three.vercel.app";
+const siteUrl = siteConfig.url;
 
 export default function robots(): MetadataRoute.Robots {
+  if (siteConfig.presentationMode) return { rules: [{ userAgent: "*", disallow: "/" }] };
   return {
     rules: [{ userAgent: "*", allow: "/", disallow: ["/admin", "/pago/", "/confirmacion/"] }],
     sitemap: `${siteUrl}/sitemap.xml`

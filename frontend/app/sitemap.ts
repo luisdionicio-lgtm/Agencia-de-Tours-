@@ -1,9 +1,11 @@
 import type { MetadataRoute } from "next";
+import { sampleTourIds } from "../src/config/routeMetadata";
+import { siteConfig } from "../src/config/site";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://agencia-de-tours-three.vercel.app";
+const siteUrl = siteConfig.url;
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const paths = ["", "/tours", "/tours/1", "/tours/2", "/tours/3", "/tours/4", "/tours/5"];
+  const paths = ["", "/tours", ...sampleTourIds.map((id) => `/tours/${id}`)];
   return paths.map((path, index) => ({
     url: `${siteUrl}${path}`,
     lastModified: new Date(),

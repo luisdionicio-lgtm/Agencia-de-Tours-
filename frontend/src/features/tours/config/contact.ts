@@ -1,9 +1,9 @@
 import type { Reservation, Tour } from "../../../shared/types";
+import { siteConfig, whatsappDisplay } from "../../../config/site";
 
-export const whatsapp = (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "51966779705").replace(/\D/g, "");
-export const whatsappDisplay = whatsapp.startsWith("51") && whatsapp.length === 11
-  ? `+51 ${whatsapp.slice(2, 5)} ${whatsapp.slice(5, 8)} ${whatsapp.slice(8)}` : `+${whatsapp}`;
-export const reservationAmount = 200;
+export const whatsapp = siteConfig.whatsapp;
+export { whatsappDisplay };
+export const reservationAmount = siteConfig.reservationAmount;
 export const isStaticPresentation = !process.env.NEXT_PUBLIC_API_URL;
 
 // A URL or an old session must never switch a live installation into demo mode.
@@ -16,8 +16,7 @@ export const demoStaffAccounts = [
 ];
 
 export const socialLinks = {
-  instagram: "https://www.instagram.com/johntoursperu?igsh=dm1hc3ZweGlkeWR2",
-  tiktok: "https://www.tiktok.com/@johntoursperu?_r=1&_t=ZS-988zH7tdmDM"
+  ...siteConfig.social
 };
 
 export const buildWhatsAppUrl = (message: string) => `https://wa.me/${whatsapp}?text=${encodeURIComponent(message)}`;
