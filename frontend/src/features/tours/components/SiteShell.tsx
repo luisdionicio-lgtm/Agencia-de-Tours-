@@ -127,12 +127,11 @@ function FloatingWhatsApp() {
 
   return (
     <div className={`floating-whatsapp-wrap ${expanded ? "is-expanded" : ""}`} onMouseEnter={() => setExpanded(true)} onMouseLeave={() => setExpanded(false)}>
-      <div className="floating-whatsapp-message" role="status"><span className="advisor-status" /> <strong>Asesoría disponible</strong><small>{advisorMessages[messageIndex]}</small></div>
+      <div className="floating-whatsapp-message"><strong>Consulta con un asesor</strong><small>{advisorMessages[messageIndex]}</small></div>
       <a href={buildWhatsAppUrl(budgetOrientationMessage)} className="floating-whatsapp" target="_blank" rel="noreferrer" aria-label="Recibir orientación de JohnToursPerú según mi presupuesto por WhatsApp" onFocus={() => setExpanded(true)} onBlur={() => setExpanded(false)}>
         <span className="floating-whatsapp-rings" aria-hidden="true" />
         <img src="/whatsapp-logo.svg" alt="" />
         <span className="floating-whatsapp-label"><strong>Según tu presupuesto</strong><small>Orientación por WhatsApp</small></span>
-        <span className="floating-notification" aria-hidden="true">1</span>
       </a>
     </div>
   );

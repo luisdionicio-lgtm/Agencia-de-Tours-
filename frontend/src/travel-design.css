@@ -147,3 +147,13 @@ body { background: #f2faff; }
   .travel-spotlight-light { display: none; }
   .tour-card:hover, .tour-card:focus-within, .tour-card:hover img { transform: none; }
 }
+
+/* Shared service icons keep a consistent stroke, scale and accessible text. */
+.service-icon { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; width: 40px; height: 40px; border-radius: 12px; background: #edf6ff; color: #073b83; }
+.service-icon svg { flex-shrink: 0; }
+.tour-type-badge .service-icon { width: auto; height: auto; border-radius: 0; background: transparent; color: inherit; }
+.tour-services-preview { display: flex; align-items: flex-start; gap: 12px; padding: 16px 0; border-top: 1px solid #e8edf3; }
+.tour-services-preview p { margin: 0; min-width: 0; }
+.tour-services-preview strong { display: block; font-size: .76rem; color: #073b83; margin-bottom: 4px; }
+.tour-services-preview p span { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; color: #526176; font-size: .82rem; line-height: 1.55; }
+.how-step-card > .service-icon { width: 48px; height: 48px; margin-bottom: 18px; background: #fff6db; color: #073b83; border: 1px solid #f5df9c; }
